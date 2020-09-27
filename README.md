@@ -14,6 +14,27 @@ content.
 
 [![Build](https://github.com/Clarifai/clarifai-swift-grpc/workflows/Run%20tests/badge.svg)](https://github.com/Clarifai/clarifai-swift-grpc/actions)
 
+## Installation
+
+Add the library to the `dependencies` list in your project's `Package.swift` file.
+
+```
+    dependencies: [
+        // ... Your other dependencies.
+        .package(url: "https://github.com/Clarifai/clarifai-swift-grpc", from: "0.0.1")
+    ],
+```
+
+Use the dependency in your target:
+
+```
+    targets: [
+        .target(
+            name: "YOUR-TARGET",
+            dependencies: ["clarifai-swift-grpc"]),
+    ]
+```
+
 ## Getting started
 
 Construct the client and setup your API key or Personal Access Token in the `metadata` variable.
@@ -22,6 +43,7 @@ Construct the client and setup your API key or Personal Access Token in the `met
 import NIO
 import NIOHPACK
 import GRPC
+import clarifai_swift_grp
 
 let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 let channel = ClientConnection.secure(group: group).connect(host: "api.clarifai.com", port: 443)
