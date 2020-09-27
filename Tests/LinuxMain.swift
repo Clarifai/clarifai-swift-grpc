@@ -1,7 +1,7 @@
 import XCTest
 
-import clarifai_swift_grpcTests
+import ClarifaiGrpcTests
 
 var tests = [XCTestCaseEntry]()
-tests += clarifai_swift_grpcTests.allTests()
+tests += ClarifaiGrpcTests.allTests()
 XCTMain(tests)

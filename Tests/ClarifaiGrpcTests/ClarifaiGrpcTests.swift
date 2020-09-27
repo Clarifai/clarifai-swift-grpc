@@ -2,13 +2,13 @@ import NIO
 import NIOHPACK
 import GRPC
 import XCTest
-@testable import clarifai_swift_grpc
+@testable import ClarifaiGrpc
 
 enum ClarifaiError: Error {
     case runtimeError(String)
 }
 
-final class clarifai_swift_grpcTests: XCTestCase {
+final class ClarifaiGrpcTests: XCTestCase {
 
     private let GENERAL_MODEL_ID = "aaa03c23b3724a16a56b629203edc62c"
     private let DOG_IMAGE_URL = "https://samples.clarifai.com/dog2.jpeg"

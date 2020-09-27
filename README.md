@@ -44,7 +44,7 @@ Construct the client and setup your API key or Personal Access Token in the `met
 import NIO
 import NIOHPACK
 import GRPC
-import clarifai_swift_grp
+import ClarifaiGrpc
 
 let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 let channel = ClientConnection.secure(group: group).connect(host: "api.clarifai.com", port: 443)
