@@ -22,7 +22,7 @@ Add the library to the `dependencies` list in your project's `Package.swift` fil
 ```
     dependencies: [
         // ... Your other dependencies.
-        .package(url: "https://github.com/Clarifai/clarifai-swift-grpc", from: "0.0.1")
+        .package(name: "ClarifaiGrpc", url: "https://github.com/Clarifai/clarifai-swift-grpc", from: "0.0.1")
     ],
 ```
 
@@ -32,7 +32,7 @@ Use the dependency in your target:
     targets: [
         .target(
             name: "YOUR-TARGET",
-            dependencies: ["clarifai-swift-grpc"]),
+            dependencies: ["ClarifaiGrpc"]),
     ]
 ```
 
