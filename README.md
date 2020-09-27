@@ -12,6 +12,8 @@ content.
 * Sign up for a free account at: https://portal.clarifai.com/signup
 * Read the documentation at: https://docs.clarifai.com/
 
+[![Build](https://github.com/Clarifai/clarifai-swift-grpc/workflows/Run%20tests/badge.svg)](https://github.com/Clarifai/clarifai-swift-grpc/actions)
+
 ## Getting started
 
 Construct the client and setup your API key or Personal Access Token in the `metadata` variable.
