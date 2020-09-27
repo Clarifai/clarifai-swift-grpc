@@ -47,9 +47,7 @@ final class clarifai_swift_grpcTests: XCTestCase {
             throw ClarifaiError.runtimeError("Please set the CLARIFAI_API_KEY environment variable.")
         }
 
-        var headers: HPACKHeaders = [:]
-        headers.add(name: "authorization", value: "Key " + apiKey!)
-
+        let headers: HPACKHeaders = ["Authorization": "Key " + apiKey!]
         return headers
     }
 
