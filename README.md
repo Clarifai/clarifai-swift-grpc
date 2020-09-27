@@ -31,7 +31,7 @@ let client = Clarifai_Api_V2Client(channel: channel, defaultCallOptions: CallOpt
 Predict concepts in an image:
 
 ```swift
-let response = try client!.postModelOutputs(
+let response = try client.postModelOutputs(
     Clarifai_Api_PostModelOutputsRequest.with {
         // This is the ID of the publicly available General model.
         $0.modelID = "aaa03c23b3724a16a56b629203edc62c";
