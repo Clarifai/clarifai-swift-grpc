@@ -20,4 +20,7 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Run tests
+      env:
+        CLARIFAI_GRPC_BASE: ${{ secrets.CLARIFAI_GRPC_BASE }}
+        CLARIFAI_API_KEY: ${{ secrets.CLARIFAI_API_KEY }}
       run: swift test -v
