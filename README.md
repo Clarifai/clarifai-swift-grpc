@@ -13,6 +13,7 @@ content.
 * Read the documentation at: https://docs.clarifai.com/
 
 [![Build](https://github.com/Clarifai/clarifai-swift-grpc/workflows/Run%20tests/badge.svg)](https://github.com/Clarifai/clarifai-swift-grpc/actions)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Clarifai/clarifai-swift-grpc)
 
 ## Installation
 
