@@ -21,8 +21,13 @@ final class clarifai_swift_grpcTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        var base = ProcessInfo.processInfo.environment["CLARIFAI_GRPC_BASE"];
+        if base == nil {
+            base = "api.clarifai.com"
+        }
+
         let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        let channel = ClientConnection.secure(group: group).connect(host: "api.clarifai.com", port: 443)
+        let channel = ClientConnection.secure(group: group).connect(host: base!, port: 443)
 
         self.group = group
         self.channel = channel
