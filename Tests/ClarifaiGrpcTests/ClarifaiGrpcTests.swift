@@ -11,6 +11,8 @@ enum ClarifaiError: Error {
 final class ClarifaiGrpcTests: XCTestCase {
 
     private let GENERAL_MODEL_ID = "aaa03c23b3724a16a56b629203edc62c"
+
+    private let TRUCK_IMAGE_URL = "https://samples.clarifai.com/red-truck.png"
     private let DOG_IMAGE_URL = "https://samples.clarifai.com/dog2.jpeg"
     private let NON_EXISTING_IMAGE_URL = "https://example.com/this-image-does-not-exist.jpg"
 
@@ -152,6 +154,74 @@ final class ClarifaiGrpcTests: XCTestCase {
         XCTAssertEqual(response.outputs[1].status.code, Clarifai_Api_Status_StatusCode.inputDownloadFailed)
     }
 
+    func testPostGetPatchAndDeleteInput() throws {
+        let postInputsResponse = try client!.postInputs(
+            Clarifai_Api_PostInputsRequest.with {
+                $0.inputs = [
+                    Clarifai_Api_Input.with {
+                        $0.data = Clarifai_Api_Data.with {
+                            $0.image = Clarifai_Api_Image.with {
+                                $0.url = TRUCK_IMAGE_URL;
+                                $0.allowDuplicateURL = true
+                            };
+                            $0.concepts = [
+                                Clarifai_Api_Concept.with {
+                                    $0.id = "red-truck"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ).response.wait()
+        try raiseOnFailure(postInputsResponse.status)
+
+        let inputId = postInputsResponse.inputs[0].id
+        while true {
+            let getInputResponse = try client!.getInput(
+                Clarifai_Api_GetInputRequest.with {
+                    $0.inputID = inputId
+                }
+            ).response.wait()
+            try raiseOnFailure(getInputResponse.status)
+
+            let inputStatusCode = getInputResponse.input.status.code
+            if inputStatusCode == Clarifai_Api_Status_StatusCode.inputDownloadSuccess {
+                break
+            } else if inputStatusCode != Clarifai_Api_Status_StatusCode.inputDownloadPending &&
+                      inputStatusCode != Clarifai_Api_Status_StatusCode.inputDownloadInProgress {
+                throw ClarifaiError.runtimeError("Waiting for input ID \(inputId) failed, status code is \(inputStatusCode)")
+            }
+            sleep(1)
+        }
+
+        let patchInputsResponse = try client!.patchInputs(
+            Clarifai_Api_PatchInputsRequest.with {
+                $0.action = "overwrite";
+                $0.inputs = [
+                    Clarifai_Api_Input.with {
+                        $0.id = inputId;
+                        $0.data = Clarifai_Api_Data.with {
+                            $0.concepts = [
+                                Clarifai_Api_Concept.with {
+                                    $0.id = "very-red-truck"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ).response.wait()
+        try raiseOnFailure(patchInputsResponse.status)
+
+        let deleteInputResponse = try client!.deleteInput(
+            Clarifai_Api_DeleteInputRequest.with {
+                $0.inputID = inputId
+            }
+        ).response.wait()
+        try raiseOnFailure(deleteInputResponse.status)
+    }
+
     private func raiseOnFailure(_ status: Clarifai_Api_Status_Status) throws {
         if status.code != Clarifai_Api_Status_StatusCode.success {
             throw ClarifaiError.runtimeError("Unexpected failure response \(status)")
@@ -164,5 +234,6 @@ final class ClarifaiGrpcTests: XCTestCase {
         ("testPostModelOutputs", testPostModelOutputs),
         ("testFailedPostModelOutputs", testFailedPostModelOutputs),
         ("testMixedSuccessPostModelOutputs", testMixedSuccessPostModelOutputs),
+        ("testPostGetPatchAndDeleteInput", testPostGetPatchAndDeleteInput),
     ]
 }
