@@ -324,6 +324,46 @@ extension Clarifai_Api_UsageIntervalType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum Clarifai_Api_RoleType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case team // = 0
+  case org // = 1
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .team
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .team
+    case 1: self = .org
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .team: return 0
+    case .org: return 1
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_RoleType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_RoleType] = [
+    .team,
+    .org,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public enum Clarifai_Api_StatValueAggType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case sum // = 0
@@ -448,6 +488,7 @@ public struct Clarifai_Api_Annotation {
   /// Clears the value of `data`. Subsequent reads from it will return its default value.
   public mutating func clearData() {self._data = nil}
 
+  /// task_id is deprecated in annotation_info. Use task_id
   public var annotationInfo: SwiftProtobuf.Google_Protobuf_Struct {
     get {return _annotationInfo ?? SwiftProtobuf.Google_Protobuf_Struct()}
     set {_annotationInfo = newValue}
@@ -463,9 +504,7 @@ public struct Clarifai_Api_Annotation {
   /// ID of the model version this annotation is created by
   public var modelVersionID: String = String()
 
-  /// The embedding model version used make this annotation available for search and training
-  /// Note that an annotation always have an 'embed_model_version_id' even if it is For human
-  /// produced annotations i.e. if its worker is of type 'human' or 'app_owner'.
+  /// DEPRECATED.
   public var embedModelVersionID: String = String()
 
   /// Annotation Status
@@ -509,6 +548,21 @@ public struct Clarifai_Api_Annotation {
   /// Is this the input level annotation.
   public var inputLevel: Bool = false
 
+  /// Consensus review related information, e.g.
+  /// * annotation group
+  /// * id of annotation parent, in case the annotation was split from another annotation
+  public var consensusInfo: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _consensusInfo ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_consensusInfo = newValue}
+  }
+  /// Returns true if `consensusInfo` has been explicitly set.
+  public var hasConsensusInfo: Bool {return self._consensusInfo != nil}
+  /// Clears the value of `consensusInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearConsensusInfo() {self._consensusInfo = nil}
+
+  /// The id of the task annotation belongs to
+  public var taskID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -518,6 +572,7 @@ public struct Clarifai_Api_Annotation {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _consensusInfo: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -536,6 +591,8 @@ public struct Clarifai_Api_App {
 
   public var defaultWorkflowID: String = String()
 
+  ///why is user_id present here when this message type is used in PostApps but completely ignored there? PostApp already specifies the userid in path but doesn't even actually use neither of userids, it instead used the id from auth context.
+  ///This creates a lot of ambiguity, should always have different message types for Post/Get endpoints so that the minimum interface for each op can be described
   public var userID: String = String()
 
   /// When the app was created. We follow the XXXX timestamp
@@ -585,7 +642,7 @@ public struct Clarifai_Api_AppQuery {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The name of the field. This supports wildcard queries like "gen*" to match "general" as an example.
+  /// Query by application name. This supports wildcard queries like "gen*" to match "general" as an example.
   public var name: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -748,9 +805,100 @@ public struct Clarifai_Api_Audio {
   /// If True then you will be allowed to have multiple urls.
   public var allowDuplicateURL: Bool = false
 
+  /// The hosted field lists original audio hosted in Clarifai storage. This field is currently used
+  /// only in response.
+  public var hosted: Clarifai_Api_HostedURL {
+    get {return _hosted ?? Clarifai_Api_HostedURL()}
+    set {_hosted = newValue}
+  }
+  /// Returns true if `hosted` has been explicitly set.
+  public var hasHosted: Bool {return self._hosted != nil}
+  /// Clears the value of `hosted`. Subsequent reads from it will return its default value.
+  public mutating func clearHosted() {self._hosted = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _hosted: Clarifai_Api_HostedURL? = nil
+}
+
+/// Track proto encodes information of a track over a number of frames
+public struct Clarifai_Api_Track {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// track id
+  public var id: String = String()
+
+  /// This is a recursive definition which can contain all the concepts,
+  /// embeddings, etc. that are computed within this track.
+  public var data: Clarifai_Api_Data {
+    get {return _data ?? Clarifai_Api_Data()}
+    set {_data = newValue}
+  }
+  /// Returns true if `data` has been explicitly set.
+  public var hasData: Bool {return self._data != nil}
+  /// Clears the value of `data`. Subsequent reads from it will return its default value.
+  public mutating func clearData() {self._data = nil}
+
+  /// The track information.
+  public var trackInfo: Clarifai_Api_Track.TrackInfo {
+    get {return _trackInfo ?? Clarifai_Api_Track.TrackInfo()}
+    set {_trackInfo = newValue}
+  }
+  /// Returns true if `trackInfo` has been explicitly set.
+  public var hasTrackInfo: Bool {return self._trackInfo != nil}
+  /// Clears the value of `trackInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearTrackInfo() {self._trackInfo = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Here is where we store the track metadata.
+  public struct TrackInfo {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// Number of frames
+    public var numFrames: UInt32 = 0
+
+    /// Timestamp where track begins.
+    public var beginTime: SwiftProtobuf.Google_Protobuf_Timestamp {
+      get {return _beginTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+      set {_beginTime = newValue}
+    }
+    /// Returns true if `beginTime` has been explicitly set.
+    public var hasBeginTime: Bool {return self._beginTime != nil}
+    /// Clears the value of `beginTime`. Subsequent reads from it will return its default value.
+    public mutating func clearBeginTime() {self._beginTime = nil}
+
+    /// Timestamp where track ends.
+    public var endTime: SwiftProtobuf.Google_Protobuf_Timestamp {
+      get {return _endTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+      set {_endTime = newValue}
+    }
+    /// Returns true if `endTime` has been explicitly set.
+    public var hasEndTime: Bool {return self._endTime != nil}
+    /// Clears the value of `endTime`. Subsequent reads from it will return its default value.
+    public mutating func clearEndTime() {self._endTime = nil}
+
+    /// Quality of the track.
+    public var quality: Float = 0
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+
+    fileprivate var _beginTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  }
+
+  public init() {}
+
+  fileprivate var _data: Clarifai_Api_Data? = nil
+  fileprivate var _trackInfo: Clarifai_Api_Track.TrackInfo? = nil
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -771,6 +919,8 @@ public struct Clarifai_Api_Cluster {
 
   /// Representative hits for cluster (for now we only return 1)
   public var hits: [Clarifai_Api_Hit] = []
+
+  public var projection: [Float] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1100,6 +1250,9 @@ public struct Clarifai_Api_ConceptQuery {
   /// (optional) The language of the concept name in a search. Defaults to English.
   public var language: String = String()
 
+  /// (optional) The id of workflow. If no id is provided, then application base workflow is used.
+  public var workflowID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1170,7 +1323,8 @@ public struct Clarifai_Api_ConceptRelation {
   /// will appear in queries as well.
   public var predicate: String = String()
 
-  /// The knowledge graph id that this edge belongs to
+  /// The knowledge graph id that this edge belongs to. If using the app's global knowledge graph
+  /// and not a specific one then this should be the empty string "".
   public var knowledgeGraphID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1335,6 +1489,9 @@ public struct Clarifai_Api_Data {
   public var hasAudio: Bool {return self._audio != nil}
   /// Clears the value of `audio`. Subsequent reads from it will return its default value.
   public mutating func clearAudio() {self._audio = nil}
+
+  /// Track information.
+  public var tracks: [Clarifai_Api_Track] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1755,6 +1912,10 @@ public struct Clarifai_Api_HostedURL {
   /// The sizes field lists which images of the different sizes are hosted in our storage. The URL
   /// of each hosted image can be obtained by joining the prefix, one of the sizes and suffix.
   public var sizes: [String] = []
+
+  /// The crossorigin property of html media tag
+  /// For Secure Data Hosting this needs to be set to 'use-credentials'
+  public var crossorigin: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2308,9 +2469,39 @@ public struct Clarifai_Api_ModelType {
   /// so that they are most flexible.
   public var modelTypeFields: [Clarifai_Api_ModelTypeField] = []
 
+  /// For sequence models we need to know when processing that they require temporal time frames
+  /// in sequential order. This will be true for model types like trackers as an example.
+  public var requiresSequentialFrames: Bool = false
+
+  /// Can this model be evaluated?
+  public var evaluable: Bool = false
+
+  /// Maps input_fields to the more granular data fields needed to parse a triton models inputs
+  public var expectedPretrainedInputFields: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _expectedPretrainedInputFields ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_expectedPretrainedInputFields = newValue}
+  }
+  /// Returns true if `expectedPretrainedInputFields` has been explicitly set.
+  public var hasExpectedPretrainedInputFields: Bool {return self._expectedPretrainedInputFields != nil}
+  /// Clears the value of `expectedPretrainedInputFields`. Subsequent reads from it will return its default value.
+  public mutating func clearExpectedPretrainedInputFields() {self._expectedPretrainedInputFields = nil}
+
+  /// Maps output_fields to the more granular data fields needed to parse a triton models outputs
+  public var expectedPretrainedOutputFields: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _expectedPretrainedOutputFields ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_expectedPretrainedOutputFields = newValue}
+  }
+  /// Returns true if `expectedPretrainedOutputFields` has been explicitly set.
+  public var hasExpectedPretrainedOutputFields: Bool {return self._expectedPretrainedOutputFields != nil}
+  /// Clears the value of `expectedPretrainedOutputFields`. Subsequent reads from it will return its default value.
+  public mutating func clearExpectedPretrainedOutputFields() {self._expectedPretrainedOutputFields = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _expectedPretrainedInputFields: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _expectedPretrainedOutputFields: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
 /// For each field in ModelType.model_type_fields we defined them with ModelTypeField
@@ -2594,6 +2785,9 @@ public struct Clarifai_Api_ModelVersion {
   /// Clears the value of `completedAt`. Subsequent reads from it will return its default value.
   public mutating func clearCompletedAt() {self._completedAt = nil}
 
+  /// Description about this version
+  public var description_p: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -2874,6 +3068,34 @@ public struct Clarifai_Api_BinaryMetrics {
   fileprivate var _precisionRecallCurve: Clarifai_Api_PrecisionRecallCurve? = nil
 }
 
+public struct Clarifai_Api_TrackerMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Multiple object tracking accuracy
+  public var motMota: Float = 0
+
+  /// Number of switches between tracks
+  public var motNumSwitches: Int32 = 0
+
+  /// MORSE fragmentation rate (a.k.a unique switch rate, only calculated in public sector)
+  public var morseFrag: Float = 0
+
+  /// Average precision calculated from all processed frames
+  public var avgPrecision: Float = 0
+
+  /// The concept that we are evaluating the tracker
+  public var aiid: String = String()
+
+  /// Same as morse_frag but calculated using MOT mapping/metrics
+  public var uniqueSwitchRate: Float = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct Clarifai_Api_EvalTestSetEntry {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3049,6 +3271,8 @@ public struct Clarifai_Api_EvalMetrics {
   public var metricsByArea: [Clarifai_Api_BinaryMetrics] = []
 
   public var metricsByClass: [Clarifai_Api_BinaryMetrics] = []
+
+  public var trackerMetrics: [Clarifai_Api_TrackerMetrics] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -3458,11 +3682,23 @@ public struct Clarifai_Api_Filter {
   /// Clears the value of `annotation`. Subsequent reads from it will return its default value.
   public mutating func clearAnnotation() {self._annotation = nil}
 
+  /// FILTER by input information.
+  /// For example you can filter inputs by status,
+  public var input: Clarifai_Api_Input {
+    get {return _input ?? Clarifai_Api_Input()}
+    set {_input = newValue}
+  }
+  /// Returns true if `input` has been explicitly set.
+  public var hasInput: Bool {return self._input != nil}
+  /// Clears the value of `input`. Subsequent reads from it will return its default value.
+  public mutating func clearInput() {self._input = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
+  fileprivate var _input: Clarifai_Api_Input? = nil
 }
 
 public struct Clarifai_Api_Rank {
@@ -3566,7 +3802,7 @@ public struct Clarifai_Api_Text {
   public var allowDuplicateURL: Bool = false
 
   /// The hosted field lists original text hosted in Clarifai storage. This field is currently used
-  /// only in response..
+  /// only in response.
   public var hosted: Clarifai_Api_HostedURL {
     get {return _hosted ?? Clarifai_Api_HostedURL()}
     set {_hosted = newValue}
@@ -3656,6 +3892,12 @@ public struct Clarifai_Api_User {
   public mutating func clearMetadata() {self._metadata = nil}
 
   public var emailAddresses: [Clarifai_Api_EmailAddress] = []
+
+  public var isOrgAdmin: Bool = false
+
+  public var twoFactorAuthEnabled: Bool = false
+
+  public var teamsCount: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -3824,11 +4066,21 @@ public struct Clarifai_Api_Workflow {
 
   public var nodes: [Clarifai_Api_WorkflowNode] = []
 
+  public var metadata: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_metadata = newValue}
+  }
+  /// Returns true if `metadata` has been explicitly set.
+  public var hasMetadata: Bool {return self._metadata != nil}
+  /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
+  public mutating func clearMetadata() {self._metadata = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
 public struct Clarifai_Api_WorkflowNode {
@@ -4129,6 +4381,15 @@ public struct Clarifai_Api_Task {
   /// Add a title for this task to quickly recognise it in a list of tasks.
   public var name: String = String()
 
+  public var aiAssistParams: Clarifai_Api_AiAssistParameters {
+    get {return _aiAssistParams ?? Clarifai_Api_AiAssistParameters()}
+    set {_aiAssistParams = newValue}
+  }
+  /// Returns true if `aiAssistParams` has been explicitly set.
+  public var hasAiAssistParams: Bool {return self._aiAssistParams != nil}
+  /// Clears the value of `aiAssistParams`. Subsequent reads from it will return its default value.
+  public mutating func clearAiAssistParams() {self._aiAssistParams = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum TaskType: SwiftProtobuf.Enum {
@@ -4180,6 +4441,7 @@ public struct Clarifai_Api_Task {
   fileprivate var _aiAssistant: Clarifai_Api_TaskAIAssistant? = nil
   fileprivate var _review: Clarifai_Api_TaskReview? = nil
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _aiAssistParams: Clarifai_Api_AiAssistParameters? = nil
 }
 
 #if swift(>=4.2)
@@ -4195,6 +4457,24 @@ extension Clarifai_Api_Task.TaskType: CaseIterable {
 }
 
 #endif  // swift(>=4.2)
+
+public struct Clarifai_Api_AiAssistParameters {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Min and max threshold values for approving annotations by default based on prediction score
+  public var minThreshold: Float = 0
+
+  public var maxThreshold: Float = 0
+
+  /// ids of concept relations. Used in AI assist workflow
+  public var conceptRelationIds: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
 
 public struct Clarifai_Api_TaskWorker {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -4593,6 +4873,28 @@ public struct Clarifai_Api_TaskAIAssistant {
   public init() {}
 }
 
+public struct Clarifai_Api_TaskStatusCountPerUser {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userID: String = String()
+
+  public var pending: UInt32 = 0
+
+  public var awaitingReview: UInt32 = 0
+
+  public var success: UInt32 = 0
+
+  public var reviewDenied: UInt32 = 0
+
+  public var awaitingConsensusReview: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 /// Collector is a data pathway from a CollectorSource to an app to collect data automatically.
 /// For example, a CollectorSource
 public struct Clarifai_Api_Collector {
@@ -4938,6 +5240,13 @@ extension Clarifai_Api_UsageIntervalType: SwiftProtobuf._ProtoNameProviding {
   ]
 }
 
+extension Clarifai_Api_RoleType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "TEAM"),
+    1: .same(proto: "ORG"),
+  ]
+}
+
 extension Clarifai_Api_StatValueAggType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "SUM"),
@@ -4972,6 +5281,8 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
     9: .standard(proto: "modified_at"),
     10: .same(proto: "trusted"),
     17: .standard(proto: "input_level"),
+    18: .standard(proto: "consensus_info"),
+    19: .standard(proto: "task_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -4989,6 +5300,8 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 15: try decoder.decodeSingularStringField(value: &self.userID)
       case 16: try decoder.decodeSingularStringField(value: &self.modelVersionID)
       case 17: try decoder.decodeSingularBoolField(value: &self.inputLevel)
+      case 18: try decoder.decodeSingularMessageField(value: &self._consensusInfo)
+      case 19: try decoder.decodeSingularStringField(value: &self.taskID)
       default: break
       }
     }
@@ -5031,6 +5344,12 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
     if self.inputLevel != false {
       try visitor.visitSingularBoolField(value: self.inputLevel, fieldNumber: 17)
     }
+    if let v = self._consensusInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 19)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -5047,6 +5366,8 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs.trusted != rhs.trusted {return false}
     if lhs.inputLevel != rhs.inputLevel {return false}
+    if lhs._consensusInfo != rhs._consensusInfo {return false}
+    if lhs.taskID != rhs.taskID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -5294,6 +5615,7 @@ extension Clarifai_Api_Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     1: .same(proto: "url"),
     2: .same(proto: "base64"),
     4: .standard(proto: "allow_duplicate_url"),
+    5: .same(proto: "hosted"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -5302,6 +5624,7 @@ extension Clarifai_Api_Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 1: try decoder.decodeSingularStringField(value: &self.url)
       case 2: try decoder.decodeSingularBytesField(value: &self.base64)
       case 4: try decoder.decodeSingularBoolField(value: &self.allowDuplicateURL)
+      case 5: try decoder.decodeSingularMessageField(value: &self._hosted)
       default: break
       }
     }
@@ -5317,6 +5640,9 @@ extension Clarifai_Api_Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if self.allowDuplicateURL != false {
       try visitor.visitSingularBoolField(value: self.allowDuplicateURL, fieldNumber: 4)
     }
+    if let v = self._hosted {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -5324,6 +5650,95 @@ extension Clarifai_Api_Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.url != rhs.url {return false}
     if lhs.base64 != rhs.base64 {return false}
     if lhs.allowDuplicateURL != rhs.allowDuplicateURL {return false}
+    if lhs._hosted != rhs._hosted {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Track: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Track"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .same(proto: "data"),
+    3: .standard(proto: "track_info"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularMessageField(value: &self._data)
+      case 3: try decoder.decodeSingularMessageField(value: &self._trackInfo)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    if let v = self._data {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
+    if let v = self._trackInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Track, rhs: Clarifai_Api_Track) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs._data != rhs._data {return false}
+    if lhs._trackInfo != rhs._trackInfo {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Track.TrackInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_Track.protoMessageName + ".TrackInfo"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "num_frames"),
+    2: .standard(proto: "begin_time"),
+    3: .standard(proto: "end_time"),
+    4: .same(proto: "quality"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularUInt32Field(value: &self.numFrames)
+      case 2: try decoder.decodeSingularMessageField(value: &self._beginTime)
+      case 3: try decoder.decodeSingularMessageField(value: &self._endTime)
+      case 4: try decoder.decodeSingularFloatField(value: &self.quality)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.numFrames != 0 {
+      try visitor.visitSingularUInt32Field(value: self.numFrames, fieldNumber: 1)
+    }
+    if let v = self._beginTime {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
+    if let v = self._endTime {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
+    if self.quality != 0 {
+      try visitor.visitSingularFloatField(value: self.quality, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Track.TrackInfo, rhs: Clarifai_Api_Track.TrackInfo) -> Bool {
+    if lhs.numFrames != rhs.numFrames {return false}
+    if lhs._beginTime != rhs._beginTime {return false}
+    if lhs._endTime != rhs._endTime {return false}
+    if lhs.quality != rhs.quality {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -5336,6 +5751,7 @@ extension Clarifai_Api_Cluster: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     2: .same(proto: "count"),
     3: .same(proto: "score"),
     4: .same(proto: "hits"),
+    5: .same(proto: "projection"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -5345,6 +5761,7 @@ extension Clarifai_Api_Cluster: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       case 2: try decoder.decodeSingularUInt32Field(value: &self.count)
       case 3: try decoder.decodeSingularFloatField(value: &self.score)
       case 4: try decoder.decodeRepeatedMessageField(value: &self.hits)
+      case 5: try decoder.decodeRepeatedFloatField(value: &self.projection)
       default: break
       }
     }
@@ -5363,6 +5780,9 @@ extension Clarifai_Api_Cluster: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if !self.hits.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.hits, fieldNumber: 4)
     }
+    if !self.projection.isEmpty {
+      try visitor.visitPackedFloatField(value: self.projection, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -5371,6 +5791,7 @@ extension Clarifai_Api_Cluster: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if lhs.count != rhs.count {return false}
     if lhs.score != rhs.score {return false}
     if lhs.hits != rhs.hits {return false}
+    if lhs.projection != rhs.projection {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -5733,6 +6154,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "name"),
     2: .same(proto: "language"),
+    3: .standard(proto: "workflow_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -5740,6 +6162,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.name)
       case 2: try decoder.decodeSingularStringField(value: &self.language)
+      case 3: try decoder.decodeSingularStringField(value: &self.workflowID)
       default: break
       }
     }
@@ -5752,12 +6175,16 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.language.isEmpty {
       try visitor.visitSingularStringField(value: self.language, fieldNumber: 2)
     }
+    if !self.workflowID.isEmpty {
+      try visitor.visitSingularStringField(value: self.workflowID, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ConceptQuery, rhs: Clarifai_Api_ConceptQuery) -> Bool {
     if lhs.name != rhs.name {return false}
     if lhs.language != rhs.language {return false}
+    if lhs.workflowID != rhs.workflowID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -5960,6 +6387,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     12: .same(proto: "frames"),
     13: .same(proto: "text"),
     14: .same(proto: "audio"),
+    15: .same(proto: "tracks"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -5977,6 +6405,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       case 12: try decoder.decodeRepeatedMessageField(value: &self.frames)
       case 13: try decoder.decodeSingularMessageField(value: &self._text)
       case 14: try decoder.decodeSingularMessageField(value: &self._audio)
+      case 15: try decoder.decodeRepeatedMessageField(value: &self.tracks)
       default: break
       }
     }
@@ -6019,6 +6448,9 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if let v = self._audio {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
     }
+    if !self.tracks.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.tracks, fieldNumber: 15)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -6035,6 +6467,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if lhs.frames != rhs.frames {return false}
     if lhs._text != rhs._text {return false}
     if lhs._audio != rhs._audio {return false}
+    if lhs.tracks != rhs.tracks {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -6596,6 +7029,7 @@ extension Clarifai_Api_HostedURL: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     1: .same(proto: "prefix"),
     2: .same(proto: "suffix"),
     3: .same(proto: "sizes"),
+    4: .same(proto: "crossorigin"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -6604,6 +7038,7 @@ extension Clarifai_Api_HostedURL: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 1: try decoder.decodeSingularStringField(value: &self.prefix)
       case 2: try decoder.decodeSingularStringField(value: &self.suffix)
       case 3: try decoder.decodeRepeatedStringField(value: &self.sizes)
+      case 4: try decoder.decodeSingularStringField(value: &self.crossorigin)
       default: break
       }
     }
@@ -6619,6 +7054,9 @@ extension Clarifai_Api_HostedURL: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.sizes.isEmpty {
       try visitor.visitRepeatedStringField(value: self.sizes, fieldNumber: 3)
     }
+    if !self.crossorigin.isEmpty {
+      try visitor.visitSingularStringField(value: self.crossorigin, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -6626,6 +7064,7 @@ extension Clarifai_Api_HostedURL: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.prefix != rhs.prefix {return false}
     if lhs.suffix != rhs.suffix {return false}
     if lhs.sizes != rhs.sizes {return false}
+    if lhs.crossorigin != rhs.crossorigin {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -7199,6 +7638,10 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     9: .same(proto: "creatable"),
     10: .standard(proto: "internal_only"),
     11: .standard(proto: "model_type_fields"),
+    12: .standard(proto: "requires_sequential_frames"),
+    13: .same(proto: "evaluable"),
+    14: .standard(proto: "expected_pretrained_input_fields"),
+    15: .standard(proto: "expected_pretrained_output_fields"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -7214,6 +7657,10 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 9: try decoder.decodeSingularBoolField(value: &self.creatable)
       case 10: try decoder.decodeSingularBoolField(value: &self.internalOnly)
       case 11: try decoder.decodeRepeatedMessageField(value: &self.modelTypeFields)
+      case 12: try decoder.decodeSingularBoolField(value: &self.requiresSequentialFrames)
+      case 13: try decoder.decodeSingularBoolField(value: &self.evaluable)
+      case 14: try decoder.decodeSingularMessageField(value: &self._expectedPretrainedInputFields)
+      case 15: try decoder.decodeSingularMessageField(value: &self._expectedPretrainedOutputFields)
       default: break
       }
     }
@@ -7250,6 +7697,18 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.modelTypeFields.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.modelTypeFields, fieldNumber: 11)
     }
+    if self.requiresSequentialFrames != false {
+      try visitor.visitSingularBoolField(value: self.requiresSequentialFrames, fieldNumber: 12)
+    }
+    if self.evaluable != false {
+      try visitor.visitSingularBoolField(value: self.evaluable, fieldNumber: 13)
+    }
+    if let v = self._expectedPretrainedInputFields {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+    }
+    if let v = self._expectedPretrainedOutputFields {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -7264,6 +7723,10 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.creatable != rhs.creatable {return false}
     if lhs.internalOnly != rhs.internalOnly {return false}
     if lhs.modelTypeFields != rhs.modelTypeFields {return false}
+    if lhs.requiresSequentialFrames != rhs.requiresSequentialFrames {return false}
+    if lhs.evaluable != rhs.evaluable {return false}
+    if lhs._expectedPretrainedInputFields != rhs._expectedPretrainedInputFields {return false}
+    if lhs._expectedPretrainedOutputFields != rhs._expectedPretrainedOutputFields {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -7502,6 +7965,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     5: .same(proto: "metrics"),
     6: .standard(proto: "total_input_count"),
     10: .standard(proto: "completed_at"),
+    11: .same(proto: "description"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -7514,6 +7978,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 5: try decoder.decodeSingularMessageField(value: &self._metrics)
       case 6: try decoder.decodeSingularUInt32Field(value: &self.totalInputCount)
       case 10: try decoder.decodeSingularMessageField(value: &self._completedAt)
+      case 11: try decoder.decodeSingularStringField(value: &self.description_p)
       default: break
       }
     }
@@ -7541,6 +8006,9 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if let v = self._completedAt {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
     }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -7552,6 +8020,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs._metrics != rhs._metrics {return false}
     if lhs.totalInputCount != rhs.totalInputCount {return false}
     if lhs._completedAt != rhs._completedAt {return false}
+    if lhs.description_p != rhs.description_p {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8103,6 +8572,65 @@ extension Clarifai_Api_BinaryMetrics: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
+extension Clarifai_Api_TrackerMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TrackerMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "mot_mota"),
+    2: .standard(proto: "mot_num_switches"),
+    3: .standard(proto: "morse_frag"),
+    4: .standard(proto: "avg_precision"),
+    5: .same(proto: "aiid"),
+    6: .standard(proto: "unique_switch_rate"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularFloatField(value: &self.motMota)
+      case 2: try decoder.decodeSingularInt32Field(value: &self.motNumSwitches)
+      case 3: try decoder.decodeSingularFloatField(value: &self.morseFrag)
+      case 4: try decoder.decodeSingularFloatField(value: &self.avgPrecision)
+      case 5: try decoder.decodeSingularStringField(value: &self.aiid)
+      case 6: try decoder.decodeSingularFloatField(value: &self.uniqueSwitchRate)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.motMota != 0 {
+      try visitor.visitSingularFloatField(value: self.motMota, fieldNumber: 1)
+    }
+    if self.motNumSwitches != 0 {
+      try visitor.visitSingularInt32Field(value: self.motNumSwitches, fieldNumber: 2)
+    }
+    if self.morseFrag != 0 {
+      try visitor.visitSingularFloatField(value: self.morseFrag, fieldNumber: 3)
+    }
+    if self.avgPrecision != 0 {
+      try visitor.visitSingularFloatField(value: self.avgPrecision, fieldNumber: 4)
+    }
+    if !self.aiid.isEmpty {
+      try visitor.visitSingularStringField(value: self.aiid, fieldNumber: 5)
+    }
+    if self.uniqueSwitchRate != 0 {
+      try visitor.visitSingularFloatField(value: self.uniqueSwitchRate, fieldNumber: 6)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TrackerMetrics, rhs: Clarifai_Api_TrackerMetrics) -> Bool {
+    if lhs.motMota != rhs.motMota {return false}
+    if lhs.motNumSwitches != rhs.motNumSwitches {return false}
+    if lhs.morseFrag != rhs.morseFrag {return false}
+    if lhs.avgPrecision != rhs.avgPrecision {return false}
+    if lhs.aiid != rhs.aiid {return false}
+    if lhs.uniqueSwitchRate != rhs.uniqueSwitchRate {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_EvalTestSetEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".EvalTestSetEntry"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -8317,6 +8845,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     7: .standard(proto: "test_set"),
     8: .standard(proto: "metrics_by_area"),
     9: .standard(proto: "metrics_by_class"),
+    11: .standard(proto: "tracker_metrics"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8332,6 +8861,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       case 8: try decoder.decodeRepeatedMessageField(value: &self.metricsByArea)
       case 9: try decoder.decodeRepeatedMessageField(value: &self.metricsByClass)
       case 10: try decoder.decodeSingularStringField(value: &self.id)
+      case 11: try decoder.decodeRepeatedMessageField(value: &self.trackerMetrics)
       default: break
       }
     }
@@ -8368,6 +8898,9 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if !self.id.isEmpty {
       try visitor.visitSingularStringField(value: self.id, fieldNumber: 10)
     }
+    if !self.trackerMetrics.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.trackerMetrics, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8382,6 +8915,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if lhs.testSet != rhs.testSet {return false}
     if lhs.metricsByArea != rhs.metricsByArea {return false}
     if lhs.metricsByClass != rhs.metricsByClass {return false}
+    if lhs.trackerMetrics != rhs.trackerMetrics {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8810,6 +9344,7 @@ extension Clarifai_Api_Filter: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     3: .same(proto: "negate"),
     4: .same(proto: "annotation"),
+    5: .same(proto: "input"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8817,6 +9352,7 @@ extension Clarifai_Api_Filter: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       switch fieldNumber {
       case 3: try decoder.decodeSingularBoolField(value: &self.negate)
       case 4: try decoder.decodeSingularMessageField(value: &self._annotation)
+      case 5: try decoder.decodeSingularMessageField(value: &self._input)
       default: break
       }
     }
@@ -8829,12 +9365,16 @@ extension Clarifai_Api_Filter: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if let v = self._annotation {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     }
+    if let v = self._input {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_Filter, rhs: Clarifai_Api_Filter) -> Bool {
     if lhs.negate != rhs.negate {return false}
     if lhs._annotation != rhs._annotation {return false}
+    if lhs._input != rhs._input {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8990,6 +9530,9 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     10: .standard(proto: "date_marketing_consent"),
     11: .same(proto: "metadata"),
     12: .standard(proto: "email_addresses"),
+    14: .standard(proto: "is_org_admin"),
+    15: .standard(proto: "two_factor_auth_enabled"),
+    16: .standard(proto: "teams_count"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9007,6 +9550,9 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       case 10: try decoder.decodeSingularMessageField(value: &self._dateMarketingConsent)
       case 11: try decoder.decodeSingularMessageField(value: &self._metadata)
       case 12: try decoder.decodeRepeatedMessageField(value: &self.emailAddresses)
+      case 14: try decoder.decodeSingularBoolField(value: &self.isOrgAdmin)
+      case 15: try decoder.decodeSingularBoolField(value: &self.twoFactorAuthEnabled)
+      case 16: try decoder.decodeSingularUInt32Field(value: &self.teamsCount)
       default: break
       }
     }
@@ -9049,6 +9595,15 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if !self.emailAddresses.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.emailAddresses, fieldNumber: 12)
     }
+    if self.isOrgAdmin != false {
+      try visitor.visitSingularBoolField(value: self.isOrgAdmin, fieldNumber: 14)
+    }
+    if self.twoFactorAuthEnabled != false {
+      try visitor.visitSingularBoolField(value: self.twoFactorAuthEnabled, fieldNumber: 15)
+    }
+    if self.teamsCount != 0 {
+      try visitor.visitSingularUInt32Field(value: self.teamsCount, fieldNumber: 16)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9065,6 +9620,9 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if lhs._dateMarketingConsent != rhs._dateMarketingConsent {return false}
     if lhs._metadata != rhs._metadata {return false}
     if lhs.emailAddresses != rhs.emailAddresses {return false}
+    if lhs.isOrgAdmin != rhs.isOrgAdmin {return false}
+    if lhs.twoFactorAuthEnabled != rhs.twoFactorAuthEnabled {return false}
+    if lhs.teamsCount != rhs.teamsCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9307,6 +9865,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     2: .standard(proto: "app_id"),
     3: .standard(proto: "created_at"),
     4: .same(proto: "nodes"),
+    5: .same(proto: "metadata"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9316,6 +9875,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       case 2: try decoder.decodeSingularStringField(value: &self.appID)
       case 3: try decoder.decodeSingularMessageField(value: &self._createdAt)
       case 4: try decoder.decodeRepeatedMessageField(value: &self.nodes)
+      case 5: try decoder.decodeSingularMessageField(value: &self._metadata)
       default: break
       }
     }
@@ -9334,6 +9894,9 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if !self.nodes.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.nodes, fieldNumber: 4)
     }
+    if let v = self._metadata {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9342,6 +9905,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.appID != rhs.appID {return false}
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs.nodes != rhs.nodes {return false}
+    if lhs._metadata != rhs._metadata {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9622,6 +10186,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     11: .same(proto: "review"),
     12: .same(proto: "status"),
     13: .same(proto: "name"),
+    14: .standard(proto: "ai_assist_params"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9640,6 +10205,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       case 11: try decoder.decodeSingularMessageField(value: &self._review)
       case 12: try decoder.decodeSingularMessageField(value: &self._status)
       case 13: try decoder.decodeSingularStringField(value: &self.name)
+      case 14: try decoder.decodeSingularMessageField(value: &self._aiAssistParams)
       default: break
       }
     }
@@ -9685,6 +10251,9 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if !self.name.isEmpty {
       try visitor.visitSingularStringField(value: self.name, fieldNumber: 13)
     }
+    if let v = self._aiAssistParams {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9702,6 +10271,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if lhs._review != rhs._review {return false}
     if lhs._status != rhs._status {return false}
     if lhs.name != rhs.name {return false}
+    if lhs._aiAssistParams != rhs._aiAssistParams {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9714,6 +10284,47 @@ extension Clarifai_Api_Task.TaskType: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "BOUNDING_BOX_DETECTION"),
     3: .same(proto: "POLYGON_DETECTION"),
   ]
+}
+
+extension Clarifai_Api_AiAssistParameters: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AiAssistParameters"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "min_threshold"),
+    2: .standard(proto: "max_threshold"),
+    3: .standard(proto: "concept_relation_ids"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularFloatField(value: &self.minThreshold)
+      case 2: try decoder.decodeSingularFloatField(value: &self.maxThreshold)
+      case 3: try decoder.decodeRepeatedStringField(value: &self.conceptRelationIds)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.minThreshold != 0 {
+      try visitor.visitSingularFloatField(value: self.minThreshold, fieldNumber: 1)
+    }
+    if self.maxThreshold != 0 {
+      try visitor.visitSingularFloatField(value: self.maxThreshold, fieldNumber: 2)
+    }
+    if !self.conceptRelationIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.conceptRelationIds, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AiAssistParameters, rhs: Clarifai_Api_AiAssistParameters) -> Bool {
+    if lhs.minThreshold != rhs.minThreshold {return false}
+    if lhs.maxThreshold != rhs.maxThreshold {return false}
+    if lhs.conceptRelationIds != rhs.conceptRelationIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }
 
 extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -10016,6 +10627,65 @@ extension Clarifai_Api_TaskAIAssistant: SwiftProtobuf.Message, SwiftProtobuf._Me
 
   public static func ==(lhs: Clarifai_Api_TaskAIAssistant, rhs: Clarifai_Api_TaskAIAssistant) -> Bool {
     if lhs.workflowID != rhs.workflowID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_TaskStatusCountPerUser: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TaskStatusCountPerUser"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_id"),
+    2: .same(proto: "pending"),
+    3: .standard(proto: "awaiting_review"),
+    4: .same(proto: "success"),
+    5: .standard(proto: "review_denied"),
+    6: .standard(proto: "awaiting_consensus_review"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.userID)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.pending)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.awaitingReview)
+      case 4: try decoder.decodeSingularUInt32Field(value: &self.success)
+      case 5: try decoder.decodeSingularUInt32Field(value: &self.reviewDenied)
+      case 6: try decoder.decodeSingularUInt32Field(value: &self.awaitingConsensusReview)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.userID.isEmpty {
+      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 1)
+    }
+    if self.pending != 0 {
+      try visitor.visitSingularUInt32Field(value: self.pending, fieldNumber: 2)
+    }
+    if self.awaitingReview != 0 {
+      try visitor.visitSingularUInt32Field(value: self.awaitingReview, fieldNumber: 3)
+    }
+    if self.success != 0 {
+      try visitor.visitSingularUInt32Field(value: self.success, fieldNumber: 4)
+    }
+    if self.reviewDenied != 0 {
+      try visitor.visitSingularUInt32Field(value: self.reviewDenied, fieldNumber: 5)
+    }
+    if self.awaitingConsensusReview != 0 {
+      try visitor.visitSingularUInt32Field(value: self.awaitingConsensusReview, fieldNumber: 6)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TaskStatusCountPerUser, rhs: Clarifai_Api_TaskStatusCountPerUser) -> Bool {
+    if lhs.userID != rhs.userID {return false}
+    if lhs.pending != rhs.pending {return false}
+    if lhs.awaitingReview != rhs.awaitingReview {return false}
+    if lhs.success != rhs.success {return false}
+    if lhs.reviewDenied != rhs.reviewDenied {return false}
+    if lhs.awaitingConsensusReview != rhs.awaitingConsensusReview {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

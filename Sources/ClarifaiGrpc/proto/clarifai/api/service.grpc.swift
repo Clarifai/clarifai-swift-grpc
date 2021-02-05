@@ -27,6 +27,21 @@ import SwiftProtobuf
 
 /// Usage: instantiate Clarifai_Api_V2Client, then call methods of this protocol to make API calls.
 public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
+  func listConceptRelations(
+    _ request: Clarifai_Api_ListConceptRelationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>
+
+  func postConceptRelations(
+    _ request: Clarifai_Api_PostConceptRelationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>
+
+  func deleteConceptRelations(
+    _ request: Clarifai_Api_DeleteConceptRelationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse>
+
   func getConceptCounts(
     _ request: Clarifai_Api_GetConceptCountsRequest,
     callOptions: CallOptions?
@@ -77,21 +92,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>
 
-  func listConceptRelations(
-    _ request: Clarifai_Api_ListConceptRelationsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>
-
-  func postConceptRelations(
-    _ request: Clarifai_Api_PostConceptRelationsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>
-
-  func deleteConceptRelations(
-    _ request: Clarifai_Api_DeleteConceptRelationsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse>
-
   func listKnowledgeGraphs(
     _ request: Clarifai_Api_ListKnowledgeGraphsRequest,
     callOptions: CallOptions?
@@ -127,6 +127,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>
 
+  func patchAnnotationsStatus(
+    _ request: Clarifai_Api_PatchAnnotationsStatusRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsStatusRequest, Clarifai_Api_PatchAnnotationsStatusResponse>
+
   func deleteAnnotation(
     _ request: Clarifai_Api_DeleteAnnotationRequest,
     callOptions: CallOptions?
@@ -151,6 +156,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_StreamInputsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_StreamInputsRequest, Clarifai_Api_MultiInputResponse>
+
+  func getInputSamples(
+    _ request: Clarifai_Api_GetInputSamplesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetInputSamplesRequest, Clarifai_Api_MultiInputAnnotationResponse>
 
   func getInput(
     _ request: Clarifai_Api_GetInputRequest,
@@ -492,6 +502,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostTasksRequest, Clarifai_Api_MultiTaskResponse>
 
+  func getTaskAnnotationCount(
+    _ request: Clarifai_Api_GetTaskCountRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>
+
+  func getTaskInputCount(
+    _ request: Clarifai_Api_GetTaskCountRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>
+
   func getTask(
     _ request: Clarifai_Api_GetTaskRequest,
     callOptions: CallOptions?
@@ -550,6 +570,59 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
 }
 
 extension Clarifai_Api_V2ClientProtocol {
+
+  /// List concept relations between concepts in the platform.
+  /// MUST be above ListConcepts so that if concept_id is empty this will still match
+  /// /concepts/relations to list all the concept relations in the app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListConceptRelations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listConceptRelations(
+    _ request: Clarifai_Api_ListConceptRelationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListConceptRelations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Post concept relations to create relations between concepts in the platform.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostConceptRelations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postConceptRelations(
+    _ request: Clarifai_Api_PostConceptRelationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostConceptRelations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Post concept relations to create relations between concepts in the platform.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteConceptRelations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteConceptRelations(
+    _ request: Clarifai_Api_DeleteConceptRelationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteConceptRelations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
 
   /// List all the concepts with their positive and negative counts
   ///
@@ -724,57 +797,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List concept relations between concepts in the platform.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListConceptRelations.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listConceptRelations(
-    _ request: Clarifai_Api_ListConceptRelationsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListConceptRelations",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
-  /// Post concept relations to create relations between concepts in the platform.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostConceptRelations.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postConceptRelations(
-    _ request: Clarifai_Api_PostConceptRelationsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostConceptRelations",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
-  /// Post concept relations to create relations between concepts in the platform.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteConceptRelations.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteConceptRelations(
-    _ request: Clarifai_Api_DeleteConceptRelationsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteConceptRelations",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
-    )
-  }
-
   /// List all domain graphs.
   ///
   /// - Parameters:
@@ -894,6 +916,23 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Patch annotations status by worker id and task id.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAnnotationsStatus.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAnnotationsStatus(
+    _ request: Clarifai_Api_PatchAnnotationsStatusRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsStatusRequest, Clarifai_Api_PatchAnnotationsStatusResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAnnotationsStatus",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// Delete a single annotation.
   ///
   /// - Parameters:
@@ -945,7 +984,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Patch one or more inputs.
+  /// Get input count per status.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetInputCount.
@@ -974,6 +1013,23 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_StreamInputsRequest, Clarifai_Api_MultiInputResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/StreamInputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Get a specific input from an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetInputSamples.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getInputSamples(
+    _ request: Clarifai_Api_GetInputSamplesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetInputSamplesRequest, Clarifai_Api_MultiInputAnnotationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetInputSamples",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -1136,6 +1192,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// List all the model types available in the platform.
+  /// This MUST be above ListModels so that the /models/types endpoint takes precedence.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListModelTypes.
@@ -1778,8 +1835,6 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Search over the applications to find one or more you're looking for.
-  /// This leverage the "body" parameter because we also have page and
-  /// per_page as url query param variables in this request.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostAppsSearches.
@@ -2154,6 +2209,40 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Task annotation count
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetTaskAnnotationCount.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getTaskAnnotationCount(
+    _ request: Clarifai_Api_GetTaskCountRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetTaskAnnotationCount",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Task Input count
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetTaskInputCount.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getTaskInputCount(
+    _ request: Clarifai_Api_GetTaskCountRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetTaskInputCount",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// Get a specific task from an app.
   ///
   /// - Parameters:
@@ -2365,6 +2454,14 @@ public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
 
 /// To build a server, implement a class that conforms to this protocol.
 public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
+  /// List concept relations between concepts in the platform.
+  /// MUST be above ListConcepts so that if concept_id is empty this will still match
+  /// /concepts/relations to list all the concept relations in the app.
+  func listConceptRelations(request: Clarifai_Api_ListConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
+  /// Post concept relations to create relations between concepts in the platform.
+  func postConceptRelations(request: Clarifai_Api_PostConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
+  /// Post concept relations to create relations between concepts in the platform.
+  func deleteConceptRelations(request: Clarifai_Api_DeleteConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// List all the concepts with their positive and negative counts
   func getConceptCounts(request: Clarifai_Api_GetConceptCountsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptCountResponse>
   /// Get a specific concept from an app.
@@ -2388,12 +2485,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Patch the name for a given language names by passing in a list of concepts with the new names
   /// for the languages.
   func patchConceptLanguages(request: Clarifai_Api_PatchConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
-  /// List concept relations between concepts in the platform.
-  func listConceptRelations(request: Clarifai_Api_ListConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
-  /// Post concept relations to create relations between concepts in the platform.
-  func postConceptRelations(request: Clarifai_Api_PostConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
-  /// Post concept relations to create relations between concepts in the platform.
-  func deleteConceptRelations(request: Clarifai_Api_DeleteConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// List all domain graphs.
   func listKnowledgeGraphs(request: Clarifai_Api_ListKnowledgeGraphsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKnowledgeGraphResponse>
   /// Post domain graphs.
@@ -2408,16 +2499,20 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postAnnotations(request: Clarifai_Api_PostAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
   /// Patch one or more annotations.
   func patchAnnotations(request: Clarifai_Api_PatchAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+  /// Patch annotations status by worker id and task id.
+  func patchAnnotationsStatus(request: Clarifai_Api_PatchAnnotationsStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PatchAnnotationsStatusResponse>
   /// Delete a single annotation.
   func deleteAnnotation(request: Clarifai_Api_DeleteAnnotationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete multiple annotations in one request.
   func deleteAnnotations(request: Clarifai_Api_DeleteAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Execute a search over annotation
   func postAnnotationsSearches(request: Clarifai_Api_PostAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
-  /// Patch one or more inputs.
+  /// Get input count per status.
   func getInputCount(request: Clarifai_Api_GetInputCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputCountResponse>
   /// Streams all the inputs starting from oldest assets.
   func streamInputs(request: Clarifai_Api_StreamInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+  /// Get a specific input from an app.
+  func getInputSamples(request: Clarifai_Api_GetInputSamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputAnnotationResponse>
   /// Get a specific input from an app.
   func getInput(request: Clarifai_Api_GetInputRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputResponse>
   /// List all the inputs.
@@ -2440,6 +2535,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Get a specific model type.
   func getModelType(request: Clarifai_Api_GetModelTypeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelTypeResponse>
   /// List all the model types available in the platform.
+  /// This MUST be above ListModels so that the /models/types endpoint takes precedence.
   func listModelTypes(request: Clarifai_Api_ListModelTypesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelTypeResponse>
   /// Get a specific model from an app.
   func getModel(request: Clarifai_Api_GetModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
@@ -2526,8 +2622,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Patch one or more apps.
   func patchApps(request: Clarifai_Api_PatchAppsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
   /// Search over the applications to find one or more you're looking for.
-  /// This leverage the "body" parameter because we also have page and
-  /// per_page as url query param variables in this request.
   func postAppsSearches(request: Clarifai_Api_PostAppsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
   /// Validate new password in real-time for a user
   func postValidatePassword(request: Clarifai_Api_PostValidatePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePasswordValidationResponse>
@@ -2571,6 +2665,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func getAppDuplication(request: Clarifai_Api_GetAppDuplicationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppDuplicationResponse>
   /// Add tasks to an app.
   func postTasks(request: Clarifai_Api_PostTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskResponse>
+  /// Task annotation count
+  func getTaskAnnotationCount(request: Clarifai_Api_GetTaskCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskCountResponse>
+  /// Task Input count
+  func getTaskInputCount(request: Clarifai_Api_GetTaskCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskCountResponse>
   /// Get a specific task from an app.
   func getTask(request: Clarifai_Api_GetTaskRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskResponse>
   /// List tasks from an app.
@@ -2606,6 +2704,27 @@ extension Clarifai_Api_V2Provider {
   /// Returns nil for methods not handled by this service.
   public func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
     switch methodName {
+    case "ListConceptRelations":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listConceptRelations(request: request, context: context)
+        }
+      }
+
+    case "PostConceptRelations":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.postConceptRelations(request: request, context: context)
+        }
+      }
+
+    case "DeleteConceptRelations":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.deleteConceptRelations(request: request, context: context)
+        }
+      }
+
     case "GetConceptCounts":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -2676,27 +2795,6 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
-    case "ListConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listConceptRelations(request: request, context: context)
-        }
-      }
-
-    case "PostConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConceptRelations(request: request, context: context)
-        }
-      }
-
-    case "DeleteConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteConceptRelations(request: request, context: context)
-        }
-      }
-
     case "ListKnowledgeGraphs":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -2746,6 +2844,13 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "PatchAnnotationsStatus":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchAnnotationsStatus(request: request, context: context)
+        }
+      }
+
     case "DeleteAnnotation":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -2778,6 +2883,13 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.streamInputs(request: request, context: context)
+        }
+      }
+
+    case "GetInputSamples":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.getInputSamples(request: request, context: context)
         }
       }
 
@@ -3254,6 +3366,20 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.postTasks(request: request, context: context)
+        }
+      }
+
+    case "GetTaskAnnotationCount":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.getTaskAnnotationCount(request: request, context: context)
+        }
+      }
+
+    case "GetTaskInputCount":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.getTaskInputCount(request: request, context: context)
         }
       }
 

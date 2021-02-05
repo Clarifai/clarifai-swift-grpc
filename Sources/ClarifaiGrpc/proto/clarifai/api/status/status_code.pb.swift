@@ -205,6 +205,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case annotationInvalidArgument // = 24155
   case annotationPermissionDenied // = 24156
   case annotationAwaitingReview // = 24157
+  case annotationAwaitingConsensusReview // = 24159
   case annotationReviewDenied // = 24158
   case annotationModifySuccess // = 24250
   case annotationModifyPending // = 24251
@@ -227,6 +228,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case dataDumpPending // = 25151
   case dataDumpFailed // = 25152
   case dataDumpInProgress // = 25153
+  case dataDumpNoData // = 25154
 
   /// Duplicate related 252xx
   case appDuplicationSuccess // = 25200
@@ -303,14 +305,13 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case databaseFailToGetConnections // = 40015
   case databaseTooManyClients // = 40016
   case databaseConstraintViolated // = 40017
-  case databaseNoOngoingOperations // = 40018
-  case databaseLockedByOngoingOperation // = 40019
   case asyncWorkerMultiErrors // = 40020
   case rpcRequestQueueFull // = 40030
   case rpcServerUnavailable // = 40031
   case rpcRequestTimeout // = 40032
   case rpcMaxMessageSizeExceeded // = 40033
   case rpcCanceled // = 40035
+  case rpcUnknownMethod // = 40036
   case clusterInternalFailure // = 43040
 
   /// could not connect to external services
@@ -347,12 +348,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case searchPredictionFailure // = 43003
   case searchByNotFullyIndexedInput // = 43004
   case savedSearchModifyFailed // = 43005
-  case annotationSearchMetricsQueuedForEvaluation // = 43100
-  case annotationSearchMetricsEvaluating // = 43101
-  case annotationSearchMetricsEvaluated // = 43102
-  case annotationSearchMetricsFailedToRetrieveData // = 43103
-  case annotationSearchMetricsInvalidArgument // = 43104
-  case annotationSearchMetricsFailed // = 43105
+  case evaluationQueued // = 43100
+  case evaluationInProgress // = 43101
+  case evaluationSuccess // = 43102
+  case evaluationFailedToRetrieveData // = 43103
+  case evaluationInvalidArgument // = 43104
+  case evaluationFailed // = 43105
+  case evaluationPending // = 43106
+  case evaluationTimedOut // = 43107
+  case evaluationUnexpectedError // = 43108
 
   /// Stripe 44xxx
   case stripeEventError // = 44001
@@ -360,6 +364,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Redis/Cache 45xxx
   case cacheMiss // = 45001
   case redisScriptExitedWithFailure // = 45002
+  case redisStreamErr // = 45003
+  case redisNoConsumers // = 45004
 
   /// Sift Science 46xxx
   case signupEventError // = 46001
@@ -415,6 +421,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Certain task-related scenarios are not implemented.
   case taskNotImplemented // = 54101
 
+  /// Task was not found.
+  case taskMissing // = 54102
+
   /// Label Order Related Status Code 55xxx
   case labelOrderPending // = 55001
   case labelOrderInProgress // = 55002
@@ -441,6 +450,16 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case featureflagConfigNotFound // = 62000
   case featureflagInvalidArgument // = 62001
   case featureflagBlocked // = 62002
+
+  /// Maintenance status code
+  case maintenanceSuccess // = 63000
+  case maintenanceFailed // = 63001
+
+  /// Generic Job status codes
+  case jobQueued // = 6400
+  case jobRunning // = 6401
+  case jobCompleted // = 6402
+  case jobFailed // = 6403
 
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
@@ -476,6 +495,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   public init?(rawValue: Int) {
     switch rawValue {
     case 0: self = .zero
+    case 6400: self = .jobQueued
+    case 6401: self = .jobRunning
+    case 6402: self = .jobCompleted
+    case 6403: self = .jobFailed
     case 10000: self = .success
     case 10010: self = .mixedStatus
     case 10020: self = .failure
@@ -562,6 +585,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 24156: self = .annotationPermissionDenied
     case 24157: self = .annotationAwaitingReview
     case 24158: self = .annotationReviewDenied
+    case 24159: self = .annotationAwaitingConsensusReview
     case 24250: self = .annotationModifySuccess
     case 24251: self = .annotationModifyPending
     case 24252: self = .annotationModifyFailed
@@ -577,6 +601,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25151: self = .dataDumpPending
     case 25152: self = .dataDumpFailed
     case 25153: self = .dataDumpInProgress
+    case 25154: self = .dataDumpNoData
     case 25200: self = .appDuplicationSuccess
     case 25201: self = .appDuplicationFailed
     case 25202: self = .appDuplicationPending
@@ -639,8 +664,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 40015: self = .databaseFailToGetConnections
     case 40016: self = .databaseTooManyClients
     case 40017: self = .databaseConstraintViolated
-    case 40018: self = .databaseNoOngoingOperations
-    case 40019: self = .databaseLockedByOngoingOperation
     case 40020: self = .asyncWorkerMultiErrors
     case 40030: self = .rpcRequestQueueFull
     case 40031: self = .rpcServerUnavailable
@@ -648,6 +671,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 40033: self = .rpcMaxMessageSizeExceeded
     case 40034: self = .externalConnectionError
     case 40035: self = .rpcCanceled
+    case 40036: self = .rpcUnknownMethod
     case 41000: self = .queueConnError
     case 41002: self = .queueCloseRequestTimeout
     case 41003: self = .queueConnClosed
@@ -673,15 +697,20 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 43004: self = .searchByNotFullyIndexedInput
     case 43005: self = .savedSearchModifyFailed
     case 43040: self = .clusterInternalFailure
-    case 43100: self = .annotationSearchMetricsQueuedForEvaluation
-    case 43101: self = .annotationSearchMetricsEvaluating
-    case 43102: self = .annotationSearchMetricsEvaluated
-    case 43103: self = .annotationSearchMetricsFailedToRetrieveData
-    case 43104: self = .annotationSearchMetricsInvalidArgument
-    case 43105: self = .annotationSearchMetricsFailed
+    case 43100: self = .evaluationQueued
+    case 43101: self = .evaluationInProgress
+    case 43102: self = .evaluationSuccess
+    case 43103: self = .evaluationFailedToRetrieveData
+    case 43104: self = .evaluationInvalidArgument
+    case 43105: self = .evaluationFailed
+    case 43106: self = .evaluationPending
+    case 43107: self = .evaluationTimedOut
+    case 43108: self = .evaluationUnexpectedError
     case 44001: self = .stripeEventError
     case 45001: self = .cacheMiss
     case 45002: self = .redisScriptExitedWithFailure
+    case 45003: self = .redisStreamErr
+    case 45004: self = .redisNoConsumers
     case 46001: self = .signupEventError
     case 46002: self = .signupFlagged
     case 46003: self = .filetypeUnsupported
@@ -709,6 +738,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 54005: self = .taskAddAnnotationsFailure
     case 54100: self = .taskConflict
     case 54101: self = .taskNotImplemented
+    case 54102: self = .taskMissing
     case 55001: self = .labelOrderPending
     case 55002: self = .labelOrderInProgress
     case 55003: self = .labelOrderSuccess
@@ -726,6 +756,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 62000: self = .featureflagConfigNotFound
     case 62001: self = .featureflagInvalidArgument
     case 62002: self = .featureflagBlocked
+    case 63000: self = .maintenanceSuccess
+    case 63001: self = .maintenanceFailed
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -753,6 +785,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   public var rawValue: Int {
     switch self {
     case .zero: return 0
+    case .jobQueued: return 6400
+    case .jobRunning: return 6401
+    case .jobCompleted: return 6402
+    case .jobFailed: return 6403
     case .success: return 10000
     case .mixedStatus: return 10010
     case .failure: return 10020
@@ -839,6 +875,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .annotationPermissionDenied: return 24156
     case .annotationAwaitingReview: return 24157
     case .annotationReviewDenied: return 24158
+    case .annotationAwaitingConsensusReview: return 24159
     case .annotationModifySuccess: return 24250
     case .annotationModifyPending: return 24251
     case .annotationModifyFailed: return 24252
@@ -854,6 +891,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .dataDumpPending: return 25151
     case .dataDumpFailed: return 25152
     case .dataDumpInProgress: return 25153
+    case .dataDumpNoData: return 25154
     case .appDuplicationSuccess: return 25200
     case .appDuplicationFailed: return 25201
     case .appDuplicationPending: return 25202
@@ -916,8 +954,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .databaseFailToGetConnections: return 40015
     case .databaseTooManyClients: return 40016
     case .databaseConstraintViolated: return 40017
-    case .databaseNoOngoingOperations: return 40018
-    case .databaseLockedByOngoingOperation: return 40019
     case .asyncWorkerMultiErrors: return 40020
     case .rpcRequestQueueFull: return 40030
     case .rpcServerUnavailable: return 40031
@@ -925,6 +961,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .rpcMaxMessageSizeExceeded: return 40033
     case .externalConnectionError: return 40034
     case .rpcCanceled: return 40035
+    case .rpcUnknownMethod: return 40036
     case .queueConnError: return 41000
     case .queueCloseRequestTimeout: return 41002
     case .queueConnClosed: return 41003
@@ -950,15 +987,20 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .searchByNotFullyIndexedInput: return 43004
     case .savedSearchModifyFailed: return 43005
     case .clusterInternalFailure: return 43040
-    case .annotationSearchMetricsQueuedForEvaluation: return 43100
-    case .annotationSearchMetricsEvaluating: return 43101
-    case .annotationSearchMetricsEvaluated: return 43102
-    case .annotationSearchMetricsFailedToRetrieveData: return 43103
-    case .annotationSearchMetricsInvalidArgument: return 43104
-    case .annotationSearchMetricsFailed: return 43105
+    case .evaluationQueued: return 43100
+    case .evaluationInProgress: return 43101
+    case .evaluationSuccess: return 43102
+    case .evaluationFailedToRetrieveData: return 43103
+    case .evaluationInvalidArgument: return 43104
+    case .evaluationFailed: return 43105
+    case .evaluationPending: return 43106
+    case .evaluationTimedOut: return 43107
+    case .evaluationUnexpectedError: return 43108
     case .stripeEventError: return 44001
     case .cacheMiss: return 45001
     case .redisScriptExitedWithFailure: return 45002
+    case .redisStreamErr: return 45003
+    case .redisNoConsumers: return 45004
     case .signupEventError: return 46001
     case .signupFlagged: return 46002
     case .filetypeUnsupported: return 46003
@@ -986,6 +1028,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .taskAddAnnotationsFailure: return 54005
     case .taskConflict: return 54100
     case .taskNotImplemented: return 54101
+    case .taskMissing: return 54102
     case .labelOrderPending: return 55001
     case .labelOrderInProgress: return 55002
     case .labelOrderSuccess: return 55003
@@ -1003,6 +1046,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .featureflagConfigNotFound: return 62000
     case .featureflagInvalidArgument: return 62001
     case .featureflagBlocked: return 62002
+    case .maintenanceSuccess: return 63000
+    case .maintenanceFailed: return 63001
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -1120,6 +1165,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .annotationInvalidArgument,
     .annotationPermissionDenied,
     .annotationAwaitingReview,
+    .annotationAwaitingConsensusReview,
     .annotationReviewDenied,
     .annotationModifySuccess,
     .annotationModifyPending,
@@ -1136,6 +1182,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .dataDumpPending,
     .dataDumpFailed,
     .dataDumpInProgress,
+    .dataDumpNoData,
     .appDuplicationSuccess,
     .appDuplicationFailed,
     .appDuplicationPending,
@@ -1198,14 +1245,13 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .databaseFailToGetConnections,
     .databaseTooManyClients,
     .databaseConstraintViolated,
-    .databaseNoOngoingOperations,
-    .databaseLockedByOngoingOperation,
     .asyncWorkerMultiErrors,
     .rpcRequestQueueFull,
     .rpcServerUnavailable,
     .rpcRequestTimeout,
     .rpcMaxMessageSizeExceeded,
     .rpcCanceled,
+    .rpcUnknownMethod,
     .clusterInternalFailure,
     .externalConnectionError,
     .queueConnError,
@@ -1232,15 +1278,20 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .searchPredictionFailure,
     .searchByNotFullyIndexedInput,
     .savedSearchModifyFailed,
-    .annotationSearchMetricsQueuedForEvaluation,
-    .annotationSearchMetricsEvaluating,
-    .annotationSearchMetricsEvaluated,
-    .annotationSearchMetricsFailedToRetrieveData,
-    .annotationSearchMetricsInvalidArgument,
-    .annotationSearchMetricsFailed,
+    .evaluationQueued,
+    .evaluationInProgress,
+    .evaluationSuccess,
+    .evaluationFailedToRetrieveData,
+    .evaluationInvalidArgument,
+    .evaluationFailed,
+    .evaluationPending,
+    .evaluationTimedOut,
+    .evaluationUnexpectedError,
     .stripeEventError,
     .cacheMiss,
     .redisScriptExitedWithFailure,
+    .redisStreamErr,
+    .redisNoConsumers,
     .signupEventError,
     .signupFlagged,
     .filetypeUnsupported,
@@ -1268,6 +1319,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .taskAddAnnotationsFailure,
     .taskConflict,
     .taskNotImplemented,
+    .taskMissing,
     .labelOrderPending,
     .labelOrderInProgress,
     .labelOrderSuccess,
@@ -1285,6 +1337,12 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .featureflagConfigNotFound,
     .featureflagInvalidArgument,
     .featureflagBlocked,
+    .maintenanceSuccess,
+    .maintenanceFailed,
+    .jobQueued,
+    .jobRunning,
+    .jobCompleted,
+    .jobFailed,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -1315,6 +1373,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
 extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "ZERO"),
+    6400: .same(proto: "JOB_QUEUED"),
+    6401: .same(proto: "JOB_RUNNING"),
+    6402: .same(proto: "JOB_COMPLETED"),
+    6403: .same(proto: "JOB_FAILED"),
     10000: .same(proto: "SUCCESS"),
     10010: .same(proto: "MIXED_STATUS"),
     10020: .same(proto: "FAILURE"),
@@ -1401,6 +1463,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     24156: .same(proto: "ANNOTATION_PERMISSION_DENIED"),
     24157: .same(proto: "ANNOTATION_AWAITING_REVIEW"),
     24158: .same(proto: "ANNOTATION_REVIEW_DENIED"),
+    24159: .same(proto: "ANNOTATION_AWAITING_CONSENSUS_REVIEW"),
     24250: .same(proto: "ANNOTATION_MODIFY_SUCCESS"),
     24251: .same(proto: "ANNOTATION_MODIFY_PENDING"),
     24252: .same(proto: "ANNOTATION_MODIFY_FAILED"),
@@ -1416,6 +1479,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25151: .same(proto: "DATA_DUMP_PENDING"),
     25152: .same(proto: "DATA_DUMP_FAILED"),
     25153: .same(proto: "DATA_DUMP_IN_PROGRESS"),
+    25154: .same(proto: "DATA_DUMP_NO_DATA"),
     25200: .same(proto: "APP_DUPLICATION_SUCCESS"),
     25201: .same(proto: "APP_DUPLICATION_FAILED"),
     25202: .same(proto: "APP_DUPLICATION_PENDING"),
@@ -1478,8 +1542,6 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     40015: .same(proto: "DATABASE_FAIL_TO_GET_CONNECTIONS"),
     40016: .same(proto: "DATABASE_TOO_MANY_CLIENTS"),
     40017: .same(proto: "DATABASE_CONSTRAINT_VIOLATED"),
-    40018: .same(proto: "DATABASE_NO_ONGOING_OPERATIONS"),
-    40019: .same(proto: "DATABASE_LOCKED_BY_ONGOING_OPERATION"),
     40020: .same(proto: "ASYNC_WORKER_MULTI_ERRORS"),
     40030: .same(proto: "RPC_REQUEST_QUEUE_FULL"),
     40031: .same(proto: "RPC_SERVER_UNAVAILABLE"),
@@ -1487,6 +1549,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     40033: .same(proto: "RPC_MAX_MESSAGE_SIZE_EXCEEDED"),
     40034: .same(proto: "EXTERNAL_CONNECTION_ERROR"),
     40035: .same(proto: "RPC_CANCELED"),
+    40036: .same(proto: "RPC_UNKNOWN_METHOD"),
     41000: .same(proto: "QUEUE_CONN_ERROR"),
     41002: .same(proto: "QUEUE_CLOSE_REQUEST_TIMEOUT"),
     41003: .same(proto: "QUEUE_CONN_CLOSED"),
@@ -1512,15 +1575,20 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     43004: .same(proto: "SEARCH_BY_NOT_FULLY_INDEXED_INPUT"),
     43005: .same(proto: "SAVED_SEARCH_MODIFY_FAILED"),
     43040: .same(proto: "CLUSTER_INTERNAL_FAILURE"),
-    43100: .same(proto: "ANNOTATION_SEARCH_METRICS_QUEUED_FOR_EVALUATION"),
-    43101: .same(proto: "ANNOTATION_SEARCH_METRICS_EVALUATING"),
-    43102: .same(proto: "ANNOTATION_SEARCH_METRICS_EVALUATED"),
-    43103: .same(proto: "ANNOTATION_SEARCH_METRICS_FAILED_TO_RETRIEVE_DATA"),
-    43104: .same(proto: "ANNOTATION_SEARCH_METRICS_INVALID_ARGUMENT"),
-    43105: .same(proto: "ANNOTATION_SEARCH_METRICS_FAILED"),
+    43100: .same(proto: "EVALUATION_QUEUED"),
+    43101: .same(proto: "EVALUATION_IN_PROGRESS"),
+    43102: .same(proto: "EVALUATION_SUCCESS"),
+    43103: .same(proto: "EVALUATION_FAILED_TO_RETRIEVE_DATA"),
+    43104: .same(proto: "EVALUATION_INVALID_ARGUMENT"),
+    43105: .same(proto: "EVALUATION_FAILED"),
+    43106: .same(proto: "EVALUATION_PENDING"),
+    43107: .same(proto: "EVALUATION_TIMED_OUT"),
+    43108: .same(proto: "EVALUATION_UNEXPECTED_ERROR"),
     44001: .same(proto: "STRIPE_EVENT_ERROR"),
     45001: .same(proto: "CACHE_MISS"),
     45002: .same(proto: "REDIS_SCRIPT_EXITED_WITH_FAILURE"),
+    45003: .same(proto: "REDIS_STREAM_ERR"),
+    45004: .same(proto: "REDIS_NO_CONSUMERS"),
     46001: .same(proto: "SIGNUP_EVENT_ERROR"),
     46002: .same(proto: "SIGNUP_FLAGGED"),
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
@@ -1548,6 +1616,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     54005: .same(proto: "TASK_ADD_ANNOTATIONS_FAILURE"),
     54100: .same(proto: "TASK_CONFLICT"),
     54101: .same(proto: "TASK_NOT_IMPLEMENTED"),
+    54102: .same(proto: "TASK_MISSING"),
     55001: .same(proto: "LABEL_ORDER_PENDING"),
     55002: .same(proto: "LABEL_ORDER_IN_PROGRESS"),
     55003: .same(proto: "LABEL_ORDER_SUCCESS"),
@@ -1565,6 +1634,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     62000: .same(proto: "FEATUREFLAG_CONFIG_NOT_FOUND"),
     62001: .same(proto: "FEATUREFLAG_INVALID_ARGUMENT"),
     62002: .same(proto: "FEATUREFLAG_BLOCKED"),
+    63000: .same(proto: "MAINTENANCE_SUCCESS"),
+    63001: .same(proto: "MAINTENANCE_FAILED"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),

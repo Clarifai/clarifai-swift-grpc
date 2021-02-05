@@ -20,6 +20,62 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+public enum Clarifai_Api_OrganizationInvitationStatus: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case notSet // = 0
+  case pending // = 1
+  case accepted // = 2
+  case cancelled // = 3
+  case declined // = 4
+  case expired // = 5
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .notSet
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .notSet
+    case 1: self = .pending
+    case 2: self = .accepted
+    case 3: self = .cancelled
+    case 4: self = .declined
+    case 5: self = .expired
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .notSet: return 0
+    case .pending: return 1
+    case .accepted: return 2
+    case .cancelled: return 3
+    case .declined: return 4
+    case .expired: return 5
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_OrganizationInvitationStatus: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_OrganizationInvitationStatus] = [
+    .notSet,
+    .pending,
+    .accepted,
+    .cancelled,
+    .declined,
+    .expired,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 /// Split the results into pages.
 public struct Clarifai_Api_Pagination {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -117,6 +173,9 @@ public struct Clarifai_Api_ListAnnotationsRequest {
 
   public var perPage: UInt32 = 0
 
+  /// Flag to filter annotations by task_id
+  public var taskID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -172,6 +231,62 @@ public struct Clarifai_Api_PatchAnnotationsRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_PatchAnnotationsStatusRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// Annotation Status code
+  public var statusCode: Clarifai_Api_Status_StatusCode = .zero
+
+  public var userIds: [String] = []
+
+  public var taskID: String = String()
+
+  /// 'overwrite' is supported
+  public var action: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_PatchAnnotationsStatusResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var userIds: [String] = []
+
+  public var updatedCount: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
 public struct Clarifai_Api_DeleteAnnotationRequest {
@@ -1057,6 +1172,20 @@ public struct Clarifai_Api_ListConceptRelationsRequest {
   public mutating func clearUserAppID() {self._userAppID = nil}
 
   /// The subject concept id in your app to get all the relationships for.
+  /// Leave as an empty string (GET /concepts/relations) to list ALL the relations in the app.
+  ///
+  /// When listing all the relations it will only return one direction of the relationship
+  /// with the predicate acting on the subject and not the inverse like is done when providing a
+  /// concept_id so that we can return a reliable page size always.
+  ///
+  /// When providing a concept_id, if a hyponym is present in the DB such as:
+  /// 'honey' (subject), 'hyponym' (predict for "is a kind of"), 'food' (object)
+  /// then you can list the concept relations for 'honey' and get hyponym predicate with 'food'
+  /// object.
+  /// But you can also list the concept relations for 'food' and it will return the same hyponym
+  /// relationship with 'honey' as subject and 'food' as predicate.
+  /// Synonyms by nature are symmetrical relationships so either side can be the concept_id (subject)
+  /// when listing the relations.
   public var conceptID: String = String()
 
   /// This is part of the url so we can extend to multiple link types in the future.
@@ -1065,7 +1194,9 @@ public struct Clarifai_Api_ListConceptRelationsRequest {
   /// 'hyponyms'
   public var predicate: String = String()
 
-  /// This identifies the subgraph you want to search over, if any.
+  /// If knowledge_graph_id is provided then just list relations from that knowledge graph.
+  /// If not provided then list relations from all knowledge graphs including the global one for this
+  /// app one (ie. knowledge_graph "") and any specific ones in the app.
   public var knowledgeGraphID: String = String()
 
   /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
@@ -1487,6 +1618,32 @@ public struct Clarifai_Api_GetInputRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+public struct Clarifai_Api_GetInputSamplesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var taskID: String = String()
+
+  /// URL param. If zero ids provided, returns for all task labelers
+  public var userIds: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
 public struct Clarifai_Api_ListInputsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1701,6 +1858,29 @@ public struct Clarifai_Api_MultiInputResponse {
   public mutating func clearStatus() {self._status = nil}
 
   public var inputs: [Clarifai_Api_Input] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+public struct Clarifai_Api_MultiInputAnnotationResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var hits: [Clarifai_Api_Hit] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2526,6 +2706,9 @@ public struct Clarifai_Api_PostModelVersionsRequest {
   /// whether to evaluate the transfer trained model after training
   public var evaluateAfterTraining: Bool = false
 
+  /// Description about this training run
+  public var description_p: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -3232,6 +3415,7 @@ public struct Clarifai_Api_PostAnnotationSearchMetricsRequest {
   public mutating func clearSearchToEval() {self._searchToEval = nil}
 
   /// List of concepts to evaluate are expected to be in data.concepts
+  /// If nil, then all app concepts are used
   public var data: Clarifai_Api_Data {
     get {return _data ?? Clarifai_Api_Data()}
     set {_data = newValue}
@@ -4055,6 +4239,64 @@ public struct Clarifai_Api_SingleTaskResponse {
   fileprivate var _task: Clarifai_Api_Task? = nil
 }
 
+/// GetTaskCountRequest can be used for fetching -
+/// 1. Task annotation count per user, per status
+/// 1. Task input (anchor annotations) count per user, per status
+public struct Clarifai_Api_GetTaskCountRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// task_id for which count per user per status is needed
+  public var taskID: String = String()
+
+  /// for given task_id, user_ids to filter on (optional)
+  public var userIds: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// SingleTaskCountResponse represent counts of annotations or inputs(anchor annotations) for labelers in given task
+public struct Clarifai_Api_SingleTaskCountResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var appID: String = String()
+
+  public var taskID: String = String()
+
+  public var counts: [Clarifai_Api_TaskStatusCountPerUser] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// Request to create Collectors.
 public struct Clarifai_Api_PostCollectorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -4350,6 +4592,17 @@ public struct Clarifai_Api_MultiStatValueAggregateResponse {
 
 fileprivate let _protobuf_package = "clarifai.api"
 
+extension Clarifai_Api_OrganizationInvitationStatus: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "NOT_SET"),
+    1: .same(proto: "PENDING"),
+    2: .same(proto: "ACCEPTED"),
+    3: .same(proto: "CANCELLED"),
+    4: .same(proto: "DECLINED"),
+    5: .same(proto: "EXPIRED"),
+  ]
+}
+
 extension Clarifai_Api_Pagination: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Pagination"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -4438,6 +4691,7 @@ extension Clarifai_Api_ListAnnotationsRequest: SwiftProtobuf.Message, SwiftProto
     6: .standard(proto: "list_all_annotations"),
     7: .same(proto: "page"),
     8: .standard(proto: "per_page"),
+    11: .standard(proto: "task_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -4452,6 +4706,7 @@ extension Clarifai_Api_ListAnnotationsRequest: SwiftProtobuf.Message, SwiftProto
       case 8: try decoder.decodeSingularUInt32Field(value: &self.perPage)
       case 9: try decoder.decodeRepeatedStringField(value: &self.userIds)
       case 10: try decoder.decodeRepeatedStringField(value: &self.modelVersionIds)
+      case 11: try decoder.decodeSingularStringField(value: &self.taskID)
       default: break
       }
     }
@@ -4485,6 +4740,9 @@ extension Clarifai_Api_ListAnnotationsRequest: SwiftProtobuf.Message, SwiftProto
     if !self.modelVersionIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.modelVersionIds, fieldNumber: 10)
     }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -4498,6 +4756,7 @@ extension Clarifai_Api_ListAnnotationsRequest: SwiftProtobuf.Message, SwiftProto
     if lhs.listAllAnnotations != rhs.listAllAnnotations {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.taskID != rhs.taskID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -4574,6 +4833,100 @@ extension Clarifai_Api_PatchAnnotationsRequest: SwiftProtobuf.Message, SwiftProt
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.annotations != rhs.annotations {return false}
     if lhs.action != rhs.action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PatchAnnotationsStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PatchAnnotationsStatusRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "status_code"),
+    3: .standard(proto: "user_ids"),
+    4: .standard(proto: "task_id"),
+    5: .same(proto: "action"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularEnumField(value: &self.statusCode)
+      case 3: try decoder.decodeRepeatedStringField(value: &self.userIds)
+      case 4: try decoder.decodeSingularStringField(value: &self.taskID)
+      case 5: try decoder.decodeSingularStringField(value: &self.action)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if self.statusCode != .zero {
+      try visitor.visitSingularEnumField(value: self.statusCode, fieldNumber: 2)
+    }
+    if !self.userIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.userIds, fieldNumber: 3)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 4)
+    }
+    if !self.action.isEmpty {
+      try visitor.visitSingularStringField(value: self.action, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PatchAnnotationsStatusRequest, rhs: Clarifai_Api_PatchAnnotationsStatusRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.statusCode != rhs.statusCode {return false}
+    if lhs.userIds != rhs.userIds {return false}
+    if lhs.taskID != rhs.taskID {return false}
+    if lhs.action != rhs.action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PatchAnnotationsStatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PatchAnnotationsStatusResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "user_ids"),
+    3: .standard(proto: "updated_count"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeRepeatedStringField(value: &self.userIds)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.updatedCount)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.userIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.userIds, fieldNumber: 2)
+    }
+    if self.updatedCount != 0 {
+      try visitor.visitSingularUInt32Field(value: self.updatedCount, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PatchAnnotationsStatusResponse, rhs: Clarifai_Api_PatchAnnotationsStatusResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.userIds != rhs.userIds {return false}
+    if lhs.updatedCount != rhs.updatedCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -6369,6 +6722,47 @@ extension Clarifai_Api_GetInputRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
+extension Clarifai_Api_GetInputSamplesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetInputSamplesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "task_id"),
+    3: .standard(proto: "user_ids"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.taskID)
+      case 3: try decoder.decodeRepeatedStringField(value: &self.userIds)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 2)
+    }
+    if !self.userIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.userIds, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetInputSamplesRequest, rhs: Clarifai_Api_GetInputSamplesRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.taskID != rhs.taskID {return false}
+    if lhs.userIds != rhs.userIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_ListInputsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ListInputsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -6686,6 +7080,41 @@ extension Clarifai_Api_MultiInputResponse: SwiftProtobuf.Message, SwiftProtobuf.
   public static func ==(lhs: Clarifai_Api_MultiInputResponse, rhs: Clarifai_Api_MultiInputResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.inputs != rhs.inputs {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiInputAnnotationResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiInputAnnotationResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    3: .same(proto: "hits"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 3: try decoder.decodeRepeatedMessageField(value: &self.hits)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.hits.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.hits, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiInputAnnotationResponse, rhs: Clarifai_Api_MultiInputAnnotationResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.hits != rhs.hits {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -7743,6 +8172,7 @@ extension Clarifai_Api_PostModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     5: .standard(proto: "train_search"),
     6: .standard(proto: "test_search"),
     7: .standard(proto: "evaluate_after_training"),
+    8: .same(proto: "description"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -7755,6 +8185,7 @@ extension Clarifai_Api_PostModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
       case 5: try decoder.decodeSingularMessageField(value: &self._trainSearch)
       case 6: try decoder.decodeSingularMessageField(value: &self._testSearch)
       case 7: try decoder.decodeSingularBoolField(value: &self.evaluateAfterTraining)
+      case 8: try decoder.decodeSingularStringField(value: &self.description_p)
       default: break
       }
     }
@@ -7782,6 +8213,9 @@ extension Clarifai_Api_PostModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     if self.evaluateAfterTraining != false {
       try visitor.visitSingularBoolField(value: self.evaluateAfterTraining, fieldNumber: 7)
     }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -7793,6 +8227,7 @@ extension Clarifai_Api_PostModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs._trainSearch != rhs._trainSearch {return false}
     if lhs._testSearch != rhs._testSearch {return false}
     if lhs.evaluateAfterTraining != rhs.evaluateAfterTraining {return false}
+    if lhs.description_p != rhs.description_p {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9788,6 +10223,94 @@ extension Clarifai_Api_SingleTaskResponse: SwiftProtobuf.Message, SwiftProtobuf.
   public static func ==(lhs: Clarifai_Api_SingleTaskResponse, rhs: Clarifai_Api_SingleTaskResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._task != rhs._task {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_GetTaskCountRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetTaskCountRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "task_id"),
+    3: .standard(proto: "user_ids"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.taskID)
+      case 3: try decoder.decodeRepeatedStringField(value: &self.userIds)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 2)
+    }
+    if !self.userIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.userIds, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetTaskCountRequest, rhs: Clarifai_Api_GetTaskCountRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.taskID != rhs.taskID {return false}
+    if lhs.userIds != rhs.userIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_SingleTaskCountResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleTaskCountResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "app_id"),
+    3: .standard(proto: "task_id"),
+    4: .same(proto: "counts"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeSingularStringField(value: &self.appID)
+      case 3: try decoder.decodeSingularStringField(value: &self.taskID)
+      case 4: try decoder.decodeRepeatedMessageField(value: &self.counts)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.appID.isEmpty {
+      try visitor.visitSingularStringField(value: self.appID, fieldNumber: 2)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 3)
+    }
+    if !self.counts.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.counts, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_SingleTaskCountResponse, rhs: Clarifai_Api_SingleTaskCountResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.appID != rhs.appID {return false}
+    if lhs.taskID != rhs.taskID {return false}
+    if lhs.counts != rhs.counts {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
