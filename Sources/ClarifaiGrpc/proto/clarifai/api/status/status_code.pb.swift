@@ -39,7 +39,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Clarifai Connection Codes: 11xxx
   case connAccountIssues // = 11000
 
-  /// invalid auth token used
+  /// invalid auth token used. Deprecated: we should return CONN_KEY_INVALID instead now in all cases.
   case connTokenInvalid // = 11001
 
   /// invalid auth credentials
@@ -357,6 +357,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case evaluationPending // = 43106
   case evaluationTimedOut // = 43107
   case evaluationUnexpectedError // = 43108
+  case evaluationMixed // = 43109
 
   /// Stripe 44xxx
   case stripeEventError // = 44001
@@ -366,6 +367,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case redisScriptExitedWithFailure // = 45002
   case redisStreamErr // = 45003
   case redisNoConsumers // = 45004
+  case redisStreamBackoff // = 45005
 
   /// Sift Science 46xxx
   case signupEventError // = 46001
@@ -483,8 +485,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case billingUncategorized // = 99005
   case internalUncategorized // = 99009
 
-  /// Depreciated codes: migrate off these to one of the internal issues
+  /// Deprecated: migrate off to one of the internal issues
   case badRequest // = 90400
+
+  /// Deprecated: migrate off to one of the internal issues
   case serverError // = 90500
   case UNRECOGNIZED(Int)
 
@@ -706,11 +710,13 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 43106: self = .evaluationPending
     case 43107: self = .evaluationTimedOut
     case 43108: self = .evaluationUnexpectedError
+    case 43109: self = .evaluationMixed
     case 44001: self = .stripeEventError
     case 45001: self = .cacheMiss
     case 45002: self = .redisScriptExitedWithFailure
     case 45003: self = .redisStreamErr
     case 45004: self = .redisNoConsumers
+    case 45005: self = .redisStreamBackoff
     case 46001: self = .signupEventError
     case 46002: self = .signupFlagged
     case 46003: self = .filetypeUnsupported
@@ -996,11 +1002,13 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .evaluationPending: return 43106
     case .evaluationTimedOut: return 43107
     case .evaluationUnexpectedError: return 43108
+    case .evaluationMixed: return 43109
     case .stripeEventError: return 44001
     case .cacheMiss: return 45001
     case .redisScriptExitedWithFailure: return 45002
     case .redisStreamErr: return 45003
     case .redisNoConsumers: return 45004
+    case .redisStreamBackoff: return 45005
     case .signupEventError: return 46001
     case .signupFlagged: return 46002
     case .filetypeUnsupported: return 46003
@@ -1287,11 +1295,13 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .evaluationPending,
     .evaluationTimedOut,
     .evaluationUnexpectedError,
+    .evaluationMixed,
     .stripeEventError,
     .cacheMiss,
     .redisScriptExitedWithFailure,
     .redisStreamErr,
     .redisNoConsumers,
+    .redisStreamBackoff,
     .signupEventError,
     .signupFlagged,
     .filetypeUnsupported,
@@ -1584,11 +1594,13 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     43106: .same(proto: "EVALUATION_PENDING"),
     43107: .same(proto: "EVALUATION_TIMED_OUT"),
     43108: .same(proto: "EVALUATION_UNEXPECTED_ERROR"),
+    43109: .same(proto: "EVALUATION_MIXED"),
     44001: .same(proto: "STRIPE_EVENT_ERROR"),
     45001: .same(proto: "CACHE_MISS"),
     45002: .same(proto: "REDIS_SCRIPT_EXITED_WITH_FAILURE"),
     45003: .same(proto: "REDIS_STREAM_ERR"),
     45004: .same(proto: "REDIS_NO_CONSUMERS"),
+    45005: .same(proto: "REDIS_STREAM_BACKOFF"),
     46001: .same(proto: "SIGNUP_EVENT_ERROR"),
     46002: .same(proto: "SIGNUP_FLAGGED"),
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
