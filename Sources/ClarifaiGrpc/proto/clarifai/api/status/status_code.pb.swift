@@ -39,7 +39,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Clarifai Connection Codes: 11xxx
   case connAccountIssues // = 11000
 
-  /// invalid auth token used
+  /// invalid auth token used. Deprecated: we should return CONN_KEY_INVALID instead now in all cases.
   case connTokenInvalid // = 11001
 
   /// invalid auth credentials
@@ -167,6 +167,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Used when model spire deployment is manually taken down or due to inactivity
   case modelNotDeployed // = 21353
+
+  /// Used when a model reference field is not set properly
+  case modelReferenceInvalidArgument // = 21400
+
+  /// Used when a model example input field is not set properly
+  case modelExampleInputInvalidArgument // = 21420
 
   /// specified model input not in workflow
   case workflowNoMatchingInput // = 22001
@@ -335,13 +341,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case sqsInvalidReceiptHandle // = 41101
   case sqsUnknown // = 41102
 
-  /// KAFKA related errros 412xx
-  case kafkaUnknow // = 41200
-  case kafkaMissingTopic // = 41201
-  case kafkaAdminErr // = 41202
-  case kafkaConsumerErr // = 41203
-  case kafkaPublisherErr // = 41204
-
   ///Search related errors 43xxxx
   case searchInternalFailure // = 43001
   case searchProjectionFailure // = 43002
@@ -357,6 +356,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case evaluationPending // = 43106
   case evaluationTimedOut // = 43107
   case evaluationUnexpectedError // = 43108
+  case evaluationMixed // = 43109
 
   /// Stripe 44xxx
   case stripeEventError // = 44001
@@ -366,6 +366,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case redisScriptExitedWithFailure // = 45002
   case redisStreamErr // = 45003
   case redisNoConsumers // = 45004
+  case redisStreamBackoff // = 45005
 
   /// Sift Science 46xxx
   case signupEventError // = 46001
@@ -386,6 +387,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case mpInvalidArgument // = 47105
   case mpImageProcessingError // = 47106
 
+  /// DataTier related error 472xx
+  case datatierConnError // = 47201
+
   /// User legal consent stauts related 50xxx
   case userConsentFace // = 50001
 
@@ -398,6 +402,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case collectorMissing // = 52000
   case collectorActive // = 52001
   case collectorInactive // = 52002
+  case collectorPostInputFailed // = 52003
 
   /// SSO 53xxx
   case ssoIdentityProviderDoesNotExist // = 53001
@@ -461,6 +466,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case jobCompleted // = 6402
   case jobFailed // = 6403
 
+  ///auth issues
+  case authMissingIdpAssoc // = 65000
+
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
   case internalFetchingIssue // = 98005
@@ -483,8 +491,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case billingUncategorized // = 99005
   case internalUncategorized // = 99009
 
-  /// Depreciated codes: migrate off these to one of the internal issues
+  /// Deprecated: migrate off to one of the internal issues
   case badRequest // = 90400
+
+  /// Deprecated: migrate off to one of the internal issues
   case serverError // = 90500
   case UNRECOGNIZED(Int)
 
@@ -558,6 +568,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21351: self = .modelDeploying
     case 21352: self = .modelQueuedForDeployment
     case 21353: self = .modelNotDeployed
+    case 21400: self = .modelReferenceInvalidArgument
+    case 21420: self = .modelExampleInputInvalidArgument
     case 22001: self = .workflowNoMatchingInput
     case 22002: self = .workflowRequireTrainedModel
     case 22100: self = .workflowDuplicate
@@ -686,11 +698,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 41100: self = .sqsOverlimit
     case 41101: self = .sqsInvalidReceiptHandle
     case 41102: self = .sqsUnknown
-    case 41200: self = .kafkaUnknow
-    case 41201: self = .kafkaMissingTopic
-    case 41202: self = .kafkaAdminErr
-    case 41203: self = .kafkaConsumerErr
-    case 41204: self = .kafkaPublisherErr
     case 43001: self = .searchInternalFailure
     case 43002: self = .searchProjectionFailure
     case 43003: self = .searchPredictionFailure
@@ -706,11 +713,13 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 43106: self = .evaluationPending
     case 43107: self = .evaluationTimedOut
     case 43108: self = .evaluationUnexpectedError
+    case 43109: self = .evaluationMixed
     case 44001: self = .stripeEventError
     case 45001: self = .cacheMiss
     case 45002: self = .redisScriptExitedWithFailure
     case 45003: self = .redisStreamErr
     case 45004: self = .redisNoConsumers
+    case 45005: self = .redisStreamBackoff
     case 46001: self = .signupEventError
     case 46002: self = .signupFlagged
     case 46003: self = .filetypeUnsupported
@@ -724,6 +733,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 47104: self = .mpImageDecodeError
     case 47105: self = .mpInvalidArgument
     case 47106: self = .mpImageProcessingError
+    case 47201: self = .datatierConnError
     case 50001: self = .userConsentFace
     case 51000: self = .workerMissing
     case 51001: self = .workerActive
@@ -731,6 +741,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 52000: self = .collectorMissing
     case 52001: self = .collectorActive
     case 52002: self = .collectorInactive
+    case 52003: self = .collectorPostInputFailed
     case 53001: self = .ssoIdentityProviderDoesNotExist
     case 54001: self = .taskInProgress
     case 54002: self = .taskDone
@@ -758,6 +769,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 62002: self = .featureflagBlocked
     case 63000: self = .maintenanceSuccess
     case 63001: self = .maintenanceFailed
+    case 65000: self = .authMissingIdpAssoc
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -848,6 +860,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelDeploying: return 21351
     case .modelQueuedForDeployment: return 21352
     case .modelNotDeployed: return 21353
+    case .modelReferenceInvalidArgument: return 21400
+    case .modelExampleInputInvalidArgument: return 21420
     case .workflowNoMatchingInput: return 22001
     case .workflowRequireTrainedModel: return 22002
     case .workflowDuplicate: return 22100
@@ -976,11 +990,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .sqsOverlimit: return 41100
     case .sqsInvalidReceiptHandle: return 41101
     case .sqsUnknown: return 41102
-    case .kafkaUnknow: return 41200
-    case .kafkaMissingTopic: return 41201
-    case .kafkaAdminErr: return 41202
-    case .kafkaConsumerErr: return 41203
-    case .kafkaPublisherErr: return 41204
     case .searchInternalFailure: return 43001
     case .searchProjectionFailure: return 43002
     case .searchPredictionFailure: return 43003
@@ -996,11 +1005,13 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .evaluationPending: return 43106
     case .evaluationTimedOut: return 43107
     case .evaluationUnexpectedError: return 43108
+    case .evaluationMixed: return 43109
     case .stripeEventError: return 44001
     case .cacheMiss: return 45001
     case .redisScriptExitedWithFailure: return 45002
     case .redisStreamErr: return 45003
     case .redisNoConsumers: return 45004
+    case .redisStreamBackoff: return 45005
     case .signupEventError: return 46001
     case .signupFlagged: return 46002
     case .filetypeUnsupported: return 46003
@@ -1014,6 +1025,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .mpImageDecodeError: return 47104
     case .mpInvalidArgument: return 47105
     case .mpImageProcessingError: return 47106
+    case .datatierConnError: return 47201
     case .userConsentFace: return 50001
     case .workerMissing: return 51000
     case .workerActive: return 51001
@@ -1021,6 +1033,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .collectorMissing: return 52000
     case .collectorActive: return 52001
     case .collectorInactive: return 52002
+    case .collectorPostInputFailed: return 52003
     case .ssoIdentityProviderDoesNotExist: return 53001
     case .taskInProgress: return 54001
     case .taskDone: return 54002
@@ -1048,6 +1061,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .featureflagBlocked: return 62002
     case .maintenanceSuccess: return 63000
     case .maintenanceFailed: return 63001
+    case .authMissingIdpAssoc: return 65000
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -1139,6 +1153,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelDeploying,
     .modelQueuedForDeployment,
     .modelNotDeployed,
+    .modelReferenceInvalidArgument,
+    .modelExampleInputInvalidArgument,
     .workflowNoMatchingInput,
     .workflowRequireTrainedModel,
     .workflowDuplicate,
@@ -1268,11 +1284,6 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .sqsOverlimit,
     .sqsInvalidReceiptHandle,
     .sqsUnknown,
-    .kafkaUnknow,
-    .kafkaMissingTopic,
-    .kafkaAdminErr,
-    .kafkaConsumerErr,
-    .kafkaPublisherErr,
     .searchInternalFailure,
     .searchProjectionFailure,
     .searchPredictionFailure,
@@ -1287,11 +1298,13 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .evaluationPending,
     .evaluationTimedOut,
     .evaluationUnexpectedError,
+    .evaluationMixed,
     .stripeEventError,
     .cacheMiss,
     .redisScriptExitedWithFailure,
     .redisStreamErr,
     .redisNoConsumers,
+    .redisStreamBackoff,
     .signupEventError,
     .signupFlagged,
     .filetypeUnsupported,
@@ -1305,6 +1318,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .mpImageDecodeError,
     .mpInvalidArgument,
     .mpImageProcessingError,
+    .datatierConnError,
     .userConsentFace,
     .workerMissing,
     .workerActive,
@@ -1312,6 +1326,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .collectorMissing,
     .collectorActive,
     .collectorInactive,
+    .collectorPostInputFailed,
     .ssoIdentityProviderDoesNotExist,
     .taskInProgress,
     .taskDone,
@@ -1343,6 +1358,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .jobRunning,
     .jobCompleted,
     .jobFailed,
+    .authMissingIdpAssoc,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -1436,6 +1452,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21351: .same(proto: "MODEL_DEPLOYING"),
     21352: .same(proto: "MODEL_QUEUED_FOR_DEPLOYMENT"),
     21353: .same(proto: "MODEL_NOT_DEPLOYED"),
+    21400: .same(proto: "MODEL_REFERENCE_INVALID_ARGUMENT"),
+    21420: .same(proto: "MODEL_EXAMPLE_INPUT_INVALID_ARGUMENT"),
     22001: .same(proto: "WORKFLOW_NO_MATCHING_INPUT"),
     22002: .same(proto: "WORKFLOW_REQUIRE_TRAINED_MODEL"),
     22100: .same(proto: "WORKFLOW_DUPLICATE"),
@@ -1564,11 +1582,6 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     41100: .same(proto: "SQS_OVERLIMIT"),
     41101: .same(proto: "SQS_INVALID_RECEIPT_HANDLE"),
     41102: .same(proto: "SQS_UNKNOWN"),
-    41200: .same(proto: "KAFKA_UNKNOW"),
-    41201: .same(proto: "KAFKA_MISSING_TOPIC"),
-    41202: .same(proto: "KAFKA_ADMIN_ERR"),
-    41203: .same(proto: "KAFKA_CONSUMER_ERR"),
-    41204: .same(proto: "KAFKA_PUBLISHER_ERR"),
     43001: .same(proto: "SEARCH_INTERNAL_FAILURE"),
     43002: .same(proto: "SEARCH_PROJECTION_FAILURE"),
     43003: .same(proto: "SEARCH_PREDICTION_FAILURE"),
@@ -1584,11 +1597,13 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     43106: .same(proto: "EVALUATION_PENDING"),
     43107: .same(proto: "EVALUATION_TIMED_OUT"),
     43108: .same(proto: "EVALUATION_UNEXPECTED_ERROR"),
+    43109: .same(proto: "EVALUATION_MIXED"),
     44001: .same(proto: "STRIPE_EVENT_ERROR"),
     45001: .same(proto: "CACHE_MISS"),
     45002: .same(proto: "REDIS_SCRIPT_EXITED_WITH_FAILURE"),
     45003: .same(proto: "REDIS_STREAM_ERR"),
     45004: .same(proto: "REDIS_NO_CONSUMERS"),
+    45005: .same(proto: "REDIS_STREAM_BACKOFF"),
     46001: .same(proto: "SIGNUP_EVENT_ERROR"),
     46002: .same(proto: "SIGNUP_FLAGGED"),
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
@@ -1602,6 +1617,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     47104: .same(proto: "MP_IMAGE_DECODE_ERROR"),
     47105: .same(proto: "MP_INVALID_ARGUMENT"),
     47106: .same(proto: "MP_IMAGE_PROCESSING_ERROR"),
+    47201: .same(proto: "DATATIER_CONN_ERROR"),
     50001: .same(proto: "USER_CONSENT_FACE"),
     51000: .same(proto: "WORKER_MISSING"),
     51001: .same(proto: "WORKER_ACTIVE"),
@@ -1609,6 +1625,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     52000: .same(proto: "COLLECTOR_MISSING"),
     52001: .same(proto: "COLLECTOR_ACTIVE"),
     52002: .same(proto: "COLLECTOR_INACTIVE"),
+    52003: .same(proto: "COLLECTOR_POST_INPUT_FAILED"),
     53001: .same(proto: "SSO_IDENTITY_PROVIDER_DOES_NOT_EXIST"),
     54001: .same(proto: "TASK_IN_PROGRESS"),
     54002: .same(proto: "TASK_DONE"),
@@ -1636,6 +1653,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     62002: .same(proto: "FEATUREFLAG_BLOCKED"),
     63000: .same(proto: "MAINTENANCE_SUCCESS"),
     63001: .same(proto: "MAINTENANCE_FAILED"),
+    65000: .same(proto: "AUTH_MISSING_IDP_ASSOC"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),

@@ -85,7 +85,7 @@ public struct Clarifai_Api_Pagination {
   /// (optional URL parameter) The page number. Pagination is used to split the results into chunks. Defaults to 1.
   public var page: UInt32 = 0
 
-  /// (optional URL parameter) The number of results that will be contained in each page. Defaults to 10.
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -169,8 +169,12 @@ public struct Clarifai_Api_ListAnnotationsRequest {
   /// by default it's listing only trusted annotations
   public var listAllAnnotations: Bool = false
 
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
   public var page: UInt32 = 0
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
   public var perPage: UInt32 = 0
 
   /// Flag to filter annotations by task_id
@@ -444,10 +448,61 @@ public struct Clarifai_Api_ListAppsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Sorting opitons:
+  /// Whether to sort in ascending order. If false, will order in descending order. 
+  public var sortAscending: Bool = false
+
+  public var sortBy: Clarifai_Api_ListAppsRequest.OneOf_SortBy? = nil
+
+  /// Whether to order by the name
+  public var sortByName: Bool {
+    get {
+      if case .sortByName(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByName(newValue)}
+  }
+
+  /// Whether to order by the modified_at time.
+  /// If neither sort option is set to true, will sort by modified_at.
+  public var sortByModifiedAt: Bool {
+    get {
+      if case .sortByModifiedAt(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByModifiedAt(newValue)}
+  }
+
+  /// Filtering options:
+  /// Query various text fields that can contain the words in the query string
+  public var query: String = String()
+
+  /// Filter by the name of the app. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated in favor of query
+  public var name: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_SortBy: Equatable {
+    /// Whether to order by the name
+    case sortByName(Bool)
+    /// Whether to order by the modified_at time.
+    /// If neither sort option is set to true, will sort by modified_at.
+    case sortByModifiedAt(Bool)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy) -> Bool {
+      switch (lhs, rhs) {
+      case (.sortByName(let l), .sortByName(let r)): return l == r
+      case (.sortByModifiedAt(let l), .sortByModifiedAt(let r)): return l == r
+      default: return false
+      }
+    }
+  #endif
+  }
 
   public init() {}
 
@@ -778,8 +833,12 @@ public struct Clarifai_Api_ListCollaborationsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
   public var page: UInt32 = 0
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -928,7 +987,7 @@ public struct Clarifai_Api_ListConceptsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1054,7 +1113,7 @@ public struct Clarifai_Api_GetConceptCountsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1204,7 +1263,7 @@ public struct Clarifai_Api_ListConceptRelationsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1473,7 +1532,7 @@ public struct Clarifai_Api_ListConceptLanguagesRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1663,7 +1722,7 @@ public struct Clarifai_Api_ListInputsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   /// Set status to filter by status
@@ -1700,6 +1759,8 @@ public struct Clarifai_Api_StreamInputsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 20.
   public var perPage: UInt32 = 0
 
   public var lastID: String = String()
@@ -1802,8 +1863,6 @@ public struct Clarifai_Api_DeleteInputsRequest {
   public mutating func clearUserAppID() {self._userAppID = nil}
 
   public var ids: [String] = []
-
-  public var deleteAll: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2009,7 +2068,7 @@ public struct Clarifai_Api_ListModelInputsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -2064,7 +2123,7 @@ public struct Clarifai_Api_ListKeysRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -2093,7 +2152,7 @@ public struct Clarifai_Api_ListAppKeysRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -2283,12 +2342,91 @@ public struct Clarifai_Api_ListModelsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
-  public var ids: [String] = []
+  /// Sorting options:
+  /// Whether to sort in ascending order. If false, will order in descending order. 
+  public var sortAscending: Bool = false
+
+  public var sortBy: Clarifai_Api_ListModelsRequest.OneOf_SortBy? = nil
+
+  /// Whether to order by the name
+  public var sortByName: Bool {
+    get {
+      if case .sortByName(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByName(newValue)}
+  }
+
+  /// Whether to order by the number of training inputs
+  public var sortByNumInputs: Bool {
+    get {
+      if case .sortByNumInputs(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByNumInputs(newValue)}
+  }
+
+  /// Whether to order by the modified_at time of the latest model version.
+  /// If neither sort option is set to true, will sort by modified_at.
+  public var sortByModifiedAt: Bool {
+    get {
+      if case .sortByModifiedAt(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByModifiedAt(newValue)}
+  }
+
+  /// Filtering options:
+  /// // Query various text fields that can contain the words in the query string
+  public var query: String = String()
+
+  /// Filter by the name of the model. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated in favor of query
+  public var name: String = String()
+
+  /// Filter models by the specific model_type_id. See ListModelTypes for the list of ModelType.Id's
+  /// supported.
+  public var modelTypeID: String = String()
+
+  /// If true, we only return models that have the status MODEL_TRAINED, which includes non-trainable model types.
+  public var trainedOnly: Bool = false
+
+  /// The list of input fields to the model.
+  /// For example, you can specify 'image', which will return models that make inferences on images like visual-classifier models.
+  public var inputFields: [String] = []
+
+  /// The list of output fields to the model.
+  /// For example, you can specify 'regions[...].data.concepts', which will return visual-detector models.
+  public var outputFields: [String] = []
+
+  /// Filter by the license of the model version
+  public var license: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_SortBy: Equatable {
+    /// Whether to order by the name
+    case sortByName(Bool)
+    /// Whether to order by the number of training inputs
+    case sortByNumInputs(Bool)
+    /// Whether to order by the modified_at time of the latest model version.
+    /// If neither sort option is set to true, will sort by modified_at.
+    case sortByModifiedAt(Bool)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_ListModelsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListModelsRequest.OneOf_SortBy) -> Bool {
+      switch (lhs, rhs) {
+      case (.sortByName(let l), .sortByName(let r)): return l == r
+      case (.sortByNumInputs(let l), .sortByNumInputs(let r)): return l == r
+      case (.sortByModifiedAt(let l), .sortByModifiedAt(let r)): return l == r
+      default: return false
+      }
+    }
+  #endif
+  }
 
   public init() {}
 
@@ -2512,6 +2650,35 @@ public struct Clarifai_Api_MultiModelResponse {
 /////////////////////////////////////////////////////////////////////////////////
 /// Requests / Responses from /proto/clarifai/api/model_version.proto
 /////////////////////////////////////////////////////////////////////////////////
+public struct Clarifai_Api_PatchModelVersionsRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var modelID: String = String()
+
+  public var modelVersions: [Clarifai_Api_ModelVersion] = []
+
+  /// The action to perform on the patched objects
+  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  public var action: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
 /// NOTE: this is same as GetModelRequest but backend doesn't support sharing same
 /// request for different endpoints currently.
 public struct Clarifai_Api_GetModelVersionRequest {
@@ -2560,7 +2727,7 @@ public struct Clarifai_Api_ListModelVersionsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   /// To list only the model versions that have these concept ids present in them.
@@ -2841,7 +3008,7 @@ public struct Clarifai_Api_ListModelTypesRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -2849,6 +3016,39 @@ public struct Clarifai_Api_ListModelTypesRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_ListOpenSourceLicensesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_ListOpenSourceLicensesResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var licenses: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
 public struct Clarifai_Api_SingleModelTypeResponse {
@@ -2910,6 +3110,184 @@ public struct Clarifai_Api_MultiModelTypeResponse {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+/// Requests / Responses for Model Version Input Examples
+/////////////////////////////////////////////////////////////////////////////////
+public struct Clarifai_Api_GetModelVersionInputExampleRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// authorization field  (contains app/user id info)
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// id of model the example belongs to
+  public var modelID: String = String()
+
+  /// specific version the example belongs to
+  public var modelVersionID: String = String()
+
+  /// Id of example to fetch
+  public var exampleID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_ListModelVersionInputExamplesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// authorization field  (contains app/user id info)
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// id of model the example belongs to
+  public var modelID: String = String()
+
+  /// specific version the example belongs to
+  public var modelVersionID: String = String()
+
+  /// Optional, defaults to 1.
+  public var page: UInt32 = 0
+
+  /// Optional, defaults to 128 references per page.
+  public var perPage: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_SingleModelVersionInputExampleResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// status of response
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  /// model input example message
+  public var modelVersionInputExample: Clarifai_Api_ModelVersionInputExample {
+    get {return _modelVersionInputExample ?? Clarifai_Api_ModelVersionInputExample()}
+    set {_modelVersionInputExample = newValue}
+  }
+  /// Returns true if `modelVersionInputExample` has been explicitly set.
+  public var hasModelVersionInputExample: Bool {return self._modelVersionInputExample != nil}
+  /// Clears the value of `modelVersionInputExample`. Subsequent reads from it will return its default value.
+  public mutating func clearModelVersionInputExample() {self._modelVersionInputExample = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _modelVersionInputExample: Clarifai_Api_ModelVersionInputExample? = nil
+}
+
+public struct Clarifai_Api_MultiModelVersionInputExampleResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// status of response
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  /// model input example messages
+  public var modelVersionInputExamples: [Clarifai_Api_ModelVersionInputExample] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+public struct Clarifai_Api_ListModelReferencesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var modelID: String = String()
+
+  /// Optional, defaults to 1.
+  public var page: UInt32 = 0
+
+  /// Optional, defaults to 128 references per page.
+  public var perPage: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_MultiModelReferenceResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var modelReferences: [Clarifai_Api_ModelReference] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 /// Requests / Responses from /proto/clarifai/api/output.proto
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
@@ -2950,9 +3328,21 @@ public struct Clarifai_Api_ListScopesRequest {
   /// If "api_key" include scopes and endpoints available to app-specific keys. (default)
   public var keyType: String = String()
 
+  /// For all user specific information we include user_app_id to get the user_id in a consistent way
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
 public struct Clarifai_Api_MyScopesRequest {
@@ -3085,8 +3475,12 @@ public struct Clarifai_Api_ListSearchesRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
   public var page: UInt32 = 0
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -3622,10 +4016,60 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Sorting options:
+  /// Whether to sort in ascending order. If false, will order in descending order. 
+  public var sortAscending: Bool = false
+
+  public var sortBy: Clarifai_Api_ListWorkflowsRequest.OneOf_SortBy? = nil
+
+  /// Whether to order by the name
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
+  }
+
+  /// Whether to order by the modified_at time.
+  /// If neither sort option is set to true, will sort by modified_at.
+  public var sortByModifiedAt: Bool {
+    get {
+      if case .sortByModifiedAt(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByModifiedAt(newValue)}
+  }
+
+  /// Query various text fields that can contain the words in the query string.
+  public var query: String = String()
+
+  /// Filter by the id of the workflow. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated in favor of query
+  public var id: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_SortBy: Equatable {
+    /// Whether to order by the name
+    case sortByID(Bool)
+    /// Whether to order by the modified_at time.
+    /// If neither sort option is set to true, will sort by modified_at.
+    case sortByModifiedAt(Bool)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_ListWorkflowsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListWorkflowsRequest.OneOf_SortBy) -> Bool {
+      switch (lhs, rhs) {
+      case (.sortByID(let l), .sortByID(let r)): return l == r
+      case (.sortByModifiedAt(let l), .sortByModifiedAt(let r)): return l == r
+      default: return false
+      }
+    }
+  #endif
+  }
 
   public init() {}
 
@@ -3824,12 +4268,25 @@ public struct Clarifai_Api_PostWorkflowResultsRequest {
   /// Use this flag to look into clarifai published workflows first for a Workflow ID
   public var favorClarifaiWorkflows: Bool = false
 
+  /// A workflow state to be maintained across PostWorkflowResults requests/responses.
+  /// If it is not sent in the initial request with workflow_state.id = "init" then no
+  /// state will be saved or returned in PostWorkflowResultsResponse.
+  public var workflowState: Clarifai_Api_WorkflowState {
+    get {return _workflowState ?? Clarifai_Api_WorkflowState()}
+    set {_workflowState = newValue}
+  }
+  /// Returns true if `workflowState` has been explicitly set.
+  public var hasWorkflowState: Bool {return self._workflowState != nil}
+  /// Clears the value of `workflowState`. Subsequent reads from it will return its default value.
+  public mutating func clearWorkflowState() {self._workflowState = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
   fileprivate var _outputConfig: Clarifai_Api_OutputConfig? = nil
+  fileprivate var _workflowState: Clarifai_Api_WorkflowState? = nil
 }
 
 public struct Clarifai_Api_PostWorkflowResultsResponse {
@@ -3837,6 +4294,7 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// The status of the request.
   public var status: Clarifai_Api_Status_Status {
     get {return _status ?? Clarifai_Api_Status_Status()}
     set {_status = newValue}
@@ -3846,6 +4304,7 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {self._status = nil}
 
+  /// The workflow that was used in predictions with PostWorkflowResults
   public var workflow: Clarifai_Api_Workflow {
     get {return _workflow ?? Clarifai_Api_Workflow()}
     set {_workflow = newValue}
@@ -3855,7 +4314,22 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
   /// Clears the value of `workflow`. Subsequent reads from it will return its default value.
   public mutating func clearWorkflow() {self._workflow = nil}
 
+  /// The resulting predictions of all models in the workflow.
   public var results: [Clarifai_Api_WorkflowResult] = []
+
+  /// A workflow state to be maintained across PostWorkflowResults requests/responses.
+  /// This WorkflowState should be passed in to subsequent PostWorkflowResults calls
+  /// if you want to keep track of state across requests.
+  /// If no WorkflowState was initialized in a request then no WorkflowState will be returned in this
+  /// response.
+  public var workflowState: Clarifai_Api_WorkflowState {
+    get {return _workflowState ?? Clarifai_Api_WorkflowState()}
+    set {_workflowState = newValue}
+  }
+  /// Returns true if `workflowState` has been explicitly set.
+  public var hasWorkflowState: Bool {return self._workflowState != nil}
+  /// Clears the value of `workflowState`. Subsequent reads from it will return its default value.
+  public mutating func clearWorkflowState() {self._workflowState = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -3863,6 +4337,7 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
   fileprivate var _workflow: Clarifai_Api_Workflow? = nil
+  fileprivate var _workflowState: Clarifai_Api_WorkflowState? = nil
 }
 
 public struct Clarifai_Api_PostWorkflowResultsSimilarityRequest {
@@ -3986,6 +4461,14 @@ public struct Clarifai_Api_ListAppDuplicationsRequest {
   public var hasUserAppID: Bool {return self._userAppID != nil}
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
+  public var page: UInt32 = 0
+
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
+  public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4111,8 +4594,12 @@ public struct Clarifai_Api_ListTasksRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
   public var page: UInt32 = 0
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
   public var perPage: UInt32 = 0
 
   /// Get tasks that have ANY user from this list assigned as worker.
@@ -4419,7 +4906,7 @@ public struct Clarifai_Api_ListCollectorsRequest {
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 10.
+  /// to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -5119,6 +5606,11 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    5: .standard(proto: "sort_ascending"),
+    6: .standard(proto: "sort_by_name"),
+    7: .standard(proto: "sort_by_modified_at"),
+    8: .same(proto: "query"),
+    4: .same(proto: "name"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -5127,6 +5619,19 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
       case 2: try decoder.decodeSingularUInt32Field(value: &self.page)
       case 3: try decoder.decodeSingularUInt32Field(value: &self.perPage)
+      case 4: try decoder.decodeSingularStringField(value: &self.name)
+      case 5: try decoder.decodeSingularBoolField(value: &self.sortAscending)
+      case 6:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByName(v)}
+      case 7:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByModifiedAt(v)}
+      case 8: try decoder.decodeSingularStringField(value: &self.query)
       default: break
       }
     }
@@ -5142,6 +5647,22 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 4)
+    }
+    if self.sortAscending != false {
+      try visitor.visitSingularBoolField(value: self.sortAscending, fieldNumber: 5)
+    }
+    switch self.sortBy {
+    case .sortByName(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 6)
+    case .sortByModifiedAt(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 7)
+    case nil: break
+    }
+    if !self.query.isEmpty {
+      try visitor.visitSingularStringField(value: self.query, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -5149,6 +5670,10 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.sortAscending != rhs.sortAscending {return false}
+    if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.query != rhs.query {return false}
+    if lhs.name != rhs.name {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -6979,7 +7504,6 @@ extension Clarifai_Api_DeleteInputsRequest: SwiftProtobuf.Message, SwiftProtobuf
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "ids"),
-    3: .standard(proto: "delete_all"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -6987,7 +7511,6 @@ extension Clarifai_Api_DeleteInputsRequest: SwiftProtobuf.Message, SwiftProtobuf
       switch fieldNumber {
       case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
       case 2: try decoder.decodeRepeatedStringField(value: &self.ids)
-      case 3: try decoder.decodeSingularBoolField(value: &self.deleteAll)
       default: break
       }
     }
@@ -7000,16 +7523,12 @@ extension Clarifai_Api_DeleteInputsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if !self.ids.isEmpty {
       try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 2)
     }
-    if self.deleteAll != false {
-      try visitor.visitSingularBoolField(value: self.deleteAll, fieldNumber: 3)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_DeleteInputsRequest, rhs: Clarifai_Api_DeleteInputsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.ids != rhs.ids {return false}
-    if lhs.deleteAll != rhs.deleteAll {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -7647,7 +8166,17 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
-    4: .same(proto: "ids"),
+    10: .standard(proto: "sort_ascending"),
+    11: .standard(proto: "sort_by_name"),
+    12: .standard(proto: "sort_by_num_inputs"),
+    13: .standard(proto: "sort_by_modified_at"),
+    14: .same(proto: "query"),
+    5: .same(proto: "name"),
+    6: .standard(proto: "model_type_id"),
+    7: .standard(proto: "trained_only"),
+    8: .standard(proto: "input_fields"),
+    9: .standard(proto: "output_fields"),
+    15: .same(proto: "license"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -7656,7 +8185,29 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
       case 2: try decoder.decodeSingularUInt32Field(value: &self.page)
       case 3: try decoder.decodeSingularUInt32Field(value: &self.perPage)
-      case 4: try decoder.decodeRepeatedStringField(value: &self.ids)
+      case 5: try decoder.decodeSingularStringField(value: &self.name)
+      case 6: try decoder.decodeSingularStringField(value: &self.modelTypeID)
+      case 7: try decoder.decodeSingularBoolField(value: &self.trainedOnly)
+      case 8: try decoder.decodeRepeatedStringField(value: &self.inputFields)
+      case 9: try decoder.decodeRepeatedStringField(value: &self.outputFields)
+      case 10: try decoder.decodeSingularBoolField(value: &self.sortAscending)
+      case 11:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByName(v)}
+      case 12:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByNumInputs(v)}
+      case 13:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByModifiedAt(v)}
+      case 14: try decoder.decodeSingularStringField(value: &self.query)
+      case 15: try decoder.decodeSingularStringField(value: &self.license)
       default: break
       }
     }
@@ -7672,8 +8223,38 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
-    if !self.ids.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 4)
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 5)
+    }
+    if !self.modelTypeID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelTypeID, fieldNumber: 6)
+    }
+    if self.trainedOnly != false {
+      try visitor.visitSingularBoolField(value: self.trainedOnly, fieldNumber: 7)
+    }
+    if !self.inputFields.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.inputFields, fieldNumber: 8)
+    }
+    if !self.outputFields.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.outputFields, fieldNumber: 9)
+    }
+    if self.sortAscending != false {
+      try visitor.visitSingularBoolField(value: self.sortAscending, fieldNumber: 10)
+    }
+    switch self.sortBy {
+    case .sortByName(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+    case .sortByNumInputs(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 12)
+    case .sortByModifiedAt(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 13)
+    case nil: break
+    }
+    if !self.query.isEmpty {
+      try visitor.visitSingularStringField(value: self.query, fieldNumber: 14)
+    }
+    if !self.license.isEmpty {
+      try visitor.visitSingularStringField(value: self.license, fieldNumber: 15)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -7682,7 +8263,15 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
-    if lhs.ids != rhs.ids {return false}
+    if lhs.sortAscending != rhs.sortAscending {return false}
+    if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.query != rhs.query {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.modelTypeID != rhs.modelTypeID {return false}
+    if lhs.trainedOnly != rhs.trainedOnly {return false}
+    if lhs.inputFields != rhs.inputFields {return false}
+    if lhs.outputFields != rhs.outputFields {return false}
+    if lhs.license != rhs.license {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -7952,6 +8541,53 @@ extension Clarifai_Api_MultiModelResponse: SwiftProtobuf.Message, SwiftProtobuf.
   public static func ==(lhs: Clarifai_Api_MultiModelResponse, rhs: Clarifai_Api_MultiModelResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.models != rhs.models {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PatchModelVersionsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PatchModelVersionsRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_versions"),
+    4: .same(proto: "action"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.modelID)
+      case 3: try decoder.decodeRepeatedMessageField(value: &self.modelVersions)
+      case 4: try decoder.decodeSingularStringField(value: &self.action)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.modelVersions.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.modelVersions, fieldNumber: 3)
+    }
+    if !self.action.isEmpty {
+      try visitor.visitSingularStringField(value: self.action, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PatchModelVersionsRequest, rhs: Clarifai_Api_PatchModelVersionsRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.modelVersions != rhs.modelVersions {return false}
+    if lhs.action != rhs.action {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8409,6 +9045,60 @@ extension Clarifai_Api_ListModelTypesRequest: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
+extension Clarifai_Api_ListOpenSourceLicensesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListOpenSourceLicensesRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListOpenSourceLicensesRequest, rhs: Clarifai_Api_ListOpenSourceLicensesRequest) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListOpenSourceLicensesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListOpenSourceLicensesResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "licenses"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeRepeatedStringField(value: &self.licenses)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.licenses.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.licenses, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListOpenSourceLicensesResponse, rhs: Clarifai_Api_ListOpenSourceLicensesResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.licenses != rhs.licenses {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_SingleModelTypeResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SingleModelTypeResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -8479,6 +9169,258 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
   }
 }
 
+extension Clarifai_Api_GetModelVersionInputExampleRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetModelVersionInputExampleRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_version_id"),
+    4: .standard(proto: "example_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.modelID)
+      case 3: try decoder.decodeSingularStringField(value: &self.modelVersionID)
+      case 4: try decoder.decodeSingularStringField(value: &self.exampleID)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.modelVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 3)
+    }
+    if !self.exampleID.isEmpty {
+      try visitor.visitSingularStringField(value: self.exampleID, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetModelVersionInputExampleRequest, rhs: Clarifai_Api_GetModelVersionInputExampleRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.modelVersionID != rhs.modelVersionID {return false}
+    if lhs.exampleID != rhs.exampleID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListModelVersionInputExamplesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListModelVersionInputExamplesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_version_id"),
+    4: .same(proto: "page"),
+    5: .standard(proto: "per_page"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.modelID)
+      case 3: try decoder.decodeSingularStringField(value: &self.modelVersionID)
+      case 4: try decoder.decodeSingularUInt32Field(value: &self.page)
+      case 5: try decoder.decodeSingularUInt32Field(value: &self.perPage)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.modelVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 3)
+    }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 4)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListModelVersionInputExamplesRequest, rhs: Clarifai_Api_ListModelVersionInputExamplesRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.modelVersionID != rhs.modelVersionID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_SingleModelVersionInputExampleResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleModelVersionInputExampleResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "model_version_input_example"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeSingularMessageField(value: &self._modelVersionInputExample)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if let v = self._modelVersionInputExample {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_SingleModelVersionInputExampleResponse, rhs: Clarifai_Api_SingleModelVersionInputExampleResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs._modelVersionInputExample != rhs._modelVersionInputExample {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiModelVersionInputExampleResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiModelVersionInputExampleResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "model_version_input_examples"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeRepeatedMessageField(value: &self.modelVersionInputExamples)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelVersionInputExamples.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.modelVersionInputExamples, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiModelVersionInputExampleResponse, rhs: Clarifai_Api_MultiModelVersionInputExampleResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.modelVersionInputExamples != rhs.modelVersionInputExamples {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListModelReferencesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListModelReferencesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .same(proto: "page"),
+    4: .standard(proto: "per_page"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.modelID)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.page)
+      case 4: try decoder.decodeSingularUInt32Field(value: &self.perPage)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 3)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListModelReferencesRequest, rhs: Clarifai_Api_ListModelReferencesRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiModelReferenceResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiModelReferenceResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "model_references"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeRepeatedMessageField(value: &self.modelReferences)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.modelReferences.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.modelReferences, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiModelReferenceResponse, rhs: Clarifai_Api_MultiModelReferenceResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.modelReferences != rhs.modelReferences {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_MultiOutputResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MultiOutputResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -8518,12 +9460,14 @@ extension Clarifai_Api_ListScopesRequest: SwiftProtobuf.Message, SwiftProtobuf._
   public static let protoMessageName: String = _protobuf_package + ".ListScopesRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "key_type"),
+    2: .standard(proto: "user_app_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.keyType)
+      case 2: try decoder.decodeSingularMessageField(value: &self._userAppID)
       default: break
       }
     }
@@ -8533,11 +9477,15 @@ extension Clarifai_Api_ListScopesRequest: SwiftProtobuf.Message, SwiftProtobuf._
     if !self.keyType.isEmpty {
       try visitor.visitSingularStringField(value: self.keyType, fieldNumber: 1)
     }
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ListScopesRequest, rhs: Clarifai_Api_ListScopesRequest) -> Bool {
     if lhs.keyType != rhs.keyType {return false}
+    if lhs._userAppID != rhs._userAppID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9339,6 +10287,11 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    5: .standard(proto: "sort_ascending"),
+    6: .standard(proto: "sort_by_id"),
+    7: .standard(proto: "sort_by_modified_at"),
+    8: .same(proto: "query"),
+    4: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9347,6 +10300,19 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
       case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
       case 2: try decoder.decodeSingularUInt32Field(value: &self.page)
       case 3: try decoder.decodeSingularUInt32Field(value: &self.perPage)
+      case 4: try decoder.decodeSingularStringField(value: &self.id)
+      case 5: try decoder.decodeSingularBoolField(value: &self.sortAscending)
+      case 6:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByID(v)}
+      case 7:
+        if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {self.sortBy = .sortByModifiedAt(v)}
+      case 8: try decoder.decodeSingularStringField(value: &self.query)
       default: break
       }
     }
@@ -9362,6 +10328,22 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 4)
+    }
+    if self.sortAscending != false {
+      try visitor.visitSingularBoolField(value: self.sortAscending, fieldNumber: 5)
+    }
+    switch self.sortBy {
+    case .sortByID(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 6)
+    case .sortByModifiedAt(let v)?:
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 7)
+    case nil: break
+    }
+    if !self.query.isEmpty {
+      try visitor.visitSingularStringField(value: self.query, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9369,6 +10351,10 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.sortAscending != rhs.sortAscending {return false}
+    if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.query != rhs.query {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9604,6 +10590,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     3: .same(proto: "inputs"),
     4: .standard(proto: "output_config"),
     5: .standard(proto: "favor_clarifai_workflows"),
+    6: .standard(proto: "workflow_state"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9614,6 +10601,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
       case 3: try decoder.decodeRepeatedMessageField(value: &self.inputs)
       case 4: try decoder.decodeSingularMessageField(value: &self._outputConfig)
       case 5: try decoder.decodeSingularBoolField(value: &self.favorClarifaiWorkflows)
+      case 6: try decoder.decodeSingularMessageField(value: &self._workflowState)
       default: break
       }
     }
@@ -9635,6 +10623,9 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     if self.favorClarifaiWorkflows != false {
       try visitor.visitSingularBoolField(value: self.favorClarifaiWorkflows, fieldNumber: 5)
     }
+    if let v = self._workflowState {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9644,6 +10635,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     if lhs.inputs != rhs.inputs {return false}
     if lhs._outputConfig != rhs._outputConfig {return false}
     if lhs.favorClarifaiWorkflows != rhs.favorClarifaiWorkflows {return false}
+    if lhs._workflowState != rhs._workflowState {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9655,6 +10647,7 @@ extension Clarifai_Api_PostWorkflowResultsResponse: SwiftProtobuf.Message, Swift
     1: .same(proto: "status"),
     2: .same(proto: "workflow"),
     3: .same(proto: "results"),
+    4: .standard(proto: "workflow_state"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9663,6 +10656,7 @@ extension Clarifai_Api_PostWorkflowResultsResponse: SwiftProtobuf.Message, Swift
       case 1: try decoder.decodeSingularMessageField(value: &self._status)
       case 2: try decoder.decodeSingularMessageField(value: &self._workflow)
       case 3: try decoder.decodeRepeatedMessageField(value: &self.results)
+      case 4: try decoder.decodeSingularMessageField(value: &self._workflowState)
       default: break
       }
     }
@@ -9678,6 +10672,9 @@ extension Clarifai_Api_PostWorkflowResultsResponse: SwiftProtobuf.Message, Swift
     if !self.results.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.results, fieldNumber: 3)
     }
+    if let v = self._workflowState {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9685,6 +10682,7 @@ extension Clarifai_Api_PostWorkflowResultsResponse: SwiftProtobuf.Message, Swift
     if lhs._status != rhs._status {return false}
     if lhs._workflow != rhs._workflow {return false}
     if lhs.results != rhs.results {return false}
+    if lhs._workflowState != rhs._workflowState {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9858,12 +10856,16 @@ extension Clarifai_Api_ListAppDuplicationsRequest: SwiftProtobuf.Message, SwiftP
   public static let protoMessageName: String = _protobuf_package + ".ListAppDuplicationsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
+    2: .same(proto: "page"),
+    3: .standard(proto: "per_page"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.page)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.perPage)
       default: break
       }
     }
@@ -9873,11 +10875,19 @@ extension Clarifai_Api_ListAppDuplicationsRequest: SwiftProtobuf.Message, SwiftP
     if let v = self._userAppID {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 2)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ListAppDuplicationsRequest, rhs: Clarifai_Api_ListAppDuplicationsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

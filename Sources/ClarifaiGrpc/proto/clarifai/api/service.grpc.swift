@@ -207,6 +207,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_GetModelTypeRequest, Clarifai_Api_SingleModelTypeResponse>
 
+  func listOpenSourceLicenses(
+    _ request: Clarifai_Api_ListOpenSourceLicensesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListOpenSourceLicensesRequest, Clarifai_Api_ListOpenSourceLicensesResponse>
+
   func listModelTypes(
     _ request: Clarifai_Api_ListModelTypesRequest,
     callOptions: CallOptions?
@@ -272,6 +277,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionsRequest, Clarifai_Api_SingleModelResponse>
 
+  func patchModelVersions(
+    _ request: Clarifai_Api_PatchModelVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>
+
   func deleteModelVersion(
     _ request: Clarifai_Api_DeleteModelVersionRequest,
     callOptions: CallOptions?
@@ -286,6 +296,21 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostModelVersionMetricsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>
+
+  func listModelReferences(
+    _ request: Clarifai_Api_ListModelReferencesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModelReferencesRequest, Clarifai_Api_MultiModelReferenceResponse>
+
+  func getModelVersionInputExample(
+    _ request: Clarifai_Api_GetModelVersionInputExampleRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionInputExampleRequest, Clarifai_Api_SingleModelVersionInputExampleResponse>
+
+  func listModelVersionInputExamples(
+    _ request: Clarifai_Api_ListModelVersionInputExamplesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModelVersionInputExamplesRequest, Clarifai_Api_MultiModelVersionInputExampleResponse>
 
   func getWorkflow(
     _ request: Clarifai_Api_GetWorkflowRequest,
@@ -1105,7 +1130,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Delete a single input.  This call is synchronous.
+  /// Delete a single input asynchronously.
   ///
   /// - Parameters:
   ///   - request: Request to send to DeleteInput.
@@ -1123,7 +1148,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Delete multiple inputs in one request.
-  /// This call is asynchronous. Use DeleteInput if you want a synchronous version.
+  /// This call is asynchronous.
   ///
   /// - Parameters:
   ///   - request: Request to send to DeleteInputs.
@@ -1186,6 +1211,23 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_GetModelTypeRequest, Clarifai_Api_SingleModelTypeResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelType",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// List all the supported open source licenses in the platform.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListOpenSourceLicenses.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listOpenSourceLicenses(
+    _ request: Clarifai_Api_ListOpenSourceLicensesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListOpenSourceLicensesRequest, Clarifai_Api_ListOpenSourceLicensesResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListOpenSourceLicenses",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -1418,6 +1460,23 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to PatchModelVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelVersions(
+    _ request: Clarifai_Api_PatchModelVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// Delete a single model.
   ///
   /// - Parameters:
@@ -1464,6 +1523,57 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_PostModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelVersionMetrics",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Lists model references tied to a particular model id.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModelReferences.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModelReferences(
+    _ request: Clarifai_Api_ListModelReferencesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModelReferencesRequest, Clarifai_Api_MultiModelReferenceResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModelReferences",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to GetModelVersionInputExample
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModelVersionInputExample.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModelVersionInputExample(
+    _ request: Clarifai_Api_GetModelVersionInputExampleRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionInputExampleRequest, Clarifai_Api_SingleModelVersionInputExampleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModelVersionInputExample",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to ListModelVersionInputExamples
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModelVersionInputExamples.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModelVersionInputExamples(
+    _ request: Clarifai_Api_ListModelVersionInputExamplesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModelVersionInputExamplesRequest, Clarifai_Api_MultiModelVersionInputExampleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModelVersionInputExamples",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -1728,7 +1838,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List all auth scopes available.
+  /// List all auth scopes available to me as a user.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListScopes.
@@ -2523,10 +2633,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postInputs(request: Clarifai_Api_PostInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
   /// Patch one or more inputs.
   func patchInputs(request: Clarifai_Api_PatchInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
-  /// Delete a single input.  This call is synchronous.
+  /// Delete a single input asynchronously.
   func deleteInput(request: Clarifai_Api_DeleteInputRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete multiple inputs in one request.
-  /// This call is asynchronous. Use DeleteInput if you want a synchronous version.
+  /// This call is asynchronous.
   func deleteInputs(request: Clarifai_Api_DeleteInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Execute a search over input
   func postInputsSearches(request: Clarifai_Api_PostInputsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
@@ -2534,6 +2644,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiOutputResponse>
   /// Get a specific model type.
   func getModelType(request: Clarifai_Api_GetModelTypeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelTypeResponse>
+  /// List all the supported open source licenses in the platform.
+  func listOpenSourceLicenses(request: Clarifai_Api_ListOpenSourceLicensesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_ListOpenSourceLicensesResponse>
   /// List all the model types available in the platform.
   /// This MUST be above ListModels so that the /models/types endpoint takes precedence.
   func listModelTypes(request: Clarifai_Api_ListModelTypesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelTypeResponse>
@@ -2566,12 +2678,17 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Create a new model version to trigger training of the model.
   /// FIXME(zeiler): this should have been a plural response.
   func postModelVersions(request: Clarifai_Api_PostModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+  func patchModelVersions(request: Clarifai_Api_PatchModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
   /// Delete a single model.
   func deleteModelVersion(request: Clarifai_Api_DeleteModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Get the evaluation metrics for a model version.
   func getModelVersionMetrics(request: Clarifai_Api_GetModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
   /// Run the evaluation metrics for a model version.
   func postModelVersionMetrics(request: Clarifai_Api_PostModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
+  /// Lists model references tied to a particular model id.
+  func listModelReferences(request: Clarifai_Api_ListModelReferencesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelReferenceResponse>
+  func getModelVersionInputExample(request: Clarifai_Api_GetModelVersionInputExampleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionInputExampleResponse>
+  func listModelVersionInputExamples(request: Clarifai_Api_ListModelVersionInputExamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionInputExampleResponse>
   /// Get a specific workflow from an app.
   func getWorkflow(request: Clarifai_Api_GetWorkflowRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleWorkflowResponse>
   /// List all the workflows.
@@ -2605,7 +2722,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// the user the scopes/access of the key/credential they're providing, as computed by
   /// our authorizer:
   func myScopes(request: Clarifai_Api_MyScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeResponse>
-  /// List all auth scopes available.
+  /// List all auth scopes available to me as a user.
   func listScopes(request: Clarifai_Api_ListScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeDepsResponse>
   /// Get a specific app from an app.
   func getApp(request: Clarifai_Api_GetAppRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppResponse>
@@ -2956,6 +3073,13 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "ListOpenSourceLicenses":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listOpenSourceLicenses(request: request, context: context)
+        }
+      }
+
     case "ListModelTypes":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -3047,6 +3171,13 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "PatchModelVersions":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchModelVersions(request: request, context: context)
+        }
+      }
+
     case "DeleteModelVersion":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -3065,6 +3196,27 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.postModelVersionMetrics(request: request, context: context)
+        }
+      }
+
+    case "ListModelReferences":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listModelReferences(request: request, context: context)
+        }
+      }
+
+    case "GetModelVersionInputExample":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.getModelVersionInputExample(request: request, context: context)
+        }
+      }
+
+    case "ListModelVersionInputExamples":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listModelVersionInputExamples(request: request, context: context)
         }
       }
 
