@@ -464,6 +464,54 @@ extension Clarifai_Api_StatTimeAggType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum Clarifai_Api_ValidationErrorType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case notSet // = 0
+  case restricted // = 1
+  case database // = 2
+  case format // = 3
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .notSet
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .notSet
+    case 1: self = .restricted
+    case 2: self = .database
+    case 3: self = .format
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .notSet: return 0
+    case .restricted: return 1
+    case .database: return 2
+    case .format: return 3
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_ValidationErrorType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_ValidationErrorType] = [
+    .notSet,
+    .restricted,
+    .database,
+    .format,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 /////////////////////////////////////////////////////////////////////////////////
 /// Messages from /proto/clarifai/api/annotation.proto
 /////////////////////////////////////////////////////////////////////////////////
@@ -2180,7 +2228,11 @@ public struct Clarifai_Api_Model {
   /// A nicer-to-read name for the model. Can have spaces and special characters.
   public var name: String = String()
 
-  /// When the model was created.
+  /// When the model was created. We follow the XXXX timestamp
+  /// format. We use https://www.ietf.org/rfc/rfc3339.txt format:
+  /// "2006-01-02T15:04:05.999999Z" so you can expect results like
+  ///  the following from the API:
+  ///  "2017-04-11T21:50:50.223962Z"
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_createdAt = newValue}
@@ -2189,6 +2241,16 @@ public struct Clarifai_Api_Model {
   public var hasCreatedAt: Bool {return self._createdAt != nil}
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedAt() {self._createdAt = nil}
+
+  /// When was the most recent model version created at
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return self._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {self._modifiedAt = nil}
 
   /// The app the model belongs to.
   public var appID: String = String()
@@ -2256,7 +2318,7 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
   public mutating func clearVisibility() {self._visibility = nil}
 
-  /// Description about this model
+  /// Short description about this model
   public var description_p: String = String()
 
   /// To handle arbitrary json metadata you can use a struct field:
@@ -2270,11 +2332,17 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
   public mutating func clearMetadata() {self._metadata = nil}
 
+  /// Notes about a model (should support markdown)
+  /// This field should be used for in-depth notes about
+  /// about a model and supports up to 64Kbs.
+  public var notes: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _outputInfo: Clarifai_Api_OutputInfo? = nil
   fileprivate var _modelVersion: Clarifai_Api_ModelVersion? = nil
   fileprivate var _inputInfo: Clarifai_Api_InputInfo? = nil
@@ -5852,6 +5920,24 @@ extension Clarifai_Api_Visibility.Gettable: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public struct Clarifai_Api_TrendingMetric {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userID: String = String()
+
+  public var appID: String = String()
+
+  public var objectID: String = String()
+
+  public var viewCount: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "clarifai.api"
@@ -5932,6 +6018,15 @@ extension Clarifai_Api_StatTimeAggType: SwiftProtobuf._ProtoNameProviding {
     4: .same(proto: "DAY"),
     5: .same(proto: "HOUR"),
     6: .same(proto: "MINUTE"),
+  ]
+}
+
+extension Clarifai_Api_ValidationErrorType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "VALIDATION_ERROR_TYPE_NOT_SET"),
+    1: .same(proto: "RESTRICTED"),
+    2: .same(proto: "DATABASE"),
+    3: .same(proto: "FORMAT"),
   ]
 }
 
@@ -8011,6 +8106,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     1: .same(proto: "id"),
     2: .same(proto: "name"),
     3: .standard(proto: "created_at"),
+    19: .standard(proto: "modified_at"),
     4: .standard(proto: "app_id"),
     5: .standard(proto: "output_info"),
     6: .standard(proto: "model_version"),
@@ -8022,6 +8118,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     15: .same(proto: "visibility"),
     16: .same(proto: "description"),
     17: .same(proto: "metadata"),
+    18: .same(proto: "notes"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8041,6 +8138,8 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 15: try decoder.decodeSingularMessageField(value: &self._visibility)
       case 16: try decoder.decodeSingularStringField(value: &self.description_p)
       case 17: try decoder.decodeSingularMessageField(value: &self._metadata)
+      case 18: try decoder.decodeSingularStringField(value: &self.notes)
+      case 19: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       default: break
       }
     }
@@ -8089,6 +8188,12 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if let v = self._metadata {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
     }
+    if !self.notes.isEmpty {
+      try visitor.visitSingularStringField(value: self.notes, fieldNumber: 18)
+    }
+    if let v = self._modifiedAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8096,6 +8201,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.id != rhs.id {return false}
     if lhs.name != rhs.name {return false}
     if lhs._createdAt != rhs._createdAt {return false}
+    if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs.appID != rhs.appID {return false}
     if lhs._outputInfo != rhs._outputInfo {return false}
     if lhs._modelVersion != rhs._modelVersion {return false}
@@ -8107,6 +8213,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs._visibility != rhs._visibility {return false}
     if lhs.description_p != rhs.description_p {return false}
     if lhs._metadata != rhs._metadata {return false}
+    if lhs.notes != rhs.notes {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -12374,4 +12481,51 @@ extension Clarifai_Api_Visibility.Gettable: SwiftProtobuf._ProtoNameProviding {
     30: .same(proto: "ORG"),
     50: .same(proto: "PUBLIC"),
   ]
+}
+
+extension Clarifai_Api_TrendingMetric: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TrendingMetric"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_id"),
+    2: .standard(proto: "app_id"),
+    3: .standard(proto: "object_id"),
+    4: .standard(proto: "view_count"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.userID)
+      case 2: try decoder.decodeSingularStringField(value: &self.appID)
+      case 3: try decoder.decodeSingularStringField(value: &self.objectID)
+      case 4: try decoder.decodeSingularUInt64Field(value: &self.viewCount)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.userID.isEmpty {
+      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 1)
+    }
+    if !self.appID.isEmpty {
+      try visitor.visitSingularStringField(value: self.appID, fieldNumber: 2)
+    }
+    if !self.objectID.isEmpty {
+      try visitor.visitSingularStringField(value: self.objectID, fieldNumber: 3)
+    }
+    if self.viewCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.viewCount, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TrendingMetric, rhs: Clarifai_Api_TrendingMetric) -> Bool {
+    if lhs.userID != rhs.userID {return false}
+    if lhs.appID != rhs.appID {return false}
+    if lhs.objectID != rhs.objectID {return false}
+    if lhs.viewCount != rhs.viewCount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }
