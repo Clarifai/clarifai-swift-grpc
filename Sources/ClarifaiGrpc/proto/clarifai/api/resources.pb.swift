@@ -2256,7 +2256,7 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
   public mutating func clearVisibility() {self._visibility = nil}
 
-  /// Short description about this model
+  /// Description about this model
   public var description_p: String = String()
 
   /// To handle arbitrary json metadata you can use a struct field:
@@ -2269,11 +2269,6 @@ public struct Clarifai_Api_Model {
   public var hasMetadata: Bool {return self._metadata != nil}
   /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
   public mutating func clearMetadata() {self._metadata = nil}
-
-  /// Notes about a model (should support markdown)
-  /// This field should be used for in-depth notes about
-  /// about a model and supports up to 64Kbs.
-  public var notes: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -5857,24 +5852,6 @@ extension Clarifai_Api_Visibility.Gettable: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public struct Clarifai_Api_TrendingMetric {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var userID: String = String()
-
-  public var appID: String = String()
-
-  public var objectID: String = String()
-
-  public var viewCount: UInt64 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "clarifai.api"
@@ -8045,7 +8022,6 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     15: .same(proto: "visibility"),
     16: .same(proto: "description"),
     17: .same(proto: "metadata"),
-    18: .same(proto: "notes"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8065,7 +8041,6 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 15: try decoder.decodeSingularMessageField(value: &self._visibility)
       case 16: try decoder.decodeSingularStringField(value: &self.description_p)
       case 17: try decoder.decodeSingularMessageField(value: &self._metadata)
-      case 18: try decoder.decodeSingularStringField(value: &self.notes)
       default: break
       }
     }
@@ -8114,9 +8089,6 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if let v = self._metadata {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
     }
-    if !self.notes.isEmpty {
-      try visitor.visitSingularStringField(value: self.notes, fieldNumber: 18)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8135,7 +8107,6 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs._visibility != rhs._visibility {return false}
     if lhs.description_p != rhs.description_p {return false}
     if lhs._metadata != rhs._metadata {return false}
-    if lhs.notes != rhs.notes {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -12403,51 +12374,4 @@ extension Clarifai_Api_Visibility.Gettable: SwiftProtobuf._ProtoNameProviding {
     30: .same(proto: "ORG"),
     50: .same(proto: "PUBLIC"),
   ]
-}
-
-extension Clarifai_Api_TrendingMetric: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".TrendingMetric"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_id"),
-    2: .standard(proto: "app_id"),
-    3: .standard(proto: "object_id"),
-    4: .standard(proto: "view_count"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.userID)
-      case 2: try decoder.decodeSingularStringField(value: &self.appID)
-      case 3: try decoder.decodeSingularStringField(value: &self.objectID)
-      case 4: try decoder.decodeSingularUInt64Field(value: &self.viewCount)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.userID.isEmpty {
-      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 1)
-    }
-    if !self.appID.isEmpty {
-      try visitor.visitSingularStringField(value: self.appID, fieldNumber: 2)
-    }
-    if !self.objectID.isEmpty {
-      try visitor.visitSingularStringField(value: self.objectID, fieldNumber: 3)
-    }
-    if self.viewCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.viewCount, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_TrendingMetric, rhs: Clarifai_Api_TrendingMetric) -> Bool {
-    if lhs.userID != rhs.userID {return false}
-    if lhs.appID != rhs.appID {return false}
-    if lhs.objectID != rhs.objectID {return false}
-    if lhs.viewCount != rhs.viewCount {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
 }

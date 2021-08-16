@@ -4248,10 +4248,6 @@ public struct Clarifai_Api_PostWorkflowResultsRequest {
   /// If an ID is specified by default we first looks into Clarifai workflows for a Workflow ID
   public var workflowID: String = String()
 
-  /// Workflow version ID to retrieve
-  /// If no ID is specified, latest workflow version is used
-  public var versionID: String = String()
-
   public var inputs: [Clarifai_Api_Input] = []
 
   /// FIXME(zeiler): the request for post workflows is using an outputconfig object that is supposed
@@ -4359,10 +4355,6 @@ public struct Clarifai_Api_PostWorkflowResultsSimilarityRequest {
   public mutating func clearUserAppID() {self._userAppID = nil}
 
   public var workflowID: String = String()
-
-  /// Workflow version ID to retrieve
-  /// If no ID is specified, latest workflow version is used
-  public var versionID: String = String()
 
   /// The specific model version whose outputs we are comparing
   public var modelVersionID: String = String()
@@ -5269,10 +5261,10 @@ public struct Clarifai_Api_PostTrendingMetricsViewRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  /// For now view types 'apps', 'workflows', and 'models' are supported.
+  /// For now view types 'apps', 'workflows', and 'models' are supported
   public var viewType: String = String()
 
-  /// ID of the views object.
+  /// ID of the views object
   public var objectID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -5280,62 +5272,6 @@ public struct Clarifai_Api_PostTrendingMetricsViewRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-public struct Clarifai_Api_ListTrendingMetricsViewsRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The user_id and app_id information.
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  /// For now view types 'apps', 'workflows', and 'models' are supported.
-  public var viewType: String = String()
-
-  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
-  /// Defaults to 1.
-  public var page: UInt32 = 0
-
-  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 128.
-  public var perPage: UInt32 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-public struct Clarifai_Api_MultiTrendingMetricsViewResponse {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
-
-  public var metrics: [Clarifai_Api_TrendingMetric] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -10850,7 +10786,6 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "workflow_id"),
-    7: .standard(proto: "version_id"),
     3: .same(proto: "inputs"),
     4: .standard(proto: "output_config"),
     5: .standard(proto: "favor_clarifai_workflows"),
@@ -10866,7 +10801,6 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
       case 4: try decoder.decodeSingularMessageField(value: &self._outputConfig)
       case 5: try decoder.decodeSingularBoolField(value: &self.favorClarifaiWorkflows)
       case 6: try decoder.decodeSingularMessageField(value: &self._workflowState)
-      case 7: try decoder.decodeSingularStringField(value: &self.versionID)
       default: break
       }
     }
@@ -10891,16 +10825,12 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     if let v = self._workflowState {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }
-    if !self.versionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.versionID, fieldNumber: 7)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostWorkflowResultsRequest, rhs: Clarifai_Api_PostWorkflowResultsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.workflowID != rhs.workflowID {return false}
-    if lhs.versionID != rhs.versionID {return false}
     if lhs.inputs != rhs.inputs {return false}
     if lhs._outputConfig != rhs._outputConfig {return false}
     if lhs.favorClarifaiWorkflows != rhs.favorClarifaiWorkflows {return false}
@@ -10962,7 +10892,6 @@ extension Clarifai_Api_PostWorkflowResultsSimilarityRequest: SwiftProtobuf.Messa
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "workflow_id"),
-    7: .standard(proto: "version_id"),
     3: .standard(proto: "model_version_id"),
     4: .standard(proto: "probe_inputs"),
     5: .standard(proto: "pool_inputs"),
@@ -10978,7 +10907,6 @@ extension Clarifai_Api_PostWorkflowResultsSimilarityRequest: SwiftProtobuf.Messa
       case 4: try decoder.decodeRepeatedMessageField(value: &self.probeInputs)
       case 5: try decoder.decodeRepeatedMessageField(value: &self.poolInputs)
       case 6: try decoder.decodeSingularBoolField(value: &self.favorClarifaiWorkflows)
-      case 7: try decoder.decodeSingularStringField(value: &self.versionID)
       default: break
       }
     }
@@ -11003,16 +10931,12 @@ extension Clarifai_Api_PostWorkflowResultsSimilarityRequest: SwiftProtobuf.Messa
     if self.favorClarifaiWorkflows != false {
       try visitor.visitSingularBoolField(value: self.favorClarifaiWorkflows, fieldNumber: 6)
     }
-    if !self.versionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.versionID, fieldNumber: 7)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostWorkflowResultsSimilarityRequest, rhs: Clarifai_Api_PostWorkflowResultsSimilarityRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.workflowID != rhs.workflowID {return false}
-    if lhs.versionID != rhs.versionID {return false}
     if lhs.modelVersionID != rhs.modelVersionID {return false}
     if lhs.probeInputs != rhs.probeInputs {return false}
     if lhs.poolInputs != rhs.poolInputs {return false}
@@ -12286,88 +12210,6 @@ extension Clarifai_Api_PostTrendingMetricsViewRequest: SwiftProtobuf.Message, Sw
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.viewType != rhs.viewType {return false}
     if lhs.objectID != rhs.objectID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_ListTrendingMetricsViewsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".ListTrendingMetricsViewsRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "view_type"),
-    3: .same(proto: "page"),
-    4: .standard(proto: "per_page"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
-      case 2: try decoder.decodeSingularStringField(value: &self.viewType)
-      case 3: try decoder.decodeSingularUInt32Field(value: &self.page)
-      case 4: try decoder.decodeSingularUInt32Field(value: &self.perPage)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }
-    if !self.viewType.isEmpty {
-      try visitor.visitSingularStringField(value: self.viewType, fieldNumber: 2)
-    }
-    if self.page != 0 {
-      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 3)
-    }
-    if self.perPage != 0 {
-      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_ListTrendingMetricsViewsRequest, rhs: Clarifai_Api_ListTrendingMetricsViewsRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.viewType != rhs.viewType {return false}
-    if lhs.page != rhs.page {return false}
-    if lhs.perPage != rhs.perPage {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_MultiTrendingMetricsViewResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".MultiTrendingMetricsViewResponse"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "metrics"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._status)
-      case 2: try decoder.decodeRepeatedMessageField(value: &self.metrics)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }
-    if !self.metrics.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.metrics, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_MultiTrendingMetricsViewResponse, rhs: Clarifai_Api_MultiTrendingMetricsViewResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.metrics != rhs.metrics {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
