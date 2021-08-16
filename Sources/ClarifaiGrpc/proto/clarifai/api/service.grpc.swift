@@ -617,6 +617,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>
 
+  func listTrendingMetricsViews(
+    _ request: Clarifai_Api_ListTrendingMetricsViewsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>
+
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -2655,6 +2660,23 @@ extension Clarifai_Api_V2ClientProtocol {
       callOptions: callOptions ?? self.defaultCallOptions
     )
   }
+
+  /// List the view metrics for a detail view
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListTrendingMetricsViews.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listTrendingMetricsViews(
+    _ request: Clarifai_Api_ListTrendingMetricsViewsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListTrendingMetricsViews",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -2932,6 +2954,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
   /// Increase the view metric for a detail view
   func postTrendingMetricsView(request: Clarifai_Api_PostTrendingMetricsViewRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// List the view metrics for a detail view
+  func listTrendingMetricsViews(request: Clarifai_Api_ListTrendingMetricsViewsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrendingMetricsViewResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -3764,6 +3788,13 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.postTrendingMetricsView(request: request, context: context)
+        }
+      }
+
+    case "ListTrendingMetricsViews":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listTrendingMetricsViews(request: request, context: context)
         }
       }
 
