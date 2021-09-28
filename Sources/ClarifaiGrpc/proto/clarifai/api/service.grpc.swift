@@ -272,6 +272,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>
 
+  func postModelVersionsPublish(
+    _ request: Clarifai_Api_PostModelVersionsPublishRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>
+
+  func deleteModelVersionsUnPublish(
+    _ request: Clarifai_Api_DeleteModelVersionsUnpublishRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteModelVersionsUnpublishRequest, Clarifai_Api_Status_BaseResponse>
+
   func postModelVersions(
     _ request: Clarifai_Api_PostModelVersionsRequest,
     callOptions: CallOptions?
@@ -406,6 +416,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_MyScopesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_MyScopesRequest, Clarifai_Api_MultiScopeResponse>
+
+  func myScopesUser(
+    _ request: Clarifai_Api_MyScopesUserRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_MyScopesUserRequest, Clarifai_Api_MultiScopeUserResponse>
+
+  func myScopesRoot(
+    _ request: Clarifai_Api_MyScopesRootRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_MyScopesRootRequest, Clarifai_Api_MultiScopeRootResponse>
 
   func listScopes(
     _ request: Clarifai_Api_ListScopesRequest,
@@ -1472,6 +1492,40 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to PostModelVersionsPublish
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModelVersionsPublish.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModelVersionsPublish(
+    _ request: Clarifai_Api_PostModelVersionsPublishRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsPublishRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModelVersionsPublish",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to DeleteModelVersionsUnPublish
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteModelVersionsUnPublish.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteModelVersionsUnPublish(
+    _ request: Clarifai_Api_DeleteModelVersionsUnpublishRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteModelVersionsUnpublishRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteModelVersionsUnPublish",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// Create a new model version to trigger training of the model.
   /// FIXME(zeiler): this should have been a plural response.
   ///
@@ -1931,6 +1985,40 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_MyScopesRequest, Clarifai_Api_MultiScopeResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/MyScopes",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to MyScopesUser
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to MyScopesUser.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func myScopesUser(
+    _ request: Clarifai_Api_MyScopesUserRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_MyScopesUserRequest, Clarifai_Api_MultiScopeUserResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/MyScopesUser",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Unary call to MyScopesRoot
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to MyScopesRoot.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func myScopesRoot(
+    _ request: Clarifai_Api_MyScopesRootRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_MyScopesRootRequest, Clarifai_Api_MultiScopeRootResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/MyScopesRoot",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -2807,6 +2895,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func getModelVersion(request: Clarifai_Api_GetModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
   /// List all the models.
   func listModelVersions(request: Clarifai_Api_ListModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
+  func postModelVersionsPublish(request: Clarifai_Api_PostModelVersionsPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  func deleteModelVersionsUnPublish(request: Clarifai_Api_DeleteModelVersionsUnpublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Create a new model version to trigger training of the model.
   /// FIXME(zeiler): this should have been a plural response.
   func postModelVersions(request: Clarifai_Api_PostModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
@@ -2862,6 +2952,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// the user the scopes/access of the key/credential they're providing, as computed by
   /// our authorizer:
   func myScopes(request: Clarifai_Api_MyScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeResponse>
+  func myScopesUser(request: Clarifai_Api_MyScopesUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeUserResponse>
+  func myScopesRoot(request: Clarifai_Api_MyScopesRootRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeRootResponse>
   /// List all auth scopes available to me as a user.
   func listScopes(request: Clarifai_Api_ListScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeDepsResponse>
   /// Get a specific app from an app.
@@ -3308,6 +3400,20 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "PostModelVersionsPublish":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.postModelVersionsPublish(request: request, context: context)
+        }
+      }
+
+    case "DeleteModelVersionsUnPublish":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.deleteModelVersionsUnPublish(request: request, context: context)
+        }
+      }
+
     case "PostModelVersions":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -3494,6 +3600,20 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.myScopes(request: request, context: context)
+        }
+      }
+
+    case "MyScopesUser":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.myScopesUser(request: request, context: context)
+        }
+      }
+
+    case "MyScopesRoot":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.myScopesRoot(request: request, context: context)
         }
       }
 
