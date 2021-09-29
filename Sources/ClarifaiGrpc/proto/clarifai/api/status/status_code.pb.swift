@@ -318,6 +318,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case rpcMaxMessageSizeExceeded // = 40033
   case rpcCanceled // = 40035
   case rpcUnknownMethod // = 40036
+  case requestCanceledByUser // = 40037
   case clusterInternalFailure // = 43040
 
   /// could not connect to external services
@@ -460,11 +461,27 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case maintenanceSuccess // = 63000
   case maintenanceFailed // = 63001
 
+  /// Datasets 64xxx
+  /// The dataset version is pending to be processed.
+  case datasetVersionPending // = 64005
+
+  /// The dataset version is currently being processed.
+  case datasetVersionInProgress // = 64010
+
+  /// The dataset version is ready to be used.
+  case datasetVersionReady // = 64015
+
+  /// An error occurred during the dataset version processing.
+  case datasetVersionFailure // = 64020
+
+  /// An unexpected error occurred during the dataset version processing.
+  case datasetVersionUnexpectedError // = 64025
+
   /// Generic Job status codes
-  case jobQueued // = 6400
-  case jobRunning // = 6401
-  case jobCompleted // = 6402
-  case jobFailed // = 6403
+  case jobQueued // = 64000
+  case jobRunning // = 64001
+  case jobCompleted // = 64002
+  case jobFailed // = 64003
 
   ///auth issues
   case authMissingIdpAssoc // = 65000
@@ -505,10 +522,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   public init?(rawValue: Int) {
     switch rawValue {
     case 0: self = .zero
-    case 6400: self = .jobQueued
-    case 6401: self = .jobRunning
-    case 6402: self = .jobCompleted
-    case 6403: self = .jobFailed
     case 10000: self = .success
     case 10010: self = .mixedStatus
     case 10020: self = .failure
@@ -684,6 +697,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 40034: self = .externalConnectionError
     case 40035: self = .rpcCanceled
     case 40036: self = .rpcUnknownMethod
+    case 40037: self = .requestCanceledByUser
     case 41000: self = .queueConnError
     case 41002: self = .queueCloseRequestTimeout
     case 41003: self = .queueConnClosed
@@ -769,6 +783,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 62002: self = .featureflagBlocked
     case 63000: self = .maintenanceSuccess
     case 63001: self = .maintenanceFailed
+    case 64000: self = .jobQueued
+    case 64001: self = .jobRunning
+    case 64002: self = .jobCompleted
+    case 64003: self = .jobFailed
+    case 64005: self = .datasetVersionPending
+    case 64010: self = .datasetVersionInProgress
+    case 64015: self = .datasetVersionReady
+    case 64020: self = .datasetVersionFailure
+    case 64025: self = .datasetVersionUnexpectedError
     case 65000: self = .authMissingIdpAssoc
     case 90400: self = .badRequest
     case 90500: self = .serverError
@@ -797,10 +820,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   public var rawValue: Int {
     switch self {
     case .zero: return 0
-    case .jobQueued: return 6400
-    case .jobRunning: return 6401
-    case .jobCompleted: return 6402
-    case .jobFailed: return 6403
     case .success: return 10000
     case .mixedStatus: return 10010
     case .failure: return 10020
@@ -976,6 +995,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .externalConnectionError: return 40034
     case .rpcCanceled: return 40035
     case .rpcUnknownMethod: return 40036
+    case .requestCanceledByUser: return 40037
     case .queueConnError: return 41000
     case .queueCloseRequestTimeout: return 41002
     case .queueConnClosed: return 41003
@@ -1061,6 +1081,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .featureflagBlocked: return 62002
     case .maintenanceSuccess: return 63000
     case .maintenanceFailed: return 63001
+    case .jobQueued: return 64000
+    case .jobRunning: return 64001
+    case .jobCompleted: return 64002
+    case .jobFailed: return 64003
+    case .datasetVersionPending: return 64005
+    case .datasetVersionInProgress: return 64010
+    case .datasetVersionReady: return 64015
+    case .datasetVersionFailure: return 64020
+    case .datasetVersionUnexpectedError: return 64025
     case .authMissingIdpAssoc: return 65000
     case .badRequest: return 90400
     case .serverError: return 90500
@@ -1268,6 +1297,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .rpcMaxMessageSizeExceeded,
     .rpcCanceled,
     .rpcUnknownMethod,
+    .requestCanceledByUser,
     .clusterInternalFailure,
     .externalConnectionError,
     .queueConnError,
@@ -1354,6 +1384,11 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .featureflagBlocked,
     .maintenanceSuccess,
     .maintenanceFailed,
+    .datasetVersionPending,
+    .datasetVersionInProgress,
+    .datasetVersionReady,
+    .datasetVersionFailure,
+    .datasetVersionUnexpectedError,
     .jobQueued,
     .jobRunning,
     .jobCompleted,
@@ -1389,10 +1424,6 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
 extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "ZERO"),
-    6400: .same(proto: "JOB_QUEUED"),
-    6401: .same(proto: "JOB_RUNNING"),
-    6402: .same(proto: "JOB_COMPLETED"),
-    6403: .same(proto: "JOB_FAILED"),
     10000: .same(proto: "SUCCESS"),
     10010: .same(proto: "MIXED_STATUS"),
     10020: .same(proto: "FAILURE"),
@@ -1568,6 +1599,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     40034: .same(proto: "EXTERNAL_CONNECTION_ERROR"),
     40035: .same(proto: "RPC_CANCELED"),
     40036: .same(proto: "RPC_UNKNOWN_METHOD"),
+    40037: .same(proto: "REQUEST_CANCELED_BY_USER"),
     41000: .same(proto: "QUEUE_CONN_ERROR"),
     41002: .same(proto: "QUEUE_CLOSE_REQUEST_TIMEOUT"),
     41003: .same(proto: "QUEUE_CONN_CLOSED"),
@@ -1653,6 +1685,15 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     62002: .same(proto: "FEATUREFLAG_BLOCKED"),
     63000: .same(proto: "MAINTENANCE_SUCCESS"),
     63001: .same(proto: "MAINTENANCE_FAILED"),
+    64000: .same(proto: "JOB_QUEUED"),
+    64001: .same(proto: "JOB_RUNNING"),
+    64002: .same(proto: "JOB_COMPLETED"),
+    64003: .same(proto: "JOB_FAILED"),
+    64005: .same(proto: "DATASET_VERSION_PENDING"),
+    64010: .same(proto: "DATASET_VERSION_IN_PROGRESS"),
+    64015: .same(proto: "DATASET_VERSION_READY"),
+    64020: .same(proto: "DATASET_VERSION_FAILURE"),
+    64025: .same(proto: "DATASET_VERSION_UNEXPECTED_ERROR"),
     65000: .same(proto: "AUTH_MISSING_IDP_ASSOC"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),

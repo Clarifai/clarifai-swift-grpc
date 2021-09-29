@@ -512,66 +512,6 @@ extension Clarifai_Api_ValidationErrorType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public enum Clarifai_Api_TagCategoryName: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-  case uncategorized // = 0
-
-  /// ex. tags: "faces", "food", "misc"
-  case useCase // = 1
-
-  /// ex. tags: "en", "ar", "fi"
-  case language // = 2
-
-  /// ex. tags: "MIT", "Apache-2.0", "OSL"
-  case licence // = 3
-
-  /// ex. tags: “HuggingFace”, "Detectron2", "OpenMMLab"
-  case toolkit // = 4
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .uncategorized
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .uncategorized
-    case 1: self = .useCase
-    case 2: self = .language
-    case 3: self = .licence
-    case 4: self = .toolkit
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .uncategorized: return 0
-    case .useCase: return 1
-    case .language: return 2
-    case .licence: return 3
-    case .toolkit: return 4
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension Clarifai_Api_TagCategoryName: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_TagCategoryName] = [
-    .uncategorized,
-    .useCase,
-    .language,
-    .licence,
-    .toolkit,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
 /////////////////////////////////////////////////////////////////////////////////
 /// Messages from /proto/clarifai/api/annotation.proto
 /////////////////////////////////////////////////////////////////////////////////
@@ -761,6 +701,14 @@ public struct Clarifai_Api_App {
 
   /// data tier id this app is using.
   public var dataTierID: String = String()
+
+  /// Is starred by the requesting user (only showed on get/list requests)
+  /// Please use PostAppStars/DeleteAppStars endpoints to star/unstar an app
+  public var isStarred: Bool = false
+
+  /// How many users have starred the app (only showed on get/list requests)
+  /// Computed value, not editable
+  public var starCount: Int32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2144,6 +2092,10 @@ public struct Clarifai_Api_Input {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {self._status = nil}
 
+  /// List of dataset IDs that this input is part of
+  /// Currently, this field is ONLY used in search.
+  public var datasetIds: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -2287,10 +2239,16 @@ public struct Clarifai_Api_Model {
   // methods supported on all messages.
 
   /// The model's ID. Must be unique within a particular app and URL-friendly.
-  public var id: String = String()
+  public var id: String {
+    get {return _storage._id}
+    set {_uniqueStorage()._id = newValue}
+  }
 
   /// A nicer-to-read name for the model. Can have spaces and special characters.
-  public var name: String = String()
+  public var name: String {
+    get {return _storage._name}
+    set {_uniqueStorage()._name = newValue}
+  }
 
   /// When the model was created. We follow the XXXX timestamp
   /// format. We use https://www.ietf.org/rfc/rfc3339.txt format:
@@ -2298,121 +2256,158 @@ public struct Clarifai_Api_Model {
   ///  the following from the API:
   ///  "2017-04-11T21:50:50.223962Z"
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_createdAt = newValue}
+    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._createdAt = newValue}
   }
   /// Returns true if `createdAt` has been explicitly set.
-  public var hasCreatedAt: Bool {return self._createdAt != nil}
+  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
-  public mutating func clearCreatedAt() {self._createdAt = nil}
+  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
 
   /// When was the most recent model version created at
   public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_modifiedAt = newValue}
+    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._modifiedAt = newValue}
   }
   /// Returns true if `modifiedAt` has been explicitly set.
-  public var hasModifiedAt: Bool {return self._modifiedAt != nil}
+  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
-  public mutating func clearModifiedAt() {self._modifiedAt = nil}
+  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
 
   /// The app the model belongs to.
-  public var appID: String = String()
+  public var appID: String {
+    get {return _storage._appID}
+    set {_uniqueStorage()._appID = newValue}
+  }
 
   /// Info about the model's output and configuration.
   public var outputInfo: Clarifai_Api_OutputInfo {
-    get {return _outputInfo ?? Clarifai_Api_OutputInfo()}
-    set {_outputInfo = newValue}
+    get {return _storage._outputInfo ?? Clarifai_Api_OutputInfo()}
+    set {_uniqueStorage()._outputInfo = newValue}
   }
   /// Returns true if `outputInfo` has been explicitly set.
-  public var hasOutputInfo: Bool {return self._outputInfo != nil}
+  public var hasOutputInfo: Bool {return _storage._outputInfo != nil}
   /// Clears the value of `outputInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearOutputInfo() {self._outputInfo = nil}
+  public mutating func clearOutputInfo() {_uniqueStorage()._outputInfo = nil}
 
   /// A particular version of the model, e.g., to specify the version when creating a workflow.
   public var modelVersion: Clarifai_Api_ModelVersion {
-    get {return _modelVersion ?? Clarifai_Api_ModelVersion()}
-    set {_modelVersion = newValue}
+    get {return _storage._modelVersion ?? Clarifai_Api_ModelVersion()}
+    set {_uniqueStorage()._modelVersion = newValue}
   }
   /// Returns true if `modelVersion` has been explicitly set.
-  public var hasModelVersion: Bool {return self._modelVersion != nil}
+  public var hasModelVersion: Bool {return _storage._modelVersion != nil}
   /// Clears the value of `modelVersion`. Subsequent reads from it will return its default value.
-  public mutating func clearModelVersion() {self._modelVersion = nil}
+  public mutating func clearModelVersion() {_uniqueStorage()._modelVersion = nil}
 
   /// An even nicer-to-read name for public Clarifai models where we're not happy with the name but
   /// need a temporary workaround while we check what depends on these names.
-  public var displayName: String = String()
+  public var displayName: String {
+    get {return _storage._displayName}
+    set {_uniqueStorage()._displayName = newValue}
+  }
 
   /// The user id that the model belongs to.
-  public var userID: String = String()
+  public var userID: String {
+    get {return _storage._userID}
+    set {_uniqueStorage()._userID = newValue}
+  }
 
   /// Info about the models' input and configuration of them.
   public var inputInfo: Clarifai_Api_InputInfo {
-    get {return _inputInfo ?? Clarifai_Api_InputInfo()}
-    set {_inputInfo = newValue}
+    get {return _storage._inputInfo ?? Clarifai_Api_InputInfo()}
+    set {_uniqueStorage()._inputInfo = newValue}
   }
   /// Returns true if `inputInfo` has been explicitly set.
-  public var hasInputInfo: Bool {return self._inputInfo != nil}
+  public var hasInputInfo: Bool {return _storage._inputInfo != nil}
   /// Clears the value of `inputInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearInputInfo() {self._inputInfo = nil}
+  public mutating func clearInputInfo() {_uniqueStorage()._inputInfo = nil}
 
   /// Configuration for the training process of this model.
   public var trainInfo: Clarifai_Api_TrainInfo {
-    get {return _trainInfo ?? Clarifai_Api_TrainInfo()}
-    set {_trainInfo = newValue}
+    get {return _storage._trainInfo ?? Clarifai_Api_TrainInfo()}
+    set {_uniqueStorage()._trainInfo = newValue}
   }
   /// Returns true if `trainInfo` has been explicitly set.
-  public var hasTrainInfo: Bool {return self._trainInfo != nil}
+  public var hasTrainInfo: Bool {return _storage._trainInfo != nil}
   /// Clears the value of `trainInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearTrainInfo() {self._trainInfo = nil}
+  public mutating func clearTrainInfo() {_uniqueStorage()._trainInfo = nil}
 
   /// The ModelType.Id that is used for this model. This is used for all versions and you cannot
   /// change model_type_id between versions of the same model.
-  public var modelTypeID: String = String()
+  public var modelTypeID: String {
+    get {return _storage._modelTypeID}
+    set {_uniqueStorage()._modelTypeID = newValue}
+  }
 
   /// The visibility field represents whether this message is privately/publicly visible.
   /// To be visible to the public the App that contains it AND the User that contains the App must
   /// also be publicly visible.
   public var visibility: Clarifai_Api_Visibility {
-    get {return _visibility ?? Clarifai_Api_Visibility()}
-    set {_visibility = newValue}
+    get {return _storage._visibility ?? Clarifai_Api_Visibility()}
+    set {_uniqueStorage()._visibility = newValue}
   }
   /// Returns true if `visibility` has been explicitly set.
-  public var hasVisibility: Bool {return self._visibility != nil}
+  public var hasVisibility: Bool {return _storage._visibility != nil}
   /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
-  public mutating func clearVisibility() {self._visibility = nil}
+  public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
 
   /// Short description about this model
-  public var description_p: String = String()
+  public var description_p: String {
+    get {return _storage._description_p}
+    set {_uniqueStorage()._description_p = newValue}
+  }
 
   /// To handle arbitrary json metadata you can use a struct field:
   /// https://github.com/google/protobuf/blob/master/src/google/protobuf/struct.proto
   public var metadata: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_metadata = newValue}
+    get {return _storage._metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_uniqueStorage()._metadata = newValue}
   }
   /// Returns true if `metadata` has been explicitly set.
-  public var hasMetadata: Bool {return self._metadata != nil}
+  public var hasMetadata: Bool {return _storage._metadata != nil}
   /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
-  public mutating func clearMetadata() {self._metadata = nil}
+  public mutating func clearMetadata() {_uniqueStorage()._metadata = nil}
 
   /// Notes about a model (should support markdown)
   /// This field should be used for in-depth notes about
   /// about a model and supports up to 64Kbs.
-  public var notes: String = String()
+  public var notes: String {
+    get {return _storage._notes}
+    set {_uniqueStorage()._notes = newValue}
+  }
+
+  /// Tags from toolkits category
+  public var toolkits: [String] {
+    get {return _storage._toolkits}
+    set {_uniqueStorage()._toolkits = newValue}
+  }
+
+  /// Tags from use_cases category
+  public var useCases: [String] {
+    get {return _storage._useCases}
+    set {_uniqueStorage()._useCases = newValue}
+  }
+
+  /// Is starred by the requesting user (only showed on get/list requests)
+  /// Please use PostModelStars/DeleteModelStars endpoints to star/unstar a model
+  public var isStarred: Bool {
+    get {return _storage._isStarred}
+    set {_uniqueStorage()._isStarred = newValue}
+  }
+
+  /// How many users have starred the model (only showed on get/list requests)
+  /// Computed value, not editable
+  public var starCount: Int32 {
+    get {return _storage._starCount}
+    set {_uniqueStorage()._starCount = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _outputInfo: Clarifai_Api_OutputInfo? = nil
-  fileprivate var _modelVersion: Clarifai_Api_ModelVersion? = nil
-  fileprivate var _inputInfo: Clarifai_Api_InputInfo? = nil
-  fileprivate var _trainInfo: Clarifai_Api_TrainInfo? = nil
-  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
-  fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// A link to a html/markdown/text file that stores reference material
@@ -2871,8 +2866,8 @@ public struct Clarifai_Api_ModelTypeField {
     /// A range for a float value.
     case range // = 7
 
-    /// If ENUM is used then the "enum_options" field should also be filled in which allows for
-    /// additional ModelTypeFields too depending on the enum choice.
+    /// If ENUM is used then the "enum_options" field should also be filled in with the respective ID and description
+    /// for the different ENUM options.
     case `enum` // = 8
 
     /// For listing collaborators of the app. The field is a string of the collaborator's user_id.
@@ -2890,6 +2885,10 @@ public struct Clarifai_Api_ModelTypeField {
 
     /// Such as ['a', 'b', 'cantaloupe']
     case arrayOfStrings // = 13
+
+    /// If RECURSIVE_ENUM is used then the "enum_options" field should also be filled in with the respective ID and description
+    /// for the different RECURSIVE_ENUM options, as well as model_type_fields for each enum choice.
+    case recursiveEnum // = 14
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -2911,6 +2910,7 @@ public struct Clarifai_Api_ModelTypeField {
       case 11: self = .arrayOfNumbers
       case 12: self = .workflowEmbedModels
       case 13: self = .arrayOfStrings
+      case 14: self = .recursiveEnum
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -2930,6 +2930,7 @@ public struct Clarifai_Api_ModelTypeField {
       case .arrayOfNumbers: return 11
       case .workflowEmbedModels: return 12
       case .arrayOfStrings: return 13
+      case .recursiveEnum: return 14
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -2960,6 +2961,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
     .arrayOfNumbers,
     .workflowEmbedModels,
     .arrayOfStrings,
+    .recursiveEnum,
   ]
 }
 
@@ -4361,6 +4363,20 @@ public struct Clarifai_Api_User {
     set {_uniqueStorage()._teamsCount = newValue}
   }
 
+  /// Is starred by the requesting user (only showed on get/list requests)
+  /// Please use PostUserStars/DeleteUserStars endpoints to star/unstar an user
+  public var isStarred: Bool {
+    get {return _storage._isStarred}
+    set {_uniqueStorage()._isStarred = newValue}
+  }
+
+  /// How many users have starred the user (only showed on get/list requests)
+  /// Computed value, not editable
+  public var starCount: Int32 {
+    get {return _storage._starCount}
+    set {_uniqueStorage()._starCount = newValue}
+  }
+
   /// The visibility field represents whether this message is privately/publicly visible.
   /// To be visible to the public the App that contains it AND the User that contains the App must
   /// also be publicly visible.
@@ -4448,6 +4464,10 @@ public struct Clarifai_Api_UserDetail {
   public var twoFactorAuthEnabled: Bool = false
 
   public var teamsCount: UInt32 = 0
+
+  public var country: String = String()
+
+  public var state: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4662,6 +4682,14 @@ public struct Clarifai_Api_Workflow {
   public var hasVersion: Bool {return self._version != nil}
   /// Clears the value of `version`. Subsequent reads from it will return its default value.
   public mutating func clearVersion() {self._version = nil}
+
+  /// Is starred by the requesting user (only showed on get/list requests)
+  /// Please use PostWorkflowStars/DeleteWorkflowStars endpoints to star/unstar a workflow
+  public var isStarred: Bool = false
+
+  /// How many users have starred the workflow (only showed on get/list requests)
+  /// Computed value, not editable
+  public var starCount: Int32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -6007,6 +6035,9 @@ public struct Clarifai_Api_TimeSegment {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// A unique id for the time segment.
+  public var id: String = String()
+
   public var data: Clarifai_Api_Data {
     get {return _data ?? Clarifai_Api_Data()}
     set {_data = newValue}
@@ -6042,31 +6073,14 @@ public struct Clarifai_Api_TimeInfo {
   public var numFrames: UInt32 = 0
 
   /// Timestamp where track begins.
-  public var beginTime: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _beginTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_beginTime = newValue}
-  }
-  /// Returns true if `beginTime` has been explicitly set.
-  public var hasBeginTime: Bool {return self._beginTime != nil}
-  /// Clears the value of `beginTime`. Subsequent reads from it will return its default value.
-  public mutating func clearBeginTime() {self._beginTime = nil}
+  public var beginTime: UInt32 = 0
 
   /// Timestamp where track ends.
-  public var endTime: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _endTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_endTime = newValue}
-  }
-  /// Returns true if `endTime` has been explicitly set.
-  public var hasEndTime: Bool {return self._endTime != nil}
-  /// Clears the value of `endTime`. Subsequent reads from it will return its default value.
-  public mutating func clearEndTime() {self._endTime = nil}
+  public var endTime: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
-
-  fileprivate var _beginTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -6158,16 +6172,6 @@ extension Clarifai_Api_ValidationErrorType: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "RESTRICTED"),
     2: .same(proto: "DATABASE"),
     3: .same(proto: "FORMAT"),
-  ]
-}
-
-extension Clarifai_Api_TagCategoryName: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "uncategorized"),
-    1: .same(proto: "use_case"),
-    2: .same(proto: "language"),
-    3: .same(proto: "licence"),
-    4: .same(proto: "toolkit"),
   ]
 }
 
@@ -6294,6 +6298,8 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     15: .standard(proto: "sample_ms"),
     16: .same(proto: "visibility"),
     18: .standard(proto: "data_tier_id"),
+    19: .standard(proto: "is_starred"),
+    20: .standard(proto: "star_count"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -6312,6 +6318,8 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 16: try decoder.decodeSingularMessageField(value: &self._visibility)
       case 17: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       case 18: try decoder.decodeSingularStringField(value: &self.dataTierID)
+      case 19: try decoder.decodeSingularBoolField(value: &self.isStarred)
+      case 20: try decoder.decodeSingularInt32Field(value: &self.starCount)
       default: break
       }
     }
@@ -6357,6 +6365,12 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.dataTierID.isEmpty {
       try visitor.visitSingularStringField(value: self.dataTierID, fieldNumber: 18)
     }
+    if self.isStarred != false {
+      try visitor.visitSingularBoolField(value: self.isStarred, fieldNumber: 19)
+    }
+    if self.starCount != 0 {
+      try visitor.visitSingularInt32Field(value: self.starCount, fieldNumber: 20)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -6374,6 +6388,8 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.sampleMs != rhs.sampleMs {return false}
     if lhs._visibility != rhs._visibility {return false}
     if lhs.dataTierID != rhs.dataTierID {return false}
+    if lhs.isStarred != rhs.isStarred {return false}
+    if lhs.starCount != rhs.starCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8025,6 +8041,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     4: .standard(proto: "created_at"),
     5: .standard(proto: "modified_at"),
     6: .same(proto: "status"),
+    7: .standard(proto: "dataset_ids"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8035,6 +8052,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 4: try decoder.decodeSingularMessageField(value: &self._createdAt)
       case 5: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       case 6: try decoder.decodeSingularMessageField(value: &self._status)
+      case 7: try decoder.decodeRepeatedStringField(value: &self.datasetIds)
       default: break
       }
     }
@@ -8056,6 +8074,9 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if let v = self._status {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }
+    if !self.datasetIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.datasetIds, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8065,6 +8086,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs._status != rhs._status {return false}
+    if lhs.datasetIds != rhs.datasetIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8272,101 +8294,195 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     16: .same(proto: "description"),
     17: .same(proto: "metadata"),
     18: .same(proto: "notes"),
+    20: .same(proto: "toolkits"),
+    21: .standard(proto: "use_cases"),
+    22: .standard(proto: "is_starred"),
+    23: .standard(proto: "star_count"),
   ]
 
+  fileprivate class _StorageClass {
+    var _id: String = String()
+    var _name: String = String()
+    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _appID: String = String()
+    var _outputInfo: Clarifai_Api_OutputInfo? = nil
+    var _modelVersion: Clarifai_Api_ModelVersion? = nil
+    var _displayName: String = String()
+    var _userID: String = String()
+    var _inputInfo: Clarifai_Api_InputInfo? = nil
+    var _trainInfo: Clarifai_Api_TrainInfo? = nil
+    var _modelTypeID: String = String()
+    var _visibility: Clarifai_Api_Visibility? = nil
+    var _description_p: String = String()
+    var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+    var _notes: String = String()
+    var _toolkits: [String] = []
+    var _useCases: [String] = []
+    var _isStarred: Bool = false
+    var _starCount: Int32 = 0
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _id = source._id
+      _name = source._name
+      _createdAt = source._createdAt
+      _modifiedAt = source._modifiedAt
+      _appID = source._appID
+      _outputInfo = source._outputInfo
+      _modelVersion = source._modelVersion
+      _displayName = source._displayName
+      _userID = source._userID
+      _inputInfo = source._inputInfo
+      _trainInfo = source._trainInfo
+      _modelTypeID = source._modelTypeID
+      _visibility = source._visibility
+      _description_p = source._description_p
+      _metadata = source._metadata
+      _notes = source._notes
+      _toolkits = source._toolkits
+      _useCases = source._useCases
+      _isStarred = source._isStarred
+      _starCount = source._starCount
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.id)
-      case 2: try decoder.decodeSingularStringField(value: &self.name)
-      case 3: try decoder.decodeSingularMessageField(value: &self._createdAt)
-      case 4: try decoder.decodeSingularStringField(value: &self.appID)
-      case 5: try decoder.decodeSingularMessageField(value: &self._outputInfo)
-      case 6: try decoder.decodeSingularMessageField(value: &self._modelVersion)
-      case 7: try decoder.decodeSingularStringField(value: &self.displayName)
-      case 9: try decoder.decodeSingularStringField(value: &self.userID)
-      case 12: try decoder.decodeSingularMessageField(value: &self._inputInfo)
-      case 13: try decoder.decodeSingularMessageField(value: &self._trainInfo)
-      case 14: try decoder.decodeSingularStringField(value: &self.modelTypeID)
-      case 15: try decoder.decodeSingularMessageField(value: &self._visibility)
-      case 16: try decoder.decodeSingularStringField(value: &self.description_p)
-      case 17: try decoder.decodeSingularMessageField(value: &self._metadata)
-      case 18: try decoder.decodeSingularStringField(value: &self.notes)
-      case 19: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        switch fieldNumber {
+        case 1: try decoder.decodeSingularStringField(value: &_storage._id)
+        case 2: try decoder.decodeSingularStringField(value: &_storage._name)
+        case 3: try decoder.decodeSingularMessageField(value: &_storage._createdAt)
+        case 4: try decoder.decodeSingularStringField(value: &_storage._appID)
+        case 5: try decoder.decodeSingularMessageField(value: &_storage._outputInfo)
+        case 6: try decoder.decodeSingularMessageField(value: &_storage._modelVersion)
+        case 7: try decoder.decodeSingularStringField(value: &_storage._displayName)
+        case 9: try decoder.decodeSingularStringField(value: &_storage._userID)
+        case 12: try decoder.decodeSingularMessageField(value: &_storage._inputInfo)
+        case 13: try decoder.decodeSingularMessageField(value: &_storage._trainInfo)
+        case 14: try decoder.decodeSingularStringField(value: &_storage._modelTypeID)
+        case 15: try decoder.decodeSingularMessageField(value: &_storage._visibility)
+        case 16: try decoder.decodeSingularStringField(value: &_storage._description_p)
+        case 17: try decoder.decodeSingularMessageField(value: &_storage._metadata)
+        case 18: try decoder.decodeSingularStringField(value: &_storage._notes)
+        case 19: try decoder.decodeSingularMessageField(value: &_storage._modifiedAt)
+        case 20: try decoder.decodeRepeatedStringField(value: &_storage._toolkits)
+        case 21: try decoder.decodeRepeatedStringField(value: &_storage._useCases)
+        case 22: try decoder.decodeSingularBoolField(value: &_storage._isStarred)
+        case 23: try decoder.decodeSingularInt32Field(value: &_storage._starCount)
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.id.isEmpty {
-      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
-    }
-    if !self.name.isEmpty {
-      try visitor.visitSingularStringField(value: self.name, fieldNumber: 2)
-    }
-    if let v = self._createdAt {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }
-    if !self.appID.isEmpty {
-      try visitor.visitSingularStringField(value: self.appID, fieldNumber: 4)
-    }
-    if let v = self._outputInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    }
-    if let v = self._modelVersion {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    }
-    if !self.displayName.isEmpty {
-      try visitor.visitSingularStringField(value: self.displayName, fieldNumber: 7)
-    }
-    if !self.userID.isEmpty {
-      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 9)
-    }
-    if let v = self._inputInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
-    }
-    if let v = self._trainInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
-    }
-    if !self.modelTypeID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelTypeID, fieldNumber: 14)
-    }
-    if let v = self._visibility {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
-    }
-    if !self.description_p.isEmpty {
-      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 16)
-    }
-    if let v = self._metadata {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
-    }
-    if !self.notes.isEmpty {
-      try visitor.visitSingularStringField(value: self.notes, fieldNumber: 18)
-    }
-    if let v = self._modifiedAt {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if !_storage._id.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
+      }
+      if !_storage._name.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._name, fieldNumber: 2)
+      }
+      if let v = _storage._createdAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      }
+      if !_storage._appID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._appID, fieldNumber: 4)
+      }
+      if let v = _storage._outputInfo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      }
+      if let v = _storage._modelVersion {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      }
+      if !_storage._displayName.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._displayName, fieldNumber: 7)
+      }
+      if !_storage._userID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._userID, fieldNumber: 9)
+      }
+      if let v = _storage._inputInfo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      }
+      if let v = _storage._trainInfo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      }
+      if !_storage._modelTypeID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._modelTypeID, fieldNumber: 14)
+      }
+      if let v = _storage._visibility {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+      }
+      if !_storage._description_p.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._description_p, fieldNumber: 16)
+      }
+      if let v = _storage._metadata {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+      }
+      if !_storage._notes.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._notes, fieldNumber: 18)
+      }
+      if let v = _storage._modifiedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
+      }
+      if !_storage._toolkits.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._toolkits, fieldNumber: 20)
+      }
+      if !_storage._useCases.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._useCases, fieldNumber: 21)
+      }
+      if _storage._isStarred != false {
+        try visitor.visitSingularBoolField(value: _storage._isStarred, fieldNumber: 22)
+      }
+      if _storage._starCount != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._starCount, fieldNumber: 23)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_Model, rhs: Clarifai_Api_Model) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.name != rhs.name {return false}
-    if lhs._createdAt != rhs._createdAt {return false}
-    if lhs._modifiedAt != rhs._modifiedAt {return false}
-    if lhs.appID != rhs.appID {return false}
-    if lhs._outputInfo != rhs._outputInfo {return false}
-    if lhs._modelVersion != rhs._modelVersion {return false}
-    if lhs.displayName != rhs.displayName {return false}
-    if lhs.userID != rhs.userID {return false}
-    if lhs._inputInfo != rhs._inputInfo {return false}
-    if lhs._trainInfo != rhs._trainInfo {return false}
-    if lhs.modelTypeID != rhs.modelTypeID {return false}
-    if lhs._visibility != rhs._visibility {return false}
-    if lhs.description_p != rhs.description_p {return false}
-    if lhs._metadata != rhs._metadata {return false}
-    if lhs.notes != rhs.notes {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._id != rhs_storage._id {return false}
+        if _storage._name != rhs_storage._name {return false}
+        if _storage._createdAt != rhs_storage._createdAt {return false}
+        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
+        if _storage._appID != rhs_storage._appID {return false}
+        if _storage._outputInfo != rhs_storage._outputInfo {return false}
+        if _storage._modelVersion != rhs_storage._modelVersion {return false}
+        if _storage._displayName != rhs_storage._displayName {return false}
+        if _storage._userID != rhs_storage._userID {return false}
+        if _storage._inputInfo != rhs_storage._inputInfo {return false}
+        if _storage._trainInfo != rhs_storage._trainInfo {return false}
+        if _storage._modelTypeID != rhs_storage._modelTypeID {return false}
+        if _storage._visibility != rhs_storage._visibility {return false}
+        if _storage._description_p != rhs_storage._description_p {return false}
+        if _storage._metadata != rhs_storage._metadata {return false}
+        if _storage._notes != rhs_storage._notes {return false}
+        if _storage._toolkits != rhs_storage._toolkits {return false}
+        if _storage._useCases != rhs_storage._useCases {return false}
+        if _storage._isStarred != rhs_storage._isStarred {return false}
+        if _storage._starCount != rhs_storage._starCount {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8919,6 +9035,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: SwiftProtobuf._ProtoNa
     11: .same(proto: "ARRAY_OF_NUMBERS"),
     12: .same(proto: "WORKFLOW_EMBED_MODELS"),
     13: .same(proto: "ARRAY_OF_STRINGS"),
+    14: .same(proto: "RECURSIVE_ENUM"),
   ]
 }
 
@@ -10726,6 +10843,8 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     14: .standard(proto: "is_org_admin"),
     15: .standard(proto: "two_factor_auth_enabled"),
     16: .standard(proto: "teams_count"),
+    21: .standard(proto: "is_starred"),
+    22: .standard(proto: "star_count"),
     17: .same(proto: "visibility"),
     18: .standard(proto: "user_detail"),
   ]
@@ -10748,6 +10867,8 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _isOrgAdmin: Bool = false
     var _twoFactorAuthEnabled: Bool = false
     var _teamsCount: UInt32 = 0
+    var _isStarred: Bool = false
+    var _starCount: Int32 = 0
     var _visibility: Clarifai_Api_Visibility? = nil
     var _userDetail: Clarifai_Api_UserDetail? = nil
 
@@ -10773,6 +10894,8 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _isOrgAdmin = source._isOrgAdmin
       _twoFactorAuthEnabled = source._twoFactorAuthEnabled
       _teamsCount = source._teamsCount
+      _isStarred = source._isStarred
+      _starCount = source._starCount
       _visibility = source._visibility
       _userDetail = source._userDetail
     }
@@ -10809,6 +10932,8 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 18: try decoder.decodeSingularMessageField(value: &_storage._userDetail)
         case 19: try decoder.decodeSingularStringField(value: &_storage._jobTitle)
         case 20: try decoder.decodeSingularStringField(value: &_storage._jobRole)
+        case 21: try decoder.decodeSingularBoolField(value: &_storage._isStarred)
+        case 22: try decoder.decodeSingularInt32Field(value: &_storage._starCount)
         default: break
         }
       }
@@ -10874,6 +10999,12 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       if !_storage._jobRole.isEmpty {
         try visitor.visitSingularStringField(value: _storage._jobRole, fieldNumber: 20)
       }
+      if _storage._isStarred != false {
+        try visitor.visitSingularBoolField(value: _storage._isStarred, fieldNumber: 21)
+      }
+      if _storage._starCount != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._starCount, fieldNumber: 22)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -10900,6 +11031,8 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._isOrgAdmin != rhs_storage._isOrgAdmin {return false}
         if _storage._twoFactorAuthEnabled != rhs_storage._twoFactorAuthEnabled {return false}
         if _storage._teamsCount != rhs_storage._teamsCount {return false}
+        if _storage._isStarred != rhs_storage._isStarred {return false}
+        if _storage._starCount != rhs_storage._starCount {return false}
         if _storage._visibility != rhs_storage._visibility {return false}
         if _storage._userDetail != rhs_storage._userDetail {return false}
         return true
@@ -10924,6 +11057,8 @@ extension Clarifai_Api_UserDetail: SwiftProtobuf.Message, SwiftProtobuf._Message
     8: .standard(proto: "is_org_admin"),
     9: .standard(proto: "two_factor_auth_enabled"),
     10: .standard(proto: "teams_count"),
+    11: .same(proto: "country"),
+    12: .same(proto: "state"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -10939,6 +11074,8 @@ extension Clarifai_Api_UserDetail: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 8: try decoder.decodeSingularBoolField(value: &self.isOrgAdmin)
       case 9: try decoder.decodeSingularBoolField(value: &self.twoFactorAuthEnabled)
       case 10: try decoder.decodeSingularUInt32Field(value: &self.teamsCount)
+      case 11: try decoder.decodeSingularStringField(value: &self.country)
+      case 12: try decoder.decodeSingularStringField(value: &self.state)
       default: break
       }
     }
@@ -10975,6 +11112,12 @@ extension Clarifai_Api_UserDetail: SwiftProtobuf.Message, SwiftProtobuf._Message
     if self.teamsCount != 0 {
       try visitor.visitSingularUInt32Field(value: self.teamsCount, fieldNumber: 10)
     }
+    if !self.country.isEmpty {
+      try visitor.visitSingularStringField(value: self.country, fieldNumber: 11)
+    }
+    if !self.state.isEmpty {
+      try visitor.visitSingularStringField(value: self.state, fieldNumber: 12)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -10989,6 +11132,8 @@ extension Clarifai_Api_UserDetail: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.isOrgAdmin != rhs.isOrgAdmin {return false}
     if lhs.twoFactorAuthEnabled != rhs.twoFactorAuthEnabled {return false}
     if lhs.teamsCount != rhs.teamsCount {return false}
+    if lhs.country != rhs.country {return false}
+    if lhs.state != rhs.state {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -11236,6 +11381,8 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     7: .standard(proto: "user_id"),
     8: .standard(proto: "modified_at"),
     9: .same(proto: "version"),
+    10: .standard(proto: "is_starred"),
+    11: .standard(proto: "star_count"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -11250,6 +11397,8 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       case 7: try decoder.decodeSingularStringField(value: &self.userID)
       case 8: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       case 9: try decoder.decodeSingularMessageField(value: &self._version)
+      case 10: try decoder.decodeSingularBoolField(value: &self.isStarred)
+      case 11: try decoder.decodeSingularInt32Field(value: &self.starCount)
       default: break
       }
     }
@@ -11283,6 +11432,12 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if let v = self._version {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
     }
+    if self.isStarred != false {
+      try visitor.visitSingularBoolField(value: self.isStarred, fieldNumber: 10)
+    }
+    if self.starCount != 0 {
+      try visitor.visitSingularInt32Field(value: self.starCount, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -11296,6 +11451,8 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.userID != rhs.userID {return false}
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs._version != rhs._version {return false}
+    if lhs.isStarred != rhs.isStarred {return false}
+    if lhs.starCount != rhs.starCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -12686,31 +12843,37 @@ extension Clarifai_Api_TrendingMetric: SwiftProtobuf.Message, SwiftProtobuf._Mes
 extension Clarifai_Api_TimeSegment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TimeSegment"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "data"),
-    2: .standard(proto: "time_info"),
+    1: .same(proto: "id"),
+    2: .same(proto: "data"),
+    3: .standard(proto: "time_info"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._data)
-      case 2: try decoder.decodeSingularMessageField(value: &self._timeInfo)
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularMessageField(value: &self._data)
+      case 3: try decoder.decodeSingularMessageField(value: &self._timeInfo)
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
     if let v = self._data {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     }
     if let v = self._timeInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TimeSegment, rhs: Clarifai_Api_TimeSegment) -> Bool {
+    if lhs.id != rhs.id {return false}
     if lhs._data != rhs._data {return false}
     if lhs._timeInfo != rhs._timeInfo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -12730,8 +12893,8 @@ extension Clarifai_Api_TimeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularUInt32Field(value: &self.numFrames)
-      case 2: try decoder.decodeSingularMessageField(value: &self._beginTime)
-      case 3: try decoder.decodeSingularMessageField(value: &self._endTime)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.beginTime)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.endTime)
       default: break
       }
     }
@@ -12741,19 +12904,19 @@ extension Clarifai_Api_TimeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if self.numFrames != 0 {
       try visitor.visitSingularUInt32Field(value: self.numFrames, fieldNumber: 1)
     }
-    if let v = self._beginTime {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    if self.beginTime != 0 {
+      try visitor.visitSingularUInt32Field(value: self.beginTime, fieldNumber: 2)
     }
-    if let v = self._endTime {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    if self.endTime != 0 {
+      try visitor.visitSingularUInt32Field(value: self.endTime, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TimeInfo, rhs: Clarifai_Api_TimeInfo) -> Bool {
     if lhs.numFrames != rhs.numFrames {return false}
-    if lhs._beginTime != rhs._beginTime {return false}
-    if lhs._endTime != rhs._endTime {return false}
+    if lhs.beginTime != rhs.beginTime {return false}
+    if lhs.endTime != rhs.endTime {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
