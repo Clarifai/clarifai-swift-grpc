@@ -257,6 +257,21 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteModelsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func patchModelToolkits(
+    _ request: Clarifai_Api_PatchModelToolkitsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelToolkitsRequest, Clarifai_Api_MultiModelToolkitResponse>
+
+  func patchModelUseCases(
+    _ request: Clarifai_Api_PatchModelUseCasesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelUseCasesRequest, Clarifai_Api_MultiModelUseCaseResponse>
+
+  func patchModelLanguages(
+    _ request: Clarifai_Api_PatchModelLanguagesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelLanguagesRequest, Clarifai_Api_MultiModelLanguageResponse>
+
   func listModelInputs(
     _ request: Clarifai_Api_ListModelInputsRequest,
     callOptions: CallOptions?
@@ -277,10 +292,10 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>
 
-  func deleteModelVersionsUnPublish(
-    _ request: Clarifai_Api_DeleteModelVersionsUnpublishRequest,
+  func postModelVersionsUnPublish(
+    _ request: Clarifai_Api_PostModelVersionsUnPublishRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteModelVersionsUnpublishRequest, Clarifai_Api_Status_BaseResponse>
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>
 
   func postModelVersions(
     _ request: Clarifai_Api_PostModelVersionsRequest,
@@ -1441,6 +1456,57 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Update model toolkits tags
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelToolkits.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelToolkits(
+    _ request: Clarifai_Api_PatchModelToolkitsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelToolkitsRequest, Clarifai_Api_MultiModelToolkitResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelToolkits",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Update model use_cases tags
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelUseCases.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelUseCases(
+    _ request: Clarifai_Api_PatchModelUseCasesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelUseCasesRequest, Clarifai_Api_MultiModelUseCaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelUseCases",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Update model languages tags
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelLanguages.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelLanguages(
+    _ request: Clarifai_Api_PatchModelLanguagesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelLanguagesRequest, Clarifai_Api_MultiModelLanguageResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelLanguages",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// List all the inputs.
   ///
   /// - Parameters:
@@ -1509,18 +1575,18 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to DeleteModelVersionsUnPublish
+  /// Unary call to PostModelVersionsUnPublish
   ///
   /// - Parameters:
-  ///   - request: Request to send to DeleteModelVersionsUnPublish.
+  ///   - request: Request to send to PostModelVersionsUnPublish.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteModelVersionsUnPublish(
-    _ request: Clarifai_Api_DeleteModelVersionsUnpublishRequest,
+  public func postModelVersionsUnPublish(
+    _ request: Clarifai_Api_PostModelVersionsUnPublishRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteModelVersionsUnpublishRequest, Clarifai_Api_Status_BaseResponse> {
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse> {
     return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteModelVersionsUnPublish",
+      path: "/clarifai.api.V2/PostModelVersionsUnPublish",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -2889,6 +2955,12 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func deleteModel(request: Clarifai_Api_DeleteModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete multiple models in one request.
   func deleteModels(request: Clarifai_Api_DeleteModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// Update model toolkits tags
+  func patchModelToolkits(request: Clarifai_Api_PatchModelToolkitsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelToolkitResponse>
+  /// Update model use_cases tags
+  func patchModelUseCases(request: Clarifai_Api_PatchModelUseCasesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelUseCaseResponse>
+  /// Update model languages tags
+  func patchModelLanguages(request: Clarifai_Api_PatchModelLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelLanguageResponse>
   /// List all the inputs.
   func listModelInputs(request: Clarifai_Api_ListModelInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
   /// Get a specific model from an app.
@@ -2896,7 +2968,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// List all the models.
   func listModelVersions(request: Clarifai_Api_ListModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
   func postModelVersionsPublish(request: Clarifai_Api_PostModelVersionsPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-  func deleteModelVersionsUnPublish(request: Clarifai_Api_DeleteModelVersionsUnpublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  func postModelVersionsUnPublish(request: Clarifai_Api_PostModelVersionsUnPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Create a new model version to trigger training of the model.
   /// FIXME(zeiler): this should have been a plural response.
   func postModelVersions(request: Clarifai_Api_PostModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
@@ -3379,6 +3451,27 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "PatchModelToolkits":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchModelToolkits(request: request, context: context)
+        }
+      }
+
+    case "PatchModelUseCases":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchModelUseCases(request: request, context: context)
+        }
+      }
+
+    case "PatchModelLanguages":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchModelLanguages(request: request, context: context)
+        }
+      }
+
     case "ListModelInputs":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -3407,10 +3500,10 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
-    case "DeleteModelVersionsUnPublish":
+    case "PostModelVersionsUnPublish":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
-          self.deleteModelVersionsUnPublish(request: request, context: context)
+          self.postModelVersionsUnPublish(request: request, context: context)
         }
       }
 
