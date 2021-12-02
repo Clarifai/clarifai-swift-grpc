@@ -93,9 +93,7 @@ public struct Clarifai_Api_Pagination {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/annotation.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetAnnotationRequest
 public struct Clarifai_Api_GetAnnotationRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -121,6 +119,7 @@ public struct Clarifai_Api_GetAnnotationRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListAnnotationsRequest
 public struct Clarifai_Api_ListAnnotationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -187,6 +186,7 @@ public struct Clarifai_Api_ListAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostAnnotationsRequest
 public struct Clarifai_Api_PostAnnotationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -210,6 +210,7 @@ public struct Clarifai_Api_PostAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchAnnotationsRequest
 public struct Clarifai_Api_PatchAnnotationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -237,6 +238,7 @@ public struct Clarifai_Api_PatchAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchAnnotationsStatusRequest
 public struct Clarifai_Api_PatchAnnotationsStatusRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -268,6 +270,7 @@ public struct Clarifai_Api_PatchAnnotationsStatusRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchAnnotationsStatusResponse
 public struct Clarifai_Api_PatchAnnotationsStatusResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -293,6 +296,7 @@ public struct Clarifai_Api_PatchAnnotationsStatusResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// DeleteAnnotationRequest
 public struct Clarifai_Api_DeleteAnnotationRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -351,6 +355,7 @@ public struct Clarifai_Api_DeleteAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleAnnotationResponse
 public struct Clarifai_Api_SingleAnnotationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -382,6 +387,7 @@ public struct Clarifai_Api_SingleAnnotationResponse {
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
 }
 
+/// MultiAnnotationResponse
 public struct Clarifai_Api_MultiAnnotationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -405,9 +411,7 @@ public struct Clarifai_Api_MultiAnnotationResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/app.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetAppRequest
 public struct Clarifai_Api_GetAppRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -432,6 +436,7 @@ public struct Clarifai_Api_GetAppRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListAppsRequest
 public struct Clarifai_Api_ListAppsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -521,6 +526,7 @@ public struct Clarifai_Api_ListAppsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostAppsRequest
 public struct Clarifai_Api_PostAppsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -544,6 +550,7 @@ public struct Clarifai_Api_PostAppsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteAppRequest
 public struct Clarifai_Api_DeleteAppRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -565,6 +572,7 @@ public struct Clarifai_Api_DeleteAppRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchAppsRequest
 public struct Clarifai_Api_PatchAppsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -651,6 +659,7 @@ public struct Clarifai_Api_PostAppsSearchesRequest {
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
+/// SingleAppResponse
 public struct Clarifai_Api_SingleAppResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -682,6 +691,7 @@ public struct Clarifai_Api_SingleAppResponse {
   fileprivate var _app: Clarifai_Api_App? = nil
 }
 
+/// MultiAppResponse
 public struct Clarifai_Api_MultiAppResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -705,9 +715,7 @@ public struct Clarifai_Api_MultiAppResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/app_sharing.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// ListCollaboratorsRequest
 public struct Clarifai_Api_ListCollaboratorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -733,6 +741,7 @@ public struct Clarifai_Api_ListCollaboratorsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostCollaboratorsRequest
 public struct Clarifai_Api_PostCollaboratorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -756,6 +765,7 @@ public struct Clarifai_Api_PostCollaboratorsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchCollaboratorsRequest
 public struct Clarifai_Api_PatchCollaboratorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -783,6 +793,7 @@ public struct Clarifai_Api_PatchCollaboratorsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteCollaboratorsRequest
 public struct Clarifai_Api_DeleteCollaboratorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -808,6 +819,7 @@ public struct Clarifai_Api_DeleteCollaboratorsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiCollaboratorsResponse
 public struct Clarifai_Api_MultiCollaboratorsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -831,6 +843,7 @@ public struct Clarifai_Api_MultiCollaboratorsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// ListCollaborationsRequest
 public struct Clarifai_Api_ListCollaborationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -860,6 +873,7 @@ public struct Clarifai_Api_ListCollaborationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiCollaborationsResponse
 public struct Clarifai_Api_MultiCollaborationsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -883,9 +897,7 @@ public struct Clarifai_Api_MultiCollaborationsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/code.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetStatusCodeRequest
 public struct Clarifai_Api_GetStatusCodeRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -898,6 +910,7 @@ public struct Clarifai_Api_GetStatusCodeRequest {
   public init() {}
 }
 
+/// ListStatusCodesRequest
 public struct Clarifai_Api_ListStatusCodesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -908,6 +921,7 @@ public struct Clarifai_Api_ListStatusCodesRequest {
   public init() {}
 }
 
+/// SingleStatusCodeResponse
 public struct Clarifai_Api_SingleStatusCodeResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -930,6 +944,7 @@ public struct Clarifai_Api_SingleStatusCodeResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiStatusCodeResponse
 public struct Clarifai_Api_MultiStatusCodeResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -953,9 +968,7 @@ public struct Clarifai_Api_MultiStatusCodeResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/concept.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetConceptRequest
 public struct Clarifai_Api_GetConceptRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -980,6 +993,7 @@ public struct Clarifai_Api_GetConceptRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListConceptsRequest
 public struct Clarifai_Api_ListConceptsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1009,6 +1023,7 @@ public struct Clarifai_Api_ListConceptsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostConceptsSearchesRequest
 public struct Clarifai_Api_PostConceptsSearchesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1054,6 +1069,7 @@ public struct Clarifai_Api_PostConceptsSearchesRequest {
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
+/// PostConceptsRequest
 public struct Clarifai_Api_PostConceptsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1078,6 +1094,7 @@ public struct Clarifai_Api_PostConceptsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchConceptsRequest
 public struct Clarifai_Api_PatchConceptsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1106,6 +1123,7 @@ public struct Clarifai_Api_PatchConceptsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// GetConceptCountsRequest
 public struct Clarifai_Api_GetConceptCountsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1135,6 +1153,7 @@ public struct Clarifai_Api_GetConceptCountsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleConceptResponse
 public struct Clarifai_Api_SingleConceptResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1168,6 +1187,7 @@ public struct Clarifai_Api_SingleConceptResponse {
   fileprivate var _concept: Clarifai_Api_Concept? = nil
 }
 
+/// MultiConceptResponse
 public struct Clarifai_Api_MultiConceptResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1193,6 +1213,7 @@ public struct Clarifai_Api_MultiConceptResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiConceptCountResponse
 public struct Clarifai_Api_MultiConceptCountResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1218,14 +1239,6 @@ public struct Clarifai_Api_MultiConceptCountResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/concept_graph.proto
-/////////////////////////////////////////////////////////////////////////////////
-///////////////////////
-/// Responses
-///////////////////////
-/// Requests
-///////////////////////
 /// GET all relations such that the concept_id refers to the subject of the relation
 public struct Clarifai_Api_ListConceptRelationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -1417,6 +1430,7 @@ public struct Clarifai_Api_PostConceptMappingJobsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiConceptRelationResponse
 public struct Clarifai_Api_MultiConceptRelationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1442,6 +1456,7 @@ public struct Clarifai_Api_MultiConceptRelationResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiKnowledgeGraphResponse
 public struct Clarifai_Api_MultiKnowledgeGraphResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1467,6 +1482,7 @@ public struct Clarifai_Api_MultiKnowledgeGraphResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiConceptMappingJobResponse
 public struct Clarifai_Api_MultiConceptMappingJobResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1492,9 +1508,6 @@ public struct Clarifai_Api_MultiConceptMappingJobResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/concept_language.proto
-/////////////////////////////////////////////////////////////////////////////////
 /// GET single concept language for the given concept.
 public struct Clarifai_Api_GetConceptLanguageRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -1609,6 +1622,7 @@ public struct Clarifai_Api_PostConceptLanguagesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleConceptLanguageResponse
 public struct Clarifai_Api_SingleConceptLanguageResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1640,6 +1654,7 @@ public struct Clarifai_Api_SingleConceptLanguageResponse {
   fileprivate var _conceptLanguage: Clarifai_Api_ConceptLanguage? = nil
 }
 
+/// MultiConceptLanguageResponse
 public struct Clarifai_Api_MultiConceptLanguageResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1663,9 +1678,7 @@ public struct Clarifai_Api_MultiConceptLanguageResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/input.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetInputRequest
 public struct Clarifai_Api_GetInputRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1689,6 +1702,7 @@ public struct Clarifai_Api_GetInputRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// GetInputSamplesRequest
 public struct Clarifai_Api_GetInputSamplesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1715,6 +1729,7 @@ public struct Clarifai_Api_GetInputSamplesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListInputsRequest
 public struct Clarifai_Api_ListInputsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1757,6 +1772,7 @@ public struct Clarifai_Api_ListInputsRequest {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// StreamInputsRequest
 public struct Clarifai_Api_StreamInputsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1786,6 +1802,7 @@ public struct Clarifai_Api_StreamInputsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostInputsRequest
 public struct Clarifai_Api_PostInputsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1809,6 +1826,7 @@ public struct Clarifai_Api_PostInputsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchInputsRequest
 public struct Clarifai_Api_PatchInputsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1836,6 +1854,7 @@ public struct Clarifai_Api_PatchInputsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteInputRequest
 public struct Clarifai_Api_DeleteInputRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1883,6 +1902,7 @@ public struct Clarifai_Api_DeleteInputsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleInputResponse
 public struct Clarifai_Api_SingleInputResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1914,6 +1934,7 @@ public struct Clarifai_Api_SingleInputResponse {
   fileprivate var _input: Clarifai_Api_Input? = nil
 }
 
+/// MultiInputResponse
 public struct Clarifai_Api_MultiInputResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1937,6 +1958,7 @@ public struct Clarifai_Api_MultiInputResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiInputAnnotationResponse
 public struct Clarifai_Api_MultiInputAnnotationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1960,6 +1982,7 @@ public struct Clarifai_Api_MultiInputAnnotationResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// SingleInputCountResponse
 public struct Clarifai_Api_SingleInputCountResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1974,7 +1997,6 @@ public struct Clarifai_Api_SingleInputCountResponse {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {self._status = nil}
 
-  /// NOTE: inconsistency: not named after the object name.
   public var counts: Clarifai_Api_InputCount {
     get {return _counts ?? Clarifai_Api_InputCount()}
     set {_counts = newValue}
@@ -1992,6 +2014,7 @@ public struct Clarifai_Api_SingleInputCountResponse {
   fileprivate var _counts: Clarifai_Api_InputCount? = nil
 }
 
+/// GetInputCountRequest
 public struct Clarifai_Api_GetInputCountRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2090,9 +2113,7 @@ public struct Clarifai_Api_ListModelInputsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/key.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetKeyRequest
 public struct Clarifai_Api_GetKeyRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2116,6 +2137,7 @@ public struct Clarifai_Api_GetKeyRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListKeysRequest
 public struct Clarifai_Api_ListKeysRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2145,6 +2167,7 @@ public struct Clarifai_Api_ListKeysRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListAppKeysRequest
 public struct Clarifai_Api_ListAppKeysRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2174,6 +2197,7 @@ public struct Clarifai_Api_ListAppKeysRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostKeysRequest
 public struct Clarifai_Api_PostKeysRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2197,6 +2221,7 @@ public struct Clarifai_Api_PostKeysRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteKeyRequest
 public struct Clarifai_Api_DeleteKeyRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2220,6 +2245,7 @@ public struct Clarifai_Api_DeleteKeyRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchKeysRequest
 public struct Clarifai_Api_PatchKeysRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2247,6 +2273,7 @@ public struct Clarifai_Api_PatchKeysRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleKeyResponse
 public struct Clarifai_Api_SingleKeyResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2278,6 +2305,7 @@ public struct Clarifai_Api_SingleKeyResponse {
   fileprivate var _key: Clarifai_Api_Key? = nil
 }
 
+/// MultiKeyResponse
 public struct Clarifai_Api_MultiKeyResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2301,9 +2329,7 @@ public struct Clarifai_Api_MultiKeyResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/model.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetModelRequest
 public struct Clarifai_Api_GetModelRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2338,6 +2364,7 @@ public struct Clarifai_Api_GetModelRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListModelsRequest
 public struct Clarifai_Api_ListModelsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2670,6 +2697,7 @@ public struct Clarifai_Api_MultiModelLanguageResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// PostModelsRequest
 public struct Clarifai_Api_PostModelsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2708,6 +2736,7 @@ public struct Clarifai_Api_PostModelsRequest {
   fileprivate var _model: Clarifai_Api_Model? = nil
 }
 
+/// PatchModelsRequest
 public struct Clarifai_Api_PatchModelsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2735,6 +2764,7 @@ public struct Clarifai_Api_PatchModelsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteModelRequest
 public struct Clarifai_Api_DeleteModelRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2830,6 +2860,7 @@ public struct Clarifai_Api_PostModelsSearchesRequest {
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
+/// SingleModelResponse
 public struct Clarifai_Api_SingleModelResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2861,6 +2892,7 @@ public struct Clarifai_Api_SingleModelResponse {
   fileprivate var _model: Clarifai_Api_Model? = nil
 }
 
+/// MultiModelResponse
 public struct Clarifai_Api_MultiModelResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2884,9 +2916,7 @@ public struct Clarifai_Api_MultiModelResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/model_version.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// PatchModelVersionsRequest
 public struct Clarifai_Api_PatchModelVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2916,7 +2946,6 @@ public struct Clarifai_Api_PatchModelVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
-/// NOTE: this is same as GetModelRequest but backend doesn't support sharing same
 /// request for different endpoints currently.
 public struct Clarifai_Api_GetModelVersionRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -2943,6 +2972,7 @@ public struct Clarifai_Api_GetModelVersionRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListModelVersionsRequest
 public struct Clarifai_Api_ListModelVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2977,6 +3007,7 @@ public struct Clarifai_Api_ListModelVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteModelVersionRequest
 public struct Clarifai_Api_DeleteModelVersionRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3002,6 +3033,7 @@ public struct Clarifai_Api_DeleteModelVersionRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleModelVersionResponse
 public struct Clarifai_Api_SingleModelVersionResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3033,6 +3065,7 @@ public struct Clarifai_Api_SingleModelVersionResponse {
   fileprivate var _modelVersion: Clarifai_Api_ModelVersion? = nil
 }
 
+/// MultiModelVersionResponse
 public struct Clarifai_Api_MultiModelVersionResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3142,6 +3175,7 @@ public struct Clarifai_Api_PostModelVersionsRequest {
   fileprivate var _datasetVersion: Clarifai_Api_DatasetVersion? = nil
 }
 
+/// ModelVersionPublishRequest
 public struct Clarifai_Api_ModelVersionPublishRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3154,6 +3188,7 @@ public struct Clarifai_Api_ModelVersionPublishRequest {
   public init() {}
 }
 
+/// PostModelVersionsPublishRequest
 public struct Clarifai_Api_PostModelVersionsPublishRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3179,6 +3214,7 @@ public struct Clarifai_Api_PostModelVersionsPublishRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ModelVersionUnpublishRequest
 public struct Clarifai_Api_ModelVersionUnpublishRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3191,6 +3227,7 @@ public struct Clarifai_Api_ModelVersionUnpublishRequest {
   public init() {}
 }
 
+/// PostModelVersionsUnPublishRequest
 public struct Clarifai_Api_PostModelVersionsUnPublishRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3293,6 +3330,7 @@ public struct Clarifai_Api_GetModelVersionMetricsRequest {
   fileprivate var _fields: Clarifai_Api_FieldsValue? = nil
 }
 
+/// GetModelTypeRequest
 public struct Clarifai_Api_GetModelTypeRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3318,6 +3356,7 @@ public struct Clarifai_Api_GetModelTypeRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListModelTypesRequest
 public struct Clarifai_Api_ListModelTypesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3348,6 +3387,7 @@ public struct Clarifai_Api_ListModelTypesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListOpenSourceLicensesRequest
 public struct Clarifai_Api_ListOpenSourceLicensesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3358,6 +3398,7 @@ public struct Clarifai_Api_ListOpenSourceLicensesRequest {
   public init() {}
 }
 
+/// ListOpenSourceLicensesResponse
 public struct Clarifai_Api_ListOpenSourceLicensesResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3381,6 +3422,7 @@ public struct Clarifai_Api_ListOpenSourceLicensesResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// SingleModelTypeResponse
 public struct Clarifai_Api_SingleModelTypeResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3414,6 +3456,7 @@ public struct Clarifai_Api_SingleModelTypeResponse {
   fileprivate var _modelType: Clarifai_Api_ModelType? = nil
 }
 
+/// MultiModelTypeResponse
 public struct Clarifai_Api_MultiModelTypeResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3439,9 +3482,7 @@ public struct Clarifai_Api_MultiModelTypeResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses for Model Version Input Examples
-/////////////////////////////////////////////////////////////////////////////////
+/// GetModelVersionInputExampleRequest
 public struct Clarifai_Api_GetModelVersionInputExampleRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3473,6 +3514,7 @@ public struct Clarifai_Api_GetModelVersionInputExampleRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListModelVersionInputExamplesRequest
 public struct Clarifai_Api_ListModelVersionInputExamplesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3507,6 +3549,7 @@ public struct Clarifai_Api_ListModelVersionInputExamplesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleModelVersionInputExampleResponse
 public struct Clarifai_Api_SingleModelVersionInputExampleResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3540,6 +3583,7 @@ public struct Clarifai_Api_SingleModelVersionInputExampleResponse {
   fileprivate var _modelVersionInputExample: Clarifai_Api_ModelVersionInputExample? = nil
 }
 
+/// MultiModelVersionInputExampleResponse
 public struct Clarifai_Api_MultiModelVersionInputExampleResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3565,6 +3609,7 @@ public struct Clarifai_Api_MultiModelVersionInputExampleResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// ListModelReferencesRequest
 public struct Clarifai_Api_ListModelReferencesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3594,6 +3639,7 @@ public struct Clarifai_Api_ListModelReferencesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiModelReferenceResponse
 public struct Clarifai_Api_MultiModelReferenceResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3617,12 +3663,7 @@ public struct Clarifai_Api_MultiModelReferenceResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/output.proto
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
-/// Outputs related requests
-/////////////////////////////////////////////////////
+/// MultiOutputResponse
 public struct Clarifai_Api_MultiOutputResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3646,9 +3687,7 @@ public struct Clarifai_Api_MultiOutputResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/scope.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// ListScopesRequest
 public struct Clarifai_Api_ListScopesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3675,6 +3714,7 @@ public struct Clarifai_Api_ListScopesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MyScopesRequest
 public struct Clarifai_Api_MyScopesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3696,6 +3736,7 @@ public struct Clarifai_Api_MyScopesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MyScopesUserRequest
 public struct Clarifai_Api_MyScopesUserRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3717,6 +3758,7 @@ public struct Clarifai_Api_MyScopesUserRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MyScopesRootRequest
 public struct Clarifai_Api_MyScopesRootRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3727,6 +3769,7 @@ public struct Clarifai_Api_MyScopesRootRequest {
   public init() {}
 }
 
+/// MultiScopeDepsResponse
 public struct Clarifai_Api_MultiScopeDepsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3757,6 +3800,7 @@ public struct Clarifai_Api_MultiScopeDepsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiScopeResponse
 public struct Clarifai_Api_MultiScopeResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3796,6 +3840,7 @@ public struct Clarifai_Api_MultiScopeResponse {
   fileprivate var _app: Clarifai_Api_App? = nil
 }
 
+/// MultiScopeUserResponse
 public struct Clarifai_Api_MultiScopeUserResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3824,6 +3869,7 @@ public struct Clarifai_Api_MultiScopeUserResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// MultiScopeRootResponse
 public struct Clarifai_Api_MultiScopeRootResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3852,9 +3898,7 @@ public struct Clarifai_Api_MultiScopeRootResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/search.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetSearchRequest
 public struct Clarifai_Api_GetSearchRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3878,6 +3922,7 @@ public struct Clarifai_Api_GetSearchRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListSearchesRequest
 public struct Clarifai_Api_ListSearchesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3907,6 +3952,7 @@ public struct Clarifai_Api_ListSearchesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostSearchesRequest
 public struct Clarifai_Api_PostSearchesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3992,6 +4038,7 @@ public struct Clarifai_Api_PostSearchesByIDRequest {
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
+/// DeleteSearchRequest
 public struct Clarifai_Api_DeleteSearchRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4053,6 +4100,7 @@ public struct Clarifai_Api_PostAnnotationsSearchesRequest {
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
+/// DeleteAnnotationSearchMetricsRequest
 public struct Clarifai_Api_DeleteAnnotationSearchMetricsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4146,6 +4194,7 @@ public struct Clarifai_Api_SingleSearchResponse {
   fileprivate var _search: Clarifai_Api_Search? = nil
 }
 
+/// MultiSearchResponse
 public struct Clarifai_Api_MultiSearchResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4188,6 +4237,7 @@ public struct Clarifai_Api_MultiSearchResponse {
   fileprivate var _query: Clarifai_Api_Query? = nil
 }
 
+/// PostAnnotationSearchMetricsRequest
 public struct Clarifai_Api_PostAnnotationSearchMetricsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4249,6 +4299,7 @@ public struct Clarifai_Api_PostAnnotationSearchMetricsRequest {
   fileprivate var _data: Clarifai_Api_Data? = nil
 }
 
+/// GetAnnotationSearchMetricsRequest
 public struct Clarifai_Api_GetAnnotationSearchMetricsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4273,6 +4324,7 @@ public struct Clarifai_Api_GetAnnotationSearchMetricsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListAnnotationSearchMetricsRequest
 public struct Clarifai_Api_ListAnnotationSearchMetricsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4294,6 +4346,7 @@ public struct Clarifai_Api_ListAnnotationSearchMetricsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiAnnotationSearchMetricsResponse
 public struct Clarifai_Api_MultiAnnotationSearchMetricsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4318,6 +4371,7 @@ public struct Clarifai_Api_MultiAnnotationSearchMetricsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// PostValidatePasswordRequest
 public struct Clarifai_Api_PostValidatePasswordRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4350,6 +4404,7 @@ public struct Clarifai_Api_PostValidatePasswordRequest {
   fileprivate var _password: Clarifai_Api_Password? = nil
 }
 
+/// SinglePasswordValidationResponse
 public struct Clarifai_Api_SinglePasswordValidationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4382,9 +4437,7 @@ public struct Clarifai_Api_SinglePasswordValidationResponse {
   fileprivate var _passwordViolations: Clarifai_Api_PasswordViolations? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Requests / Responses from /proto/clarifai/api/workflow.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GetWorkflowRequest
 public struct Clarifai_Api_GetWorkflowRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4417,6 +4470,7 @@ public struct Clarifai_Api_GetWorkflowRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListWorkflowsRequest
 public struct Clarifai_Api_ListWorkflowsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4505,6 +4559,7 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostWorkflowsRequest
 public struct Clarifai_Api_PostWorkflowsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4528,6 +4583,7 @@ public struct Clarifai_Api_PostWorkflowsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchWorkflowsRequest
 public struct Clarifai_Api_PatchWorkflowsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4555,6 +4611,7 @@ public struct Clarifai_Api_PatchWorkflowsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteWorkflowRequest
 public struct Clarifai_Api_DeleteWorkflowRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4604,6 +4661,7 @@ public struct Clarifai_Api_DeleteWorkflowsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// SingleWorkflowResponse
 public struct Clarifai_Api_SingleWorkflowResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4635,6 +4693,7 @@ public struct Clarifai_Api_SingleWorkflowResponse {
   fileprivate var _workflow: Clarifai_Api_Workflow? = nil
 }
 
+/// MultiWorkflowResponse
 public struct Clarifai_Api_MultiWorkflowResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4658,6 +4717,7 @@ public struct Clarifai_Api_MultiWorkflowResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// PostWorkflowResultsRequest
 public struct Clarifai_Api_PostWorkflowResultsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4722,6 +4782,7 @@ public struct Clarifai_Api_PostWorkflowResultsRequest {
   fileprivate var _workflowState: Clarifai_Api_WorkflowState? = nil
 }
 
+/// PostWorkflowResultsResponse
 public struct Clarifai_Api_PostWorkflowResultsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4773,6 +4834,7 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
   fileprivate var _workflowState: Clarifai_Api_WorkflowState? = nil
 }
 
+/// PostWorkflowResultsSimilarityRequest
 public struct Clarifai_Api_PostWorkflowResultsSimilarityRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4812,6 +4874,7 @@ public struct Clarifai_Api_PostWorkflowResultsSimilarityRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PostWorkflowResultsSimilarityResponse
 public struct Clarifai_Api_PostWorkflowResultsSimilarityResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4835,6 +4898,7 @@ public struct Clarifai_Api_PostWorkflowResultsSimilarityResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// ListWorkflowVersionsRequest
 public struct Clarifai_Api_ListWorkflowVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4867,6 +4931,7 @@ public struct Clarifai_Api_ListWorkflowVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// GetWorkflowVersionRequest
 public struct Clarifai_Api_GetWorkflowVersionRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4894,6 +4959,7 @@ public struct Clarifai_Api_GetWorkflowVersionRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// DeleteWorkflowVersionsRequest
 public struct Clarifai_Api_DeleteWorkflowVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4921,6 +4987,7 @@ public struct Clarifai_Api_DeleteWorkflowVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchWorkflowVersionsRequest
 public struct Clarifai_Api_PatchWorkflowVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4952,6 +5019,7 @@ public struct Clarifai_Api_PatchWorkflowVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiWorkflowVersionResponse
 public struct Clarifai_Api_MultiWorkflowVersionResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4975,6 +5043,7 @@ public struct Clarifai_Api_MultiWorkflowVersionResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// SingleWorkflowVersionResponse
 public struct Clarifai_Api_SingleWorkflowVersionResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5085,6 +5154,7 @@ public struct Clarifai_Api_ListAppDuplicationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiAppDuplicationsResponse
 public struct Clarifai_Api_MultiAppDuplicationsResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5108,6 +5178,7 @@ public struct Clarifai_Api_MultiAppDuplicationsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// SingleAppDuplicationResponse
 public struct Clarifai_Api_SingleAppDuplicationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5244,7 +5315,7 @@ public struct Clarifai_Api_PatchTasksRequest {
   public var tasks: [Clarifai_Api_Task] = []
 
   /// The action to perform on the patched objects
-  /// For now only 'overwrite' action is supported
+  /// For now actions 'merge', 'overwrite', and 'remove' are supported
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -5416,6 +5487,7 @@ public struct Clarifai_Api_PostCollectorsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// PatchCollectorsRequest
 public struct Clarifai_Api_PatchCollectorsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5580,9 +5652,7 @@ public struct Clarifai_Api_SingleCollectorResponse {
   fileprivate var _collector: Clarifai_Api_Collector? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Stats Collection Endpoints.
-/////////////////////////////////////////////////////////////////////////////////
+/// PostStatValuesRequest
 public struct Clarifai_Api_PostStatValuesRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5608,6 +5678,7 @@ public struct Clarifai_Api_PostStatValuesRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiStatValueResponse
 public struct Clarifai_Api_MultiStatValueResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5633,6 +5704,7 @@ public struct Clarifai_Api_MultiStatValueResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// PostStatValuesAggregateRequest
 public struct Clarifai_Api_PostStatValuesAggregateRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5658,6 +5730,7 @@ public struct Clarifai_Api_PostStatValuesAggregateRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiStatValueAggregateResponse
 public struct Clarifai_Api_MultiStatValueAggregateResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5683,6 +5756,7 @@ public struct Clarifai_Api_MultiStatValueAggregateResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// PostTrendingMetricsViewRequest
 public struct Clarifai_Api_PostTrendingMetricsViewRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5711,6 +5785,7 @@ public struct Clarifai_Api_PostTrendingMetricsViewRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListTrendingMetricsViewsRequest
 public struct Clarifai_Api_ListTrendingMetricsViewsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5744,6 +5819,7 @@ public struct Clarifai_Api_ListTrendingMetricsViewsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// MultiTrendingMetricsViewResponse
 public struct Clarifai_Api_MultiTrendingMetricsViewResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for

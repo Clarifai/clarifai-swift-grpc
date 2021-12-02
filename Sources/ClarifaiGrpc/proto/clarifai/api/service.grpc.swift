@@ -852,7 +852,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Add a new tranlsation for this concept.
+  /// Add a new translation for this concept.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostConceptLanguages.
@@ -1388,7 +1388,6 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Add a models to an app.
-  /// FIXME(zeiler): this should have been a plural response.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostModels.
@@ -1558,7 +1557,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostModelVersionsPublish
+  /// PostModelVersionsPublish
   ///
   /// - Parameters:
   ///   - request: Request to send to PostModelVersionsPublish.
@@ -1575,7 +1574,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostModelVersionsUnPublish
+  /// PostModelVersionsUnPublish
   ///
   /// - Parameters:
   ///   - request: Request to send to PostModelVersionsUnPublish.
@@ -1593,7 +1592,6 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Create a new model version to trigger training of the model.
-  /// FIXME(zeiler): this should have been a plural response.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostModelVersions.
@@ -1610,7 +1608,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PatchModelVersions
+  /// PatchModelVersions
   ///
   /// - Parameters:
   ///   - request: Request to send to PatchModelVersions.
@@ -1695,7 +1693,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to GetModelVersionInputExample
+  /// GetModelVersionInputExample
   ///
   /// - Parameters:
   ///   - request: Request to send to GetModelVersionInputExample.
@@ -1712,7 +1710,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to ListModelVersionInputExamples
+  /// ListModelVersionInputExamples
   ///
   /// - Parameters:
   ///   - request: Request to send to ListModelVersionInputExamples.
@@ -1848,7 +1846,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostWorkflowResultsSimilarity
+  /// Compare embeddings distances using a workflow
   ///
   /// - Parameters:
   ///   - request: Request to send to PostWorkflowResultsSimilarity.
@@ -2349,7 +2347,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to DeleteAnnotationSearchMetrics
+  /// DeleteAnnotationSearchMetrics
   ///
   /// - Parameters:
   ///   - request: Request to send to DeleteAnnotationSearchMetrics.
@@ -2764,7 +2762,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostStatValues
+  /// PostStatValues
   ///
   /// - Parameters:
   ///   - request: Request to send to PostStatValues.
@@ -2781,7 +2779,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostStatValuesAggregate
+  /// PostStatValuesAggregate
   ///
   /// - Parameters:
   ///   - request: Request to send to PostStatValuesAggregate.
@@ -2876,7 +2874,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func getConceptLanguage(request: Clarifai_Api_GetConceptLanguageRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleConceptLanguageResponse>
   /// List the concept in all the translated languages.
   func listConceptLanguages(request: Clarifai_Api_ListConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
-  /// Add a new tranlsation for this concept.
+  /// Add a new translation for this concept.
   func postConceptLanguages(request: Clarifai_Api_PostConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
   /// Patch the name for a given language names by passing in a list of concepts with the new names
   /// for the languages.
@@ -2947,7 +2945,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// per_page as url query param variables in this request.
   func postModelsSearches(request: Clarifai_Api_PostModelsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
   /// Add a models to an app.
-  /// FIXME(zeiler): this should have been a plural response.
   func postModels(request: Clarifai_Api_PostModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
   /// Patch one or more models.
   func patchModels(request: Clarifai_Api_PatchModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
@@ -2967,11 +2964,13 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func getModelVersion(request: Clarifai_Api_GetModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
   /// List all the models.
   func listModelVersions(request: Clarifai_Api_ListModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
+  /// PostModelVersionsPublish
   func postModelVersionsPublish(request: Clarifai_Api_PostModelVersionsPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// PostModelVersionsUnPublish
   func postModelVersionsUnPublish(request: Clarifai_Api_PostModelVersionsUnPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Create a new model version to trigger training of the model.
-  /// FIXME(zeiler): this should have been a plural response.
   func postModelVersions(request: Clarifai_Api_PostModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+  /// PatchModelVersions
   func patchModelVersions(request: Clarifai_Api_PatchModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
   /// Delete a single model.
   func deleteModelVersion(request: Clarifai_Api_DeleteModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
@@ -2981,7 +2980,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postModelVersionMetrics(request: Clarifai_Api_PostModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
   /// Lists model references tied to a particular model id.
   func listModelReferences(request: Clarifai_Api_ListModelReferencesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelReferenceResponse>
+  /// GetModelVersionInputExample
   func getModelVersionInputExample(request: Clarifai_Api_GetModelVersionInputExampleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionInputExampleResponse>
+  /// ListModelVersionInputExamples
   func listModelVersionInputExamples(request: Clarifai_Api_ListModelVersionInputExamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionInputExampleResponse>
   /// Get a specific workflow from an app.
   func getWorkflow(request: Clarifai_Api_GetWorkflowRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleWorkflowResponse>
@@ -2997,6 +2998,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func deleteWorkflows(request: Clarifai_Api_DeleteWorkflowsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Predict using a workflow.
   func postWorkflowResults(request: Clarifai_Api_PostWorkflowResultsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsResponse>
+  /// Compare embeddings distances using a workflow
   func postWorkflowResultsSimilarity(request: Clarifai_Api_PostWorkflowResultsSimilarityRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsSimilarityResponse>
   /// List workflow versions.
   func listWorkflowVersions(request: Clarifai_Api_ListWorkflowVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionResponse>
@@ -3060,6 +3062,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func getAnnotationSearchMetrics(request: Clarifai_Api_GetAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
   /// List the evaluation results between two search requests
   func listAnnotationSearchMetrics(request: Clarifai_Api_ListAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
+  /// DeleteAnnotationSearchMetrics
   func deleteAnnotationSearchMetrics(request: Clarifai_Api_DeleteAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete a saved search.
   func deleteSearch(request: Clarifai_Api_DeleteSearchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
@@ -3114,7 +3117,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple collectors in one request.
   /// This call is asynchronous. Use DeleteCollector if you want a synchronous version.
   func deleteCollectors(request: Clarifai_Api_DeleteCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// PostStatValues
   func postStatValues(request: Clarifai_Api_PostStatValuesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueResponse>
+  /// PostStatValuesAggregate
   func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
   /// Increase the view metric for a detail view
   func postTrendingMetricsView(request: Clarifai_Api_PostTrendingMetricsViewRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
