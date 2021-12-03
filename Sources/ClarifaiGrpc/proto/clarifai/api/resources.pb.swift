@@ -512,9 +512,7 @@ extension Clarifai_Api_ValidationErrorType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/annotation.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Annotation of an asset with metadata
 public struct Clarifai_Api_Annotation {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -623,9 +621,7 @@ public struct Clarifai_Api_Annotation {
   fileprivate var _consensusInfo: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/app.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Application with tasks and datasets
 public struct Clarifai_Api_App {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -720,6 +716,7 @@ public struct Clarifai_Api_App {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
+/// App query
 public struct Clarifai_Api_AppQuery {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -733,9 +730,7 @@ public struct Clarifai_Api_AppQuery {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/app_sharing.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Collaborator - invited user, who shares an access to an application
 public struct Clarifai_Api_Collaborator {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -866,9 +861,7 @@ public struct Clarifai_Api_Collaboration {
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/audio.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Audio asset struct
 public struct Clarifai_Api_Audio {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -979,9 +972,7 @@ public struct Clarifai_Api_Track {
   fileprivate var _timeInfo: Clarifai_Api_TimeInfo? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/cluster.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Cluster data
 public struct Clarifai_Api_Cluster {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1005,9 +996,7 @@ public struct Clarifai_Api_Cluster {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/color.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Color data
 public struct Clarifai_Api_Color {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1047,9 +1036,6 @@ public struct Clarifai_Api_W3C {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/common.proto
-/////////////////////////////////////////////////////////////////////////////////
 /// Common message to identify the app in a url endpoint.
 public struct Clarifai_Api_UserAppIDSet {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -1066,6 +1052,7 @@ public struct Clarifai_Api_UserAppIDSet {
   public init() {}
 }
 
+/// PatchAction
 public struct Clarifai_Api_PatchAction {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1150,9 +1137,7 @@ public struct Clarifai_Api_PatchAction {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/concept.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Concept or tag
 public struct Clarifai_Api_Concept {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1221,6 +1206,7 @@ public struct Clarifai_Api_Concept {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
+/// ConceptCount
 public struct Clarifai_Api_ConceptCount {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1260,6 +1246,7 @@ public struct Clarifai_Api_ConceptCount {
   fileprivate var _detailConceptCount: Clarifai_Api_DetailConceptCount? = nil
 }
 
+/// ConceptTypeCount
 public struct Clarifai_Api_ConceptTypeCount {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1278,6 +1265,7 @@ public struct Clarifai_Api_ConceptTypeCount {
   public init() {}
 }
 
+/// DetailConceptCount
 public struct Clarifai_Api_DetailConceptCount {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1333,6 +1321,7 @@ public struct Clarifai_Api_DetailConceptCount {
   fileprivate var _processing: Clarifai_Api_ConceptTypeCount? = nil
 }
 
+/// ConceptQuery
 public struct Clarifai_Api_ConceptQuery {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1352,9 +1341,6 @@ public struct Clarifai_Api_ConceptQuery {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/concept_graph.proto
-/////////////////////////////////////////////////////////////////////////////////
 /// This represents a relation (i.e. edge) between the subject concept and the object concept
 public struct Clarifai_Api_ConceptRelation {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -1468,6 +1454,7 @@ public struct Clarifai_Api_KnowledgeGraph {
   public init() {}
 }
 
+/// ConceptMappingJob
 public struct Clarifai_Api_ConceptMappingJob {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1484,9 +1471,6 @@ public struct Clarifai_Api_ConceptMappingJob {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/concept_language.proto
-/////////////////////////////////////////////////////////////////////////////////
 /// This represents a link to an outside source for the given concept.
 /// The values from here are sticked into Concept message into the name and definition fields when
 /// returning from the API in your default language. The "id" field here becomes the "language"
@@ -1510,9 +1494,7 @@ public struct Clarifai_Api_ConceptLanguage {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/data.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Data
 public struct Clarifai_Api_Data {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1820,6 +1802,7 @@ public struct Clarifai_Api_Mask {
   fileprivate var _image: Clarifai_Api_Image? = nil
 }
 
+/// Polygon
 public struct Clarifai_Api_Polygon {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1833,6 +1816,7 @@ public struct Clarifai_Api_Polygon {
   public init() {}
 }
 
+/// Point
 public struct Clarifai_Api_Point {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1854,9 +1838,7 @@ public struct Clarifai_Api_Point {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/embedding.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Embedding
 public struct Clarifai_Api_Embedding {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1871,9 +1853,7 @@ public struct Clarifai_Api_Embedding {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/geo.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// GeoPoint
 public struct Clarifai_Api_GeoPoint {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1888,6 +1868,7 @@ public struct Clarifai_Api_GeoPoint {
   public init() {}
 }
 
+/// GeoLimit
 public struct Clarifai_Api_GeoLimit {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1902,6 +1883,7 @@ public struct Clarifai_Api_GeoLimit {
   public init() {}
 }
 
+/// GeoBoxedPoint
 public struct Clarifai_Api_GeoBoxedPoint {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1923,6 +1905,7 @@ public struct Clarifai_Api_GeoBoxedPoint {
   fileprivate var _geoPoint: Clarifai_Api_GeoPoint? = nil
 }
 
+/// Geo
 public struct Clarifai_Api_Geo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1957,9 +1940,7 @@ public struct Clarifai_Api_Geo {
   fileprivate var _geoLimit: Clarifai_Api_GeoLimit? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/image.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Image
 public struct Clarifai_Api_Image {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2029,6 +2010,7 @@ public struct Clarifai_Api_ImageInfo {
   public init() {}
 }
 
+/// HostedURL
 public struct Clarifai_Api_HostedURL {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2053,9 +2035,7 @@ public struct Clarifai_Api_HostedURL {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/input.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Input
 public struct Clarifai_Api_Input {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2150,6 +2130,7 @@ public struct Clarifai_Api_InputCount {
   public init() {}
 }
 
+/// DatasetFilter
 public struct Clarifai_Api_DatasetFilter {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2210,6 +2191,7 @@ public struct Clarifai_Api_DatasetFilter {
   fileprivate var _savedSearch: Clarifai_Api_Search? = nil
 }
 
+/// DatasetVersion
 public struct Clarifai_Api_DatasetVersion {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2373,6 +2355,7 @@ public struct Clarifai_Api_DatasetVersionSummary {
   public init() {}
 }
 
+/// WorkflowResultsSimilarity
 public struct Clarifai_Api_WorkflowResultsSimilarity {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2397,9 +2380,7 @@ public struct Clarifai_Api_WorkflowResultsSimilarity {
   fileprivate var _probeInput: Clarifai_Api_Input? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/key.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Key
 public struct Clarifai_Api_Key {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2459,9 +2440,6 @@ public struct Clarifai_Api_Key {
   fileprivate var _expiresAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/model.proto
-/////////////////////////////////////////////////////////////////////////////////
 /// This is the Model object which represents a created model in the platform.
 /// Each model has a particular type denoted by the model_type_id.
 /// When creating a Model with PostModels the following happens:
@@ -2665,8 +2643,7 @@ public struct Clarifai_Api_Model {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-/// A link to a html/markdown/text file that stores reference material
-/// tied to a model.
+/// A link to a html/markdown/text file that stores reference material tied to a model.
 public struct Clarifai_Api_ModelReference {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2702,6 +2679,7 @@ public struct Clarifai_Api_ModelReference {
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
+/// ModelVersionInputExample
 public struct Clarifai_Api_ModelVersionInputExample {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2817,6 +2795,7 @@ public struct Clarifai_Api_OutputInfo {
   fileprivate var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
+/// InputInfo
 public struct Clarifai_Api_InputInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3244,6 +3223,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// ModelTypeRangeInfo
 public struct Clarifai_Api_ModelTypeRangeInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3264,6 +3244,7 @@ public struct Clarifai_Api_ModelTypeRangeInfo {
   public init() {}
 }
 
+/// ModelTypeEnumOption
 public struct Clarifai_Api_ModelTypeEnumOption {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3287,6 +3268,7 @@ public struct Clarifai_Api_ModelTypeEnumOption {
   public init() {}
 }
 
+/// ModelQuery
 public struct Clarifai_Api_ModelQuery {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3307,9 +3289,7 @@ public struct Clarifai_Api_ModelQuery {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/model_version.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// ModelVersion
 public struct Clarifai_Api_ModelVersion {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3418,86 +3398,7 @@ public struct Clarifai_Api_ModelVersion {
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
-public struct Clarifai_Api_PretrainedModelConfig {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// This is the internal id of the pretrained model.
-  public var id: String = String()
-
-  /// This is the internal type of the pretrained model.
-  public var type: String = String()
-
-  /// Map from the api.Data field names to the Triton config.pbtxt input.
-  public var inputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _inputFieldsMap ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_inputFieldsMap = newValue}
-  }
-  /// Returns true if `inputFieldsMap` has been explicitly set.
-  public var hasInputFieldsMap: Bool {return self._inputFieldsMap != nil}
-  /// Clears the value of `inputFieldsMap`. Subsequent reads from it will return its default value.
-  public mutating func clearInputFieldsMap() {self._inputFieldsMap = nil}
-
-  /// Map from the api.Data field names to the Triton config.pbtxt output.
-  public var outputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _outputFieldsMap ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_outputFieldsMap = newValue}
-  }
-  /// Returns true if `outputFieldsMap` has been explicitly set.
-  public var hasOutputFieldsMap: Bool {return self._outputFieldsMap != nil}
-  /// Clears the value of `outputFieldsMap`. Subsequent reads from it will return its default value.
-  public mutating func clearOutputFieldsMap() {self._outputFieldsMap = nil}
-
-  /// Preprocessing steps for the model as a json string
-  public var dataProviderParams: String = String()
-
-  /// Url to a zipped up model in triton format with only version 1
-  public var modelZipURL: String = String()
-
-  /// Whether to overwrite the model for the existing internal id
-  public var overwrite: Bool = false
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _inputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct? = nil
-  fileprivate var _outputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct? = nil
-}
-
-public struct Clarifai_Api_TrainStats {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var lossCurve: [Clarifai_Api_LossCurveEntry] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-public struct Clarifai_Api_LossCurveEntry {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// current epoch
-  public var epoch: UInt32 = 0
-
-  /// current global step
-  public var globalStep: UInt32 = 0
-
-  /// current cost
-  /// FIXME(rigel): this should be loss instead of cost.
-  public var cost: Float = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
+/// LabelCount
 public struct Clarifai_Api_LabelCount {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3514,6 +3415,7 @@ public struct Clarifai_Api_LabelCount {
   public init() {}
 }
 
+/// LabelDistribution
 public struct Clarifai_Api_LabelDistribution {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3545,6 +3447,7 @@ public struct Clarifai_Api_CooccurrenceMatrixEntry {
   public init() {}
 }
 
+/// CooccurrenceMatrix
 public struct Clarifai_Api_CooccurrenceMatrix {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3560,6 +3463,7 @@ public struct Clarifai_Api_CooccurrenceMatrix {
   public init() {}
 }
 
+/// ConfusionMatrixEntry
 public struct Clarifai_Api_ConfusionMatrixEntry {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3576,6 +3480,7 @@ public struct Clarifai_Api_ConfusionMatrixEntry {
   public init() {}
 }
 
+/// ConfusionMatrix
 public struct Clarifai_Api_ConfusionMatrix {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3591,6 +3496,7 @@ public struct Clarifai_Api_ConfusionMatrix {
   public init() {}
 }
 
+/// ROC
 public struct Clarifai_Api_ROC {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3611,6 +3517,7 @@ public struct Clarifai_Api_ROC {
   public init() {}
 }
 
+/// PrecisionRecallCurve
 public struct Clarifai_Api_PrecisionRecallCurve {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3627,6 +3534,7 @@ public struct Clarifai_Api_PrecisionRecallCurve {
   public init() {}
 }
 
+/// BinaryMetrics
 public struct Clarifai_Api_BinaryMetrics {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3688,6 +3596,7 @@ public struct Clarifai_Api_BinaryMetrics {
   fileprivate var _precisionRecallCurve: Clarifai_Api_PrecisionRecallCurve? = nil
 }
 
+/// TrackerMetrics
 public struct Clarifai_Api_TrackerMetrics {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3716,6 +3625,7 @@ public struct Clarifai_Api_TrackerMetrics {
   public init() {}
 }
 
+/// EvalTestSetEntry
 public struct Clarifai_Api_EvalTestSetEntry {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3761,8 +3671,7 @@ public struct Clarifai_Api_EvalTestSetEntry {
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
 }
 
-/// NOTE(Janvier): We copy this from proto/utils/lopq_service.proto instead of importing it because
-/// we should not import internal protos in public protos.
+/// LOPQEvalResult
 public struct Clarifai_Api_LOPQEvalResult {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3810,7 +3719,7 @@ public struct Clarifai_Api_LOPQEvalResult {
   public init() {}
 }
 
-/// FIXME: copy this into an internal proto since it is stored in DB and field names can't change.
+/// MetricsSummary
 public struct Clarifai_Api_MetricsSummary {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3843,6 +3752,7 @@ public struct Clarifai_Api_MetricsSummary {
   public init() {}
 }
 
+/// EvalMetrics
 public struct Clarifai_Api_EvalMetrics {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3916,6 +3826,7 @@ public struct Clarifai_Api_EvalMetrics {
   fileprivate var _labelCounts: Clarifai_Api_LabelDistribution? = nil
 }
 
+/// FieldsValue
 public struct Clarifai_Api_FieldsValue {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3940,9 +3851,7 @@ public struct Clarifai_Api_FieldsValue {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/output.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Output
 public struct Clarifai_Api_Output {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4017,9 +3926,7 @@ public struct Clarifai_Api_Output {
   fileprivate var _data: Clarifai_Api_Data? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/scope.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// ScopeDeps
 public struct Clarifai_Api_ScopeDeps {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4036,6 +3943,7 @@ public struct Clarifai_Api_ScopeDeps {
   public init() {}
 }
 
+/// EndpointDeps
 public struct Clarifai_Api_EndpointDeps {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4052,9 +3960,7 @@ public struct Clarifai_Api_EndpointDeps {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/search.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Hit
 public struct Clarifai_Api_Hit {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4307,6 +4213,7 @@ public struct Clarifai_Api_Search {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
+/// Filter
 public struct Clarifai_Api_Filter {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4356,6 +4263,7 @@ public struct Clarifai_Api_Filter {
   fileprivate var _lastUpdatedTimeRange: Clarifai_Api_TimeRange? = nil
 }
 
+/// TimeRange
 public struct Clarifai_Api_TimeRange {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4389,6 +4297,7 @@ public struct Clarifai_Api_TimeRange {
   fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
+/// Rank
 public struct Clarifai_Api_Rank {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4415,6 +4324,7 @@ public struct Clarifai_Api_Rank {
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
 }
 
+/// AnnotationSearchMetrics
 public struct Clarifai_Api_AnnotationSearchMetrics {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4486,9 +4396,7 @@ public struct Clarifai_Api_AnnotationSearchMetrics {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/text.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Text
 public struct Clarifai_Api_Text {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4547,9 +4455,7 @@ public struct Clarifai_Api_TextInfo {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/user.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// User
 public struct Clarifai_Api_User {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4783,6 +4689,7 @@ public struct Clarifai_Api_UserDetail {
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
+/// EmailAddress
 public struct Clarifai_Api_EmailAddress {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4799,12 +4706,12 @@ public struct Clarifai_Api_EmailAddress {
   public init() {}
 }
 
+/// Password
 public struct Clarifai_Api_Password {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// TODO(lawrence): merge this with message UserPassword above
   /// unencrypted password string
   public var plaintext: String = String()
 
@@ -4813,6 +4720,7 @@ public struct Clarifai_Api_Password {
   public init() {}
 }
 
+/// PasswordViolations
 public struct Clarifai_Api_PasswordViolations {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4865,9 +4773,7 @@ public struct Clarifai_Api_PasswordViolations {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/video.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Video
 public struct Clarifai_Api_Video {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4951,9 +4857,7 @@ public struct Clarifai_Api_VideoInfo {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Messages from /proto/clarifai/api/workflow.proto
-/////////////////////////////////////////////////////////////////////////////////
+/// Workflow
 public struct Clarifai_Api_Workflow {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5058,6 +4962,7 @@ public struct Clarifai_Api_Workflow {
   fileprivate var _version: Clarifai_Api_WorkflowVersion? = nil
 }
 
+/// WorkflowVersion
 public struct Clarifai_Api_WorkflowVersion {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5142,6 +5047,7 @@ public struct Clarifai_Api_WorkflowVersion {
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
+/// WorkflowNode
 public struct Clarifai_Api_WorkflowNode {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5190,6 +5096,7 @@ public struct Clarifai_Api_NodeInput {
   public init() {}
 }
 
+/// WorkflowResult
 public struct Clarifai_Api_WorkflowResult {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5253,6 +5160,7 @@ public struct Clarifai_Api_WorkflowResult {
   fileprivate var _input: Clarifai_Api_Input? = nil
 }
 
+/// WorkflowState
 public struct Clarifai_Api_WorkflowState {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5269,6 +5177,7 @@ public struct Clarifai_Api_WorkflowState {
   public init() {}
 }
 
+/// AppDuplication
 public struct Clarifai_Api_AppDuplication {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5333,6 +5242,7 @@ public struct Clarifai_Api_AppDuplication {
   fileprivate var _filter: Clarifai_Api_AppDuplicationFilters? = nil
 }
 
+/// AppDuplicationFilters
 public struct Clarifai_Api_AppDuplicationFilters {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5568,6 +5478,7 @@ extension Clarifai_Api_Task.TaskType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// AiAssistParameters
 public struct Clarifai_Api_AiAssistParameters {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5586,6 +5497,7 @@ public struct Clarifai_Api_AiAssistParameters {
   public init() {}
 }
 
+/// TaskWorker
 public struct Clarifai_Api_TaskWorker {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5675,6 +5587,7 @@ extension Clarifai_Api_TaskWorker.TaskWorkerStrategy: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// TaskWorkerPartitionedStrategyInfo
 public struct Clarifai_Api_TaskWorkerPartitionedStrategyInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5773,6 +5686,7 @@ extension Clarifai_Api_TaskWorkerPartitionedStrategyInfo.TaskWorkerPartitionedSt
 
 #endif  // swift(>=4.2)
 
+/// TaskInputSource
 public struct Clarifai_Api_TaskInputSource {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5837,6 +5751,7 @@ extension Clarifai_Api_TaskInputSource.TaskInputSourceType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// TaskReview
 public struct Clarifai_Api_TaskReview {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5942,6 +5857,7 @@ extension Clarifai_Api_TaskReview.TaskReviewStrategy: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// TaskReviewManualStrategyInfo
 public struct Clarifai_Api_TaskReviewManualStrategyInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5955,6 +5871,7 @@ public struct Clarifai_Api_TaskReviewManualStrategyInfo {
   public init() {}
 }
 
+/// TaskReviewConsensusStrategyInfo
 public struct Clarifai_Api_TaskReviewConsensusStrategyInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5968,6 +5885,7 @@ public struct Clarifai_Api_TaskReviewConsensusStrategyInfo {
   public init() {}
 }
 
+/// TaskAIAssistant
 public struct Clarifai_Api_TaskAIAssistant {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -5983,6 +5901,8 @@ public struct Clarifai_Api_TaskAIAssistant {
   public init() {}
 }
 
+/// TaskStatusCountPerUser can represents count of human created annotations for a user for each valid status,
+/// count of inputs (anchor annotation) for a user for each valid status
 public struct Clarifai_Api_TaskStatusCountPerUser {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6139,9 +6059,7 @@ public struct Clarifai_Api_APIPostModelOutputsCollectorSource {
   public init() {}
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// Stats Collection Objects.
-/////////////////////////////////////////////////////////////////////////////////
+/// StatValue
 public struct Clarifai_Api_StatValue {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6173,6 +6091,7 @@ public struct Clarifai_Api_StatValue {
   fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
+/// StatValueAggregateResult
 public struct Clarifai_Api_StatValueAggregateResult {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6198,6 +6117,7 @@ public struct Clarifai_Api_StatValueAggregateResult {
   fileprivate var _statValueAggregateQuery: Clarifai_Api_StatValueAggregateQuery? = nil
 }
 
+/// StatValueAggregate
 public struct Clarifai_Api_StatValueAggregate {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6232,6 +6152,7 @@ public struct Clarifai_Api_StatValueAggregate {
   fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
+/// StatValueAggregateQuery
 public struct Clarifai_Api_StatValueAggregateQuery {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6293,9 +6214,6 @@ public struct Clarifai_Api_StatValueAggregateQuery {
   fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
-//////////////////////////////
-/// Visibilty of the resource.
-//////////////////////////////
 /// Visibility represents how visible the given resource is to other users.
 /// When authenticating a request we can tell if a user is a collaborator or a teammate for the
 /// the app that contains the resource and set their allowed visibility. We use that to restrict
@@ -6374,6 +6292,7 @@ extension Clarifai_Api_Visibility.Gettable: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// TrendingMetric
 public struct Clarifai_Api_TrendingMetric {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6392,6 +6311,7 @@ public struct Clarifai_Api_TrendingMetric {
   public init() {}
 }
 
+/// TimeSegment
 public struct Clarifai_Api_TimeSegment {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -6426,6 +6346,7 @@ public struct Clarifai_Api_TimeSegment {
   fileprivate var _timeInfo: Clarifai_Api_TimeInfo? = nil
 }
 
+/// TimeInfo
 public struct Clarifai_Api_TimeInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -9967,141 +9888,6 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs._metadata != rhs._metadata {return false}
     if lhs.license != rhs.license {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PretrainedModelConfig"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .same(proto: "type"),
-    3: .standard(proto: "input_fields_map"),
-    4: .standard(proto: "output_fields_map"),
-    5: .standard(proto: "data_provider_params"),
-    6: .standard(proto: "model_zip_url"),
-    7: .same(proto: "overwrite"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.id)
-      case 2: try decoder.decodeSingularStringField(value: &self.type)
-      case 3: try decoder.decodeSingularMessageField(value: &self._inputFieldsMap)
-      case 4: try decoder.decodeSingularMessageField(value: &self._outputFieldsMap)
-      case 5: try decoder.decodeSingularStringField(value: &self.dataProviderParams)
-      case 6: try decoder.decodeSingularStringField(value: &self.modelZipURL)
-      case 7: try decoder.decodeSingularBoolField(value: &self.overwrite)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.id.isEmpty {
-      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
-    }
-    if !self.type.isEmpty {
-      try visitor.visitSingularStringField(value: self.type, fieldNumber: 2)
-    }
-    if let v = self._inputFieldsMap {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }
-    if let v = self._outputFieldsMap {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    }
-    if !self.dataProviderParams.isEmpty {
-      try visitor.visitSingularStringField(value: self.dataProviderParams, fieldNumber: 5)
-    }
-    if !self.modelZipURL.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelZipURL, fieldNumber: 6)
-    }
-    if self.overwrite != false {
-      try visitor.visitSingularBoolField(value: self.overwrite, fieldNumber: 7)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_PretrainedModelConfig, rhs: Clarifai_Api_PretrainedModelConfig) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.type != rhs.type {return false}
-    if lhs._inputFieldsMap != rhs._inputFieldsMap {return false}
-    if lhs._outputFieldsMap != rhs._outputFieldsMap {return false}
-    if lhs.dataProviderParams != rhs.dataProviderParams {return false}
-    if lhs.modelZipURL != rhs.modelZipURL {return false}
-    if lhs.overwrite != rhs.overwrite {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_TrainStats: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".TrainStats"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "loss_curve"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeRepeatedMessageField(value: &self.lossCurve)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.lossCurve.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.lossCurve, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_TrainStats, rhs: Clarifai_Api_TrainStats) -> Bool {
-    if lhs.lossCurve != rhs.lossCurve {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_LossCurveEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".LossCurveEntry"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "epoch"),
-    2: .standard(proto: "global_step"),
-    3: .same(proto: "cost"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularUInt32Field(value: &self.epoch)
-      case 2: try decoder.decodeSingularUInt32Field(value: &self.globalStep)
-      case 3: try decoder.decodeSingularFloatField(value: &self.cost)
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.epoch != 0 {
-      try visitor.visitSingularUInt32Field(value: self.epoch, fieldNumber: 1)
-    }
-    if self.globalStep != 0 {
-      try visitor.visitSingularUInt32Field(value: self.globalStep, fieldNumber: 2)
-    }
-    if self.cost != 0 {
-      try visitor.visitSingularFloatField(value: self.cost, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_LossCurveEntry, rhs: Clarifai_Api_LossCurveEntry) -> Bool {
-    if lhs.epoch != rhs.epoch {return false}
-    if lhs.globalStep != rhs.globalStep {return false}
-    if lhs.cost != rhs.cost {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
