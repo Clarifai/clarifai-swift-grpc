@@ -1817,6 +1817,11 @@ public struct Clarifai_Api_PostInputsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// List of inputs to post.
+  /// For each input, the following fields are used:
+  /// * id
+  /// * data
+  /// * dataset_ids
   public var inputs: [Clarifai_Api_Input] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1841,6 +1846,10 @@ public struct Clarifai_Api_PatchInputsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// List of inputs to patch.
+  /// Inputs are identified by id field.
+  /// For each input, the following fields are patchable:
+  /// * data
   public var inputs: [Clarifai_Api_Input] = []
 
   /// The action to perform on the patched objects
@@ -2434,13 +2443,13 @@ public struct Clarifai_Api_ListModelsRequest {
   }
 
   /// Filtering options:
-  /// // Query various text fields that can contain the words in the query string
+  /// Query name, description and id fields, that can contain the words in the query string. Does NOT support wildcards - full words only. Supports operators "OR" and "-" as NOT.
   public var query: String {
     get {return _storage._query}
     set {_uniqueStorage()._query = newValue}
   }
 
-  /// Filter by the name of the model. This supports wildcard queries like "gen*" to match "general" as an example.
+  /// Filter by the name, description and id of the model. This supports wildcard queries like "gen*" to match "general" as an example.
   /// Deprecated in favor of query
   public var name: String {
     get {return _storage._name}
@@ -3475,11 +3484,22 @@ public struct Clarifai_Api_MultiModelTypeResponse {
   /// List of ModelType objects.
   public var modelTypes: [Clarifai_Api_ModelType] = []
 
+  /// List of model importers
+  public var modelImporters: Clarifai_Api_ModelTypeField {
+    get {return _modelImporters ?? Clarifai_Api_ModelTypeField()}
+    set {_modelImporters = newValue}
+  }
+  /// Returns true if `modelImporters` has been explicitly set.
+  public var hasModelImporters: Bool {return self._modelImporters != nil}
+  /// Clears the value of `modelImporters`. Subsequent reads from it will return its default value.
+  public mutating func clearModelImporters() {self._modelImporters = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _modelImporters: Clarifai_Api_ModelTypeField? = nil
 }
 
 /// GetModelVersionInputExampleRequest
@@ -10431,6 +10451,7 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .standard(proto: "model_types"),
+    3: .standard(proto: "model_importers"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -10438,6 +10459,7 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
       switch fieldNumber {
       case 1: try decoder.decodeSingularMessageField(value: &self._status)
       case 2: try decoder.decodeRepeatedMessageField(value: &self.modelTypes)
+      case 3: try decoder.decodeSingularMessageField(value: &self._modelImporters)
       default: break
       }
     }
@@ -10450,12 +10472,16 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
     if !self.modelTypes.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.modelTypes, fieldNumber: 2)
     }
+    if let v = self._modelImporters {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiModelTypeResponse, rhs: Clarifai_Api_MultiModelTypeResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.modelTypes != rhs.modelTypes {return false}
+    if lhs._modelImporters != rhs._modelImporters {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

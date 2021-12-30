@@ -20,6 +20,46 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+public enum Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case notSet // = 0
+  case inputType // = 1
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .notSet
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .notSet
+    case 1: self = .inputType
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .notSet: return 0
+    case .inputType: return 1
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_DatasetVersionMetricsGroupType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_DatasetVersionMetricsGroupType] = [
+    .notSet,
+    .inputType,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public enum Clarifai_Api_ExpirationAction: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
@@ -2258,15 +2298,15 @@ public struct Clarifai_Api_DatasetVersion {
   /// Description of the dataset version
   public var description_p: String = String()
 
-  /// Dataset version summary
-  public var summary: Clarifai_Api_DatasetVersionSummary {
-    get {return _summary ?? Clarifai_Api_DatasetVersionSummary()}
-    set {_summary = newValue}
+  /// Dataset version metrics
+  public var metrics: Clarifai_Api_DatasetVersionMetrics {
+    get {return _metrics ?? Clarifai_Api_DatasetVersionMetrics()}
+    set {_metrics = newValue}
   }
-  /// Returns true if `summary` has been explicitly set.
-  public var hasSummary: Bool {return self._summary != nil}
-  /// Clears the value of `summary`. Subsequent reads from it will return its default value.
-  public mutating func clearSummary() {self._summary = nil}
+  /// Returns true if `metrics` has been explicitly set.
+  public var hasMetrics: Bool {return self._metrics != nil}
+  /// Clears the value of `metrics`. Subsequent reads from it will return its default value.
+  public mutating func clearMetrics() {self._metrics = nil}
 
   /// To handle arbitrary json metadata you can use a struct field:
   /// https://github.com/google/protobuf/blob/master/src/google/protobuf/struct.proto
@@ -2315,7 +2355,7 @@ public struct Clarifai_Api_DatasetVersion {
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _summary: Clarifai_Api_DatasetVersionSummary? = nil
+  fileprivate var _metrics: Clarifai_Api_DatasetVersionMetrics? = nil
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
@@ -2341,14 +2381,16 @@ public struct Clarifai_Api_DatasetVersionDatasetFilterConfig {
   fileprivate var _datasetFilter: Clarifai_Api_DatasetFilter? = nil
 }
 
-public struct Clarifai_Api_DatasetVersionSummary {
+public struct Clarifai_Api_DatasetVersionMetrics {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Counts by different filters. Each key is the filter key,
-  /// e.g. total_image, train_image, test_image, total_video, train_video, test_video.
-  public var inputCounts: Dictionary<String,UInt64> = [:]
+  public var inputsCount: UInt64 = 0
+
+  public var positiveAnnotationsCount: UInt64 = 0
+
+  public var boundingBoxesCount: UInt64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2462,7 +2504,7 @@ public struct Clarifai_Api_Model {
     set {_uniqueStorage()._id = newValue}
   }
 
-  /// A nicer-to-read name for the model. Can have spaces and special characters.
+  /// DEPRECATED: Please use the model id to name the model.
   public var name: String {
     get {return _storage._name}
     set {_uniqueStorage()._name = newValue}
@@ -2518,8 +2560,7 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `modelVersion`. Subsequent reads from it will return its default value.
   public mutating func clearModelVersion() {_uniqueStorage()._modelVersion = nil}
 
-  /// An even nicer-to-read name for public Clarifai models where we're not happy with the name but
-  /// need a temporary workaround while we check what depends on these names.
+  /// DEPRECATED: Please use the model id to name the model.
   public var displayName: String {
     get {return _storage._displayName}
     set {_uniqueStorage()._displayName = newValue}
@@ -2754,14 +2795,6 @@ public struct Clarifai_Api_OutputInfo {
   /// For returning where to look for the Output info if not returning it.
   public var message: String = String()
 
-  /// To help clients know what type of Data to expect out of the model.
-  /// TO BE DEPRECATED
-  public var type: String = String()
-
-  /// Extra metadata about the Type data.
-  /// TO BE DEPRECATED
-  public var typeExt: String = String()
-
   /// Map from the api.Data field names to the underlying model graph's outputs. When using a
   /// PretrainedModelConfig the values in this map need to match the Triton config.pbtxt output names.
   public var fieldsMap: SwiftProtobuf.Google_Protobuf_Struct {
@@ -2982,9 +3015,6 @@ public struct Clarifai_Api_ModelType {
 
   /// Description of this model type.
   public var description_p: String = String()
-
-  /// The type of the model to create. This is currently stored in output_info.type.
-  public var type: String = String()
 
   /// The list of input fields that this model accepts. These are the keys of the Model's
   /// InputInfo.fields_map
@@ -3253,6 +3283,13 @@ public struct Clarifai_Api_ModelTypeEnumOption {
   /// The unique value of the enum option.
   public var id: String = String()
 
+  /// List of other ID values that are equivalent with this ID.
+  /// This allows the user to choose this option by multiple IDs.
+  /// Example: if enum is "Phone Number Prefix", you could add an option that is selectable by two values:
+  /// 1. ID: "Estonia"
+  /// 2. Alias: 37
+  public var aliases: [Clarifai_Api_ModelTypeEnumOptionAlias] = []
+
   /// Optional description for this enum option.
   public var description_p: String = String()
 
@@ -3268,6 +3305,19 @@ public struct Clarifai_Api_ModelTypeEnumOption {
   public init() {}
 }
 
+public struct Clarifai_Api_ModelTypeEnumOptionAlias {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Integer alias for id.
+  public var idInt: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 /// ModelQuery
 public struct Clarifai_Api_ModelQuery {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -3276,9 +3326,6 @@ public struct Clarifai_Api_ModelQuery {
 
   /// The name ofthe field. This supports wilcard queries like "gen*" to match "general" as an example.
   public var name: String = String()
-
-  /// This is the legacy model type. Do not use, only kept for support in old API clients.
-  public var type: String = String()
 
   /// Filter models by the specific model_type_id. See ListModelTypes for the list of ModelType.Id's
   /// supported.
@@ -3385,6 +3432,16 @@ public struct Clarifai_Api_ModelVersion {
 
   public var license: String = String()
 
+  /// Dataset version used to create this model version.
+  public var datasetVersion: Clarifai_Api_DatasetVersion {
+    get {return _datasetVersion ?? Clarifai_Api_DatasetVersion()}
+    set {_datasetVersion = newValue}
+  }
+  /// Returns true if `datasetVersion` has been explicitly set.
+  public var hasDatasetVersion: Bool {return self._datasetVersion != nil}
+  /// Clears the value of `datasetVersion`. Subsequent reads from it will return its default value.
+  public mutating func clearDatasetVersion() {self._datasetVersion = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -3396,6 +3453,90 @@ public struct Clarifai_Api_ModelVersion {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _datasetVersion: Clarifai_Api_DatasetVersion? = nil
+}
+
+/// PretrainedModelConfig
+public struct Clarifai_Api_PretrainedModelConfig {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// This is the internal id of the pretrained model.
+  public var id: String = String()
+
+  /// This is the internal type of the pretrained model.
+  public var type: String = String()
+
+  /// Map from the api.Data field names to the Triton config.pbtxt input.
+  public var inputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _inputFieldsMap ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_inputFieldsMap = newValue}
+  }
+  /// Returns true if `inputFieldsMap` has been explicitly set.
+  public var hasInputFieldsMap: Bool {return self._inputFieldsMap != nil}
+  /// Clears the value of `inputFieldsMap`. Subsequent reads from it will return its default value.
+  public mutating func clearInputFieldsMap() {self._inputFieldsMap = nil}
+
+  /// Map from the api.Data field names to the Triton config.pbtxt output.
+  public var outputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _outputFieldsMap ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_outputFieldsMap = newValue}
+  }
+  /// Returns true if `outputFieldsMap` has been explicitly set.
+  public var hasOutputFieldsMap: Bool {return self._outputFieldsMap != nil}
+  /// Clears the value of `outputFieldsMap`. Subsequent reads from it will return its default value.
+  public mutating func clearOutputFieldsMap() {self._outputFieldsMap = nil}
+
+  /// Preprocessing steps for the model as a json string
+  public var dataProviderParams: String = String()
+
+  /// Url to a zipped up model in triton format with only version 1
+  public var modelZipURL: String = String()
+
+  /// Whether to overwrite the model for the existing internal id
+  public var overwrite: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _inputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _outputFieldsMap: SwiftProtobuf.Google_Protobuf_Struct? = nil
+}
+
+/// TrainStats
+public struct Clarifai_Api_TrainStats {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var lossCurve: [Clarifai_Api_LossCurveEntry] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// LossCurveEntry
+public struct Clarifai_Api_LossCurveEntry {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// current epoch
+  public var epoch: UInt32 = 0
+
+  /// current global step
+  public var globalStep: UInt32 = 0
+
+  /// current cost
+  /// FIXME(rigel): this should be loss instead of cost.
+  public var cost: Float = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 /// LabelCount
@@ -6370,6 +6511,13 @@ public struct Clarifai_Api_TimeInfo {
 
 fileprivate let _protobuf_package = "clarifai.api"
 
+extension Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "DATASET_VERSION_METRICS_GROUP_TYPE_NOT_SET"),
+    1: .same(proto: "INPUT_TYPE"),
+  ]
+}
+
 extension Clarifai_Api_ExpirationAction: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "EXPIRATION_ACTION_NOT_SET"),
@@ -8582,7 +8730,7 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     7: .standard(proto: "dataset_filter_config"),
     8: .same(proto: "status"),
     10: .same(proto: "description"),
-    11: .same(proto: "summary"),
+    11: .same(proto: "metrics"),
     12: .same(proto: "metadata"),
     13: .same(proto: "visibility"),
     14: .standard(proto: "embed_model_version_ids"),
@@ -8607,7 +8755,7 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
         if let v = v {self.dataConfig = .datasetFilterConfig(v)}
       case 8: try decoder.decodeSingularMessageField(value: &self._status)
       case 10: try decoder.decodeSingularStringField(value: &self.description_p)
-      case 11: try decoder.decodeSingularMessageField(value: &self._summary)
+      case 11: try decoder.decodeSingularMessageField(value: &self._metrics)
       case 12: try decoder.decodeSingularMessageField(value: &self._metadata)
       case 13: try decoder.decodeSingularMessageField(value: &self._visibility)
       case 14: try decoder.decodeRepeatedStringField(value: &self.embedModelVersionIds)
@@ -8644,7 +8792,7 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if !self.description_p.isEmpty {
       try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 10)
     }
-    if let v = self._summary {
+    if let v = self._metrics {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
     }
     if let v = self._metadata {
@@ -8669,7 +8817,7 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs.dataConfig != rhs.dataConfig {return false}
     if lhs._status != rhs._status {return false}
     if lhs.description_p != rhs.description_p {return false}
-    if lhs._summary != rhs._summary {return false}
+    if lhs._metrics != rhs._metrics {return false}
     if lhs._metadata != rhs._metadata {return false}
     if lhs._visibility != rhs._visibility {return false}
     if lhs.embedModelVersionIds != rhs.embedModelVersionIds {return false}
@@ -8707,30 +8855,42 @@ extension Clarifai_Api_DatasetVersionDatasetFilterConfig: SwiftProtobuf.Message,
   }
 }
 
-extension Clarifai_Api_DatasetVersionSummary: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DatasetVersionSummary"
+extension Clarifai_Api_DatasetVersionMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DatasetVersionMetrics"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "input_counts"),
+    1: .standard(proto: "inputs_count"),
+    2: .standard(proto: "positive_annotations_count"),
+    3: .standard(proto: "bounding_boxes_count"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufUInt64>.self, value: &self.inputCounts)
+      case 1: try decoder.decodeSingularUInt64Field(value: &self.inputsCount)
+      case 2: try decoder.decodeSingularUInt64Field(value: &self.positiveAnnotationsCount)
+      case 3: try decoder.decodeSingularUInt64Field(value: &self.boundingBoxesCount)
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.inputCounts.isEmpty {
-      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufUInt64>.self, value: self.inputCounts, fieldNumber: 1)
+    if self.inputsCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.inputsCount, fieldNumber: 1)
+    }
+    if self.positiveAnnotationsCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.positiveAnnotationsCount, fieldNumber: 2)
+    }
+    if self.boundingBoxesCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.boundingBoxesCount, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_DatasetVersionSummary, rhs: Clarifai_Api_DatasetVersionSummary) -> Bool {
-    if lhs.inputCounts != rhs.inputCounts {return false}
+  public static func ==(lhs: Clarifai_Api_DatasetVersionMetrics, rhs: Clarifai_Api_DatasetVersionMetrics) -> Bool {
+    if lhs.inputsCount != rhs.inputsCount {return false}
+    if lhs.positiveAnnotationsCount != rhs.positiveAnnotationsCount {return false}
+    if lhs.boundingBoxesCount != rhs.boundingBoxesCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9195,8 +9355,6 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     1: .same(proto: "data"),
     2: .standard(proto: "output_config"),
     3: .same(proto: "message"),
-    4: .same(proto: "type"),
-    5: .standard(proto: "type_ext"),
     6: .standard(proto: "fields_map"),
     7: .same(proto: "params"),
   ]
@@ -9207,8 +9365,6 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 1: try decoder.decodeSingularMessageField(value: &self._data)
       case 2: try decoder.decodeSingularMessageField(value: &self._outputConfig)
       case 3: try decoder.decodeSingularStringField(value: &self.message)
-      case 4: try decoder.decodeSingularStringField(value: &self.type)
-      case 5: try decoder.decodeSingularStringField(value: &self.typeExt)
       case 6: try decoder.decodeSingularMessageField(value: &self._fieldsMap)
       case 7: try decoder.decodeSingularMessageField(value: &self._params)
       default: break
@@ -9226,12 +9382,6 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if !self.message.isEmpty {
       try visitor.visitSingularStringField(value: self.message, fieldNumber: 3)
     }
-    if !self.type.isEmpty {
-      try visitor.visitSingularStringField(value: self.type, fieldNumber: 4)
-    }
-    if !self.typeExt.isEmpty {
-      try visitor.visitSingularStringField(value: self.typeExt, fieldNumber: 5)
-    }
     if let v = self._fieldsMap {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }
@@ -9245,8 +9395,6 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs._data != rhs._data {return false}
     if lhs._outputConfig != rhs._outputConfig {return false}
     if lhs.message != rhs.message {return false}
-    if lhs.type != rhs.type {return false}
-    if lhs.typeExt != rhs.typeExt {return false}
     if lhs._fieldsMap != rhs._fieldsMap {return false}
     if lhs._params != rhs._params {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -9460,7 +9608,6 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     1: .same(proto: "id"),
     2: .same(proto: "title"),
     3: .same(proto: "description"),
-    4: .same(proto: "type"),
     5: .standard(proto: "input_fields"),
     6: .standard(proto: "output_fields"),
     8: .same(proto: "trainable"),
@@ -9479,7 +9626,6 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 1: try decoder.decodeSingularStringField(value: &self.id)
       case 2: try decoder.decodeSingularStringField(value: &self.title)
       case 3: try decoder.decodeSingularStringField(value: &self.description_p)
-      case 4: try decoder.decodeSingularStringField(value: &self.type)
       case 5: try decoder.decodeRepeatedStringField(value: &self.inputFields)
       case 6: try decoder.decodeRepeatedStringField(value: &self.outputFields)
       case 8: try decoder.decodeSingularBoolField(value: &self.trainable)
@@ -9504,9 +9650,6 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     }
     if !self.description_p.isEmpty {
       try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 3)
-    }
-    if !self.type.isEmpty {
-      try visitor.visitSingularStringField(value: self.type, fieldNumber: 4)
     }
     if !self.inputFields.isEmpty {
       try visitor.visitRepeatedStringField(value: self.inputFields, fieldNumber: 5)
@@ -9545,7 +9688,6 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.id != rhs.id {return false}
     if lhs.title != rhs.title {return false}
     if lhs.description_p != rhs.description_p {return false}
-    if lhs.type != rhs.type {return false}
     if lhs.inputFields != rhs.inputFields {return false}
     if lhs.outputFields != rhs.outputFields {return false}
     if lhs.trainable != rhs.trainable {return false}
@@ -9702,6 +9844,7 @@ extension Clarifai_Api_ModelTypeEnumOption: SwiftProtobuf.Message, SwiftProtobuf
   public static let protoMessageName: String = _protobuf_package + ".ModelTypeEnumOption"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
+    5: .same(proto: "aliases"),
     2: .same(proto: "description"),
     3: .standard(proto: "model_type_fields"),
     4: .standard(proto: "internal_only"),
@@ -9714,6 +9857,7 @@ extension Clarifai_Api_ModelTypeEnumOption: SwiftProtobuf.Message, SwiftProtobuf
       case 2: try decoder.decodeSingularStringField(value: &self.description_p)
       case 3: try decoder.decodeRepeatedMessageField(value: &self.modelTypeFields)
       case 4: try decoder.decodeSingularBoolField(value: &self.internalOnly)
+      case 5: try decoder.decodeRepeatedMessageField(value: &self.aliases)
       default: break
       }
     }
@@ -9732,14 +9876,47 @@ extension Clarifai_Api_ModelTypeEnumOption: SwiftProtobuf.Message, SwiftProtobuf
     if self.internalOnly != false {
       try visitor.visitSingularBoolField(value: self.internalOnly, fieldNumber: 4)
     }
+    if !self.aliases.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.aliases, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ModelTypeEnumOption, rhs: Clarifai_Api_ModelTypeEnumOption) -> Bool {
     if lhs.id != rhs.id {return false}
+    if lhs.aliases != rhs.aliases {return false}
     if lhs.description_p != rhs.description_p {return false}
     if lhs.modelTypeFields != rhs.modelTypeFields {return false}
     if lhs.internalOnly != rhs.internalOnly {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ModelTypeEnumOptionAlias: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ModelTypeEnumOptionAlias"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "id_int"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularInt64Field(value: &self.idInt)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.idInt != 0 {
+      try visitor.visitSingularInt64Field(value: self.idInt, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ModelTypeEnumOptionAlias, rhs: Clarifai_Api_ModelTypeEnumOptionAlias) -> Bool {
+    if lhs.idInt != rhs.idInt {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9749,7 +9926,6 @@ extension Clarifai_Api_ModelQuery: SwiftProtobuf.Message, SwiftProtobuf._Message
   public static let protoMessageName: String = _protobuf_package + ".ModelQuery"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "name"),
-    2: .same(proto: "type"),
     3: .standard(proto: "model_type_id"),
   ]
 
@@ -9757,7 +9933,6 @@ extension Clarifai_Api_ModelQuery: SwiftProtobuf.Message, SwiftProtobuf._Message
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.name)
-      case 2: try decoder.decodeSingularStringField(value: &self.type)
       case 3: try decoder.decodeSingularStringField(value: &self.modelTypeID)
       default: break
       }
@@ -9768,9 +9943,6 @@ extension Clarifai_Api_ModelQuery: SwiftProtobuf.Message, SwiftProtobuf._Message
     if !self.name.isEmpty {
       try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
     }
-    if !self.type.isEmpty {
-      try visitor.visitSingularStringField(value: self.type, fieldNumber: 2)
-    }
     if !self.modelTypeID.isEmpty {
       try visitor.visitSingularStringField(value: self.modelTypeID, fieldNumber: 3)
     }
@@ -9779,7 +9951,6 @@ extension Clarifai_Api_ModelQuery: SwiftProtobuf.Message, SwiftProtobuf._Message
 
   public static func ==(lhs: Clarifai_Api_ModelQuery, rhs: Clarifai_Api_ModelQuery) -> Bool {
     if lhs.name != rhs.name {return false}
-    if lhs.type != rhs.type {return false}
     if lhs.modelTypeID != rhs.modelTypeID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -9803,6 +9974,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     15: .standard(proto: "modified_at"),
     16: .same(proto: "metadata"),
     17: .same(proto: "license"),
+    18: .standard(proto: "dataset_version"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -9822,6 +9994,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 15: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       case 16: try decoder.decodeSingularMessageField(value: &self._metadata)
       case 17: try decoder.decodeSingularStringField(value: &self.license)
+      case 18: try decoder.decodeSingularMessageField(value: &self._datasetVersion)
       default: break
       }
     }
@@ -9870,6 +10043,9 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.license.isEmpty {
       try visitor.visitSingularStringField(value: self.license, fieldNumber: 17)
     }
+    if let v = self._datasetVersion {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -9888,6 +10064,142 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs._metadata != rhs._metadata {return false}
     if lhs.license != rhs.license {return false}
+    if lhs._datasetVersion != rhs._datasetVersion {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PretrainedModelConfig"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .same(proto: "type"),
+    3: .standard(proto: "input_fields_map"),
+    4: .standard(proto: "output_fields_map"),
+    5: .standard(proto: "data_provider_params"),
+    6: .standard(proto: "model_zip_url"),
+    7: .same(proto: "overwrite"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularStringField(value: &self.id)
+      case 2: try decoder.decodeSingularStringField(value: &self.type)
+      case 3: try decoder.decodeSingularMessageField(value: &self._inputFieldsMap)
+      case 4: try decoder.decodeSingularMessageField(value: &self._outputFieldsMap)
+      case 5: try decoder.decodeSingularStringField(value: &self.dataProviderParams)
+      case 6: try decoder.decodeSingularStringField(value: &self.modelZipURL)
+      case 7: try decoder.decodeSingularBoolField(value: &self.overwrite)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    if !self.type.isEmpty {
+      try visitor.visitSingularStringField(value: self.type, fieldNumber: 2)
+    }
+    if let v = self._inputFieldsMap {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
+    if let v = self._outputFieldsMap {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    }
+    if !self.dataProviderParams.isEmpty {
+      try visitor.visitSingularStringField(value: self.dataProviderParams, fieldNumber: 5)
+    }
+    if !self.modelZipURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelZipURL, fieldNumber: 6)
+    }
+    if self.overwrite != false {
+      try visitor.visitSingularBoolField(value: self.overwrite, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PretrainedModelConfig, rhs: Clarifai_Api_PretrainedModelConfig) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs.type != rhs.type {return false}
+    if lhs._inputFieldsMap != rhs._inputFieldsMap {return false}
+    if lhs._outputFieldsMap != rhs._outputFieldsMap {return false}
+    if lhs.dataProviderParams != rhs.dataProviderParams {return false}
+    if lhs.modelZipURL != rhs.modelZipURL {return false}
+    if lhs.overwrite != rhs.overwrite {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_TrainStats: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TrainStats"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "loss_curve"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeRepeatedMessageField(value: &self.lossCurve)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.lossCurve.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.lossCurve, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TrainStats, rhs: Clarifai_Api_TrainStats) -> Bool {
+    if lhs.lossCurve != rhs.lossCurve {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_LossCurveEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".LossCurveEntry"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "epoch"),
+    2: .standard(proto: "global_step"),
+    3: .same(proto: "cost"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularUInt32Field(value: &self.epoch)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.globalStep)
+      case 3: try decoder.decodeSingularFloatField(value: &self.cost)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.epoch != 0 {
+      try visitor.visitSingularUInt32Field(value: self.epoch, fieldNumber: 1)
+    }
+    if self.globalStep != 0 {
+      try visitor.visitSingularUInt32Field(value: self.globalStep, fieldNumber: 2)
+    }
+    if self.cost != 0 {
+      try visitor.visitSingularFloatField(value: self.cost, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_LossCurveEntry, rhs: Clarifai_Api_LossCurveEntry) -> Bool {
+    if lhs.epoch != rhs.epoch {return false}
+    if lhs.globalStep != rhs.globalStep {return false}
+    if lhs.cost != rhs.cost {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
