@@ -19,11 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3830e76c-eeb5-423d-bfba-686ec3cf3588" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/resources.pb.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/resources.pb.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/service.grpc.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/service.grpc.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/service.pb.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/ClarifaiGrpc/proto/clarifai/api/service.pb.swift" afterDir="false" />
-    </list>
+    <list default="true" id="3830e76c-eeb5-423d-bfba-686ec3cf3588" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,6 +50,7 @@
       <updated>1619780347871</updated>
       <workItem from="1619780348912" duration="32000" />
       <workItem from="1629115753371" duration="408000" />
+      <workItem from="1640949751905" duration="7000" />
     </task>
     <servers />
   </component>
