@@ -1817,6 +1817,11 @@ public struct Clarifai_Api_PostInputsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// List of inputs to post.
+  /// For each input, the following fields are used:
+  /// * id
+  /// * data
+  /// * dataset_ids
   public var inputs: [Clarifai_Api_Input] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1841,6 +1846,10 @@ public struct Clarifai_Api_PatchInputsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
+  /// List of inputs to patch.
+  /// Inputs are identified by id field.
+  /// For each input, the following fields are patchable:
+  /// * data
   public var inputs: [Clarifai_Api_Input] = []
 
   /// The action to perform on the patched objects
@@ -2434,13 +2443,13 @@ public struct Clarifai_Api_ListModelsRequest {
   }
 
   /// Filtering options:
-  /// // Query various text fields that can contain the words in the query string
+  /// Query name, description and id fields, that can contain the words in the query string. Does NOT support wildcards - full words only. Supports operators "OR" and "-" as NOT.
   public var query: String {
     get {return _storage._query}
     set {_uniqueStorage()._query = newValue}
   }
 
-  /// Filter by the name of the model. This supports wildcard queries like "gen*" to match "general" as an example.
+  /// Filter by the name, description and id of the model. This supports wildcard queries like "gen*" to match "general" as an example.
   /// Deprecated in favor of query
   public var name: String {
     get {return _storage._name}
@@ -3475,11 +3484,22 @@ public struct Clarifai_Api_MultiModelTypeResponse {
   /// List of ModelType objects.
   public var modelTypes: [Clarifai_Api_ModelType] = []
 
+  /// List of model importers
+  public var modelImporters: Clarifai_Api_ModelTypeField {
+    get {return _modelImporters ?? Clarifai_Api_ModelTypeField()}
+    set {_modelImporters = newValue}
+  }
+  /// Returns true if `modelImporters` has been explicitly set.
+  public var hasModelImporters: Bool {return self._modelImporters != nil}
+  /// Clears the value of `modelImporters`. Subsequent reads from it will return its default value.
+  public mutating func clearModelImporters() {self._modelImporters = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _modelImporters: Clarifai_Api_ModelTypeField? = nil
 }
 
 /// GetModelVersionInputExampleRequest
@@ -5461,6 +5481,192 @@ public struct Clarifai_Api_SingleTaskCountResponse {
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+/// Request to create label orders.
+public struct Clarifai_Api_PostLabelOrdersRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var labelOrders: [Clarifai_Api_LabelOrder] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Request to get one label order.
+public struct Clarifai_Api_GetLabelOrderRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var labelOrderID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Request to list multiple label orders.
+public struct Clarifai_Api_ListLabelOrdersRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
+  public var page: UInt32 = 0
+
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
+  public var perPage: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Request to patch a list of label orders.
+public struct Clarifai_Api_PatchLabelOrdersRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var labelOrders: [Clarifai_Api_LabelOrder] = []
+
+  /// The action to perform on the patched objects
+  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  public var action: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Request to delete a list of tasks.
+public struct Clarifai_Api_DeleteLabelOrdersRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var ids: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Response with multiple label order.
+public struct Clarifai_Api_MultiLabelOrderResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var labelOrders: [Clarifai_Api_LabelOrder] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+/// Response with a label order.
+public struct Clarifai_Api_SingleLabelOrderResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var labelOrder: Clarifai_Api_LabelOrder {
+    get {return _labelOrder ?? Clarifai_Api_LabelOrder()}
+    set {_labelOrder = newValue}
+  }
+  /// Returns true if `labelOrder` has been explicitly set.
+  public var hasLabelOrder: Bool {return self._labelOrder != nil}
+  /// Clears the value of `labelOrder`. Subsequent reads from it will return its default value.
+  public mutating func clearLabelOrder() {self._labelOrder = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _labelOrder: Clarifai_Api_LabelOrder? = nil
 }
 
 /// Request to create Collectors.
@@ -10431,6 +10637,7 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .standard(proto: "model_types"),
+    3: .standard(proto: "model_importers"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -10438,6 +10645,7 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
       switch fieldNumber {
       case 1: try decoder.decodeSingularMessageField(value: &self._status)
       case 2: try decoder.decodeRepeatedMessageField(value: &self.modelTypes)
+      case 3: try decoder.decodeSingularMessageField(value: &self._modelImporters)
       default: break
       }
     }
@@ -10450,12 +10658,16 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
     if !self.modelTypes.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.modelTypes, fieldNumber: 2)
     }
+    if let v = self._modelImporters {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiModelTypeResponse, rhs: Clarifai_Api_MultiModelTypeResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.modelTypes != rhs.modelTypes {return false}
+    if lhs._modelImporters != rhs._modelImporters {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -13025,6 +13237,263 @@ extension Clarifai_Api_SingleTaskCountResponse: SwiftProtobuf.Message, SwiftProt
     if lhs.appID != rhs.appID {return false}
     if lhs.taskID != rhs.taskID {return false}
     if lhs.counts != rhs.counts {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostLabelOrdersRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostLabelOrdersRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "label_orders"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeRepeatedMessageField(value: &self.labelOrders)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.labelOrders.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.labelOrders, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostLabelOrdersRequest, rhs: Clarifai_Api_PostLabelOrdersRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.labelOrders != rhs.labelOrders {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_GetLabelOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetLabelOrderRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "label_order_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularStringField(value: &self.labelOrderID)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.labelOrderID.isEmpty {
+      try visitor.visitSingularStringField(value: self.labelOrderID, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetLabelOrderRequest, rhs: Clarifai_Api_GetLabelOrderRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.labelOrderID != rhs.labelOrderID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListLabelOrdersRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListLabelOrdersRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "page"),
+    3: .standard(proto: "per_page"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.page)
+      case 3: try decoder.decodeSingularUInt32Field(value: &self.perPage)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 2)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListLabelOrdersRequest, rhs: Clarifai_Api_ListLabelOrdersRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PatchLabelOrdersRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PatchLabelOrdersRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "label_orders"),
+    3: .same(proto: "action"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeRepeatedMessageField(value: &self.labelOrders)
+      case 3: try decoder.decodeSingularStringField(value: &self.action)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.labelOrders.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.labelOrders, fieldNumber: 2)
+    }
+    if !self.action.isEmpty {
+      try visitor.visitSingularStringField(value: self.action, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PatchLabelOrdersRequest, rhs: Clarifai_Api_PatchLabelOrdersRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.labelOrders != rhs.labelOrders {return false}
+    if lhs.action != rhs.action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_DeleteLabelOrdersRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeleteLabelOrdersRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "ids"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._userAppID)
+      case 2: try decoder.decodeRepeatedStringField(value: &self.ids)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.ids.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_DeleteLabelOrdersRequest, rhs: Clarifai_Api_DeleteLabelOrdersRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.ids != rhs.ids {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiLabelOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiLabelOrderResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "label_orders"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeRepeatedMessageField(value: &self.labelOrders)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if !self.labelOrders.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.labelOrders, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiLabelOrderResponse, rhs: Clarifai_Api_MultiLabelOrderResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.labelOrders != rhs.labelOrders {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_SingleLabelOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleLabelOrderResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "label_order"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 2: try decoder.decodeSingularMessageField(value: &self._labelOrder)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }
+    if let v = self._labelOrder {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_SingleLabelOrderResponse, rhs: Clarifai_Api_SingleLabelOrderResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs._labelOrder != rhs._labelOrder {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -612,6 +612,31 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteTasksRequest, Clarifai_Api_Status_BaseResponse>
 
+  func postLabelOrders(
+    _ request: Clarifai_Api_PostLabelOrdersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>
+
+  func getLabelOrder(
+    _ request: Clarifai_Api_GetLabelOrderRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetLabelOrderRequest, Clarifai_Api_SingleLabelOrderResponse>
+
+  func listLabelOrders(
+    _ request: Clarifai_Api_ListLabelOrdersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>
+
+  func patchLabelOrders(
+    _ request: Clarifai_Api_PatchLabelOrdersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>
+
+  func deleteLabelOrders(
+    _ request: Clarifai_Api_DeleteLabelOrdersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>
+
   func postCollectors(
     _ request: Clarifai_Api_PostCollectorsRequest,
     callOptions: CallOptions?
@@ -2671,6 +2696,92 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Add Label orders.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostLabelOrders.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postLabelOrders(
+    _ request: Clarifai_Api_PostLabelOrdersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostLabelOrders",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Get a label order.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetLabelOrder.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getLabelOrder(
+    _ request: Clarifai_Api_GetLabelOrderRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetLabelOrderRequest, Clarifai_Api_SingleLabelOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetLabelOrder",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// List label orders.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListLabelOrders.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listLabelOrders(
+    _ request: Clarifai_Api_ListLabelOrdersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListLabelOrders",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Patch one or more label orders.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchLabelOrders.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchLabelOrders(
+    _ request: Clarifai_Api_PatchLabelOrdersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchLabelOrders",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Delete multiple label orders in one request.
+  /// this do not change task status
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteLabelOrders.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteLabelOrders(
+    _ request: Clarifai_Api_DeleteLabelOrdersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteLabelOrders",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
   /// Add a list of Collectors to an app.
   /// In the handler of this endpoint we also check for all the scopes of the  POST /inputs
   /// endpoint.
@@ -3101,6 +3212,17 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func patchTasks(request: Clarifai_Api_PatchTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskResponse>
   /// Delete multiple tasks in one request.
   func deleteTasks(request: Clarifai_Api_DeleteTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// Add Label orders.
+  func postLabelOrders(request: Clarifai_Api_PostLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+  /// Get a label order.
+  func getLabelOrder(request: Clarifai_Api_GetLabelOrderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleLabelOrderResponse>
+  /// List label orders.
+  func listLabelOrders(request: Clarifai_Api_ListLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+  /// Patch one or more label orders.
+  func patchLabelOrders(request: Clarifai_Api_PatchLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+  /// Delete multiple label orders in one request.
+  /// this do not change task status
+  func deleteLabelOrders(request: Clarifai_Api_DeleteLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Add a list of Collectors to an app.
   /// In the handler of this endpoint we also check for all the scopes of the  POST /inputs
   /// endpoint.
@@ -3950,6 +4072,41 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.deleteTasks(request: request, context: context)
+        }
+      }
+
+    case "PostLabelOrders":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.postLabelOrders(request: request, context: context)
+        }
+      }
+
+    case "GetLabelOrder":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.getLabelOrder(request: request, context: context)
+        }
+      }
+
+    case "ListLabelOrders":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.listLabelOrders(request: request, context: context)
+        }
+      }
+
+    case "PatchLabelOrders":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchLabelOrders(request: request, context: context)
+        }
+      }
+
+    case "DeleteLabelOrders":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.deleteLabelOrders(request: request, context: context)
         }
       }
 

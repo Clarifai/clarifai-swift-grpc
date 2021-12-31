@@ -243,6 +243,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case appDuplicationInProgress // = 25203
   case appDuplicationInvalidRequest // = 25204
 
+  /// Module related codes 253xx
+  case moduleDoesNotExist // = 25300
+  case modulePermissionDenied // = 25301
+  case moduleInvalidArgument // = 25302
+  case moduleInvalidRequest // = 25303
+
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
 
@@ -632,6 +638,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25202: self = .appDuplicationPending
     case 25203: self = .appDuplicationInProgress
     case 25204: self = .appDuplicationInvalidRequest
+    case 25300: self = .moduleDoesNotExist
+    case 25301: self = .modulePermissionDenied
+    case 25302: self = .moduleInvalidArgument
+    case 25303: self = .moduleInvalidRequest
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -930,6 +940,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .appDuplicationPending: return 25202
     case .appDuplicationInProgress: return 25203
     case .appDuplicationInvalidRequest: return 25204
+    case .moduleDoesNotExist: return 25300
+    case .modulePermissionDenied: return 25301
+    case .moduleInvalidArgument: return 25302
+    case .moduleInvalidRequest: return 25303
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -1233,6 +1247,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .appDuplicationPending,
     .appDuplicationInProgress,
     .appDuplicationInvalidRequest,
+    .moduleDoesNotExist,
+    .modulePermissionDenied,
+    .moduleInvalidArgument,
+    .moduleInvalidRequest,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1534,6 +1552,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25202: .same(proto: "APP_DUPLICATION_PENDING"),
     25203: .same(proto: "APP_DUPLICATION_IN_PROGRESS"),
     25204: .same(proto: "APP_DUPLICATION_INVALID_REQUEST"),
+    25300: .same(proto: "MODULE_DOES_NOT_EXIST"),
+    25301: .same(proto: "MODULE_PERMISSION_DENIED"),
+    25302: .same(proto: "MODULE_INVALID_ARGUMENT"),
+    25303: .same(proto: "MODULE_INVALID_REQUEST"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
