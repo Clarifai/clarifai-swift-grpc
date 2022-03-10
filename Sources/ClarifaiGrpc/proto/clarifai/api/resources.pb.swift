@@ -23,7 +23,44 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 public enum Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
-  case inputType // = 1
+
+  /// Group data examples by input type.
+  /// Examples: images, videos, text, audio.
+  case inputType // = 2
+
+  /// Group data examples by concept ID.
+  /// Examples: inputs with cat concept, inputs with dog concept.
+  case conceptID // = 10
+
+  /// Group data examples by concepts count.
+  /// Examples: inputs with 20 concepts, inputs with 21 concepts.
+  case conceptsCount // = 11
+
+  /// Group data examples by bounding boxes count.
+  /// Examples: inputs with 20 bounding boxes, inputs with 21 bounding boxes.
+  case boundingBoxesCount // = 20
+
+  /// Group data examples by polygons count.
+  /// Examples: inputs with 20 polygons, inputs with 21 polygons.
+  case polygonsCount // = 21
+
+  /// Group data examples by points count.
+  /// Examples: inputs with 20 points, inputs with 21 points.
+  case pointsCount // = 22
+
+  /// Group data examples by masks count.
+  /// Examples: inputs with 20 masks, inputs with 21 masks.
+  case masksCount // = 23
+
+  /// Group data examples by pixels count.
+  /// In order to reduce the number of groups, we use bins.
+  /// Examples for bin size = 400: inputs with [200000, 200400) pixels, inputs with [200400, 200800) pixels.
+  case pixelsCount // = 30
+
+  /// Group data examples by aspect ratio.
+  /// In order to reduce the number of groups, we use bins.
+  /// Examples for bin size = 0.1: inputs with [0.5, 0.6) aspect ratio, inputs with [0.6, 0.7) aspect ratio.
+  case aspectRatio // = 31
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -33,7 +70,15 @@ public enum Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf.Enum {
   public init?(rawValue: Int) {
     switch rawValue {
     case 0: self = .notSet
-    case 1: self = .inputType
+    case 2: self = .inputType
+    case 10: self = .conceptID
+    case 11: self = .conceptsCount
+    case 20: self = .boundingBoxesCount
+    case 21: self = .polygonsCount
+    case 22: self = .pointsCount
+    case 23: self = .masksCount
+    case 30: self = .pixelsCount
+    case 31: self = .aspectRatio
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -41,7 +86,15 @@ public enum Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf.Enum {
   public var rawValue: Int {
     switch self {
     case .notSet: return 0
-    case .inputType: return 1
+    case .inputType: return 2
+    case .conceptID: return 10
+    case .conceptsCount: return 11
+    case .boundingBoxesCount: return 20
+    case .polygonsCount: return 21
+    case .pointsCount: return 22
+    case .masksCount: return 23
+    case .pixelsCount: return 30
+    case .aspectRatio: return 31
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -55,6 +108,14 @@ extension Clarifai_Api_DatasetVersionMetricsGroupType: CaseIterable {
   public static var allCases: [Clarifai_Api_DatasetVersionMetricsGroupType] = [
     .notSet,
     .inputType,
+    .conceptID,
+    .conceptsCount,
+    .boundingBoxesCount,
+    .polygonsCount,
+    .pointsCount,
+    .masksCount,
+    .pixelsCount,
+    .aspectRatio,
   ]
 }
 
@@ -746,6 +807,10 @@ public struct Clarifai_Api_App {
   /// Computed value, not editable
   public var starCount: Int32 = 0
 
+  /// Notes for the application
+  /// This field should be used for in-depth notes and supports up to 64Kbs.
+  public var notes: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1023,7 +1088,8 @@ public struct Clarifai_Api_Cluster {
   /// Number of annotations tied to the cluster in the app
   public var count: UInt32 = 0
 
-  /// The score assigned to this cluster
+  /// The score assigned to this cluster.
+  /// For List Clusters endpoint, this represents percentage of inputs in the app assigned to this cluster.
   public var score: Float = 0
 
   /// Representative hits for cluster (for now we only return 1)
@@ -1730,6 +1796,26 @@ public struct Clarifai_Api_RegionInfo {
   /// Clears the value of `point`. Subsequent reads from it will return its default value.
   public mutating func clearPoint() {self._point = nil}
 
+  /// Span char sequence for NLP.
+  public var span: Clarifai_Api_Span {
+    get {return _span ?? Clarifai_Api_Span()}
+    set {_span = newValue}
+  }
+  /// Returns true if `span` has been explicitly set.
+  public var hasSpan: Bool {return self._span != nil}
+  /// Clears the value of `span`. Subsequent reads from it will return its default value.
+  public mutating func clearSpan() {self._span = nil}
+
+  /// Token char sequence for NLP.
+  public var token: Clarifai_Api_Token {
+    get {return _token ?? Clarifai_Api_Token()}
+    set {_token = newValue}
+  }
+  /// Returns true if `token` has been explicitly set.
+  public var hasToken: Bool {return self._token != nil}
+  /// Clears the value of `token`. Subsequent reads from it will return its default value.
+  public mutating func clearToken() {self._token = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1738,6 +1824,8 @@ public struct Clarifai_Api_RegionInfo {
   fileprivate var _mask: Clarifai_Api_Mask? = nil
   fileprivate var _polygon: Clarifai_Api_Polygon? = nil
   fileprivate var _point: Clarifai_Api_Point? = nil
+  fileprivate var _span: Clarifai_Api_Span? = nil
+  fileprivate var _token: Clarifai_Api_Token? = nil
 }
 
 /// Rectangular bounding box for a region.
@@ -1875,6 +1963,38 @@ public struct Clarifai_Api_Point {
 
   /// Depth if applicable for the point.
   public var z: Float = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_Span {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var charStart: UInt32 = 0
+
+  public var charEnd: UInt32 = 0
+
+  public var rawText: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_Token {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var charStart: UInt32 = 0
+
+  public var charEnd: UInt32 = 0
+
+  public var rawText: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2173,16 +2293,18 @@ public struct Clarifai_Api_InputCount {
   public init() {}
 }
 
-/// DatasetFilter
-public struct Clarifai_Api_DatasetFilter {
+/// AnnotationFilter is used to create a new dataset version.
+/// For now, the filter is simply a wrapper over a Search.
+/// In the future, we may add extra fields to customize the filtering.
+public struct Clarifai_Api_AnnotationFilter {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The ID for the dataset filter
+  /// The ID for the annotation filter
   public var id: String = String()
 
-  /// When the dataset filter was created.
+  /// When the annotation filter was created.
   /// The format is https://www.ietf.org/rfc/rfc3339.txt.
   /// Example: "2006-01-02T15:04:05.999999Z".
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
@@ -2194,7 +2316,7 @@ public struct Clarifai_Api_DatasetFilter {
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedAt() {self._createdAt = nil}
 
-  /// When the dataset filter was modified.
+  /// When the annotation filter was modified.
   /// The format is https://www.ietf.org/rfc/rfc3339.txt.
   /// Example: "2006-01-02T15:04:05.999999Z".
   public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
@@ -2206,14 +2328,11 @@ public struct Clarifai_Api_DatasetFilter {
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {self._modifiedAt = nil}
 
-  /// The user the dataset filter belongs to.
+  /// The user the annotation filter belongs to.
   public var userID: String = String()
 
-  /// The app the dataset filter belongs to.
+  /// The app the annotation filter belongs to.
   public var appID: String = String()
-
-  /// The dataset the filter belongs to.
-  public var datasetID: String = String()
 
   /// The saved search that this filter uses.
   public var savedSearch: Clarifai_Api_Search {
@@ -2279,13 +2398,13 @@ public struct Clarifai_Api_DatasetVersion {
   /// Data config reveals how the dataset version is generated.
   public var dataConfig: Clarifai_Api_DatasetVersion.OneOf_DataConfig? = nil
 
-  /// The dataset version will be generated based on a single dataset filter.
-  public var datasetFilterConfig: Clarifai_Api_DatasetVersionDatasetFilterConfig {
+  /// The dataset version will be generated based on a single annotation filter.
+  public var annotationFilterConfig: Clarifai_Api_AnnotationFilterConfig {
     get {
-      if case .datasetFilterConfig(let v)? = dataConfig {return v}
-      return Clarifai_Api_DatasetVersionDatasetFilterConfig()
+      if case .annotationFilterConfig(let v)? = dataConfig {return v}
+      return Clarifai_Api_AnnotationFilterConfig()
     }
-    set {dataConfig = .datasetFilterConfig(newValue)}
+    set {dataConfig = .annotationFilterConfig(newValue)}
   }
 
   /// Status for this dataset version.
@@ -2341,13 +2460,13 @@ public struct Clarifai_Api_DatasetVersion {
 
   /// Data config reveals how the dataset version is generated.
   public enum OneOf_DataConfig: Equatable {
-    /// The dataset version will be generated based on a single dataset filter.
-    case datasetFilterConfig(Clarifai_Api_DatasetVersionDatasetFilterConfig)
+    /// The dataset version will be generated based on a single annotation filter.
+    case annotationFilterConfig(Clarifai_Api_AnnotationFilterConfig)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_DatasetVersion.OneOf_DataConfig, rhs: Clarifai_Api_DatasetVersion.OneOf_DataConfig) -> Bool {
       switch (lhs, rhs) {
-      case (.datasetFilterConfig(let l), .datasetFilterConfig(let r)): return l == r
+      case (.annotationFilterConfig(let l), .annotationFilterConfig(let r)): return l == r
       }
     }
   #endif
@@ -2363,25 +2482,25 @@ public struct Clarifai_Api_DatasetVersion {
   fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
-public struct Clarifai_Api_DatasetVersionDatasetFilterConfig {
+public struct Clarifai_Api_AnnotationFilterConfig {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var datasetFilter: Clarifai_Api_DatasetFilter {
-    get {return _datasetFilter ?? Clarifai_Api_DatasetFilter()}
-    set {_datasetFilter = newValue}
+  public var annotationFilter: Clarifai_Api_AnnotationFilter {
+    get {return _annotationFilter ?? Clarifai_Api_AnnotationFilter()}
+    set {_annotationFilter = newValue}
   }
-  /// Returns true if `datasetFilter` has been explicitly set.
-  public var hasDatasetFilter: Bool {return self._datasetFilter != nil}
-  /// Clears the value of `datasetFilter`. Subsequent reads from it will return its default value.
-  public mutating func clearDatasetFilter() {self._datasetFilter = nil}
+  /// Returns true if `annotationFilter` has been explicitly set.
+  public var hasAnnotationFilter: Bool {return self._annotationFilter != nil}
+  /// Clears the value of `annotationFilter`. Subsequent reads from it will return its default value.
+  public mutating func clearAnnotationFilter() {self._annotationFilter = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _datasetFilter: Clarifai_Api_DatasetFilter? = nil
+  fileprivate var _annotationFilter: Clarifai_Api_AnnotationFilter? = nil
 }
 
 public struct Clarifai_Api_DatasetVersionMetrics {
@@ -2389,15 +2508,198 @@ public struct Clarifai_Api_DatasetVersionMetrics {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var inputsCount: UInt64 = 0
+  /// Number of inputs
+  public var inputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._inputsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._inputsCount = newValue}
+  }
+  /// Returns true if `inputsCount` has been explicitly set.
+  public var hasInputsCount: Bool {return _storage._inputsCount != nil}
+  /// Clears the value of `inputsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearInputsCount() {_uniqueStorage()._inputsCount = nil}
 
-  public var positiveAnnotationsCount: UInt64 = 0
+  /// Number of unlabeled inputs
+  /// An input is considered unlabeled if it there are no annotations with positive labels for that input.
+  public var unlabeledInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._unlabeledInputsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._unlabeledInputsCount = newValue}
+  }
+  /// Returns true if `unlabeledInputsCount` has been explicitly set.
+  public var hasUnlabeledInputsCount: Bool {return _storage._unlabeledInputsCount != nil}
+  /// Clears the value of `unlabeledInputsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearUnlabeledInputsCount() {_uniqueStorage()._unlabeledInputsCount = nil}
 
-  public var boundingBoxesCount: UInt64 = 0
+  /// Number of inputs that have metadata
+  public var inputsWithMetadataCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._inputsWithMetadataCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._inputsWithMetadataCount = newValue}
+  }
+  /// Returns true if `inputsWithMetadataCount` has been explicitly set.
+  public var hasInputsWithMetadataCount: Bool {return _storage._inputsWithMetadataCount != nil}
+  /// Clears the value of `inputsWithMetadataCount`. Subsequent reads from it will return its default value.
+  public mutating func clearInputsWithMetadataCount() {_uniqueStorage()._inputsWithMetadataCount = nil}
+
+  /// Number of inputs that have geo information
+  public var inputsWithGeoCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._inputsWithGeoCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._inputsWithGeoCount = newValue}
+  }
+  /// Returns true if `inputsWithGeoCount` has been explicitly set.
+  public var hasInputsWithGeoCount: Bool {return _storage._inputsWithGeoCount != nil}
+  /// Clears the value of `inputsWithGeoCount`. Subsequent reads from it will return its default value.
+  public mutating func clearInputsWithGeoCount() {_uniqueStorage()._inputsWithGeoCount = nil}
+
+  /// Number of regions
+  public var regionsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._regionsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._regionsCount = newValue}
+  }
+  /// Returns true if `regionsCount` has been explicitly set.
+  public var hasRegionsCount: Bool {return _storage._regionsCount != nil}
+  /// Clears the value of `regionsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearRegionsCount() {_uniqueStorage()._regionsCount = nil}
+
+  /// The matrix shows where the regions are located.
+  /// Example: If the matrix has 2x2 dimensions, then
+  /// * region_location_matrix[0][0] = the number of regions that appear in the top left corner, i.e. [0,0]..(0.5,0.5)
+  /// * region_location_matrix[0][1] = the number of regions that appear in the top right corner, i.e. [0,0.5]..[0.5,1]
+  /// * region_location_matrix[1][0] = the number of regions that appear in the bottom left corner, i.e. [0.5,0]..[1,0.5)
+  /// * region_location_matrix[1][1] = the number of regions that appear in the bottom right corner, i.e. [0.5,0.5]..[1,1]
+  public var regionLocationMatrix: MatrixUint64 {
+    get {return _storage._regionLocationMatrix ?? MatrixUint64()}
+    set {_uniqueStorage()._regionLocationMatrix = newValue}
+  }
+  /// Returns true if `regionLocationMatrix` has been explicitly set.
+  public var hasRegionLocationMatrix: Bool {return _storage._regionLocationMatrix != nil}
+  /// Clears the value of `regionLocationMatrix`. Subsequent reads from it will return its default value.
+  public mutating func clearRegionLocationMatrix() {_uniqueStorage()._regionLocationMatrix = nil}
+
+  /// Number of bounding boxes
+  public var boundingBoxesCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._boundingBoxesCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._boundingBoxesCount = newValue}
+  }
+  /// Returns true if `boundingBoxesCount` has been explicitly set.
+  public var hasBoundingBoxesCount: Bool {return _storage._boundingBoxesCount != nil}
+  /// Clears the value of `boundingBoxesCount`. Subsequent reads from it will return its default value.
+  public mutating func clearBoundingBoxesCount() {_uniqueStorage()._boundingBoxesCount = nil}
+
+  /// Number of polygons
+  public var polygonsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._polygonsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._polygonsCount = newValue}
+  }
+  /// Returns true if `polygonsCount` has been explicitly set.
+  public var hasPolygonsCount: Bool {return _storage._polygonsCount != nil}
+  /// Clears the value of `polygonsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearPolygonsCount() {_uniqueStorage()._polygonsCount = nil}
+
+  /// Number of points
+  public var pointsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._pointsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._pointsCount = newValue}
+  }
+  /// Returns true if `pointsCount` has been explicitly set.
+  public var hasPointsCount: Bool {return _storage._pointsCount != nil}
+  /// Clears the value of `pointsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearPointsCount() {_uniqueStorage()._pointsCount = nil}
+
+  /// Number of masks
+  public var masksCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._masksCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._masksCount = newValue}
+  }
+  /// Returns true if `masksCount` has been explicitly set.
+  public var hasMasksCount: Bool {return _storage._masksCount != nil}
+  /// Clears the value of `masksCount`. Subsequent reads from it will return its default value.
+  public mutating func clearMasksCount() {_uniqueStorage()._masksCount = nil}
+
+  /// Number of inputs that have regions attached
+  /// Note that this is not a recursive count: if an input contains frames that contains regions, then the region_frames_count is increased, but region_inputs_count is not increased.
+  public var regionInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._regionInputsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._regionInputsCount = newValue}
+  }
+  /// Returns true if `regionInputsCount` has been explicitly set.
+  public var hasRegionInputsCount: Bool {return _storage._regionInputsCount != nil}
+  /// Clears the value of `regionInputsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearRegionInputsCount() {_uniqueStorage()._regionInputsCount = nil}
+
+  /// Number of frames that have regions attached
+  public var regionFramesCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._regionFramesCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._regionFramesCount = newValue}
+  }
+  /// Returns true if `regionFramesCount` has been explicitly set.
+  public var hasRegionFramesCount: Bool {return _storage._regionFramesCount != nil}
+  /// Clears the value of `regionFramesCount`. Subsequent reads from it will return its default value.
+  public mutating func clearRegionFramesCount() {_uniqueStorage()._regionFramesCount = nil}
+
+  /// Number of frames
+  public var framesCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._framesCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._framesCount = newValue}
+  }
+  /// Returns true if `framesCount` has been explicitly set.
+  public var hasFramesCount: Bool {return _storage._framesCount != nil}
+  /// Clears the value of `framesCount`. Subsequent reads from it will return its default value.
+  public mutating func clearFramesCount() {_uniqueStorage()._framesCount = nil}
+
+  /// Number of inputs that have frames attached
+  public var frameInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._frameInputsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._frameInputsCount = newValue}
+  }
+  /// Returns true if `frameInputsCount` has been explicitly set.
+  public var hasFrameInputsCount: Bool {return _storage._frameInputsCount != nil}
+  /// Clears the value of `frameInputsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearFrameInputsCount() {_uniqueStorage()._frameInputsCount = nil}
+
+  /// Number of embeddings
+  public var embeddingsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._embeddingsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._embeddingsCount = newValue}
+  }
+  /// Returns true if `embeddingsCount` has been explicitly set.
+  public var hasEmbeddingsCount: Bool {return _storage._embeddingsCount != nil}
+  /// Clears the value of `embeddingsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearEmbeddingsCount() {_uniqueStorage()._embeddingsCount = nil}
+
+  /// Number of positive tags added at input-level
+  public var positiveInputTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._positiveInputTagsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._positiveInputTagsCount = newValue}
+  }
+  /// Returns true if `positiveInputTagsCount` has been explicitly set.
+  public var hasPositiveInputTagsCount: Bool {return _storage._positiveInputTagsCount != nil}
+  /// Clears the value of `positiveInputTagsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearPositiveInputTagsCount() {_uniqueStorage()._positiveInputTagsCount = nil}
+
+  /// Number of positive tags added at region-level
+  public var positiveRegionTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._positiveRegionTagsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._positiveRegionTagsCount = newValue}
+  }
+  /// Returns true if `positiveRegionTagsCount` has been explicitly set.
+  public var hasPositiveRegionTagsCount: Bool {return _storage._positiveRegionTagsCount != nil}
+  /// Clears the value of `positiveRegionTagsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearPositiveRegionTagsCount() {_uniqueStorage()._positiveRegionTagsCount = nil}
+
+  /// Number of positive tags added at frame-level
+  public var positiveFrameTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value {
+    get {return _storage._positiveFrameTagsCount ?? SwiftProtobuf.Google_Protobuf_UInt64Value()}
+    set {_uniqueStorage()._positiveFrameTagsCount = newValue}
+  }
+  /// Returns true if `positiveFrameTagsCount` has been explicitly set.
+  public var hasPositiveFrameTagsCount: Bool {return _storage._positiveFrameTagsCount != nil}
+  /// Clears the value of `positiveFrameTagsCount`. Subsequent reads from it will return its default value.
+  public mutating func clearPositiveFrameTagsCount() {_uniqueStorage()._positiveFrameTagsCount = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// WorkflowResultsSimilarity
@@ -2600,6 +2902,12 @@ public struct Clarifai_Api_Model {
   public var modelTypeID: String {
     get {return _storage._modelTypeID}
     set {_uniqueStorage()._modelTypeID = newValue}
+  }
+
+  /// The task the model was trained to do
+  public var task: String {
+    get {return _storage._task}
+    set {_uniqueStorage()._task = newValue}
   }
 
   /// The visibility field represents whether this message is privately/publicly visible.
@@ -5336,10 +5644,13 @@ public struct Clarifai_Api_AppDuplication {
   ///the id of app duplication
   public var id: String = String()
 
-  ///the id of new app
+  /// the id of new app. If provided, we will create a new application with this id. If the app id exists, we will return err.
+  /// if new_app_name is empty, the name will be the same as this id.
+  /// You can not set this if existing_app_id is set.
   public var newAppID: String = String()
 
-  ///the name of new app
+  ///the name of new app. If provided, we will create a new application with this name.
+  /// You can not set this if existing_app_id is set.
   public var newAppName: String = String()
 
   ///the status of app duplication
@@ -5382,6 +5693,11 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `filter`. Subsequent reads from it will return its default value.
   public mutating func clearFilter() {self._filter = nil}
 
+  /// the id of existing app you want to copy data into.
+  /// you can not set this if either new_app_id or new_app_name is set.
+  /// if new_app_id, new_app_name and existing_app_id are all empty, we will create a new app with random app id/name
+  public var existingAppID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -5398,7 +5714,7 @@ public struct Clarifai_Api_AppDuplicationFilters {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Copy only inputs and default annotations
+  /// Copy inputs what what it depends on: input level annotation and concepts
   public var copyInputs: Bool = false
 
   /// Copy only concepts
@@ -5957,6 +6273,9 @@ public struct Clarifai_Api_TaskInputSource {
 
     /// Use the inputs from a saved search.
     case savedSearch // = 2
+
+    /// Inputs from a dataset.
+    case dataset // = 3
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -5968,6 +6287,7 @@ public struct Clarifai_Api_TaskInputSource {
       case 0: self = .inputSourceTypeNotSet
       case 1: self = .allInputs
       case 2: self = .savedSearch
+      case 3: self = .dataset
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -5977,6 +6297,7 @@ public struct Clarifai_Api_TaskInputSource {
       case .inputSourceTypeNotSet: return 0
       case .allInputs: return 1
       case .savedSearch: return 2
+      case .dataset: return 3
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -5994,6 +6315,7 @@ extension Clarifai_Api_TaskInputSource.TaskInputSourceType: CaseIterable {
     .inputSourceTypeNotSet,
     .allInputs,
     .savedSearch,
+    .dataset,
   ]
 }
 
@@ -6621,7 +6943,15 @@ fileprivate let _protobuf_package = "clarifai.api"
 extension Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "DATASET_VERSION_METRICS_GROUP_TYPE_NOT_SET"),
-    1: .same(proto: "INPUT_TYPE"),
+    2: .same(proto: "INPUT_TYPE"),
+    10: .same(proto: "CONCEPT_ID"),
+    11: .same(proto: "CONCEPTS_COUNT"),
+    20: .same(proto: "BOUNDING_BOXES_COUNT"),
+    21: .same(proto: "POLYGONS_COUNT"),
+    22: .same(proto: "POINTS_COUNT"),
+    23: .same(proto: "MASKS_COUNT"),
+    30: .same(proto: "PIXELS_COUNT"),
+    31: .same(proto: "ASPECT_RATIO"),
   ]
 }
 
@@ -6838,6 +7168,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     18: .standard(proto: "data_tier_id"),
     19: .standard(proto: "is_starred"),
     20: .standard(proto: "star_count"),
+    21: .same(proto: "notes"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -6858,6 +7189,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 18: try decoder.decodeSingularStringField(value: &self.dataTierID)
       case 19: try decoder.decodeSingularBoolField(value: &self.isStarred)
       case 20: try decoder.decodeSingularInt32Field(value: &self.starCount)
+      case 21: try decoder.decodeSingularStringField(value: &self.notes)
       default: break
       }
     }
@@ -6909,6 +7241,9 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if self.starCount != 0 {
       try visitor.visitSingularInt32Field(value: self.starCount, fieldNumber: 20)
     }
+    if !self.notes.isEmpty {
+      try visitor.visitSingularStringField(value: self.notes, fieldNumber: 21)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -6928,6 +7263,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.dataTierID != rhs.dataTierID {return false}
     if lhs.isStarred != rhs.isStarred {return false}
     if lhs.starCount != rhs.starCount {return false}
+    if lhs.notes != rhs.notes {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8052,6 +8388,8 @@ extension Clarifai_Api_RegionInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     4: .same(proto: "mask"),
     5: .same(proto: "polygon"),
     6: .same(proto: "point"),
+    7: .same(proto: "span"),
+    8: .same(proto: "token"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8061,6 +8399,8 @@ extension Clarifai_Api_RegionInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 4: try decoder.decodeSingularMessageField(value: &self._mask)
       case 5: try decoder.decodeSingularMessageField(value: &self._polygon)
       case 6: try decoder.decodeSingularMessageField(value: &self._point)
+      case 7: try decoder.decodeSingularMessageField(value: &self._span)
+      case 8: try decoder.decodeSingularMessageField(value: &self._token)
       default: break
       }
     }
@@ -8079,6 +8419,12 @@ extension Clarifai_Api_RegionInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if let v = self._point {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }
+    if let v = self._span {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }
+    if let v = self._token {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8087,6 +8433,8 @@ extension Clarifai_Api_RegionInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs._mask != rhs._mask {return false}
     if lhs._polygon != rhs._polygon {return false}
     if lhs._point != rhs._point {return false}
+    if lhs._span != rhs._span {return false}
+    if lhs._token != rhs._token {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8309,6 +8657,88 @@ extension Clarifai_Api_Point: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.row != rhs.row {return false}
     if lhs.col != rhs.col {return false}
     if lhs.z != rhs.z {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Span: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Span"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "char_start"),
+    2: .standard(proto: "char_end"),
+    3: .standard(proto: "raw_text"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularUInt32Field(value: &self.charStart)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.charEnd)
+      case 3: try decoder.decodeSingularStringField(value: &self.rawText)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.charStart != 0 {
+      try visitor.visitSingularUInt32Field(value: self.charStart, fieldNumber: 1)
+    }
+    if self.charEnd != 0 {
+      try visitor.visitSingularUInt32Field(value: self.charEnd, fieldNumber: 2)
+    }
+    if !self.rawText.isEmpty {
+      try visitor.visitSingularStringField(value: self.rawText, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Span, rhs: Clarifai_Api_Span) -> Bool {
+    if lhs.charStart != rhs.charStart {return false}
+    if lhs.charEnd != rhs.charEnd {return false}
+    if lhs.rawText != rhs.rawText {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Token: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Token"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "char_start"),
+    2: .standard(proto: "char_end"),
+    3: .standard(proto: "raw_text"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularUInt32Field(value: &self.charStart)
+      case 2: try decoder.decodeSingularUInt32Field(value: &self.charEnd)
+      case 3: try decoder.decodeSingularStringField(value: &self.rawText)
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.charStart != 0 {
+      try visitor.visitSingularUInt32Field(value: self.charStart, fieldNumber: 1)
+    }
+    if self.charEnd != 0 {
+      try visitor.visitSingularUInt32Field(value: self.charEnd, fieldNumber: 2)
+    }
+    if !self.rawText.isEmpty {
+      try visitor.visitSingularStringField(value: self.rawText, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Token, rhs: Clarifai_Api_Token) -> Bool {
+    if lhs.charStart != rhs.charStart {return false}
+    if lhs.charEnd != rhs.charEnd {return false}
+    if lhs.rawText != rhs.rawText {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8766,15 +9196,14 @@ extension Clarifai_Api_InputCount: SwiftProtobuf.Message, SwiftProtobuf._Message
   }
 }
 
-extension Clarifai_Api_DatasetFilter: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DatasetFilter"
+extension Clarifai_Api_AnnotationFilter: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AnnotationFilter"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .standard(proto: "created_at"),
     3: .standard(proto: "modified_at"),
     4: .standard(proto: "user_id"),
     5: .standard(proto: "app_id"),
-    6: .standard(proto: "dataset_id"),
     8: .standard(proto: "saved_search"),
   ]
 
@@ -8786,7 +9215,6 @@ extension Clarifai_Api_DatasetFilter: SwiftProtobuf.Message, SwiftProtobuf._Mess
       case 3: try decoder.decodeSingularMessageField(value: &self._modifiedAt)
       case 4: try decoder.decodeSingularStringField(value: &self.userID)
       case 5: try decoder.decodeSingularStringField(value: &self.appID)
-      case 6: try decoder.decodeSingularStringField(value: &self.datasetID)
       case 8: try decoder.decodeSingularMessageField(value: &self._savedSearch)
       default: break
       }
@@ -8809,22 +9237,18 @@ extension Clarifai_Api_DatasetFilter: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if !self.appID.isEmpty {
       try visitor.visitSingularStringField(value: self.appID, fieldNumber: 5)
     }
-    if !self.datasetID.isEmpty {
-      try visitor.visitSingularStringField(value: self.datasetID, fieldNumber: 6)
-    }
     if let v = self._savedSearch {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_DatasetFilter, rhs: Clarifai_Api_DatasetFilter) -> Bool {
+  public static func ==(lhs: Clarifai_Api_AnnotationFilter, rhs: Clarifai_Api_AnnotationFilter) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs.userID != rhs.userID {return false}
     if lhs.appID != rhs.appID {return false}
-    if lhs.datasetID != rhs.datasetID {return false}
     if lhs._savedSearch != rhs._savedSearch {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -8840,7 +9264,7 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     4: .standard(proto: "app_id"),
     5: .standard(proto: "user_id"),
     6: .standard(proto: "dataset_id"),
-    7: .standard(proto: "dataset_filter_config"),
+    15: .standard(proto: "annotation_filter_config"),
     8: .same(proto: "status"),
     10: .same(proto: "description"),
     11: .same(proto: "metrics"),
@@ -8858,20 +9282,20 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 4: try decoder.decodeSingularStringField(value: &self.appID)
       case 5: try decoder.decodeSingularStringField(value: &self.userID)
       case 6: try decoder.decodeSingularStringField(value: &self.datasetID)
-      case 7:
-        var v: Clarifai_Api_DatasetVersionDatasetFilterConfig?
-        if let current = self.dataConfig {
-          try decoder.handleConflictingOneOf()
-          if case .datasetFilterConfig(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {self.dataConfig = .datasetFilterConfig(v)}
       case 8: try decoder.decodeSingularMessageField(value: &self._status)
       case 10: try decoder.decodeSingularStringField(value: &self.description_p)
       case 11: try decoder.decodeSingularMessageField(value: &self._metrics)
       case 12: try decoder.decodeSingularMessageField(value: &self._metadata)
       case 13: try decoder.decodeSingularMessageField(value: &self._visibility)
       case 14: try decoder.decodeRepeatedStringField(value: &self.embedModelVersionIds)
+      case 15:
+        var v: Clarifai_Api_AnnotationFilterConfig?
+        if let current = self.dataConfig {
+          try decoder.handleConflictingOneOf()
+          if case .annotationFilterConfig(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {self.dataConfig = .annotationFilterConfig(v)}
       default: break
       }
     }
@@ -8896,9 +9320,6 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if !self.datasetID.isEmpty {
       try visitor.visitSingularStringField(value: self.datasetID, fieldNumber: 6)
     }
-    if case .datasetFilterConfig(let v)? = self.dataConfig {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    }
     if let v = self._status {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
     }
@@ -8916,6 +9337,9 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
     }
     if !self.embedModelVersionIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.embedModelVersionIds, fieldNumber: 14)
+    }
+    if case .annotationFilterConfig(let v)? = self.dataConfig {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -8939,30 +9363,30 @@ extension Clarifai_Api_DatasetVersion: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Clarifai_Api_DatasetVersionDatasetFilterConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DatasetVersionDatasetFilterConfig"
+extension Clarifai_Api_AnnotationFilterConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AnnotationFilterConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "dataset_filter"),
+    1: .standard(proto: "annotation_filter"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._datasetFilter)
+      case 1: try decoder.decodeSingularMessageField(value: &self._annotationFilter)
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._datasetFilter {
+    if let v = self._annotationFilter {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_DatasetVersionDatasetFilterConfig, rhs: Clarifai_Api_DatasetVersionDatasetFilterConfig) -> Bool {
-    if lhs._datasetFilter != rhs._datasetFilter {return false}
+  public static func ==(lhs: Clarifai_Api_AnnotationFilterConfig, rhs: Clarifai_Api_AnnotationFilterConfig) -> Bool {
+    if lhs._annotationFilter != rhs._annotationFilter {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8972,38 +9396,194 @@ extension Clarifai_Api_DatasetVersionMetrics: SwiftProtobuf.Message, SwiftProtob
   public static let protoMessageName: String = _protobuf_package + ".DatasetVersionMetrics"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "inputs_count"),
-    2: .standard(proto: "positive_annotations_count"),
-    3: .standard(proto: "bounding_boxes_count"),
+    6: .standard(proto: "unlabeled_inputs_count"),
+    8: .standard(proto: "inputs_with_metadata_count"),
+    9: .standard(proto: "inputs_with_geo_count"),
+    20: .standard(proto: "regions_count"),
+    21: .standard(proto: "region_location_matrix"),
+    22: .standard(proto: "bounding_boxes_count"),
+    23: .standard(proto: "polygons_count"),
+    24: .standard(proto: "points_count"),
+    25: .standard(proto: "masks_count"),
+    60: .standard(proto: "region_inputs_count"),
+    61: .standard(proto: "region_frames_count"),
+    30: .standard(proto: "frames_count"),
+    70: .standard(proto: "frame_inputs_count"),
+    40: .standard(proto: "embeddings_count"),
+    50: .standard(proto: "positive_input_tags_count"),
+    51: .standard(proto: "positive_region_tags_count"),
+    52: .standard(proto: "positive_frame_tags_count"),
   ]
 
+  fileprivate class _StorageClass {
+    var _inputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _unlabeledInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _inputsWithMetadataCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _inputsWithGeoCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _regionsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _regionLocationMatrix: MatrixUint64? = nil
+    var _boundingBoxesCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _polygonsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _pointsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _masksCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _regionInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _regionFramesCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _framesCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _frameInputsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _embeddingsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _positiveInputTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _positiveRegionTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+    var _positiveFrameTagsCount: SwiftProtobuf.Google_Protobuf_UInt64Value? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _inputsCount = source._inputsCount
+      _unlabeledInputsCount = source._unlabeledInputsCount
+      _inputsWithMetadataCount = source._inputsWithMetadataCount
+      _inputsWithGeoCount = source._inputsWithGeoCount
+      _regionsCount = source._regionsCount
+      _regionLocationMatrix = source._regionLocationMatrix
+      _boundingBoxesCount = source._boundingBoxesCount
+      _polygonsCount = source._polygonsCount
+      _pointsCount = source._pointsCount
+      _masksCount = source._masksCount
+      _regionInputsCount = source._regionInputsCount
+      _regionFramesCount = source._regionFramesCount
+      _framesCount = source._framesCount
+      _frameInputsCount = source._frameInputsCount
+      _embeddingsCount = source._embeddingsCount
+      _positiveInputTagsCount = source._positiveInputTagsCount
+      _positiveRegionTagsCount = source._positiveRegionTagsCount
+      _positiveFrameTagsCount = source._positiveFrameTagsCount
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      switch fieldNumber {
-      case 1: try decoder.decodeSingularUInt64Field(value: &self.inputsCount)
-      case 2: try decoder.decodeSingularUInt64Field(value: &self.positiveAnnotationsCount)
-      case 3: try decoder.decodeSingularUInt64Field(value: &self.boundingBoxesCount)
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        switch fieldNumber {
+        case 1: try decoder.decodeSingularMessageField(value: &_storage._inputsCount)
+        case 6: try decoder.decodeSingularMessageField(value: &_storage._unlabeledInputsCount)
+        case 8: try decoder.decodeSingularMessageField(value: &_storage._inputsWithMetadataCount)
+        case 9: try decoder.decodeSingularMessageField(value: &_storage._inputsWithGeoCount)
+        case 20: try decoder.decodeSingularMessageField(value: &_storage._regionsCount)
+        case 21: try decoder.decodeSingularMessageField(value: &_storage._regionLocationMatrix)
+        case 22: try decoder.decodeSingularMessageField(value: &_storage._boundingBoxesCount)
+        case 23: try decoder.decodeSingularMessageField(value: &_storage._polygonsCount)
+        case 24: try decoder.decodeSingularMessageField(value: &_storage._pointsCount)
+        case 25: try decoder.decodeSingularMessageField(value: &_storage._masksCount)
+        case 30: try decoder.decodeSingularMessageField(value: &_storage._framesCount)
+        case 40: try decoder.decodeSingularMessageField(value: &_storage._embeddingsCount)
+        case 50: try decoder.decodeSingularMessageField(value: &_storage._positiveInputTagsCount)
+        case 51: try decoder.decodeSingularMessageField(value: &_storage._positiveRegionTagsCount)
+        case 52: try decoder.decodeSingularMessageField(value: &_storage._positiveFrameTagsCount)
+        case 60: try decoder.decodeSingularMessageField(value: &_storage._regionInputsCount)
+        case 61: try decoder.decodeSingularMessageField(value: &_storage._regionFramesCount)
+        case 70: try decoder.decodeSingularMessageField(value: &_storage._frameInputsCount)
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.inputsCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.inputsCount, fieldNumber: 1)
-    }
-    if self.positiveAnnotationsCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.positiveAnnotationsCount, fieldNumber: 2)
-    }
-    if self.boundingBoxesCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.boundingBoxesCount, fieldNumber: 3)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if let v = _storage._inputsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      }
+      if let v = _storage._unlabeledInputsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      }
+      if let v = _storage._inputsWithMetadataCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      }
+      if let v = _storage._inputsWithGeoCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      }
+      if let v = _storage._regionsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      }
+      if let v = _storage._regionLocationMatrix {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
+      }
+      if let v = _storage._boundingBoxesCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 22)
+      }
+      if let v = _storage._polygonsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 23)
+      }
+      if let v = _storage._pointsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
+      }
+      if let v = _storage._masksCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
+      }
+      if let v = _storage._framesCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 30)
+      }
+      if let v = _storage._embeddingsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 40)
+      }
+      if let v = _storage._positiveInputTagsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 50)
+      }
+      if let v = _storage._positiveRegionTagsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 51)
+      }
+      if let v = _storage._positiveFrameTagsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 52)
+      }
+      if let v = _storage._regionInputsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 60)
+      }
+      if let v = _storage._regionFramesCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 61)
+      }
+      if let v = _storage._frameInputsCount {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 70)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_DatasetVersionMetrics, rhs: Clarifai_Api_DatasetVersionMetrics) -> Bool {
-    if lhs.inputsCount != rhs.inputsCount {return false}
-    if lhs.positiveAnnotationsCount != rhs.positiveAnnotationsCount {return false}
-    if lhs.boundingBoxesCount != rhs.boundingBoxesCount {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._inputsCount != rhs_storage._inputsCount {return false}
+        if _storage._unlabeledInputsCount != rhs_storage._unlabeledInputsCount {return false}
+        if _storage._inputsWithMetadataCount != rhs_storage._inputsWithMetadataCount {return false}
+        if _storage._inputsWithGeoCount != rhs_storage._inputsWithGeoCount {return false}
+        if _storage._regionsCount != rhs_storage._regionsCount {return false}
+        if _storage._regionLocationMatrix != rhs_storage._regionLocationMatrix {return false}
+        if _storage._boundingBoxesCount != rhs_storage._boundingBoxesCount {return false}
+        if _storage._polygonsCount != rhs_storage._polygonsCount {return false}
+        if _storage._pointsCount != rhs_storage._pointsCount {return false}
+        if _storage._masksCount != rhs_storage._masksCount {return false}
+        if _storage._regionInputsCount != rhs_storage._regionInputsCount {return false}
+        if _storage._regionFramesCount != rhs_storage._regionFramesCount {return false}
+        if _storage._framesCount != rhs_storage._framesCount {return false}
+        if _storage._frameInputsCount != rhs_storage._frameInputsCount {return false}
+        if _storage._embeddingsCount != rhs_storage._embeddingsCount {return false}
+        if _storage._positiveInputTagsCount != rhs_storage._positiveInputTagsCount {return false}
+        if _storage._positiveRegionTagsCount != rhs_storage._positiveRegionTagsCount {return false}
+        if _storage._positiveFrameTagsCount != rhs_storage._positiveFrameTagsCount {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -9136,6 +9716,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     12: .standard(proto: "input_info"),
     13: .standard(proto: "train_info"),
     14: .standard(proto: "model_type_id"),
+    26: .same(proto: "task"),
     15: .same(proto: "visibility"),
     16: .same(proto: "description"),
     17: .same(proto: "metadata"),
@@ -9161,6 +9742,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _inputInfo: Clarifai_Api_InputInfo? = nil
     var _trainInfo: Clarifai_Api_TrainInfo? = nil
     var _modelTypeID: String = String()
+    var _task: String = String()
     var _visibility: Clarifai_Api_Visibility? = nil
     var _description_p: String = String()
     var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
@@ -9189,6 +9771,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _inputInfo = source._inputInfo
       _trainInfo = source._trainInfo
       _modelTypeID = source._modelTypeID
+      _task = source._task
       _visibility = source._visibility
       _description_p = source._description_p
       _metadata = source._metadata
@@ -9236,6 +9819,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 23: try decoder.decodeSingularInt32Field(value: &_storage._starCount)
         case 24: try decoder.decodeSingularMessageField(value: &_storage._importInfo)
         case 25: try decoder.decodeRepeatedStringField(value: &_storage._languages)
+        case 26: try decoder.decodeSingularStringField(value: &_storage._task)
         default: break
         }
       }
@@ -9310,6 +9894,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if !_storage._languages.isEmpty {
         try visitor.visitRepeatedStringField(value: _storage._languages, fieldNumber: 25)
       }
+      if !_storage._task.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._task, fieldNumber: 26)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -9331,6 +9918,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._inputInfo != rhs_storage._inputInfo {return false}
         if _storage._trainInfo != rhs_storage._trainInfo {return false}
         if _storage._modelTypeID != rhs_storage._modelTypeID {return false}
+        if _storage._task != rhs_storage._task {return false}
         if _storage._visibility != rhs_storage._visibility {return false}
         if _storage._description_p != rhs_storage._description_p {return false}
         if _storage._metadata != rhs_storage._metadata {return false}
@@ -12777,6 +13365,7 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
     5: .standard(proto: "created_at"),
     6: .standard(proto: "last_modified_at"),
     7: .same(proto: "filter"),
+    8: .standard(proto: "existing_app_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -12789,6 +13378,7 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 5: try decoder.decodeSingularMessageField(value: &self._createdAt)
       case 6: try decoder.decodeSingularMessageField(value: &self._lastModifiedAt)
       case 7: try decoder.decodeSingularMessageField(value: &self._filter)
+      case 8: try decoder.decodeSingularStringField(value: &self.existingAppID)
       default: break
       }
     }
@@ -12816,6 +13406,9 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if let v = self._filter {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
     }
+    if !self.existingAppID.isEmpty {
+      try visitor.visitSingularStringField(value: self.existingAppID, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -12827,6 +13420,7 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._lastModifiedAt != rhs._lastModifiedAt {return false}
     if lhs._filter != rhs._filter {return false}
+    if lhs.existingAppID != rhs.existingAppID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -13352,6 +13946,7 @@ extension Clarifai_Api_TaskInputSource.TaskInputSourceType: SwiftProtobuf._Proto
     0: .same(proto: "INPUT_SOURCE_TYPE_NOT_SET"),
     1: .same(proto: "ALL_INPUTS"),
     2: .same(proto: "SAVED_SEARCH"),
+    3: .same(proto: "DATASET"),
   ]
 }
 

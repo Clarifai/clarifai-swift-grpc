@@ -47,9 +47,6 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   /// Make an rpc to our prediction services.
   case predict // = 2
 
-  /// Make an rpc to our search services.
-  case earch // = 3
-
   /// Write to the inputs table in the DB.
   case inputsAdd // = 4
 
@@ -218,6 +215,18 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case findDuplicateAnnotationsJobsAdd // = 102
   case findDuplicateAnnotationsJobsGet // = 103
   case findDuplicateAnnotationsJobsDelete // = 104
+
+  /// Make an rpc to our search services.
+  case earch // = 3
+
+  /// To get a saved search.
+  case avedSearchGet // = 114
+
+  /// To add a saved search
+  case avedSearchAdd // = 115
+
+  /// To delete a saved search
+  case avedSearchDelete // = 116
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -286,6 +295,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 102: self = .findDuplicateAnnotationsJobsAdd
     case 103: self = .findDuplicateAnnotationsJobsGet
     case 104: self = .findDuplicateAnnotationsJobsDelete
+    case 114: self = .avedSearchGet
+    case 115: self = .avedSearchAdd
+    case 116: self = .avedSearchDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -352,6 +364,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .findDuplicateAnnotationsJobsAdd: return 102
     case .findDuplicateAnnotationsJobsGet: return 103
     case .findDuplicateAnnotationsJobsDelete: return 104
+    case .avedSearchGet: return 114
+    case .avedSearchAdd: return 115
+    case .avedSearchDelete: return 116
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -366,7 +381,6 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .undef,
     .all,
     .predict,
-    .earch,
     .inputsAdd,
     .inputsGet,
     .inputsPatch,
@@ -423,6 +437,10 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .findDuplicateAnnotationsJobsAdd,
     .findDuplicateAnnotationsJobsGet,
     .findDuplicateAnnotationsJobsDelete,
+    .earch,
+    .avedSearchGet,
+    .avedSearchAdd,
+    .avedSearchDelete,
   ]
 }
 
@@ -586,6 +604,9 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     102: .same(proto: "FindDuplicateAnnotationsJobs_Add"),
     103: .same(proto: "FindDuplicateAnnotationsJobs_Get"),
     104: .same(proto: "FindDuplicateAnnotationsJobs_Delete"),
+    114: .same(proto: "SavedSearch_Get"),
+    115: .same(proto: "SavedSearch_Add"),
+    116: .same(proto: "SavedSearch_Delete"),
   ]
 }
 

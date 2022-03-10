@@ -235,6 +235,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case dataDumpFailed // = 25152
   case dataDumpInProgress // = 25153
   case dataDumpNoData // = 25154
+  case dataDumpUnexpectedError // = 25155
 
   /// Duplicate related 252xx
   case appDuplicationSuccess // = 25200
@@ -633,6 +634,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25152: self = .dataDumpFailed
     case 25153: self = .dataDumpInProgress
     case 25154: self = .dataDumpNoData
+    case 25155: self = .dataDumpUnexpectedError
     case 25200: self = .appDuplicationSuccess
     case 25201: self = .appDuplicationFailed
     case 25202: self = .appDuplicationPending
@@ -935,6 +937,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .dataDumpFailed: return 25152
     case .dataDumpInProgress: return 25153
     case .dataDumpNoData: return 25154
+    case .dataDumpUnexpectedError: return 25155
     case .appDuplicationSuccess: return 25200
     case .appDuplicationFailed: return 25201
     case .appDuplicationPending: return 25202
@@ -1242,6 +1245,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .dataDumpFailed,
     .dataDumpInProgress,
     .dataDumpNoData,
+    .dataDumpUnexpectedError,
     .appDuplicationSuccess,
     .appDuplicationFailed,
     .appDuplicationPending,
@@ -1547,6 +1551,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25152: .same(proto: "DATA_DUMP_FAILED"),
     25153: .same(proto: "DATA_DUMP_IN_PROGRESS"),
     25154: .same(proto: "DATA_DUMP_NO_DATA"),
+    25155: .same(proto: "DATA_DUMP_UNEXPECTED_ERROR"),
     25200: .same(proto: "APP_DUPLICATION_SUCCESS"),
     25201: .same(proto: "APP_DUPLICATION_FAILED"),
     25202: .same(proto: "APP_DUPLICATION_PENDING"),

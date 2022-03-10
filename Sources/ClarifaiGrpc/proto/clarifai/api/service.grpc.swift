@@ -142,6 +142,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func patchAnnotationsSearches(
+    _ request: Clarifai_Api_PatchAnnotationsSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>
+
   func postAnnotationsSearches(
     _ request: Clarifai_Api_PostAnnotationsSearchesRequest,
     callOptions: CallOptions?
@@ -191,6 +196,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteInputsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteInputsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func patchInputsSearches(
+    _ request: Clarifai_Api_PatchInputsSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>
 
   func postInputsSearches(
     _ request: Clarifai_Api_PostInputsSearchesRequest,
@@ -246,6 +256,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PatchModelsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchModelsRequest, Clarifai_Api_MultiModelResponse>
+
+  func patchModelIds(
+    _ request: Clarifai_Api_PatchModelIdsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse>
 
   func deleteModel(
     _ request: Clarifai_Api_DeleteModelRequest,
@@ -491,6 +506,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_ListSearchesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListSearchesRequest, Clarifai_Api_MultiSearchResponse>
+
+  func patchSearches(
+    _ request: Clarifai_Api_PatchSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse>
 
   func postSearches(
     _ request: Clarifai_Api_PostSearchesRequest,
@@ -1082,7 +1102,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Execute a search over annotation
+  /// Patch saved annotations searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAnnotationsSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAnnotationsSearches(
+    _ request: Clarifai_Api_PatchAnnotationsSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAnnotationsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Execute a search over annotations
   ///
   /// - Parameters:
   ///   - request: Request to send to PostAnnotationsSearches.
@@ -1255,7 +1292,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Execute a search over input
+  /// Patch saved inputs searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchInputsSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchInputsSearches(
+    _ request: Clarifai_Api_PatchInputsSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchInputsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Execute a search over inputs
   ///
   /// - Parameters:
   ///   - request: Request to send to PostInputsSearches.
@@ -1441,6 +1495,23 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_PatchModelsRequest, Clarifai_Api_MultiModelResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModels",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Patch one or more models.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelIds.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelIds(
+    _ request: Clarifai_Api_PatchModelIdsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelIds",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -2253,7 +2324,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a saved search.
+  /// Get a saved legacy search.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetSearch.
@@ -2270,7 +2341,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List all saved searches.
+  /// List all saved legacy searches.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListSearches.
@@ -2282,6 +2353,23 @@ extension Clarifai_Api_V2ClientProtocol {
   ) -> UnaryCall<Clarifai_Api_ListSearchesRequest, Clarifai_Api_MultiSearchResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions
+    )
+  }
+
+  /// Patch saved legacy searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchSearches(
+    _ request: Clarifai_Api_PatchSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchSearches",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions
     )
@@ -2304,7 +2392,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Execute a previously saved search.
+  /// Execute a previously saved legacy search.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostSearchesByID.
@@ -3010,7 +3098,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func deleteAnnotation(request: Clarifai_Api_DeleteAnnotationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete multiple annotations in one request.
   func deleteAnnotations(request: Clarifai_Api_DeleteAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-  /// Execute a search over annotation
+  /// Patch saved annotations searches by ids.
+  func patchAnnotationsSearches(request: Clarifai_Api_PatchAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+  /// Execute a search over annotations
   func postAnnotationsSearches(request: Clarifai_Api_PostAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
   /// Get input count per status.
   func getInputCount(request: Clarifai_Api_GetInputCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputCountResponse>
@@ -3033,7 +3123,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple inputs in one request.
   /// This call is asynchronous.
   func deleteInputs(request: Clarifai_Api_DeleteInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-  /// Execute a search over input
+  /// Patch saved inputs searches by ids.
+  func patchInputsSearches(request: Clarifai_Api_PatchInputsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+  /// Execute a search over inputs
   func postInputsSearches(request: Clarifai_Api_PostInputsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
   /// Get predicted outputs from the model.
   func postModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiOutputResponse>
@@ -3059,6 +3151,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postModels(request: Clarifai_Api_PostModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
   /// Patch one or more models.
   func patchModels(request: Clarifai_Api_PatchModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
+  /// Patch one or more models.
+  func patchModelIds(request: Clarifai_Api_PatchModelIdsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
   /// Delete a single model.
   func deleteModel(request: Clarifai_Api_DeleteModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
   /// Delete multiple models in one request.
@@ -3159,13 +3253,15 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postAppsSearches(request: Clarifai_Api_PostAppsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
   /// Validate new password in real-time for a user
   func postValidatePassword(request: Clarifai_Api_PostValidatePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePasswordValidationResponse>
-  /// Get a saved search.
+  /// Get a saved legacy search.
   func getSearch(request: Clarifai_Api_GetSearchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleSearchResponse>
-  /// List all saved searches.
+  /// List all saved legacy searches.
   func listSearches(request: Clarifai_Api_ListSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+  /// Patch saved legacy searches by ids.
+  func patchSearches(request: Clarifai_Api_PatchSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
   /// Execute a new search and optionally save it.
   func postSearches(request: Clarifai_Api_PostSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
-  /// Execute a previously saved search.
+  /// Execute a previously saved legacy search.
   func postSearchesByID(request: Clarifai_Api_PostSearchesByIDRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
   /// Evaluate the results of two search requests
   func postAnnotationSearchMetrics(request: Clarifai_Api_PostAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
@@ -3417,6 +3513,13 @@ extension Clarifai_Api_V2Provider {
         }
       }
 
+    case "PatchAnnotationsSearches":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchAnnotationsSearches(request: request, context: context)
+        }
+      }
+
     case "PostAnnotationsSearches":
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
@@ -3484,6 +3587,13 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.deleteInputs(request: request, context: context)
+        }
+      }
+
+    case "PatchInputsSearches":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchInputsSearches(request: request, context: context)
         }
       }
 
@@ -3561,6 +3671,13 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.patchModels(request: request, context: context)
+        }
+      }
+
+    case "PatchModelIds":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchModelIds(request: request, context: context)
         }
       }
 
@@ -3904,6 +4021,13 @@ extension Clarifai_Api_V2Provider {
       return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
         return { request in
           self.listSearches(request: request, context: context)
+        }
+      }
+
+    case "PatchSearches":
+      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
+        return { request in
+          self.patchSearches(request: request, context: context)
         }
       }
 
