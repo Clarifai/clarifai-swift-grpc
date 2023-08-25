@@ -29,12 +29,24 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 /// cannot make a key that would be useless. Beyond the key creation they are not enforced
 /// but rather the scopes are enforce when data is accessed.
 ///
+///
 /// There is the following conventions in place, make sure you add them to the scopes for all new
 /// resource types:
 ///
 /// 1. *_Add requires the corresponding _Get.
 /// 2. *_Delete requires the corresponding _Add and _Get.
 /// 3. *_Patch is deprecated and not check anywhere.
+///
+/// Think of the dependencies in this file at the DB level. If you cannot make a DB call to Get, Add
+/// or Delete a resource without having access to another resource then you should add it here. That
+/// should for the most part be the same resource type. In service.proto for the API level you will
+/// also specify cl_depending_scopes for each API endpoint. Those cover cases where an endpoint
+/// might need to access more than just that one resource type in order to operate (ie. API handlers
+/// that make multiple DB calls of various resource types likely have more cl_depending_scopes than
+/// the ones listed below). For example: PostCollectors to create a collector we make sure that you
+/// can do model predictions, get concepts, etc. so that you don't have a collector that would be
+/// useless at the end of that API handler but below you can see that the dependencies of Collector
+/// scopes are only on other Collector scopes.
 public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -46,9 +58,6 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
 
   /// Make an rpc to our prediction services.
   case predict // = 2
-
-  /// Make an rpc to our search services.
-  case earch // = 3
 
   /// Write to the inputs table in the DB.
   case inputsAdd // = 4
@@ -218,6 +227,69 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case findDuplicateAnnotationsJobsAdd // = 102
   case findDuplicateAnnotationsJobsGet // = 103
   case findDuplicateAnnotationsJobsDelete // = 104
+  case datasetsGet // = 105
+  case datasetsAdd // = 106
+  case datasetsDelete // = 107
+
+  /// Write to the modules DB tables.
+  case modulesAdd // = 108
+
+  /// Read from the modules and modules versions DB tables.
+  case modulesGet // = 109
+
+  /// To delete we need read/write.
+  case modulesDelete // = 110
+
+  /// Write to the InstalledModuleVersions DB tables.
+  case installedModuleVersionsAdd // = 111
+
+  /// Read from the InstalledModuleVersions and InstalledModuleVersions versions DB tables.
+  case installedModuleVersionsGet // = 112
+
+  /// To delete we need read/write.
+  case installedModuleVersionsDelete // = 113
+
+  /// Make an rpc to our search services.
+  case earch // = 3
+
+  /// To get a saved search.
+  case avedSearchGet // = 114
+
+  /// To add a saved search
+  case avedSearchAdd // = 115
+
+  /// To delete a saved search
+  case avedSearchDelete // = 116
+  case modelVersionPublicationsAdd // = 117
+  case modelVersionPublicationsDelete // = 118
+  case workflowPublicationsAdd // = 119
+  case workflowPublicationsDelete // = 120
+
+  /// To write bulk operations to the DB
+  case bulkOperationAdd // = 121
+
+  /// To Read Bulk Operations from the DB
+  case bulkOperationGet // = 122
+
+  /// To Delete Bulk Operations from the DB
+  case bulkOperationDelete // = 123
+
+  /// To read historical usage from usage.dashboard_items table
+  case historicalUsageGet // = 124
+
+  /// To read uploaded files and archives info from Uploads endpoints
+  case uploadsGet // = 128
+
+  /// To upload files or archives through the Uploads endpoints
+  case uploadsAdd // = 129
+  case uploadsDelete // = 130
+
+  /// To read allo control over remote runners
+  case runnersGet // = 131
+  case runnersAdd // = 132
+  case runnersDelete // = 133
+  case runnerItemsGet // = 134
+  case runnerItemsAdd // = 135
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -286,6 +358,34 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 102: self = .findDuplicateAnnotationsJobsAdd
     case 103: self = .findDuplicateAnnotationsJobsGet
     case 104: self = .findDuplicateAnnotationsJobsDelete
+    case 105: self = .datasetsGet
+    case 106: self = .datasetsAdd
+    case 107: self = .datasetsDelete
+    case 108: self = .modulesAdd
+    case 109: self = .modulesGet
+    case 110: self = .modulesDelete
+    case 111: self = .installedModuleVersionsAdd
+    case 112: self = .installedModuleVersionsGet
+    case 113: self = .installedModuleVersionsDelete
+    case 114: self = .avedSearchGet
+    case 115: self = .avedSearchAdd
+    case 116: self = .avedSearchDelete
+    case 117: self = .modelVersionPublicationsAdd
+    case 118: self = .modelVersionPublicationsDelete
+    case 119: self = .workflowPublicationsAdd
+    case 120: self = .workflowPublicationsDelete
+    case 121: self = .bulkOperationAdd
+    case 122: self = .bulkOperationGet
+    case 123: self = .bulkOperationDelete
+    case 124: self = .historicalUsageGet
+    case 128: self = .uploadsGet
+    case 129: self = .uploadsAdd
+    case 130: self = .uploadsDelete
+    case 131: self = .runnersGet
+    case 132: self = .runnersAdd
+    case 133: self = .runnersDelete
+    case 134: self = .runnerItemsGet
+    case 135: self = .runnerItemsAdd
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -352,6 +452,34 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .findDuplicateAnnotationsJobsAdd: return 102
     case .findDuplicateAnnotationsJobsGet: return 103
     case .findDuplicateAnnotationsJobsDelete: return 104
+    case .datasetsGet: return 105
+    case .datasetsAdd: return 106
+    case .datasetsDelete: return 107
+    case .modulesAdd: return 108
+    case .modulesGet: return 109
+    case .modulesDelete: return 110
+    case .installedModuleVersionsAdd: return 111
+    case .installedModuleVersionsGet: return 112
+    case .installedModuleVersionsDelete: return 113
+    case .avedSearchGet: return 114
+    case .avedSearchAdd: return 115
+    case .avedSearchDelete: return 116
+    case .modelVersionPublicationsAdd: return 117
+    case .modelVersionPublicationsDelete: return 118
+    case .workflowPublicationsAdd: return 119
+    case .workflowPublicationsDelete: return 120
+    case .bulkOperationAdd: return 121
+    case .bulkOperationGet: return 122
+    case .bulkOperationDelete: return 123
+    case .historicalUsageGet: return 124
+    case .uploadsGet: return 128
+    case .uploadsAdd: return 129
+    case .uploadsDelete: return 130
+    case .runnersGet: return 131
+    case .runnersAdd: return 132
+    case .runnersDelete: return 133
+    case .runnerItemsGet: return 134
+    case .runnerItemsAdd: return 135
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -366,7 +494,6 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .undef,
     .all,
     .predict,
-    .earch,
     .inputsAdd,
     .inputsGet,
     .inputsPatch,
@@ -423,6 +550,35 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .findDuplicateAnnotationsJobsAdd,
     .findDuplicateAnnotationsJobsGet,
     .findDuplicateAnnotationsJobsDelete,
+    .datasetsGet,
+    .datasetsAdd,
+    .datasetsDelete,
+    .modulesAdd,
+    .modulesGet,
+    .modulesDelete,
+    .installedModuleVersionsAdd,
+    .installedModuleVersionsGet,
+    .installedModuleVersionsDelete,
+    .earch,
+    .avedSearchGet,
+    .avedSearchAdd,
+    .avedSearchDelete,
+    .modelVersionPublicationsAdd,
+    .modelVersionPublicationsDelete,
+    .workflowPublicationsAdd,
+    .workflowPublicationsDelete,
+    .bulkOperationAdd,
+    .bulkOperationGet,
+    .bulkOperationDelete,
+    .historicalUsageGet,
+    .uploadsGet,
+    .uploadsAdd,
+    .uploadsDelete,
+    .runnersGet,
+    .runnersAdd,
+    .runnersDelete,
+    .runnerItemsGet,
+    .runnerItemsAdd,
   ]
 }
 
@@ -586,6 +742,34 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     102: .same(proto: "FindDuplicateAnnotationsJobs_Add"),
     103: .same(proto: "FindDuplicateAnnotationsJobs_Get"),
     104: .same(proto: "FindDuplicateAnnotationsJobs_Delete"),
+    105: .same(proto: "Datasets_Get"),
+    106: .same(proto: "Datasets_Add"),
+    107: .same(proto: "Datasets_Delete"),
+    108: .same(proto: "Modules_Add"),
+    109: .same(proto: "Modules_Get"),
+    110: .same(proto: "Modules_Delete"),
+    111: .same(proto: "InstalledModuleVersions_Add"),
+    112: .same(proto: "InstalledModuleVersions_Get"),
+    113: .same(proto: "InstalledModuleVersions_Delete"),
+    114: .same(proto: "SavedSearch_Get"),
+    115: .same(proto: "SavedSearch_Add"),
+    116: .same(proto: "SavedSearch_Delete"),
+    117: .same(proto: "ModelVersionPublications_Add"),
+    118: .same(proto: "ModelVersionPublications_Delete"),
+    119: .same(proto: "WorkflowPublications_Add"),
+    120: .same(proto: "WorkflowPublications_Delete"),
+    121: .same(proto: "BulkOperation_Add"),
+    122: .same(proto: "BulkOperation_Get"),
+    123: .same(proto: "BulkOperation_Delete"),
+    124: .same(proto: "HistoricalUsage_Get"),
+    128: .same(proto: "Uploads_Get"),
+    129: .same(proto: "Uploads_Add"),
+    130: .same(proto: "Uploads_Delete"),
+    131: .same(proto: "Runners_Get"),
+    132: .same(proto: "Runners_Add"),
+    133: .same(proto: "Runners_Delete"),
+    134: .same(proto: "RunnerItems_Get"),
+    135: .same(proto: "RunnerItems_Add"),
   ]
 }
 
@@ -598,9 +782,12 @@ extension Clarifai_Auth_Scope_ScopeList: SwiftProtobuf.Message, SwiftProtobuf._M
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeRepeatedEnumField(value: &self.scopes)
-      case 2: try decoder.decodeRepeatedStringField(value: &self.endpoints)
+      case 1: try { try decoder.decodeRepeatedEnumField(value: &self.scopes) }()
+      case 2: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
       default: break
       }
     }

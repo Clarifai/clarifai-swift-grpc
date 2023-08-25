@@ -31,7 +31,7 @@ public struct Clarifai_Api_Utils_TestProto {
 
   public var value: Double = 0
 
-  public var imageBytes: Data = SwiftProtobuf.Internal.emptyData
+  public var imageBytes: Data = Data()
 
   public var oneOfField: Clarifai_Api_Utils_TestProto.OneOf_OneOfField? = nil
 
@@ -68,10 +68,22 @@ public struct Clarifai_Api_Utils_TestProto {
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_Utils_TestProto.OneOf_OneOfField, rhs: Clarifai_Api_Utils_TestProto.OneOf_OneOfField) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch (lhs, rhs) {
-      case (.stringOneof(let l), .stringOneof(let r)): return l == r
-      case (.boolOneof(let l), .boolOneof(let r)): return l == r
-      case (.messageOneof(let l), .messageOneof(let r)): return l == r
+      case (.stringOneof, .stringOneof): return {
+        guard case .stringOneof(let l) = lhs, case .stringOneof(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.boolOneof, .boolOneof): return {
+        guard case .boolOneof(let l) = lhs, case .boolOneof(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.messageOneof, .messageOneof): return {
+        guard case .messageOneof(let l) = lhs, case .messageOneof(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
       default: return false
       }
     }
@@ -113,35 +125,53 @@ extension Clarifai_Api_Utils_TestProto: SwiftProtobuf.Message, SwiftProtobuf._Me
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.id)
-      case 2: try decoder.decodeSingularStringField(value: &self.message)
-      case 3: try decoder.decodeSingularDoubleField(value: &self.value)
-      case 4: try decoder.decodeSingularBytesField(value: &self.imageBytes)
-      case 5:
-        if self.oneOfField != nil {try decoder.handleConflictingOneOf()}
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      case 3: try { try decoder.decodeSingularDoubleField(value: &self.value) }()
+      case 4: try { try decoder.decodeSingularBytesField(value: &self.imageBytes) }()
+      case 5: try {
         var v: String?
         try decoder.decodeSingularStringField(value: &v)
-        if let v = v {self.oneOfField = .stringOneof(v)}
-      case 6:
-        if self.oneOfField != nil {try decoder.handleConflictingOneOf()}
+        if let v = v {
+          if self.oneOfField != nil {try decoder.handleConflictingOneOf()}
+          self.oneOfField = .stringOneof(v)
+        }
+      }()
+      case 6: try {
         var v: Bool?
         try decoder.decodeSingularBoolField(value: &v)
-        if let v = v {self.oneOfField = .boolOneof(v)}
-      case 7:
+        if let v = v {
+          if self.oneOfField != nil {try decoder.handleConflictingOneOf()}
+          self.oneOfField = .boolOneof(v)
+        }
+      }()
+      case 7: try {
         var v: Clarifai_Api_Utils_TestProto2?
+        var hadOneofValue = false
         if let current = self.oneOfField {
-          try decoder.handleConflictingOneOf()
+          hadOneofValue = true
           if case .messageOneof(let m) = current {v = m}
         }
         try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {self.oneOfField = .messageOneof(v)}
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.oneOfField = .messageOneof(v)
+        }
+      }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.id.isEmpty {
       try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
     }
@@ -155,12 +185,18 @@ extension Clarifai_Api_Utils_TestProto: SwiftProtobuf.Message, SwiftProtobuf._Me
       try visitor.visitSingularBytesField(value: self.imageBytes, fieldNumber: 4)
     }
     switch self.oneOfField {
-    case .stringOneof(let v)?:
+    case .stringOneof?: try {
+      guard case .stringOneof(let v)? = self.oneOfField else { preconditionFailure() }
       try visitor.visitSingularStringField(value: v, fieldNumber: 5)
-    case .boolOneof(let v)?:
+    }()
+    case .boolOneof?: try {
+      guard case .boolOneof(let v)? = self.oneOfField else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 6)
-    case .messageOneof(let v)?:
+    }()
+    case .messageOneof?: try {
+      guard case .messageOneof(let v)? = self.oneOfField else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }()
     case nil: break
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -186,9 +222,12 @@ extension Clarifai_Api_Utils_TestProto2: SwiftProtobuf.Message, SwiftProtobuf._M
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularStringField(value: &self.id)
-      case 2: try decoder.decodeSingularBoolField(value: &self.flip)
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.flip) }()
       default: break
       }
     }

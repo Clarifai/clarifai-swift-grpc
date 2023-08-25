@@ -25,8 +25,11 @@ import NIO
 import SwiftProtobuf
 
 
-/// Usage: instantiate Clarifai_Api_V2Client, then call methods of this protocol to make API calls.
+/// Usage: instantiate `Clarifai_Api_V2Client`, then call methods of this protocol to make API calls.
 public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: Clarifai_Api_V2ClientInterceptorFactoryProtocol? { get }
+
   func listConceptRelations(
     _ request: Clarifai_Api_ListConceptRelationsRequest,
     callOptions: CallOptions?
@@ -56,6 +59,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_ListConceptsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListConceptsRequest, Clarifai_Api_MultiConceptResponse>
+
+  func listModelConcepts(
+    _ request: Clarifai_Api_ListModelConceptsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModelConceptsRequest, Clarifai_Api_MultiConceptResponse>
 
   func postConceptsSearches(
     _ request: Clarifai_Api_PostConceptsSearchesRequest,
@@ -142,6 +150,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func patchAnnotationsSearches(
+    _ request: Clarifai_Api_PatchAnnotationsSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>
+
   func postAnnotationsSearches(
     _ request: Clarifai_Api_PostAnnotationsSearchesRequest,
     callOptions: CallOptions?
@@ -166,6 +179,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_GetInputRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_GetInputRequest, Clarifai_Api_SingleInputResponse>
+
+  func getInputVideoManifest(
+    _ request: Clarifai_Api_GetVideoManifestRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetVideoManifestRequest, Clarifai_Api_GetVideoManifestResponse>
 
   func listInputs(
     _ request: Clarifai_Api_ListInputsRequest,
@@ -192,6 +210,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteInputsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func patchInputsSearches(
+    _ request: Clarifai_Api_PatchInputsSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>
+
   func postInputsSearches(
     _ request: Clarifai_Api_PostInputsSearchesRequest,
     callOptions: CallOptions?
@@ -201,6 +224,86 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostModelOutputsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>
+
+  func listDatasets(
+    _ request: Clarifai_Api_ListDatasetsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListDatasetsRequest, Clarifai_Api_MultiDatasetResponse>
+
+  func getDataset(
+    _ request: Clarifai_Api_GetDatasetRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetDatasetRequest, Clarifai_Api_SingleDatasetResponse>
+
+  func postDatasets(
+    _ request: Clarifai_Api_PostDatasetsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostDatasetsRequest, Clarifai_Api_MultiDatasetResponse>
+
+  func patchDatasets(
+    _ request: Clarifai_Api_PatchDatasetsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchDatasetsRequest, Clarifai_Api_MultiDatasetResponse>
+
+  func deleteDatasets(
+    _ request: Clarifai_Api_DeleteDatasetsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listDatasetInputs(
+    _ request: Clarifai_Api_ListDatasetInputsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>
+
+  func getDatasetInput(
+    _ request: Clarifai_Api_GetDatasetInputRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetDatasetInputRequest, Clarifai_Api_SingleDatasetInputResponse>
+
+  func postDatasetInputs(
+    _ request: Clarifai_Api_PostDatasetInputsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>
+
+  func deleteDatasetInputs(
+    _ request: Clarifai_Api_DeleteDatasetInputsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetInputsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listDatasetVersions(
+    _ request: Clarifai_Api_ListDatasetVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>
+
+  func getDatasetVersion(
+    _ request: Clarifai_Api_GetDatasetVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetDatasetVersionRequest, Clarifai_Api_SingleDatasetVersionResponse>
+
+  func listDatasetVersionMetricsGroups(
+    _ request: Clarifai_Api_ListDatasetVersionMetricsGroupsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListDatasetVersionMetricsGroupsRequest, Clarifai_Api_MultiDatasetVersionMetricsGroupResponse>
+
+  func postDatasetVersions(
+    _ request: Clarifai_Api_PostDatasetVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>
+
+  func patchDatasetVersions(
+    _ request: Clarifai_Api_PatchDatasetVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>
+
+  func deleteDatasetVersions(
+    _ request: Clarifai_Api_DeleteDatasetVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetVersionsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func putDatasetVersionExports(
+    _ request: Clarifai_Api_PutDatasetVersionExportsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PutDatasetVersionExportsRequest, Clarifai_Api_MultiDatasetVersionExportResponse>
 
   func getModelType(
     _ request: Clarifai_Api_GetModelTypeRequest,
@@ -232,6 +335,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListModelsRequest, Clarifai_Api_MultiModelResponse>
 
+  func getResourceCounts(
+    _ request: Clarifai_Api_GetResourceCountsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetResourceCountsRequest, Clarifai_Api_GetResourceCountsResponse>
+
   func postModelsSearches(
     _ request: Clarifai_Api_PostModelsSearchesRequest,
     callOptions: CallOptions?
@@ -247,6 +355,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchModelsRequest, Clarifai_Api_MultiModelResponse>
 
+  func patchModelIds(
+    _ request: Clarifai_Api_PatchModelIdsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse>
+
   func deleteModel(
     _ request: Clarifai_Api_DeleteModelRequest,
     callOptions: CallOptions?
@@ -256,6 +369,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteModelsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteModelsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func patchModelCheckConsents(
+    _ request: Clarifai_Api_PatchModelCheckConsentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModelCheckConsentsRequest, Clarifai_Api_MultiModelCheckConsentResponse>
 
   func patchModelToolkits(
     _ request: Clarifai_Api_PatchModelToolkitsRequest,
@@ -286,6 +404,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_ListModelVersionsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>
+
+  func postWorkflowVersionsUnPublish(
+    _ request: Clarifai_Api_PostWorkflowVersionsUnPublishRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postWorkflowVersionsPublish(
+    _ request: Clarifai_Api_PostWorkflowVersionsPublishRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>
 
   func postModelVersionsPublish(
     _ request: Clarifai_Api_PostModelVersionsPublishRequest,
@@ -322,6 +450,36 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>
 
+  func postModelVersionEvaluations(
+    _ request: Clarifai_Api_PostModelVersionEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>
+
+  func listModelVersionEvaluations(
+    _ request: Clarifai_Api_ListModelVersionEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>
+
+  func getModelVersionEvaluation(
+    _ request: Clarifai_Api_GetModelVersionEvaluationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>
+
+  func postEvaluations(
+    _ request: Clarifai_Api_PostEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>
+
+  func listEvaluations(
+    _ request: Clarifai_Api_ListEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>
+
+  func getEvaluation(
+    _ request: Clarifai_Api_GetEvaluationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>
+
   func listModelReferences(
     _ request: Clarifai_Api_ListModelReferencesRequest,
     callOptions: CallOptions?
@@ -356,6 +514,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PatchWorkflowsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>
+
+  func patchWorkflowIds(
+    _ request: Clarifai_Api_PatchWorkflowIdsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchWorkflowIdsRequest, Clarifai_Api_MultiWorkflowResponse>
 
   func deleteWorkflow(
     _ request: Clarifai_Api_DeleteWorkflowRequest,
@@ -472,10 +635,25 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>
 
+  func patchAppsIds(
+    _ request: Clarifai_Api_PatchAppsIdsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAppsIdsRequest, Clarifai_Api_MultiAppResponse>
+
+  func patchApp(
+    _ request: Clarifai_Api_PatchAppRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAppRequest, Clarifai_Api_SingleAppResponse>
+
   func postAppsSearches(
     _ request: Clarifai_Api_PostAppsSearchesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostAppsSearchesRequest, Clarifai_Api_MultiAppResponse>
+
+  func getUser(
+    _ request: Clarifai_Api_GetUserRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetUserRequest, Clarifai_Api_SingleUserResponse>
 
   func postValidatePassword(
     _ request: Clarifai_Api_PostValidatePasswordRequest,
@@ -491,6 +669,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_ListSearchesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListSearchesRequest, Clarifai_Api_MultiSearchResponse>
+
+  func patchSearches(
+    _ request: Clarifai_Api_PatchSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse>
 
   func postSearches(
     _ request: Clarifai_Api_PostSearchesRequest,
@@ -526,6 +709,31 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteSearchRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteSearchRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listAnnotationFilters(
+    _ request: Clarifai_Api_ListAnnotationFiltersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>
+
+  func getAnnotationFilter(
+    _ request: Clarifai_Api_GetAnnotationFilterRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetAnnotationFilterRequest, Clarifai_Api_SingleAnnotationFilterResponse>
+
+  func postAnnotationFilters(
+    _ request: Clarifai_Api_PostAnnotationFiltersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>
+
+  func patchAnnotationFilters(
+    _ request: Clarifai_Api_PatchAnnotationFiltersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>
+
+  func deleteAnnotationFilters(
+    _ request: Clarifai_Api_DeleteAnnotationFiltersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationFiltersRequest, Clarifai_Api_Status_BaseResponse>
 
   func listStatusCodes(
     _ request: Clarifai_Api_ListStatusCodesRequest,
@@ -682,9 +890,216 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>
 
+  func getModule(
+    _ request: Clarifai_Api_GetModuleRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>
+
+  func listModules(
+    _ request: Clarifai_Api_ListModulesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>
+
+  func postModules(
+    _ request: Clarifai_Api_PostModulesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>
+
+  func patchModules(
+    _ request: Clarifai_Api_PatchModulesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>
+
+  func deleteModules(
+    _ request: Clarifai_Api_DeleteModulesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>
+
+  func getModuleVersion(
+    _ request: Clarifai_Api_GetModuleVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>
+
+  func listModuleVersions(
+    _ request: Clarifai_Api_ListModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
+
+  func postModuleVersions(
+    _ request: Clarifai_Api_PostModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
+
+  func deleteModuleVersions(
+    _ request: Clarifai_Api_DeleteModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func getInstalledModuleVersion(
+    _ request: Clarifai_Api_GetInstalledModuleVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>
+
+  func listInstalledModuleVersions(
+    _ request: Clarifai_Api_ListInstalledModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>
+
+  func postInstalledModuleVersions(
+    _ request: Clarifai_Api_PostInstalledModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>
+
+  func deleteInstalledModuleVersions(
+    _ request: Clarifai_Api_DeleteInstalledModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postInstalledModuleVersionsKey(
+    _ request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>
+
+  func postBulkOperations(
+    _ request: Clarifai_Api_PostBulkOperationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>
+
+  func listBulkOperations(
+    _ request: Clarifai_Api_ListBulkOperationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>
+
+  func getBulkOperation(
+    _ request: Clarifai_Api_GetBulkOperationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetBulkOperationRequest, Clarifai_Api_SingleBulkOperationsResponse>
+
+  func cancelBulkOperations(
+    _ request: Clarifai_Api_CancelBulkOperationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_CancelBulkOperationRequest, Clarifai_Api_MultiBulkOperationsResponse>
+
+  func deleteBulkOperations(
+    _ request: Clarifai_Api_DeleteBulkOperationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>
+
+  func getDatasetInputsSearchAddJob(
+    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
+
+  func listNextTaskAssignments(
+    _ request: Clarifai_Api_ListNextTaskAssignmentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>
+
+  func putTaskAssignments(
+    _ request: Clarifai_Api_PutTaskAssignmentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listInputsAddJobs(
+    _ request: Clarifai_Api_ListInputsAddJobsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListInputsAddJobsRequest, Clarifai_Api_MultiInputsAddJobResponse>
+
+  func getInputsAddJob(
+    _ request: Clarifai_Api_GetInputsAddJobRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>
+
+  func cancelInputsAddJob(
+    _ request: Clarifai_Api_CancelInputsAddJobRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_CancelInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>
+
+  func postUploads(
+    _ request: Clarifai_Api_PostUploadsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostUploadsRequest, Clarifai_Api_MultiUploadResponse>
+
+  func putUploadContentParts(
+    _ request: Clarifai_Api_PutUploadContentPartsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PutUploadContentPartsRequest, Clarifai_Api_SingleUploadResponse>
+
+  func getUpload(
+    _ request: Clarifai_Api_GetUploadRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetUploadRequest, Clarifai_Api_SingleUploadResponse>
+
+  func listUploads(
+    _ request: Clarifai_Api_ListUploadsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListUploadsRequest, Clarifai_Api_MultiUploadResponse>
+
+  func deleteUploads(
+    _ request: Clarifai_Api_DeleteUploadsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteUploadsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postInputsDataSources(
+    _ request: Clarifai_Api_PostInputsDataSourcesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostInputsDataSourcesRequest, Clarifai_Api_MultiInputsAddJobResponse>
+
+  func getInputsExtractionJob(
+    _ request: Clarifai_Api_GetInputsExtractionJobRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetInputsExtractionJobRequest, Clarifai_Api_SingleInputsExtractionJobResponse>
+
+  func listInputsExtractionJobs(
+    _ request: Clarifai_Api_ListInputsExtractionJobsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>
+
+  func cancelInputsExtractionJobs(
+    _ request: Clarifai_Api_CancelInputsExtractionJobsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_CancelInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>
+
+  func postInputsUploads(
+    _ request: Clarifai_Api_PostInputsUploadsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>
+
+  func getRunner(
+    _ request: Clarifai_Api_GetRunnerRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse>
+
+  func listRunners(
+    _ request: Clarifai_Api_ListRunnersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListRunnersRequest, Clarifai_Api_MultiRunnerResponse>
+
+  func postRunners(
+    _ request: Clarifai_Api_PostRunnersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>
+
+  func deleteRunners(
+    _ request: Clarifai_Api_DeleteRunnersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteRunnersRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listRunnerItems(
+    _ request: Clarifai_Api_ListRunnerItemsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListRunnerItemsRequest, Clarifai_Api_MultiRunnerItemResponse>
+
+  func postRunnerItemOutputs(
+    _ request: Clarifai_Api_PostRunnerItemOutputsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
+  public var serviceName: String {
+    return "clarifai.api.V2"
+  }
 
   /// List concept relations between concepts in the platform.
   /// MUST be above ListConcepts so that if concept_id is empty this will still match
@@ -701,7 +1116,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListConceptRelations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListConceptRelationsInterceptors() ?? []
     )
   }
 
@@ -718,7 +1134,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostConceptRelations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostConceptRelationsInterceptors() ?? []
     )
   }
 
@@ -735,7 +1152,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteConceptRelations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteConceptRelationsInterceptors() ?? []
     )
   }
 
@@ -752,7 +1170,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetConceptCounts",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetConceptCountsInterceptors() ?? []
     )
   }
 
@@ -769,7 +1188,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetConcept",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetConceptInterceptors() ?? []
     )
   }
 
@@ -786,7 +1206,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListConcepts",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListConceptsInterceptors() ?? []
+    )
+  }
+
+  /// List models concepts.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModelConcepts.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModelConcepts(
+    _ request: Clarifai_Api_ListModelConceptsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModelConceptsRequest, Clarifai_Api_MultiConceptResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModelConcepts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelConceptsInterceptors() ?? []
     )
   }
 
@@ -805,7 +1244,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostConceptsSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostConceptsSearchesInterceptors() ?? []
     )
   }
 
@@ -822,7 +1262,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostConcepts",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostConceptsInterceptors() ?? []
     )
   }
 
@@ -839,7 +1280,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchConcepts",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchConceptsInterceptors() ?? []
     )
   }
 
@@ -856,7 +1298,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetConceptLanguage",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetConceptLanguageInterceptors() ?? []
     )
   }
 
@@ -873,7 +1316,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListConceptLanguages",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListConceptLanguagesInterceptors() ?? []
     )
   }
 
@@ -890,7 +1334,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostConceptLanguages",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostConceptLanguagesInterceptors() ?? []
     )
   }
 
@@ -908,7 +1353,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchConceptLanguages",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchConceptLanguagesInterceptors() ?? []
     )
   }
 
@@ -925,7 +1371,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListKnowledgeGraphs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListKnowledgeGraphsInterceptors() ?? []
     )
   }
 
@@ -942,7 +1389,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostKnowledgeGraphs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostKnowledgeGraphsInterceptors() ?? []
     )
   }
 
@@ -959,7 +1407,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostConceptMappingJobs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostConceptMappingJobsInterceptors() ?? []
     )
   }
 
@@ -976,7 +1425,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetAnnotation",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAnnotationInterceptors() ?? []
     )
   }
 
@@ -993,7 +1443,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListAnnotations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationsInterceptors() ?? []
     )
   }
 
@@ -1010,7 +1461,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAnnotations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAnnotationsInterceptors() ?? []
     )
   }
 
@@ -1027,7 +1479,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchAnnotations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAnnotationsInterceptors() ?? []
     )
   }
 
@@ -1044,7 +1497,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchAnnotationsStatus",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAnnotationsStatusInterceptors() ?? []
     )
   }
 
@@ -1061,7 +1515,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteAnnotation",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAnnotationInterceptors() ?? []
     )
   }
 
@@ -1078,11 +1533,30 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteAnnotations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAnnotationsInterceptors() ?? []
     )
   }
 
-  /// Execute a search over annotation
+  /// Patch saved annotations searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAnnotationsSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAnnotationsSearches(
+    _ request: Clarifai_Api_PatchAnnotationsSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAnnotationsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAnnotationsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Execute a search over annotations
   ///
   /// - Parameters:
   ///   - request: Request to send to PostAnnotationsSearches.
@@ -1095,7 +1569,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAnnotationsSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? []
     )
   }
 
@@ -1112,7 +1587,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetInputCount",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputCountInterceptors() ?? []
     )
   }
 
@@ -1129,7 +1605,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/StreamInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamInputsInterceptors() ?? []
     )
   }
 
@@ -1146,7 +1623,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetInputSamples",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputSamplesInterceptors() ?? []
     )
   }
 
@@ -1163,7 +1641,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetInput",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputInterceptors() ?? []
+    )
+  }
+
+  /// Get a video input manifest.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetInputVideoManifest.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getInputVideoManifest(
+    _ request: Clarifai_Api_GetVideoManifestRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetVideoManifestRequest, Clarifai_Api_GetVideoManifestResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetInputVideoManifest",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputVideoManifestInterceptors() ?? []
     )
   }
 
@@ -1180,13 +1677,13 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListInputsInterceptors() ?? []
     )
   }
 
-  /// Add an input (or set of inputs) to an app.
-  /// This call is synchronous if the PostInputsRequest contains exactly one image input. Otherwise,
-  /// it is asynchronous.
+  /// Add 1 or more input to an app.
+  /// The actual inputs processing is asynchronous.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostInputs.
@@ -1199,7 +1696,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInputsInterceptors() ?? []
     )
   }
 
@@ -1216,7 +1714,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchInputsInterceptors() ?? []
     )
   }
 
@@ -1233,7 +1732,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteInput",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInputInterceptors() ?? []
     )
   }
 
@@ -1251,11 +1751,30 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInputsInterceptors() ?? []
     )
   }
 
-  /// Execute a search over input
+  /// Patch saved inputs searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchInputsSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchInputsSearches(
+    _ request: Clarifai_Api_PatchInputsSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchInputsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchInputsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Execute a search over inputs
   ///
   /// - Parameters:
   ///   - request: Request to send to PostInputsSearches.
@@ -1268,7 +1787,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostInputsSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInputsSearchesInterceptors() ?? []
     )
   }
 
@@ -1285,7 +1805,309 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelOutputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelOutputsInterceptors() ?? []
+    )
+  }
+
+  /// List all the datasets.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListDatasets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listDatasets(
+    _ request: Clarifai_Api_ListDatasetsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListDatasetsRequest, Clarifai_Api_MultiDatasetResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListDatasets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListDatasetsInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific dataset.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDataset.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDataset(
+    _ request: Clarifai_Api_GetDatasetRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetDatasetRequest, Clarifai_Api_SingleDatasetResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetDataset",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDatasetInterceptors() ?? []
+    )
+  }
+
+  /// Add datasets to an app.
+  /// The process is atomic, i.e. either all or no datasets are added.
+  /// If there is an error for one dataset,
+  /// the process will stop, revert the transaction and return the error.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostDatasets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postDatasets(
+    _ request: Clarifai_Api_PostDatasetsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostDatasetsRequest, Clarifai_Api_MultiDatasetResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostDatasets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostDatasetsInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more datasets.
+  /// The process is atomic, i.e. either all or no datasets are patched.
+  /// If there is an error for one dataset,
+  /// the process will stop, revert the transaction and return the error.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchDatasets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchDatasets(
+    _ request: Clarifai_Api_PatchDatasetsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchDatasetsRequest, Clarifai_Api_MultiDatasetResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchDatasets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchDatasetsInterceptors() ?? []
+    )
+  }
+
+  /// Delete one or more datasets in a single request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteDatasets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteDatasets(
+    _ request: Clarifai_Api_DeleteDatasetsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteDatasets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteDatasetsInterceptors() ?? []
+    )
+  }
+
+  /// List all the dataset inputs in a dataset.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListDatasetInputs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listDatasetInputs(
+    _ request: Clarifai_Api_ListDatasetInputsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListDatasetInputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListDatasetInputsInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific dataset input.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDatasetInput.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDatasetInput(
+    _ request: Clarifai_Api_GetDatasetInputRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetDatasetInputRequest, Clarifai_Api_SingleDatasetInputResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetDatasetInput",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDatasetInputInterceptors() ?? []
+    )
+  }
+
+  /// Add dataset inputs to a dataset.
+  /// The process is not atomic, i.e. if there are errors with some dataset
+  /// inputs, others might still be added. The response reports
+  ///   - SUCCESS if all dataset inputs were added,
+  ///   - MIXED_STATUS if only some dataset inputs were added, and
+  ///   - FAILURE if no dataset inputs were added.
+  /// Each individual dataset input in the response has the status set to
+  /// indicate if it was successful or if there was an error.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostDatasetInputs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postDatasetInputs(
+    _ request: Clarifai_Api_PostDatasetInputsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostDatasetInputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostDatasetInputsInterceptors() ?? []
+    )
+  }
+
+  /// Delete one or more dataset inputs in a single request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteDatasetInputs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteDatasetInputs(
+    _ request: Clarifai_Api_DeleteDatasetInputsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetInputsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteDatasetInputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteDatasetInputsInterceptors() ?? []
+    )
+  }
+
+  /// List all the dataset versions.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListDatasetVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listDatasetVersions(
+    _ request: Clarifai_Api_ListDatasetVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListDatasetVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListDatasetVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific dataset version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDatasetVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDatasetVersion(
+    _ request: Clarifai_Api_GetDatasetVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetDatasetVersionRequest, Clarifai_Api_SingleDatasetVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetDatasetVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDatasetVersionInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListDatasetVersionMetricsGroups
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListDatasetVersionMetricsGroups.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listDatasetVersionMetricsGroups(
+    _ request: Clarifai_Api_ListDatasetVersionMetricsGroupsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListDatasetVersionMetricsGroupsRequest, Clarifai_Api_MultiDatasetVersionMetricsGroupResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListDatasetVersionMetricsGroups",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListDatasetVersionMetricsGroupsInterceptors() ?? []
+    )
+  }
+
+  /// Add dataset versions to a dataset.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostDatasetVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postDatasetVersions(
+    _ request: Clarifai_Api_PostDatasetVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostDatasetVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostDatasetVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more dataset versions.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchDatasetVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchDatasetVersions(
+    _ request: Clarifai_Api_PatchDatasetVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchDatasetVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchDatasetVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Delete one or more dataset versions in a single request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteDatasetVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteDatasetVersions(
+    _ request: Clarifai_Api_DeleteDatasetVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteDatasetVersionsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteDatasetVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteDatasetVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Create export of a dataset version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PutDatasetVersionExports.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func putDatasetVersionExports(
+    _ request: Clarifai_Api_PutDatasetVersionExportsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PutDatasetVersionExportsRequest, Clarifai_Api_MultiDatasetVersionExportResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PutDatasetVersionExports",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePutDatasetVersionExportsInterceptors() ?? []
     )
   }
 
@@ -1302,7 +2124,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelType",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelTypeInterceptors() ?? []
     )
   }
 
@@ -1319,7 +2142,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListOpenSourceLicenses",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListOpenSourceLicensesInterceptors() ?? []
     )
   }
 
@@ -1337,7 +2161,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModelTypes",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelTypesInterceptors() ?? []
     )
   }
 
@@ -1354,7 +2179,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModel",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelInterceptors() ?? []
     )
   }
 
@@ -1372,7 +2198,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelOutputInfo",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelOutputInfoInterceptors() ?? []
     )
   }
 
@@ -1389,7 +2216,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModels",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelsInterceptors() ?? []
+    )
+  }
+
+  /// List the resource counts for the app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetResourceCounts.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getResourceCounts(
+    _ request: Clarifai_Api_GetResourceCountsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetResourceCountsRequest, Clarifai_Api_GetResourceCountsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetResourceCounts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetResourceCountsInterceptors() ?? []
     )
   }
 
@@ -1408,7 +2254,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelsSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelsSearchesInterceptors() ?? []
     )
   }
 
@@ -1425,7 +2272,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModels",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelsInterceptors() ?? []
     )
   }
 
@@ -1442,7 +2290,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModels",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelsInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more models ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelIds.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelIds(
+    _ request: Clarifai_Api_PatchModelIdsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelIds",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelIdsInterceptors() ?? []
     )
   }
 
@@ -1459,7 +2326,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteModel",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModelInterceptors() ?? []
     )
   }
 
@@ -1476,7 +2344,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteModels",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModelsInterceptors() ?? []
+    )
+  }
+
+  /// Update model check consents
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModelCheckConsents.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModelCheckConsents(
+    _ request: Clarifai_Api_PatchModelCheckConsentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModelCheckConsentsRequest, Clarifai_Api_MultiModelCheckConsentResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModelCheckConsents",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelCheckConsentsInterceptors() ?? []
     )
   }
 
@@ -1493,7 +2380,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModelToolkits",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelToolkitsInterceptors() ?? []
     )
   }
 
@@ -1510,7 +2398,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModelUseCases",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelUseCasesInterceptors() ?? []
     )
   }
 
@@ -1527,7 +2416,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModelLanguages",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelLanguagesInterceptors() ?? []
     )
   }
 
@@ -1544,7 +2434,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModelInputs",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelInputsInterceptors() ?? []
     )
   }
 
@@ -1561,7 +2452,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelVersion",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelVersionInterceptors() ?? []
     )
   }
 
@@ -1578,7 +2470,44 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModelVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostWorkflowVersionsUnPublish
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostWorkflowVersionsUnPublish.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postWorkflowVersionsUnPublish(
+    _ request: Clarifai_Api_PostWorkflowVersionsUnPublishRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostWorkflowVersionsUnPublish",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowVersionsUnPublishInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostWorkflowVersionsPublish
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostWorkflowVersionsPublish.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postWorkflowVersionsPublish(
+    _ request: Clarifai_Api_PostWorkflowVersionsPublishRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionsPublishRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostWorkflowVersionsPublish",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowVersionsPublishInterceptors() ?? []
     )
   }
 
@@ -1595,7 +2524,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelVersionsPublish",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsPublishInterceptors() ?? []
     )
   }
 
@@ -1612,7 +2542,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelVersionsUnPublish",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsUnPublishInterceptors() ?? []
     )
   }
 
@@ -1629,7 +2560,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsInterceptors() ?? []
     )
   }
 
@@ -1646,7 +2578,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchModelVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModelVersionsInterceptors() ?? []
     )
   }
 
@@ -1663,10 +2596,12 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteModelVersion",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModelVersionInterceptors() ?? []
     )
   }
 
+  /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
   ///
   /// - Parameters:
@@ -1680,10 +2615,12 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelVersionMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelVersionMetricsInterceptors() ?? []
     )
   }
 
+  /// Deprecated, use PostEvaluations instead
   /// Run the evaluation metrics for a model version.
   ///
   /// - Parameters:
@@ -1697,7 +2634,118 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostModelVersionMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionMetricsInterceptors() ?? []
+    )
+  }
+
+  /// Deprecated, use PostEvaluations instead
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModelVersionEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModelVersionEvaluations(
+    _ request: Clarifai_Api_PostModelVersionEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModelVersionEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Deprecated, use GetEvaluation instead
+  /// List the evaluation metrics for a model version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModelVersionEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModelVersionEvaluations(
+    _ request: Clarifai_Api_ListModelVersionEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModelVersionEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelVersionEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Deprecated, use GetEvaluation instead
+  /// Get an evaluation metrics for a model version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModelVersionEvaluation.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModelVersionEvaluation(
+    _ request: Clarifai_Api_GetModelVersionEvaluationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModelVersionEvaluation",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelVersionEvaluationInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostEvaluations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postEvaluations(
+    _ request: Clarifai_Api_PostEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListEvaluations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listEvaluations(
+    _ request: Clarifai_Api_ListEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetEvaluation
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetEvaluation.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getEvaluation(
+    _ request: Clarifai_Api_GetEvaluationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetEvaluation",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetEvaluationInterceptors() ?? []
     )
   }
 
@@ -1714,7 +2762,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModelReferences",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelReferencesInterceptors() ?? []
     )
   }
 
@@ -1731,7 +2780,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetModelVersionInputExample",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelVersionInputExampleInterceptors() ?? []
     )
   }
 
@@ -1748,7 +2798,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListModelVersionInputExamples",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModelVersionInputExamplesInterceptors() ?? []
     )
   }
 
@@ -1765,7 +2816,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetWorkflow",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetWorkflowInterceptors() ?? []
     )
   }
 
@@ -1782,7 +2834,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListWorkflows",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListWorkflowsInterceptors() ?? []
     )
   }
 
@@ -1799,7 +2852,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostWorkflows",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowsInterceptors() ?? []
     )
   }
 
@@ -1816,7 +2870,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchWorkflows",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchWorkflowsInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more workflows ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchWorkflowIds.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchWorkflowIds(
+    _ request: Clarifai_Api_PatchWorkflowIdsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchWorkflowIdsRequest, Clarifai_Api_MultiWorkflowResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchWorkflowIds",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchWorkflowIdsInterceptors() ?? []
     )
   }
 
@@ -1833,7 +2906,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteWorkflow",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteWorkflowInterceptors() ?? []
     )
   }
 
@@ -1850,7 +2924,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteWorkflows",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteWorkflowsInterceptors() ?? []
     )
   }
 
@@ -1867,7 +2942,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostWorkflowResults",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowResultsInterceptors() ?? []
     )
   }
 
@@ -1884,7 +2960,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostWorkflowResultsSimilarity",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowResultsSimilarityInterceptors() ?? []
     )
   }
 
@@ -1901,7 +2978,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListWorkflowVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListWorkflowVersionsInterceptors() ?? []
     )
   }
 
@@ -1918,7 +2996,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetWorkflowVersion",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetWorkflowVersionInterceptors() ?? []
     )
   }
 
@@ -1935,7 +3014,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteWorkflowVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteWorkflowVersionsInterceptors() ?? []
     )
   }
 
@@ -1952,7 +3032,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchWorkflowVersions",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchWorkflowVersionsInterceptors() ?? []
     )
   }
 
@@ -1969,7 +3050,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetKeyInterceptors() ?? []
     )
   }
 
@@ -1986,7 +3068,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListKeys",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListKeysInterceptors() ?? []
     )
   }
 
@@ -2003,7 +3086,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListAppKeys",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAppKeysInterceptors() ?? []
     )
   }
 
@@ -2022,7 +3106,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteKey",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteKeyInterceptors() ?? []
     )
   }
 
@@ -2039,7 +3124,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostKeys",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostKeysInterceptors() ?? []
     )
   }
 
@@ -2056,7 +3142,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchKeys",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchKeysInterceptors() ?? []
     )
   }
 
@@ -2075,7 +3162,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/MyScopes",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeMyScopesInterceptors() ?? []
     )
   }
 
@@ -2092,7 +3180,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/MyScopesUser",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeMyScopesUserInterceptors() ?? []
     )
   }
 
@@ -2109,7 +3198,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/MyScopesRoot",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeMyScopesRootInterceptors() ?? []
     )
   }
 
@@ -2126,7 +3216,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListScopes",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListScopesInterceptors() ?? []
     )
   }
 
@@ -2143,7 +3234,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetApp",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAppInterceptors() ?? []
     )
   }
 
@@ -2160,7 +3252,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListApps",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAppsInterceptors() ?? []
     )
   }
 
@@ -2179,7 +3272,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteApp",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAppInterceptors() ?? []
     )
   }
 
@@ -2198,7 +3292,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostApps",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAppsInterceptors() ?? []
     )
   }
 
@@ -2215,7 +3310,44 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchApps",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAppsInterceptors() ?? []
+    )
+  }
+
+  /// Patch apps ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAppsIds.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAppsIds(
+    _ request: Clarifai_Api_PatchAppsIdsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAppsIdsRequest, Clarifai_Api_MultiAppResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAppsIds",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAppsIdsInterceptors() ?? []
+    )
+  }
+
+  /// Patch one app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchApp.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchApp(
+    _ request: Clarifai_Api_PatchAppRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAppRequest, Clarifai_Api_SingleAppResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchApp",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAppInterceptors() ?? []
     )
   }
 
@@ -2232,7 +3364,26 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAppsSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAppsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Get user information
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetUser.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getUser(
+    _ request: Clarifai_Api_GetUserRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetUserRequest, Clarifai_Api_SingleUserResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetUser",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetUserInterceptors() ?? []
     )
   }
 
@@ -2249,11 +3400,12 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostValidatePassword",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostValidatePasswordInterceptors() ?? []
     )
   }
 
-  /// Get a saved search.
+  /// Get a saved legacy search.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetSearch.
@@ -2266,11 +3418,12 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetSearch",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetSearchInterceptors() ?? []
     )
   }
 
-  /// List all saved searches.
+  /// List all saved legacy searches.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListSearches.
@@ -2283,11 +3436,32 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Patch saved legacy searches by ids.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchSearches(
+    _ request: Clarifai_Api_PatchSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchSearchesInterceptors() ?? []
     )
   }
 
   /// Execute a new search and optionally save it.
+  ///
+  /// Deprecated: Use PostInputsSearches or PostAnnotationsSearches instead.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostSearches.
@@ -2300,11 +3474,12 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostSearches",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostSearchesInterceptors() ?? []
     )
   }
 
-  /// Execute a previously saved search.
+  /// Execute a previously saved legacy search.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostSearchesByID.
@@ -2317,7 +3492,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostSearchesByID",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostSearchesByIDInterceptors() ?? []
     )
   }
 
@@ -2334,7 +3510,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAnnotationSearchMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAnnotationSearchMetricsInterceptors() ?? []
     )
   }
 
@@ -2351,7 +3528,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetAnnotationSearchMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAnnotationSearchMetricsInterceptors() ?? []
     )
   }
 
@@ -2368,7 +3546,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListAnnotationSearchMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationSearchMetricsInterceptors() ?? []
     )
   }
 
@@ -2385,7 +3564,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteAnnotationSearchMetrics",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAnnotationSearchMetricsInterceptors() ?? []
     )
   }
 
@@ -2402,7 +3582,98 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteSearch",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteSearchInterceptors() ?? []
+    )
+  }
+
+  /// List all the annotation filters.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListAnnotationFilters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listAnnotationFilters(
+    _ request: Clarifai_Api_ListAnnotationFiltersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListAnnotationFilters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationFiltersInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific annotation filter.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetAnnotationFilter.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getAnnotationFilter(
+    _ request: Clarifai_Api_GetAnnotationFilterRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetAnnotationFilterRequest, Clarifai_Api_SingleAnnotationFilterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetAnnotationFilter",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAnnotationFilterInterceptors() ?? []
+    )
+  }
+
+  /// Add annotation filters.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostAnnotationFilters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postAnnotationFilters(
+    _ request: Clarifai_Api_PostAnnotationFiltersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostAnnotationFilters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAnnotationFiltersInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more annotation filters.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAnnotationFilters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAnnotationFilters(
+    _ request: Clarifai_Api_PatchAnnotationFiltersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAnnotationFilters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAnnotationFiltersInterceptors() ?? []
+    )
+  }
+
+  /// Delete one or more annotation filters in a single request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteAnnotationFilters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteAnnotationFilters(
+    _ request: Clarifai_Api_DeleteAnnotationFiltersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationFiltersRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteAnnotationFilters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAnnotationFiltersInterceptors() ?? []
     )
   }
 
@@ -2419,7 +3690,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListStatusCodes",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListStatusCodesInterceptors() ?? []
     )
   }
 
@@ -2436,7 +3708,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetStatusCode",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetStatusCodeInterceptors() ?? []
     )
   }
 
@@ -2453,7 +3726,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListCollaborators",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListCollaboratorsInterceptors() ?? []
     )
   }
 
@@ -2470,7 +3744,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostCollaborators",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostCollaboratorsInterceptors() ?? []
     )
   }
 
@@ -2487,7 +3762,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchCollaborators",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchCollaboratorsInterceptors() ?? []
     )
   }
 
@@ -2504,7 +3780,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteCollaborators",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteCollaboratorsInterceptors() ?? []
     )
   }
 
@@ -2521,7 +3798,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListCollaborations",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListCollaborationsInterceptors() ?? []
     )
   }
 
@@ -2539,7 +3817,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAppDuplications",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAppDuplicationsInterceptors() ?? []
     )
   }
 
@@ -2556,7 +3835,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListAppDuplications",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAppDuplicationsInterceptors() ?? []
     )
   }
 
@@ -2573,7 +3853,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetAppDuplication",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAppDuplicationInterceptors() ?? []
     )
   }
 
@@ -2590,7 +3871,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostTasks",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostTasksInterceptors() ?? []
     )
   }
 
@@ -2607,7 +3889,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetTaskAnnotationCount",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetTaskAnnotationCountInterceptors() ?? []
     )
   }
 
@@ -2624,7 +3907,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetTaskInputCount",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetTaskInputCountInterceptors() ?? []
     )
   }
 
@@ -2641,7 +3925,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetTask",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetTaskInterceptors() ?? []
     )
   }
 
@@ -2658,7 +3943,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListTasks",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListTasksInterceptors() ?? []
     )
   }
 
@@ -2675,7 +3961,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchTasks",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchTasksInterceptors() ?? []
     )
   }
 
@@ -2692,7 +3979,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteTasks",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteTasksInterceptors() ?? []
     )
   }
 
@@ -2709,7 +3997,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostLabelOrders",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostLabelOrdersInterceptors() ?? []
     )
   }
 
@@ -2726,7 +4015,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetLabelOrder",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetLabelOrderInterceptors() ?? []
     )
   }
 
@@ -2743,7 +4033,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListLabelOrders",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListLabelOrdersInterceptors() ?? []
     )
   }
 
@@ -2760,7 +4051,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchLabelOrders",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchLabelOrdersInterceptors() ?? []
     )
   }
 
@@ -2778,7 +4070,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteLabelOrders",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteLabelOrdersInterceptors() ?? []
     )
   }
 
@@ -2800,7 +4093,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostCollectors",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostCollectorsInterceptors() ?? []
     )
   }
 
@@ -2817,7 +4111,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/GetCollector",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetCollectorInterceptors() ?? []
     )
   }
 
@@ -2834,7 +4129,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListCollectors",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListCollectorsInterceptors() ?? []
     )
   }
 
@@ -2851,7 +4147,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PatchCollectors",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchCollectorsInterceptors() ?? []
     )
   }
 
@@ -2869,7 +4166,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeleteCollectors",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteCollectorsInterceptors() ?? []
     )
   }
 
@@ -2886,7 +4184,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostStatValues",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostStatValuesInterceptors() ?? []
     )
   }
 
@@ -2903,7 +4202,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostStatValuesAggregate",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostStatValuesAggregateInterceptors() ?? []
     )
   }
 
@@ -2920,7 +4220,8 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostTrendingMetricsView",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostTrendingMetricsViewInterceptors() ?? []
     )
   }
 
@@ -2937,292 +4238,1961 @@ extension Clarifai_Api_V2ClientProtocol {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/ListTrendingMetricsViews",
       request: request,
-      callOptions: callOptions ?? self.defaultCallOptions
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListTrendingMetricsViewsInterceptors() ?? []
     )
   }
+
+  /// Get a specific module from an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModule.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModule(
+    _ request: Clarifai_Api_GetModuleRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModule",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModuleInterceptors() ?? []
+    )
+  }
+
+  /// List all the modules in community, by user or by app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModules.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModules(
+    _ request: Clarifai_Api_ListModulesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModules",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModulesInterceptors() ?? []
+    )
+  }
+
+  /// Add a modules to an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModules.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModules(
+    _ request: Clarifai_Api_PostModulesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModules",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModulesInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more modules.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModules.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModules(
+    _ request: Clarifai_Api_PatchModulesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModules",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModulesInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple modules in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteModules.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteModules(
+    _ request: Clarifai_Api_DeleteModulesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteModules",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModulesInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific module version for a module.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModuleVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModuleVersion(
+    _ request: Clarifai_Api_GetModuleVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModuleVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModuleVersionInterceptors() ?? []
+    )
+  }
+
+  /// List all the modules versions for a given module.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listModuleVersions(
+    _ request: Clarifai_Api_ListModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Create a new module version to trigger training of the module.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModuleVersions(
+    _ request: Clarifai_Api_PostModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Delete a multiple module version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteModuleVersions(
+    _ request: Clarifai_Api_DeleteModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Get installed modules vesrions for an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetInstalledModuleVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getInstalledModuleVersion(
+    _ request: Clarifai_Api_GetInstalledModuleVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetInstalledModuleVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInstalledModuleVersionInterceptors() ?? []
+    )
+  }
+
+  /// List installed modules vesrions for an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListInstalledModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listInstalledModuleVersions(
+    _ request: Clarifai_Api_ListInstalledModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListInstalledModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListInstalledModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Install a new module version which will deploy the specific ModuleVersion to the app in the url.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostInstalledModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postInstalledModuleVersions(
+    _ request: Clarifai_Api_PostInstalledModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostInstalledModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInstalledModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Uninstall an installed module version which will deploy the specific ModuleVersion to the app
+  /// in the url.
+  /// This cleaned up any associated caller keys so needs the Keys_Delete scope.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteInstalledModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteInstalledModuleVersions(
+    _ request: Clarifai_Api_DeleteInstalledModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteInstalledModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteInstalledModuleVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Assign a key that the caller owns to be used when accessing this installed module version
+  /// If this endpoint is called with a different key then it overwrites what is there.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostInstalledModuleVersionsKey.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postInstalledModuleVersionsKey(
+    _ request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostInstalledModuleVersionsKey",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInstalledModuleVersionsKeyInterceptors() ?? []
+    )
+  }
+
+  /// Perform bulk operations on a list of inputs based on input source.
+  /// Operation include add, update, delete of concepts, metadata and geo data.
+  /// This is an Asynchronous process. Use ListBulkOperations or GetBulkOperation to check the status.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostBulkOperations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postBulkOperations(
+    _ request: Clarifai_Api_PostBulkOperationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostBulkOperations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostBulkOperationsInterceptors() ?? []
+    )
+  }
+
+  /// List all the bulk operations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListBulkOperations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listBulkOperations(
+    _ request: Clarifai_Api_ListBulkOperationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListBulkOperations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListBulkOperationsInterceptors() ?? []
+    )
+  }
+
+  /// Get the bulk operation details by ID
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBulkOperation.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getBulkOperation(
+    _ request: Clarifai_Api_GetBulkOperationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetBulkOperationRequest, Clarifai_Api_SingleBulkOperationsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetBulkOperation",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBulkOperationInterceptors() ?? []
+    )
+  }
+
+  /// Cancel one or more bulk operations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to CancelBulkOperations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func cancelBulkOperations(
+    _ request: Clarifai_Api_CancelBulkOperationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_CancelBulkOperationRequest, Clarifai_Api_MultiBulkOperationsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/CancelBulkOperations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCancelBulkOperationsInterceptors() ?? []
+    )
+  }
+
+  /// delete one or more terminated bulk operations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteBulkOperations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteBulkOperations(
+    _ request: Clarifai_Api_DeleteBulkOperationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteBulkOperations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteBulkOperationsInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific job.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDatasetInputsSearchAddJob.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDatasetInputsSearchAddJob(
+    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetDatasetInputsSearchAddJob",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? []
+    )
+  }
+
+  /// List next non-labeled and unassigned inputs from task's dataset
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListNextTaskAssignments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listNextTaskAssignments(
+    _ request: Clarifai_Api_ListNextTaskAssignmentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListNextTaskAssignments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListNextTaskAssignmentsInterceptors() ?? []
+    )
+  }
+
+  /// PutTaskAssignments evaluates all the annotations by labeler (authenticated user) for given task (task_id) and input (input_id).
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PutTaskAssignments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func putTaskAssignments(
+    _ request: Clarifai_Api_PutTaskAssignmentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PutTaskAssignments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePutTaskAssignmentsInterceptors() ?? []
+    )
+  }
+
+  /// List all the inputs add jobs
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListInputsAddJobs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listInputsAddJobs(
+    _ request: Clarifai_Api_ListInputsAddJobsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListInputsAddJobsRequest, Clarifai_Api_MultiInputsAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListInputsAddJobs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListInputsAddJobsInterceptors() ?? []
+    )
+  }
+
+  /// Get the input add job details by ID
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetInputsAddJob.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getInputsAddJob(
+    _ request: Clarifai_Api_GetInputsAddJobRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetInputsAddJob",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputsAddJobInterceptors() ?? []
+    )
+  }
+
+  /// cancel the input add job by ID
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to CancelInputsAddJob.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func cancelInputsAddJob(
+    _ request: Clarifai_Api_CancelInputsAddJobRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_CancelInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/CancelInputsAddJob",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCancelInputsAddJobInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostUploads
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostUploads.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postUploads(
+    _ request: Clarifai_Api_PostUploadsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostUploadsRequest, Clarifai_Api_MultiUploadResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostUploads",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostUploadsInterceptors() ?? []
+    )
+  }
+
+  /// Upload a part of a multipart upload.
+  /// Behaviour on completion depends on the endpoint that was used to initiate the upload.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PutUploadContentParts.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func putUploadContentParts(
+    _ request: Clarifai_Api_PutUploadContentPartsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PutUploadContentPartsRequest, Clarifai_Api_SingleUploadResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PutUploadContentParts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePutUploadContentPartsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetUpload
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetUpload.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getUpload(
+    _ request: Clarifai_Api_GetUploadRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetUploadRequest, Clarifai_Api_SingleUploadResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetUpload",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetUploadInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListUploads
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListUploads.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listUploads(
+    _ request: Clarifai_Api_ListUploadsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListUploadsRequest, Clarifai_Api_MultiUploadResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListUploads",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListUploadsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeleteUploads
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteUploads.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteUploads(
+    _ request: Clarifai_Api_DeleteUploadsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteUploadsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteUploads",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteUploadsInterceptors() ?? []
+    )
+  }
+
+  /// Initiates retrieval of inputs from cloud storage from a user provided data source.
+  /// Will create and return an inputs-add-job for tracking progress.
+  /// Archives will be extracted and their contents will be processed as inputs.
+  ///
+  /// The cloud URL will be treated as a filter prefix. For example s3:/bucket/images_folder/abc will process
+  /// files in the images_folder beginning with abc or in a subfolder beginning with abc.
+  /// For example:
+  /// bucket/images_folder/abcImage.png
+  /// bucket/images_folder/abc-1/Data.zip
+  ///
+  /// If given URL is for a private bucket or file, then credentials should be provided to access the bucket.
+  /// Credentials should include rights to list the objects in the bucket, except when pointed directly at a file archive,
+  /// in which case it only requires rights to access that particular file.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostInputsDataSources.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postInputsDataSources(
+    _ request: Clarifai_Api_PostInputsDataSourcesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostInputsDataSourcesRequest, Clarifai_Api_MultiInputsAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostInputsDataSources",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInputsDataSourcesInterceptors() ?? []
+    )
+  }
+
+  /// Get the input extraction job details by ID
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetInputsExtractionJob.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getInputsExtractionJob(
+    _ request: Clarifai_Api_GetInputsExtractionJobRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetInputsExtractionJobRequest, Clarifai_Api_SingleInputsExtractionJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetInputsExtractionJob",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetInputsExtractionJobInterceptors() ?? []
+    )
+  }
+
+  /// List all the input extraction jobs
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListInputsExtractionJobs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listInputsExtractionJobs(
+    _ request: Clarifai_Api_ListInputsExtractionJobsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListInputsExtractionJobs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListInputsExtractionJobsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to CancelInputsExtractionJobs
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to CancelInputsExtractionJobs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func cancelInputsExtractionJobs(
+    _ request: Clarifai_Api_CancelInputsExtractionJobsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_CancelInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/CancelInputsExtractionJobs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeCancelInputsExtractionJobsInterceptors() ?? []
+    )
+  }
+
+  /// Start uploading a file archive containing inputs.
+  /// Will create and return an inputs-add-job for tracking progress.
+  ///
+  /// Associated inputs-add-job contains an upload id which should be completed through `PutUploadContentParts` endpoint.
+  /// Completing the upload will automatically begin unpacking the archive and uploading the contents as inputs.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostInputsUploads.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postInputsUploads(
+    _ request: Clarifai_Api_PostInputsUploadsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostInputsUploads",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostInputsUploadsInterceptors() ?? []
+    )
+  }
+
+  /// Get a specific runner from an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetRunner.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getRunner(
+    _ request: Clarifai_Api_GetRunnerRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetRunner",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetRunnerInterceptors() ?? []
+    )
+  }
+
+  /// List all the runners in community, by user or by app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListRunners.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listRunners(
+    _ request: Clarifai_Api_ListRunnersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListRunnersRequest, Clarifai_Api_MultiRunnerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListRunners",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListRunnersInterceptors() ?? []
+    )
+  }
+
+  /// Add a runners to an app.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostRunners.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postRunners(
+    _ request: Clarifai_Api_PostRunnersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostRunners",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostRunnersInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple runners in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteRunners.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteRunners(
+    _ request: Clarifai_Api_DeleteRunnersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteRunnersRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteRunners",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteRunnersInterceptors() ?? []
+    )
+  }
+
+  /// List items for the remote runner to work on.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListRunnerItems.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listRunnerItems(
+    _ request: Clarifai_Api_ListRunnerItemsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListRunnerItemsRequest, Clarifai_Api_MultiRunnerItemResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListRunnerItems",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListRunnerItemsInterceptors() ?? []
+    )
+  }
+
+  /// Post back outputs from remote runners
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostRunnerItemOutputs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postRunnerItemOutputs(
+    _ request: Clarifai_Api_PostRunnerItemOutputsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostRunnerItemOutputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostRunnerItemOutputsInterceptors() ?? []
+    )
+  }
+}
+
+public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'listConceptRelations'.
+  func makeListConceptRelationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postConceptRelations'.
+  func makePostConceptRelationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteConceptRelations'.
+  func makeDeleteConceptRelationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getConceptCounts'.
+  func makeGetConceptCountsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetConceptCountsRequest, Clarifai_Api_MultiConceptCountResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getConcept'.
+  func makeGetConceptInterceptors() -> [ClientInterceptor<Clarifai_Api_GetConceptRequest, Clarifai_Api_SingleConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listConcepts'.
+  func makeListConceptsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelConcepts'.
+  func makeListModelConceptsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postConceptsSearches'.
+  func makePostConceptsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptsSearchesRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postConcepts'.
+  func makePostConceptsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchConcepts'.
+  func makePatchConceptsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getConceptLanguage'.
+  func makeGetConceptLanguageInterceptors() -> [ClientInterceptor<Clarifai_Api_GetConceptLanguageRequest, Clarifai_Api_SingleConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listConceptLanguages'.
+  func makeListConceptLanguagesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postConceptLanguages'.
+  func makePostConceptLanguagesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchConceptLanguages'.
+  func makePatchConceptLanguagesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listKnowledgeGraphs'.
+  func makeListKnowledgeGraphsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postKnowledgeGraphs'.
+  func makePostKnowledgeGraphsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postConceptMappingJobs'.
+  func makePostConceptMappingJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAnnotation'.
+  func makeGetAnnotationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAnnotationRequest, Clarifai_Api_SingleAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAnnotations'.
+  func makeListAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAnnotations'.
+  func makePostAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAnnotations'.
+  func makePatchAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAnnotationsStatus'.
+  func makePatchAnnotationsStatusInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationsStatusRequest, Clarifai_Api_PatchAnnotationsStatusResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteAnnotation'.
+  func makeDeleteAnnotationInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteAnnotations'.
+  func makeDeleteAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAnnotationsSearches'.
+  func makePatchAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAnnotationsSearches'.
+  func makePostAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInputCount'.
+  func makeGetInputCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputCountRequest, Clarifai_Api_SingleInputCountResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'streamInputs'.
+  func makeStreamInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInputSamples'.
+  func makeGetInputSamplesInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputSamplesRequest, Clarifai_Api_MultiInputAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInput'.
+  func makeGetInputInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputRequest, Clarifai_Api_SingleInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInputVideoManifest'.
+  func makeGetInputVideoManifestInterceptors() -> [ClientInterceptor<Clarifai_Api_GetVideoManifestRequest, Clarifai_Api_GetVideoManifestResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listInputs'.
+  func makeListInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInputs'.
+  func makePostInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchInputs'.
+  func makePatchInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteInput'.
+  func makeDeleteInputInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteInputRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteInputs'.
+  func makeDeleteInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteInputsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchInputsSearches'.
+  func makePatchInputsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInputsSearches'.
+  func makePostInputsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelOutputs'.
+  func makePostModelOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listDatasets'.
+  func makeListDatasetsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDataset'.
+  func makeGetDatasetInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetRequest, Clarifai_Api_SingleDatasetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postDatasets'.
+  func makePostDatasetsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchDatasets'.
+  func makePatchDatasetsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteDatasets'.
+  func makeDeleteDatasetsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDatasetsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listDatasetInputs'.
+  func makeListDatasetInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDatasetInput'.
+  func makeGetDatasetInputInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetInputRequest, Clarifai_Api_SingleDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postDatasetInputs'.
+  func makePostDatasetInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteDatasetInputs'.
+  func makeDeleteDatasetInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDatasetInputsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listDatasetVersions'.
+  func makeListDatasetVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDatasetVersion'.
+  func makeGetDatasetVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetVersionRequest, Clarifai_Api_SingleDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listDatasetVersionMetricsGroups'.
+  func makeListDatasetVersionMetricsGroupsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDatasetVersionMetricsGroupsRequest, Clarifai_Api_MultiDatasetVersionMetricsGroupResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postDatasetVersions'.
+  func makePostDatasetVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchDatasetVersions'.
+  func makePatchDatasetVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteDatasetVersions'.
+  func makeDeleteDatasetVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDatasetVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'putDatasetVersionExports'.
+  func makePutDatasetVersionExportsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutDatasetVersionExportsRequest, Clarifai_Api_MultiDatasetVersionExportResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelType'.
+  func makeGetModelTypeInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelTypeRequest, Clarifai_Api_SingleModelTypeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listOpenSourceLicenses'.
+  func makeListOpenSourceLicensesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListOpenSourceLicensesRequest, Clarifai_Api_ListOpenSourceLicensesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelTypes'.
+  func makeListModelTypesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelTypesRequest, Clarifai_Api_MultiModelTypeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModel'.
+  func makeGetModelInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelOutputInfo'.
+  func makeGetModelOutputInfoInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModels'.
+  func makeListModelsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getResourceCounts'.
+  func makeGetResourceCountsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetResourceCountsRequest, Clarifai_Api_GetResourceCountsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelsSearches'.
+  func makePostModelsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelsSearchesRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModels'.
+  func makePostModelsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelsRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModels'.
+  func makePatchModelsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelIds'.
+  func makePatchModelIdsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteModel'.
+  func makeDeleteModelInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteModels'.
+  func makeDeleteModelsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelCheckConsents'.
+  func makePatchModelCheckConsentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelCheckConsentsRequest, Clarifai_Api_MultiModelCheckConsentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelToolkits'.
+  func makePatchModelToolkitsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelToolkitsRequest, Clarifai_Api_MultiModelToolkitResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelUseCases'.
+  func makePatchModelUseCasesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelUseCasesRequest, Clarifai_Api_MultiModelUseCaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelLanguages'.
+  func makePatchModelLanguagesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelLanguagesRequest, Clarifai_Api_MultiModelLanguageResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelInputs'.
+  func makeListModelInputsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelVersion'.
+  func makeGetModelVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelVersions'.
+  func makeListModelVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowVersionsUnPublish'.
+  func makePostWorkflowVersionsUnPublishInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowVersionsPublish'.
+  func makePostWorkflowVersionsPublishInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsPublish'.
+  func makePostModelVersionsPublishInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsUnPublish'.
+  func makePostModelVersionsUnPublishInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersions'.
+  func makePostModelVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModelVersions'.
+  func makePatchModelVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteModelVersion'.
+  func makeDeleteModelVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelVersionMetrics'.
+  func makeGetModelVersionMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionMetrics'.
+  func makePostModelVersionMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionEvaluations'.
+  func makePostModelVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelVersionEvaluations'.
+  func makeListModelVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelVersionEvaluation'.
+  func makeGetModelVersionEvaluationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postEvaluations'.
+  func makePostEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listEvaluations'.
+  func makeListEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getEvaluation'.
+  func makeGetEvaluationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelReferences'.
+  func makeListModelReferencesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelReferencesRequest, Clarifai_Api_MultiModelReferenceResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelVersionInputExample'.
+  func makeGetModelVersionInputExampleInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionInputExampleRequest, Clarifai_Api_SingleModelVersionInputExampleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModelVersionInputExamples'.
+  func makeListModelVersionInputExamplesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModelVersionInputExamplesRequest, Clarifai_Api_MultiModelVersionInputExampleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getWorkflow'.
+  func makeGetWorkflowInterceptors() -> [ClientInterceptor<Clarifai_Api_GetWorkflowRequest, Clarifai_Api_SingleWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listWorkflows'.
+  func makeListWorkflowsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflows'.
+  func makePostWorkflowsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchWorkflows'.
+  func makePatchWorkflowsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchWorkflowIds'.
+  func makePatchWorkflowIdsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowIdsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteWorkflow'.
+  func makeDeleteWorkflowInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteWorkflowRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteWorkflows'.
+  func makeDeleteWorkflowsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteWorkflowsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowResults'.
+  func makePostWorkflowResultsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowResultsRequest, Clarifai_Api_PostWorkflowResultsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowResultsSimilarity'.
+  func makePostWorkflowResultsSimilarityInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listWorkflowVersions'.
+  func makeListWorkflowVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowVersionsRequest, Clarifai_Api_MultiWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getWorkflowVersion'.
+  func makeGetWorkflowVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetWorkflowVersionRequest, Clarifai_Api_SingleWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteWorkflowVersions'.
+  func makeDeleteWorkflowVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteWorkflowVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchWorkflowVersions'.
+  func makePatchWorkflowVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowVersionsRequest, Clarifai_Api_MultiWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getKey'.
+  func makeGetKeyInterceptors() -> [ClientInterceptor<Clarifai_Api_GetKeyRequest, Clarifai_Api_SingleKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listKeys'.
+  func makeListKeysInterceptors() -> [ClientInterceptor<Clarifai_Api_ListKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAppKeys'.
+  func makeListAppKeysInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAppKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteKey'.
+  func makeDeleteKeyInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteKeyRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postKeys'.
+  func makePostKeysInterceptors() -> [ClientInterceptor<Clarifai_Api_PostKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchKeys'.
+  func makePatchKeysInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'myScopes'.
+  func makeMyScopesInterceptors() -> [ClientInterceptor<Clarifai_Api_MyScopesRequest, Clarifai_Api_MultiScopeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'myScopesUser'.
+  func makeMyScopesUserInterceptors() -> [ClientInterceptor<Clarifai_Api_MyScopesUserRequest, Clarifai_Api_MultiScopeUserResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'myScopesRoot'.
+  func makeMyScopesRootInterceptors() -> [ClientInterceptor<Clarifai_Api_MyScopesRootRequest, Clarifai_Api_MultiScopeRootResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listScopes'.
+  func makeListScopesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListScopesRequest, Clarifai_Api_MultiScopeDepsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getApp'.
+  func makeGetAppInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAppRequest, Clarifai_Api_SingleAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listApps'.
+  func makeListAppsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteApp'.
+  func makeDeleteAppInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAppRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postApps'.
+  func makePostAppsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchApps'.
+  func makePatchAppsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAppsIds'.
+  func makePatchAppsIdsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppsIdsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchApp'.
+  func makePatchAppInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppRequest, Clarifai_Api_SingleAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAppsSearches'.
+  func makePostAppsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAppsSearchesRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getUser'.
+  func makeGetUserInterceptors() -> [ClientInterceptor<Clarifai_Api_GetUserRequest, Clarifai_Api_SingleUserResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postValidatePassword'.
+  func makePostValidatePasswordInterceptors() -> [ClientInterceptor<Clarifai_Api_PostValidatePasswordRequest, Clarifai_Api_SinglePasswordValidationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getSearch'.
+  func makeGetSearchInterceptors() -> [ClientInterceptor<Clarifai_Api_GetSearchRequest, Clarifai_Api_SingleSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listSearches'.
+  func makeListSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchSearches'.
+  func makePatchSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postSearches'.
+  func makePostSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postSearchesByID'.
+  func makePostSearchesByIDInterceptors() -> [ClientInterceptor<Clarifai_Api_PostSearchesByIDRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAnnotationSearchMetrics'.
+  func makePostAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAnnotationSearchMetrics'.
+  func makeGetAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAnnotationSearchMetrics'.
+  func makeListAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteAnnotationSearchMetrics'.
+  func makeDeleteAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteSearch'.
+  func makeDeleteSearchInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteSearchRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAnnotationFilters'.
+  func makeListAnnotationFiltersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAnnotationFilter'.
+  func makeGetAnnotationFilterInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAnnotationFilterRequest, Clarifai_Api_SingleAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAnnotationFilters'.
+  func makePostAnnotationFiltersInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAnnotationFilters'.
+  func makePatchAnnotationFiltersInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteAnnotationFilters'.
+  func makeDeleteAnnotationFiltersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationFiltersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listStatusCodes'.
+  func makeListStatusCodesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListStatusCodesRequest, Clarifai_Api_MultiStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getStatusCode'.
+  func makeGetStatusCodeInterceptors() -> [ClientInterceptor<Clarifai_Api_GetStatusCodeRequest, Clarifai_Api_SingleStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listCollaborators'.
+  func makeListCollaboratorsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postCollaborators'.
+  func makePostCollaboratorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchCollaborators'.
+  func makePatchCollaboratorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteCollaborators'.
+  func makeDeleteCollaboratorsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteCollaboratorsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listCollaborations'.
+  func makeListCollaborationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCollaborationsRequest, Clarifai_Api_MultiCollaborationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAppDuplications'.
+  func makePostAppDuplicationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAppDuplicationsRequest, Clarifai_Api_MultiAppDuplicationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAppDuplications'.
+  func makeListAppDuplicationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAppDuplicationsRequest, Clarifai_Api_MultiAppDuplicationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAppDuplication'.
+  func makeGetAppDuplicationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAppDuplicationRequest, Clarifai_Api_SingleAppDuplicationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postTasks'.
+  func makePostTasksInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getTaskAnnotationCount'.
+  func makeGetTaskAnnotationCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getTaskInputCount'.
+  func makeGetTaskInputCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getTask'.
+  func makeGetTaskInterceptors() -> [ClientInterceptor<Clarifai_Api_GetTaskRequest, Clarifai_Api_SingleTaskResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listTasks'.
+  func makeListTasksInterceptors() -> [ClientInterceptor<Clarifai_Api_ListTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchTasks'.
+  func makePatchTasksInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteTasks'.
+  func makeDeleteTasksInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteTasksRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postLabelOrders'.
+  func makePostLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_PostLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getLabelOrder'.
+  func makeGetLabelOrderInterceptors() -> [ClientInterceptor<Clarifai_Api_GetLabelOrderRequest, Clarifai_Api_SingleLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listLabelOrders'.
+  func makeListLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchLabelOrders'.
+  func makePatchLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteLabelOrders'.
+  func makeDeleteLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postCollectors'.
+  func makePostCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getCollector'.
+  func makeGetCollectorInterceptors() -> [ClientInterceptor<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listCollectors'.
+  func makeListCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchCollectors'.
+  func makePatchCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteCollectors'.
+  func makeDeleteCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postStatValues'.
+  func makePostStatValuesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postStatValuesAggregate'.
+  func makePostStatValuesAggregateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postTrendingMetricsView'.
+  func makePostTrendingMetricsViewInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listTrendingMetricsViews'.
+  func makeListTrendingMetricsViewsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModule'.
+  func makeGetModuleInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModules'.
+  func makeListModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModules'.
+  func makePostModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchModules'.
+  func makePatchModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteModules'.
+  func makeDeleteModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModuleVersion'.
+  func makeGetModuleVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listModuleVersions'.
+  func makeListModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModuleVersions'.
+  func makePostModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteModuleVersions'.
+  func makeDeleteModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInstalledModuleVersion'.
+  func makeGetInstalledModuleVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listInstalledModuleVersions'.
+  func makeListInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInstalledModuleVersions'.
+  func makePostInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteInstalledModuleVersions'.
+  func makeDeleteInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInstalledModuleVersionsKey'.
+  func makePostInstalledModuleVersionsKeyInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postBulkOperations'.
+  func makePostBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listBulkOperations'.
+  func makeListBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getBulkOperation'.
+  func makeGetBulkOperationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetBulkOperationRequest, Clarifai_Api_SingleBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'cancelBulkOperations'.
+  func makeCancelBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_CancelBulkOperationRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteBulkOperations'.
+  func makeDeleteBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDatasetInputsSearchAddJob'.
+  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listNextTaskAssignments'.
+  func makeListNextTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'putTaskAssignments'.
+  func makePutTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listInputsAddJobs'.
+  func makeListInputsAddJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInputsAddJobsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInputsAddJob'.
+  func makeGetInputsAddJobInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'cancelInputsAddJob'.
+  func makeCancelInputsAddJobInterceptors() -> [ClientInterceptor<Clarifai_Api_CancelInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postUploads'.
+  func makePostUploadsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostUploadsRequest, Clarifai_Api_MultiUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'putUploadContentParts'.
+  func makePutUploadContentPartsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutUploadContentPartsRequest, Clarifai_Api_SingleUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getUpload'.
+  func makeGetUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_GetUploadRequest, Clarifai_Api_SingleUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listUploads'.
+  func makeListUploadsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListUploadsRequest, Clarifai_Api_MultiUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteUploads'.
+  func makeDeleteUploadsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteUploadsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInputsDataSources'.
+  func makePostInputsDataSourcesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInputsDataSourcesRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getInputsExtractionJob'.
+  func makeGetInputsExtractionJobInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputsExtractionJobRequest, Clarifai_Api_SingleInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listInputsExtractionJobs'.
+  func makeListInputsExtractionJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'cancelInputsExtractionJobs'.
+  func makeCancelInputsExtractionJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_CancelInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postInputsUploads'.
+  func makePostInputsUploadsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getRunner'.
+  func makeGetRunnerInterceptors() -> [ClientInterceptor<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listRunners'.
+  func makeListRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postRunners'.
+  func makePostRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteRunners'.
+  func makeDeleteRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteRunnersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listRunnerItems'.
+  func makeListRunnerItemsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListRunnerItemsRequest, Clarifai_Api_MultiRunnerItemResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postRunnerItemOutputs'.
+  func makePostRunnerItemOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
   public let channel: GRPCChannel
   public var defaultCallOptions: CallOptions
+  public var interceptors: Clarifai_Api_V2ClientInterceptorFactoryProtocol?
 
   /// Creates a client for the clarifai.api.V2 service.
   ///
   /// - Parameters:
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
-  public init(channel: GRPCChannel, defaultCallOptions: CallOptions = CallOptions()) {
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: Clarifai_Api_V2ClientInterceptorFactoryProtocol? = nil
+  ) {
     self.channel = channel
     self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
   }
 }
 
 /// To build a server, implement a class that conforms to this protocol.
 public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
+  var interceptors: Clarifai_Api_V2ServerInterceptorFactoryProtocol? { get }
+
   /// List concept relations between concepts in the platform.
   /// MUST be above ListConcepts so that if concept_id is empty this will still match
   /// /concepts/relations to list all the concept relations in the app.
   func listConceptRelations(request: Clarifai_Api_ListConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
+
   /// Post concept relations to create relations between concepts in the platform.
   func postConceptRelations(request: Clarifai_Api_PostConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptRelationResponse>
+
   /// Post concept relations to create relations between concepts in the platform.
   func deleteConceptRelations(request: Clarifai_Api_DeleteConceptRelationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// List all the concepts with their positive and negative counts
   func getConceptCounts(request: Clarifai_Api_GetConceptCountsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptCountResponse>
+
   /// Get a specific concept from an app.
   func getConcept(request: Clarifai_Api_GetConceptRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleConceptResponse>
+
   /// List all the concepts.
   func listConcepts(request: Clarifai_Api_ListConceptsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptResponse>
+
+  /// List models concepts.
+  func listModelConcepts(request: Clarifai_Api_ListModelConceptsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptResponse>
+
   /// Search over the concepts to find one or more you're looking for.
   /// This leverage the "body" parameter because we also have page and
   /// per_page as url query param variables in this request.
   func postConceptsSearches(request: Clarifai_Api_PostConceptsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptResponse>
+
   /// Add a concept to an app.
   func postConcepts(request: Clarifai_Api_PostConceptsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptResponse>
+
   /// Patch one or more concepts.
   func patchConcepts(request: Clarifai_Api_PatchConceptsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptResponse>
+
   /// Get a specific concept from an app.
   func getConceptLanguage(request: Clarifai_Api_GetConceptLanguageRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleConceptLanguageResponse>
+
   /// List the concept in all the translated languages.
   func listConceptLanguages(request: Clarifai_Api_ListConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
+
   /// Add a new translation for this concept.
   func postConceptLanguages(request: Clarifai_Api_PostConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
+
   /// Patch the name for a given language names by passing in a list of concepts with the new names
   /// for the languages.
   func patchConceptLanguages(request: Clarifai_Api_PatchConceptLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptLanguageResponse>
+
   /// List all domain graphs.
   func listKnowledgeGraphs(request: Clarifai_Api_ListKnowledgeGraphsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKnowledgeGraphResponse>
+
   /// Post domain graphs.
   func postKnowledgeGraphs(request: Clarifai_Api_PostKnowledgeGraphsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKnowledgeGraphResponse>
+
   /// Start concept mapping jobs.
   func postConceptMappingJobs(request: Clarifai_Api_PostConceptMappingJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptMappingJobResponse>
+
   /// Get a specific annotation from an app.
   func getAnnotation(request: Clarifai_Api_GetAnnotationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAnnotationResponse>
+
   /// List all the annotation.
   func listAnnotations(request: Clarifai_Api_ListAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+
   /// Post annotations.
   func postAnnotations(request: Clarifai_Api_PostAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+
   /// Patch one or more annotations.
   func patchAnnotations(request: Clarifai_Api_PatchAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+
   /// Patch annotations status by worker id and task id.
   func patchAnnotationsStatus(request: Clarifai_Api_PatchAnnotationsStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PatchAnnotationsStatusResponse>
+
   /// Delete a single annotation.
   func deleteAnnotation(request: Clarifai_Api_DeleteAnnotationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Delete multiple annotations in one request.
   func deleteAnnotations(request: Clarifai_Api_DeleteAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-  /// Execute a search over annotation
+
+  /// Patch saved annotations searches by ids.
+  func patchAnnotationsSearches(request: Clarifai_Api_PatchAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
+  /// Execute a search over annotations
   func postAnnotationsSearches(request: Clarifai_Api_PostAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
   /// Get input count per status.
   func getInputCount(request: Clarifai_Api_GetInputCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputCountResponse>
+
   /// Streams all the inputs starting from oldest assets.
   func streamInputs(request: Clarifai_Api_StreamInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+
   /// Get a specific input from an app.
   func getInputSamples(request: Clarifai_Api_GetInputSamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputAnnotationResponse>
+
   /// Get a specific input from an app.
   func getInput(request: Clarifai_Api_GetInputRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputResponse>
+
+  /// Get a video input manifest.
+  func getInputVideoManifest(request: Clarifai_Api_GetVideoManifestRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_GetVideoManifestResponse>
+
   /// List all the inputs.
   func listInputs(request: Clarifai_Api_ListInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
-  /// Add an input (or set of inputs) to an app.
-  /// This call is synchronous if the PostInputsRequest contains exactly one image input. Otherwise,
-  /// it is asynchronous.
+
+  /// Add 1 or more input to an app.
+  /// The actual inputs processing is asynchronous.
   func postInputs(request: Clarifai_Api_PostInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+
   /// Patch one or more inputs.
   func patchInputs(request: Clarifai_Api_PatchInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+
   /// Delete a single input asynchronously.
   func deleteInput(request: Clarifai_Api_DeleteInputRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Delete multiple inputs in one request.
   /// This call is asynchronous.
   func deleteInputs(request: Clarifai_Api_DeleteInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-  /// Execute a search over input
+
+  /// Patch saved inputs searches by ids.
+  func patchInputsSearches(request: Clarifai_Api_PatchInputsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
+  /// Execute a search over inputs
   func postInputsSearches(request: Clarifai_Api_PostInputsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
   /// Get predicted outputs from the model.
   func postModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiOutputResponse>
+
+  /// List all the datasets.
+  func listDatasets(request: Clarifai_Api_ListDatasetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetResponse>
+
+  /// Get a specific dataset.
+  func getDataset(request: Clarifai_Api_GetDatasetRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetResponse>
+
+  /// Add datasets to an app.
+  /// The process is atomic, i.e. either all or no datasets are added.
+  /// If there is an error for one dataset,
+  /// the process will stop, revert the transaction and return the error.
+  func postDatasets(request: Clarifai_Api_PostDatasetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetResponse>
+
+  /// Patch one or more datasets.
+  /// The process is atomic, i.e. either all or no datasets are patched.
+  /// If there is an error for one dataset,
+  /// the process will stop, revert the transaction and return the error.
+  func patchDatasets(request: Clarifai_Api_PatchDatasetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetResponse>
+
+  /// Delete one or more datasets in a single request.
+  func deleteDatasets(request: Clarifai_Api_DeleteDatasetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List all the dataset inputs in a dataset.
+  func listDatasetInputs(request: Clarifai_Api_ListDatasetInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetInputResponse>
+
+  /// Get a specific dataset input.
+  func getDatasetInput(request: Clarifai_Api_GetDatasetInputRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetInputResponse>
+
+  /// Add dataset inputs to a dataset.
+  /// The process is not atomic, i.e. if there are errors with some dataset
+  /// inputs, others might still be added. The response reports
+  ///   - SUCCESS if all dataset inputs were added,
+  ///   - MIXED_STATUS if only some dataset inputs were added, and
+  ///   - FAILURE if no dataset inputs were added.
+  /// Each individual dataset input in the response has the status set to
+  /// indicate if it was successful or if there was an error.
+  func postDatasetInputs(request: Clarifai_Api_PostDatasetInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetInputResponse>
+
+  /// Delete one or more dataset inputs in a single request.
+  func deleteDatasetInputs(request: Clarifai_Api_DeleteDatasetInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List all the dataset versions.
+  func listDatasetVersions(request: Clarifai_Api_ListDatasetVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetVersionResponse>
+
+  /// Get a specific dataset version.
+  func getDatasetVersion(request: Clarifai_Api_GetDatasetVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetVersionResponse>
+
+  func listDatasetVersionMetricsGroups(request: Clarifai_Api_ListDatasetVersionMetricsGroupsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetVersionMetricsGroupResponse>
+
+  /// Add dataset versions to a dataset.
+  func postDatasetVersions(request: Clarifai_Api_PostDatasetVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetVersionResponse>
+
+  /// Patch one or more dataset versions.
+  func patchDatasetVersions(request: Clarifai_Api_PatchDatasetVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetVersionResponse>
+
+  /// Delete one or more dataset versions in a single request.
+  func deleteDatasetVersions(request: Clarifai_Api_DeleteDatasetVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Create export of a dataset version.
+  func putDatasetVersionExports(request: Clarifai_Api_PutDatasetVersionExportsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetVersionExportResponse>
+
   /// Get a specific model type.
   func getModelType(request: Clarifai_Api_GetModelTypeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelTypeResponse>
+
   /// List all the supported open source licenses in the platform.
   func listOpenSourceLicenses(request: Clarifai_Api_ListOpenSourceLicensesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_ListOpenSourceLicensesResponse>
+
   /// List all the model types available in the platform.
   /// This MUST be above ListModels so that the /models/types endpoint takes precedence.
   func listModelTypes(request: Clarifai_Api_ListModelTypesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelTypeResponse>
+
   /// Get a specific model from an app.
   func getModel(request: Clarifai_Api_GetModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+
   /// Get a the output info for a given model_id or model_id/version_id
   /// combo.
   func getModelOutputInfo(request: Clarifai_Api_GetModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+
   /// List all the models.
   func listModels(request: Clarifai_Api_ListModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
+
+  /// List the resource counts for the app.
+  func getResourceCounts(request: Clarifai_Api_GetResourceCountsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_GetResourceCountsResponse>
+
   /// Search over the models to find one or more you're looking for.
   /// This leverage the "body" parameter because we also have page and
   /// per_page as url query param variables in this request.
   func postModelsSearches(request: Clarifai_Api_PostModelsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
+
   /// Add a models to an app.
   func postModels(request: Clarifai_Api_PostModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+
   /// Patch one or more models.
   func patchModels(request: Clarifai_Api_PatchModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
+
+  /// Patch one or more models ids.
+  func patchModelIds(request: Clarifai_Api_PatchModelIdsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelResponse>
+
   /// Delete a single model.
   func deleteModel(request: Clarifai_Api_DeleteModelRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Delete multiple models in one request.
   func deleteModels(request: Clarifai_Api_DeleteModelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Update model check consents
+  func patchModelCheckConsents(request: Clarifai_Api_PatchModelCheckConsentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelCheckConsentResponse>
+
   /// Update model toolkits tags
   func patchModelToolkits(request: Clarifai_Api_PatchModelToolkitsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelToolkitResponse>
+
   /// Update model use_cases tags
   func patchModelUseCases(request: Clarifai_Api_PatchModelUseCasesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelUseCaseResponse>
+
   /// Update model languages tags
   func patchModelLanguages(request: Clarifai_Api_PatchModelLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelLanguageResponse>
+
   /// List all the inputs.
   func listModelInputs(request: Clarifai_Api_ListModelInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+
   /// Get a specific model from an app.
   func getModelVersion(request: Clarifai_Api_GetModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
+
   /// List all the models.
   func listModelVersions(request: Clarifai_Api_ListModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
+
+  func postWorkflowVersionsUnPublish(request: Clarifai_Api_PostWorkflowVersionsUnPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func postWorkflowVersionsPublish(request: Clarifai_Api_PostWorkflowVersionsPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// PostModelVersionsPublish
   func postModelVersionsPublish(request: Clarifai_Api_PostModelVersionsPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// PostModelVersionsUnPublish
   func postModelVersionsUnPublish(request: Clarifai_Api_PostModelVersionsUnPublishRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Create a new model version to trigger training of the model.
   func postModelVersions(request: Clarifai_Api_PostModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+
   /// PatchModelVersions
   func patchModelVersions(request: Clarifai_Api_PatchModelVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionResponse>
+
   /// Delete a single model.
   func deleteModelVersion(request: Clarifai_Api_DeleteModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
   func getModelVersionMetrics(request: Clarifai_Api_GetModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
+
+  /// Deprecated, use PostEvaluations instead
   /// Run the evaluation metrics for a model version.
   func postModelVersionMetrics(request: Clarifai_Api_PostModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
+
+  /// Deprecated, use PostEvaluations instead
+  func postModelVersionEvaluations(request: Clarifai_Api_PostModelVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiEvalMetricsResponse>
+
+  /// Deprecated, use GetEvaluation instead
+  /// List the evaluation metrics for a model version.
+  func listModelVersionEvaluations(request: Clarifai_Api_ListModelVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiEvalMetricsResponse>
+
+  /// Deprecated, use GetEvaluation instead
+  /// Get an evaluation metrics for a model version.
+  func getModelVersionEvaluation(request: Clarifai_Api_GetModelVersionEvaluationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleEvalMetricsResponse>
+
+  func postEvaluations(request: Clarifai_Api_PostEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiEvalMetricsResponse>
+
+  func listEvaluations(request: Clarifai_Api_ListEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiEvalMetricsResponse>
+
+  func getEvaluation(request: Clarifai_Api_GetEvaluationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleEvalMetricsResponse>
+
   /// Lists model references tied to a particular model id.
   func listModelReferences(request: Clarifai_Api_ListModelReferencesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelReferenceResponse>
+
   /// GetModelVersionInputExample
   func getModelVersionInputExample(request: Clarifai_Api_GetModelVersionInputExampleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionInputExampleResponse>
+
   /// ListModelVersionInputExamples
   func listModelVersionInputExamples(request: Clarifai_Api_ListModelVersionInputExamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelVersionInputExampleResponse>
+
   /// Get a specific workflow from an app.
   func getWorkflow(request: Clarifai_Api_GetWorkflowRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleWorkflowResponse>
+
   /// List all the workflows.
   func listWorkflows(request: Clarifai_Api_ListWorkflowsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowResponse>
+
   /// Add a workflow to an app.
   func postWorkflows(request: Clarifai_Api_PostWorkflowsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowResponse>
+
   /// Patch one or more workflows.
   func patchWorkflows(request: Clarifai_Api_PatchWorkflowsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowResponse>
+
+  /// Patch one or more workflows ids.
+  func patchWorkflowIds(request: Clarifai_Api_PatchWorkflowIdsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowResponse>
+
   /// Delete a single workflow.
   func deleteWorkflow(request: Clarifai_Api_DeleteWorkflowRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Delete multiple workflows in one request.
   func deleteWorkflows(request: Clarifai_Api_DeleteWorkflowsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Predict using a workflow.
   func postWorkflowResults(request: Clarifai_Api_PostWorkflowResultsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsResponse>
+
   /// Compare embeddings distances using a workflow
   func postWorkflowResultsSimilarity(request: Clarifai_Api_PostWorkflowResultsSimilarityRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsSimilarityResponse>
+
   /// List workflow versions.
   func listWorkflowVersions(request: Clarifai_Api_ListWorkflowVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionResponse>
+
   /// Get single workflow version.
   func getWorkflowVersion(request: Clarifai_Api_GetWorkflowVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleWorkflowVersionResponse>
+
   /// Delete workflow versions.
   func deleteWorkflowVersions(request: Clarifai_Api_DeleteWorkflowVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Patch workflow versions.
   func patchWorkflowVersions(request: Clarifai_Api_PatchWorkflowVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionResponse>
+
   /// Get a specific key from an app.
   func getKey(request: Clarifai_Api_GetKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleKeyResponse>
+
   /// List all the keys.
   func listKeys(request: Clarifai_Api_ListKeysRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKeyResponse>
+
   /// List keys by app_id
   func listAppKeys(request: Clarifai_Api_ListAppKeysRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKeyResponse>
+
   /// Search over the keys to find one or more you're looking for.
   /// This leverage the "body" parameter because we also have page and
   /// per_page as url query param variables in this request.
   func deleteKey(request: Clarifai_Api_DeleteKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Add a key to an app.
   func postKeys(request: Clarifai_Api_PostKeysRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKeyResponse>
+
   /// Patch one or more keys.
   func patchKeys(request: Clarifai_Api_PatchKeysRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKeyResponse>
+
   /// API Keys in the public API -- request is itself Key authorized, and will tell
   /// the user the scopes/access of the key/credential they're providing, as computed by
   /// our authorizer:
   func myScopes(request: Clarifai_Api_MyScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeResponse>
+
   func myScopesUser(request: Clarifai_Api_MyScopesUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeUserResponse>
+
   func myScopesRoot(request: Clarifai_Api_MyScopesRootRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeRootResponse>
+
   /// List all auth scopes available to me as a user.
   func listScopes(request: Clarifai_Api_ListScopesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiScopeDepsResponse>
+
   /// Get a specific app from an app.
   func getApp(request: Clarifai_Api_GetAppRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppResponse>
+
   /// List all the apps.
   func listApps(request: Clarifai_Api_ListAppsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
   /// Search over the apps to find one or more you're looking for.
   /// This leverage the "body" parameter because we also have page and
   /// per_page as url query param variables in this request.
   func deleteApp(request: Clarifai_Api_DeleteAppRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Add a app to an app.
   /// This needs to load the default workflow to make a copy, validating all the models in it, and
   /// then writing the new workflow back to this new app.
   func postApps(request: Clarifai_Api_PostAppsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
   /// Patch one or more apps.
   func patchApps(request: Clarifai_Api_PatchAppsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
+  /// Patch apps ids.
+  func patchAppsIds(request: Clarifai_Api_PatchAppsIdsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
+  /// Patch one app.
+  func patchApp(request: Clarifai_Api_PatchAppRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppResponse>
+
   /// Search over the applications to find one or more you're looking for.
   func postAppsSearches(request: Clarifai_Api_PostAppsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
+  /// Get user information
+  func getUser(request: Clarifai_Api_GetUserRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleUserResponse>
+
   /// Validate new password in real-time for a user
   func postValidatePassword(request: Clarifai_Api_PostValidatePasswordRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePasswordValidationResponse>
-  /// Get a saved search.
+
+  /// Get a saved legacy search.
   func getSearch(request: Clarifai_Api_GetSearchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleSearchResponse>
-  /// List all saved searches.
+
+  /// List all saved legacy searches.
   func listSearches(request: Clarifai_Api_ListSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
+  /// Patch saved legacy searches by ids.
+  func patchSearches(request: Clarifai_Api_PatchSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
   /// Execute a new search and optionally save it.
+  ///
+  /// Deprecated: Use PostInputsSearches or PostAnnotationsSearches instead.
   func postSearches(request: Clarifai_Api_PostSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
-  /// Execute a previously saved search.
+
+  /// Execute a previously saved legacy search.
   func postSearchesByID(request: Clarifai_Api_PostSearchesByIDRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
   /// Evaluate the results of two search requests
   func postAnnotationSearchMetrics(request: Clarifai_Api_PostAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
+
   /// Get the evaluation results between two search requests
   func getAnnotationSearchMetrics(request: Clarifai_Api_GetAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
+
   /// List the evaluation results between two search requests
   func listAnnotationSearchMetrics(request: Clarifai_Api_ListAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
+
   /// DeleteAnnotationSearchMetrics
   func deleteAnnotationSearchMetrics(request: Clarifai_Api_DeleteAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Delete a saved search.
   func deleteSearch(request: Clarifai_Api_DeleteSearchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List all the annotation filters.
+  func listAnnotationFilters(request: Clarifai_Api_ListAnnotationFiltersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationFilterResponse>
+
+  /// Get a specific annotation filter.
+  func getAnnotationFilter(request: Clarifai_Api_GetAnnotationFilterRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAnnotationFilterResponse>
+
+  /// Add annotation filters.
+  func postAnnotationFilters(request: Clarifai_Api_PostAnnotationFiltersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationFilterResponse>
+
+  /// Patch one or more annotation filters.
+  func patchAnnotationFilters(request: Clarifai_Api_PatchAnnotationFiltersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationFilterResponse>
+
+  /// Delete one or more annotation filters in a single request.
+  func deleteAnnotationFilters(request: Clarifai_Api_DeleteAnnotationFiltersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// List all status codes.
   func listStatusCodes(request: Clarifai_Api_ListStatusCodesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatusCodeResponse>
+
   /// Get more details for a status code.
   func getStatusCode(request: Clarifai_Api_GetStatusCodeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleStatusCodeResponse>
+
   /// owner list users who the app is shared with
   func listCollaborators(request: Clarifai_Api_ListCollaboratorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaboratorsResponse>
+
   /// add collaborators to an app.
   func postCollaborators(request: Clarifai_Api_PostCollaboratorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaboratorsResponse>
+
   /// Patch existing collaborators.
   func patchCollaborators(request: Clarifai_Api_PatchCollaboratorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaboratorsResponse>
+
   /// Delete existing collaborators.
   func deleteCollaborators(request: Clarifai_Api_DeleteCollaboratorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Collaboration includes the app user are invitied to work on
   func listCollaborations(request: Clarifai_Api_ListCollaborationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaborationsResponse>
+
   /// start to duplicate an app which copies all the inputs, annotations, models, concepts etc. to a new app.
   /// this is an async process, you should use ListAppDuplications or GetAppDuplication to check the status.
   func postAppDuplications(request: Clarifai_Api_PostAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
+
   /// list all the app duplications user triggers
   func listAppDuplications(request: Clarifai_Api_ListAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
+
   /// get the app duplication status
   func getAppDuplication(request: Clarifai_Api_GetAppDuplicationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppDuplicationResponse>
+
   /// Add tasks to an app.
   func postTasks(request: Clarifai_Api_PostTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskResponse>
+
   /// Task annotation count
   func getTaskAnnotationCount(request: Clarifai_Api_GetTaskCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskCountResponse>
+
   /// Task Input count
   func getTaskInputCount(request: Clarifai_Api_GetTaskCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskCountResponse>
+
   /// Get a specific task from an app.
   func getTask(request: Clarifai_Api_GetTaskRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleTaskResponse>
+
   /// List tasks from an app.
   func listTasks(request: Clarifai_Api_ListTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskResponse>
+
   /// Patch one or more tasks.
   func patchTasks(request: Clarifai_Api_PatchTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskResponse>
+
   /// Delete multiple tasks in one request.
   func deleteTasks(request: Clarifai_Api_DeleteTasksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Add Label orders.
   func postLabelOrders(request: Clarifai_Api_PostLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+
   /// Get a label order.
   func getLabelOrder(request: Clarifai_Api_GetLabelOrderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleLabelOrderResponse>
+
   /// List label orders.
   func listLabelOrders(request: Clarifai_Api_ListLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+
   /// Patch one or more label orders.
   func patchLabelOrders(request: Clarifai_Api_PatchLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLabelOrderResponse>
+
   /// Delete multiple label orders in one request.
   /// this do not change task status
   func deleteLabelOrders(request: Clarifai_Api_DeleteLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Add a list of Collectors to an app.
   /// In the handler of this endpoint we also check for all the scopes of the  POST /inputs
   /// endpoint.
@@ -3230,23 +6200,171 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// They are needed when adding the collectors just so we now that you have permission with
   /// that key at least to do the writing to this app with POST /inputs.
   func postCollectors(request: Clarifai_Api_PostCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
+
   /// Get a specific collector from an app.
   func getCollector(request: Clarifai_Api_GetCollectorRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleCollectorResponse>
+
   /// List all the collectors.
   func listCollectors(request: Clarifai_Api_ListCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
+
   /// Patch one or more collectors.
   func patchCollectors(request: Clarifai_Api_PatchCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
+
   /// Delete multiple collectors in one request.
   /// This call is asynchronous. Use DeleteCollector if you want a synchronous version.
   func deleteCollectors(request: Clarifai_Api_DeleteCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// PostStatValues
   func postStatValues(request: Clarifai_Api_PostStatValuesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueResponse>
+
   /// PostStatValuesAggregate
   func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
+
   /// Increase the view metric for a detail view
   func postTrendingMetricsView(request: Clarifai_Api_PostTrendingMetricsViewRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// List the view metrics for a detail view
   func listTrendingMetricsViews(request: Clarifai_Api_ListTrendingMetricsViewsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrendingMetricsViewResponse>
+
+  /// Get a specific module from an app.
+  func getModule(request: Clarifai_Api_GetModuleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleResponse>
+
+  /// List all the modules in community, by user or by app.
+  func listModules(request: Clarifai_Api_ListModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
+
+  /// Add a modules to an app.
+  func postModules(request: Clarifai_Api_PostModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
+
+  /// Patch one or more modules.
+  func patchModules(request: Clarifai_Api_PatchModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
+
+  /// Delete multiple modules in one request.
+  func deleteModules(request: Clarifai_Api_DeleteModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Get a specific module version for a module.
+  func getModuleVersion(request: Clarifai_Api_GetModuleVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleVersionResponse>
+
+  /// List all the modules versions for a given module.
+  func listModuleVersions(request: Clarifai_Api_ListModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
+
+  /// Create a new module version to trigger training of the module.
+  func postModuleVersions(request: Clarifai_Api_PostModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
+
+  /// Delete a multiple module version.
+  func deleteModuleVersions(request: Clarifai_Api_DeleteModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Get installed modules vesrions for an app.
+  func getInstalledModuleVersion(request: Clarifai_Api_GetInstalledModuleVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInstalledModuleVersionResponse>
+
+  /// List installed modules vesrions for an app.
+  func listInstalledModuleVersions(request: Clarifai_Api_ListInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstalledModuleVersionResponse>
+
+  /// Install a new module version which will deploy the specific ModuleVersion to the app in the url.
+  func postInstalledModuleVersions(request: Clarifai_Api_PostInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstalledModuleVersionResponse>
+
+  /// Uninstall an installed module version which will deploy the specific ModuleVersion to the app
+  /// in the url.
+  /// This cleaned up any associated caller keys so needs the Keys_Delete scope.
+  func deleteInstalledModuleVersions(request: Clarifai_Api_DeleteInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Assign a key that the caller owns to be used when accessing this installed module version
+  /// If this endpoint is called with a different key then it overwrites what is there.
+  func postInstalledModuleVersionsKey(request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleKeyResponse>
+
+  /// Perform bulk operations on a list of inputs based on input source.
+  /// Operation include add, update, delete of concepts, metadata and geo data.
+  /// This is an Asynchronous process. Use ListBulkOperations or GetBulkOperation to check the status.
+  func postBulkOperations(request: Clarifai_Api_PostBulkOperationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiBulkOperationsResponse>
+
+  /// List all the bulk operations
+  func listBulkOperations(request: Clarifai_Api_ListBulkOperationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiBulkOperationsResponse>
+
+  /// Get the bulk operation details by ID
+  func getBulkOperation(request: Clarifai_Api_GetBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleBulkOperationsResponse>
+
+  /// Cancel one or more bulk operations
+  func cancelBulkOperations(request: Clarifai_Api_CancelBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiBulkOperationsResponse>
+
+  /// delete one or more terminated bulk operations
+  func deleteBulkOperations(request: Clarifai_Api_DeleteBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Get a specific job.
+  func getDatasetInputsSearchAddJob(request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
+
+  /// List next non-labeled and unassigned inputs from task's dataset
+  func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
+
+  /// PutTaskAssignments evaluates all the annotations by labeler (authenticated user) for given task (task_id) and input (input_id).
+  func putTaskAssignments(request: Clarifai_Api_PutTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List all the inputs add jobs
+  func listInputsAddJobs(request: Clarifai_Api_ListInputsAddJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
+
+  /// Get the input add job details by ID
+  func getInputsAddJob(request: Clarifai_Api_GetInputsAddJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputsAddJobResponse>
+
+  /// cancel the input add job by ID
+  func cancelInputsAddJob(request: Clarifai_Api_CancelInputsAddJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputsAddJobResponse>
+
+  func postUploads(request: Clarifai_Api_PostUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiUploadResponse>
+
+  /// Upload a part of a multipart upload.
+  /// Behaviour on completion depends on the endpoint that was used to initiate the upload.
+  func putUploadContentParts(request: Clarifai_Api_PutUploadContentPartsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleUploadResponse>
+
+  func getUpload(request: Clarifai_Api_GetUploadRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleUploadResponse>
+
+  func listUploads(request: Clarifai_Api_ListUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiUploadResponse>
+
+  func deleteUploads(request: Clarifai_Api_DeleteUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Initiates retrieval of inputs from cloud storage from a user provided data source.
+  /// Will create and return an inputs-add-job for tracking progress.
+  /// Archives will be extracted and their contents will be processed as inputs.
+  ///
+  /// The cloud URL will be treated as a filter prefix. For example s3:/bucket/images_folder/abc will process
+  /// files in the images_folder beginning with abc or in a subfolder beginning with abc.
+  /// For example:
+  /// bucket/images_folder/abcImage.png
+  /// bucket/images_folder/abc-1/Data.zip
+  ///
+  /// If given URL is for a private bucket or file, then credentials should be provided to access the bucket.
+  /// Credentials should include rights to list the objects in the bucket, except when pointed directly at a file archive,
+  /// in which case it only requires rights to access that particular file.
+  func postInputsDataSources(request: Clarifai_Api_PostInputsDataSourcesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
+
+  /// Get the input extraction job details by ID
+  func getInputsExtractionJob(request: Clarifai_Api_GetInputsExtractionJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputsExtractionJobResponse>
+
+  /// List all the input extraction jobs
+  func listInputsExtractionJobs(request: Clarifai_Api_ListInputsExtractionJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsExtractionJobResponse>
+
+  func cancelInputsExtractionJobs(request: Clarifai_Api_CancelInputsExtractionJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsExtractionJobResponse>
+
+  /// Start uploading a file archive containing inputs.
+  /// Will create and return an inputs-add-job for tracking progress.
+  ///
+  /// Associated inputs-add-job contains an upload id which should be completed through `PutUploadContentParts` endpoint.
+  /// Completing the upload will automatically begin unpacking the archive and uploading the contents as inputs.
+  func postInputsUploads(request: Clarifai_Api_PostInputsUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
+
+  /// Get a specific runner from an app.
+  func getRunner(request: Clarifai_Api_GetRunnerRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleRunnerResponse>
+
+  /// List all the runners in community, by user or by app.
+  func listRunners(request: Clarifai_Api_ListRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
+
+  /// Add a runners to an app.
+  func postRunners(request: Clarifai_Api_PostRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
+
+  /// Delete multiple runners in one request.
+  func deleteRunners(request: Clarifai_Api_DeleteRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List items for the remote runner to work on.
+  func listRunnerItems(request: Clarifai_Api_ListRunnerItemsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemResponse>
+
+  /// Post back outputs from remote runners
+  func postRunnerItemOutputs(request: Clarifai_Api_PostRunnerItemOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemOutputResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -3254,927 +6372,2785 @@ extension Clarifai_Api_V2Provider {
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  public func handleMethod(_ methodName: Substring, callHandlerContext: CallHandlerContext) -> GRPCCallHandler? {
-    switch methodName {
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
     case "ListConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listConceptRelations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListConceptRelationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptRelationResponse>(),
+        interceptors: self.interceptors?.makeListConceptRelationsInterceptors() ?? [],
+        userFunction: self.listConceptRelations(request:context:)
+      )
 
     case "PostConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConceptRelations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptRelationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptRelationResponse>(),
+        interceptors: self.interceptors?.makePostConceptRelationsInterceptors() ?? [],
+        userFunction: self.postConceptRelations(request:context:)
+      )
 
     case "DeleteConceptRelations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteConceptRelations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteConceptRelationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteConceptRelationsInterceptors() ?? [],
+        userFunction: self.deleteConceptRelations(request:context:)
+      )
 
     case "GetConceptCounts":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getConceptCounts(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetConceptCountsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptCountResponse>(),
+        interceptors: self.interceptors?.makeGetConceptCountsInterceptors() ?? [],
+        userFunction: self.getConceptCounts(request:context:)
+      )
 
     case "GetConcept":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getConcept(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetConceptRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleConceptResponse>(),
+        interceptors: self.interceptors?.makeGetConceptInterceptors() ?? [],
+        userFunction: self.getConcept(request:context:)
+      )
 
     case "ListConcepts":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listConcepts(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListConceptsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptResponse>(),
+        interceptors: self.interceptors?.makeListConceptsInterceptors() ?? [],
+        userFunction: self.listConcepts(request:context:)
+      )
+
+    case "ListModelConcepts":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelConceptsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptResponse>(),
+        interceptors: self.interceptors?.makeListModelConceptsInterceptors() ?? [],
+        userFunction: self.listModelConcepts(request:context:)
+      )
 
     case "PostConceptsSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConceptsSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptResponse>(),
+        interceptors: self.interceptors?.makePostConceptsSearchesInterceptors() ?? [],
+        userFunction: self.postConceptsSearches(request:context:)
+      )
 
     case "PostConcepts":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConcepts(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptResponse>(),
+        interceptors: self.interceptors?.makePostConceptsInterceptors() ?? [],
+        userFunction: self.postConcepts(request:context:)
+      )
 
     case "PatchConcepts":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchConcepts(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchConceptsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptResponse>(),
+        interceptors: self.interceptors?.makePatchConceptsInterceptors() ?? [],
+        userFunction: self.patchConcepts(request:context:)
+      )
 
     case "GetConceptLanguage":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getConceptLanguage(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetConceptLanguageRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleConceptLanguageResponse>(),
+        interceptors: self.interceptors?.makeGetConceptLanguageInterceptors() ?? [],
+        userFunction: self.getConceptLanguage(request:context:)
+      )
 
     case "ListConceptLanguages":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listConceptLanguages(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListConceptLanguagesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptLanguageResponse>(),
+        interceptors: self.interceptors?.makeListConceptLanguagesInterceptors() ?? [],
+        userFunction: self.listConceptLanguages(request:context:)
+      )
 
     case "PostConceptLanguages":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConceptLanguages(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptLanguagesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptLanguageResponse>(),
+        interceptors: self.interceptors?.makePostConceptLanguagesInterceptors() ?? [],
+        userFunction: self.postConceptLanguages(request:context:)
+      )
 
     case "PatchConceptLanguages":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchConceptLanguages(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchConceptLanguagesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptLanguageResponse>(),
+        interceptors: self.interceptors?.makePatchConceptLanguagesInterceptors() ?? [],
+        userFunction: self.patchConceptLanguages(request:context:)
+      )
 
     case "ListKnowledgeGraphs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listKnowledgeGraphs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListKnowledgeGraphsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKnowledgeGraphResponse>(),
+        interceptors: self.interceptors?.makeListKnowledgeGraphsInterceptors() ?? [],
+        userFunction: self.listKnowledgeGraphs(request:context:)
+      )
 
     case "PostKnowledgeGraphs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postKnowledgeGraphs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostKnowledgeGraphsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKnowledgeGraphResponse>(),
+        interceptors: self.interceptors?.makePostKnowledgeGraphsInterceptors() ?? [],
+        userFunction: self.postKnowledgeGraphs(request:context:)
+      )
 
     case "PostConceptMappingJobs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postConceptMappingJobs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptMappingJobsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptMappingJobResponse>(),
+        interceptors: self.interceptors?.makePostConceptMappingJobsInterceptors() ?? [],
+        userFunction: self.postConceptMappingJobs(request:context:)
+      )
 
     case "GetAnnotation":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getAnnotation(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAnnotationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAnnotationResponse>(),
+        interceptors: self.interceptors?.makeGetAnnotationInterceptors() ?? [],
+        userFunction: self.getAnnotation(request:context:)
+      )
 
     case "ListAnnotations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listAnnotations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationsInterceptors() ?? [],
+        userFunction: self.listAnnotations(request:context:)
+      )
 
     case "PostAnnotations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postAnnotations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
+        interceptors: self.interceptors?.makePostAnnotationsInterceptors() ?? [],
+        userFunction: self.postAnnotations(request:context:)
+      )
 
     case "PatchAnnotations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchAnnotations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
+        interceptors: self.interceptors?.makePatchAnnotationsInterceptors() ?? [],
+        userFunction: self.patchAnnotations(request:context:)
+      )
 
     case "PatchAnnotationsStatus":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchAnnotationsStatus(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAnnotationsStatusRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PatchAnnotationsStatusResponse>(),
+        interceptors: self.interceptors?.makePatchAnnotationsStatusInterceptors() ?? [],
+        userFunction: self.patchAnnotationsStatus(request:context:)
+      )
 
     case "DeleteAnnotation":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteAnnotation(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAnnotationInterceptors() ?? [],
+        userFunction: self.deleteAnnotation(request:context:)
+      )
 
     case "DeleteAnnotations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteAnnotations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAnnotationsInterceptors() ?? [],
+        userFunction: self.deleteAnnotations(request:context:)
+      )
+
+    case "PatchAnnotationsSearches":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAnnotationsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePatchAnnotationsSearchesInterceptors() ?? [],
+        userFunction: self.patchAnnotationsSearches(request:context:)
+      )
 
     case "PostAnnotationsSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postAnnotationsSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? [],
+        userFunction: self.postAnnotationsSearches(request:context:)
+      )
 
     case "GetInputCount":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getInputCount(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInputCountRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInputCountResponse>(),
+        interceptors: self.interceptors?.makeGetInputCountInterceptors() ?? [],
+        userFunction: self.getInputCount(request:context:)
+      )
 
     case "StreamInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.streamInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makeStreamInputsInterceptors() ?? [],
+        userFunction: self.streamInputs(request:context:)
+      )
 
     case "GetInputSamples":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getInputSamples(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInputSamplesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputAnnotationResponse>(),
+        interceptors: self.interceptors?.makeGetInputSamplesInterceptors() ?? [],
+        userFunction: self.getInputSamples(request:context:)
+      )
 
     case "GetInput":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getInput(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInputRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInputResponse>(),
+        interceptors: self.interceptors?.makeGetInputInterceptors() ?? [],
+        userFunction: self.getInput(request:context:)
+      )
+
+    case "GetInputVideoManifest":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetVideoManifestRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_GetVideoManifestResponse>(),
+        interceptors: self.interceptors?.makeGetInputVideoManifestInterceptors() ?? [],
+        userFunction: self.getInputVideoManifest(request:context:)
+      )
 
     case "ListInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makeListInputsInterceptors() ?? [],
+        userFunction: self.listInputs(request:context:)
+      )
 
     case "PostInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makePostInputsInterceptors() ?? [],
+        userFunction: self.postInputs(request:context:)
+      )
 
     case "PatchInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makePatchInputsInterceptors() ?? [],
+        userFunction: self.patchInputs(request:context:)
+      )
 
     case "DeleteInput":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteInput(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteInputRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteInputInterceptors() ?? [],
+        userFunction: self.deleteInput(request:context:)
+      )
 
     case "DeleteInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteInputsInterceptors() ?? [],
+        userFunction: self.deleteInputs(request:context:)
+      )
+
+    case "PatchInputsSearches":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchInputsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePatchInputsSearchesInterceptors() ?? [],
+        userFunction: self.patchInputsSearches(request:context:)
+      )
 
     case "PostInputsSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postInputsSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInputsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePostInputsSearchesInterceptors() ?? [],
+        userFunction: self.postInputsSearches(request:context:)
+      )
 
     case "PostModelOutputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelOutputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelOutputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiOutputResponse>(),
+        interceptors: self.interceptors?.makePostModelOutputsInterceptors() ?? [],
+        userFunction: self.postModelOutputs(request:context:)
+      )
+
+    case "ListDatasets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListDatasetsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetResponse>(),
+        interceptors: self.interceptors?.makeListDatasetsInterceptors() ?? [],
+        userFunction: self.listDatasets(request:context:)
+      )
+
+    case "GetDataset":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetResponse>(),
+        interceptors: self.interceptors?.makeGetDatasetInterceptors() ?? [],
+        userFunction: self.getDataset(request:context:)
+      )
+
+    case "PostDatasets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostDatasetsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetResponse>(),
+        interceptors: self.interceptors?.makePostDatasetsInterceptors() ?? [],
+        userFunction: self.postDatasets(request:context:)
+      )
+
+    case "PatchDatasets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchDatasetsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetResponse>(),
+        interceptors: self.interceptors?.makePatchDatasetsInterceptors() ?? [],
+        userFunction: self.patchDatasets(request:context:)
+      )
+
+    case "DeleteDatasets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteDatasetsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteDatasetsInterceptors() ?? [],
+        userFunction: self.deleteDatasets(request:context:)
+      )
+
+    case "ListDatasetInputs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListDatasetInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetInputResponse>(),
+        interceptors: self.interceptors?.makeListDatasetInputsInterceptors() ?? [],
+        userFunction: self.listDatasetInputs(request:context:)
+      )
+
+    case "GetDatasetInput":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetInputRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetInputResponse>(),
+        interceptors: self.interceptors?.makeGetDatasetInputInterceptors() ?? [],
+        userFunction: self.getDatasetInput(request:context:)
+      )
+
+    case "PostDatasetInputs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostDatasetInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetInputResponse>(),
+        interceptors: self.interceptors?.makePostDatasetInputsInterceptors() ?? [],
+        userFunction: self.postDatasetInputs(request:context:)
+      )
+
+    case "DeleteDatasetInputs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteDatasetInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteDatasetInputsInterceptors() ?? [],
+        userFunction: self.deleteDatasetInputs(request:context:)
+      )
+
+    case "ListDatasetVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListDatasetVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetVersionResponse>(),
+        interceptors: self.interceptors?.makeListDatasetVersionsInterceptors() ?? [],
+        userFunction: self.listDatasetVersions(request:context:)
+      )
+
+    case "GetDatasetVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetVersionResponse>(),
+        interceptors: self.interceptors?.makeGetDatasetVersionInterceptors() ?? [],
+        userFunction: self.getDatasetVersion(request:context:)
+      )
+
+    case "ListDatasetVersionMetricsGroups":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListDatasetVersionMetricsGroupsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetVersionMetricsGroupResponse>(),
+        interceptors: self.interceptors?.makeListDatasetVersionMetricsGroupsInterceptors() ?? [],
+        userFunction: self.listDatasetVersionMetricsGroups(request:context:)
+      )
+
+    case "PostDatasetVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostDatasetVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetVersionResponse>(),
+        interceptors: self.interceptors?.makePostDatasetVersionsInterceptors() ?? [],
+        userFunction: self.postDatasetVersions(request:context:)
+      )
+
+    case "PatchDatasetVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchDatasetVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetVersionResponse>(),
+        interceptors: self.interceptors?.makePatchDatasetVersionsInterceptors() ?? [],
+        userFunction: self.patchDatasetVersions(request:context:)
+      )
+
+    case "DeleteDatasetVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteDatasetVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteDatasetVersionsInterceptors() ?? [],
+        userFunction: self.deleteDatasetVersions(request:context:)
+      )
+
+    case "PutDatasetVersionExports":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PutDatasetVersionExportsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDatasetVersionExportResponse>(),
+        interceptors: self.interceptors?.makePutDatasetVersionExportsInterceptors() ?? [],
+        userFunction: self.putDatasetVersionExports(request:context:)
+      )
 
     case "GetModelType":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModelType(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelTypeRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelTypeResponse>(),
+        interceptors: self.interceptors?.makeGetModelTypeInterceptors() ?? [],
+        userFunction: self.getModelType(request:context:)
+      )
 
     case "ListOpenSourceLicenses":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listOpenSourceLicenses(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListOpenSourceLicensesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_ListOpenSourceLicensesResponse>(),
+        interceptors: self.interceptors?.makeListOpenSourceLicensesInterceptors() ?? [],
+        userFunction: self.listOpenSourceLicenses(request:context:)
+      )
 
     case "ListModelTypes":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModelTypes(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelTypesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelTypeResponse>(),
+        interceptors: self.interceptors?.makeListModelTypesInterceptors() ?? [],
+        userFunction: self.listModelTypes(request:context:)
+      )
 
     case "GetModel":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModel(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makeGetModelInterceptors() ?? [],
+        userFunction: self.getModel(request:context:)
+      )
 
     case "GetModelOutputInfo":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModelOutputInfo(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makeGetModelOutputInfoInterceptors() ?? [],
+        userFunction: self.getModelOutputInfo(request:context:)
+      )
 
     case "ListModels":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModels(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelResponse>(),
+        interceptors: self.interceptors?.makeListModelsInterceptors() ?? [],
+        userFunction: self.listModels(request:context:)
+      )
+
+    case "GetResourceCounts":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetResourceCountsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_GetResourceCountsResponse>(),
+        interceptors: self.interceptors?.makeGetResourceCountsInterceptors() ?? [],
+        userFunction: self.getResourceCounts(request:context:)
+      )
 
     case "PostModelsSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelsSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelResponse>(),
+        interceptors: self.interceptors?.makePostModelsSearchesInterceptors() ?? [],
+        userFunction: self.postModelsSearches(request:context:)
+      )
 
     case "PostModels":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModels(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makePostModelsInterceptors() ?? [],
+        userFunction: self.postModels(request:context:)
+      )
 
     case "PatchModels":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchModels(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelResponse>(),
+        interceptors: self.interceptors?.makePatchModelsInterceptors() ?? [],
+        userFunction: self.patchModels(request:context:)
+      )
+
+    case "PatchModelIds":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelIdsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelResponse>(),
+        interceptors: self.interceptors?.makePatchModelIdsInterceptors() ?? [],
+        userFunction: self.patchModelIds(request:context:)
+      )
 
     case "DeleteModel":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteModel(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModelRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteModelInterceptors() ?? [],
+        userFunction: self.deleteModel(request:context:)
+      )
 
     case "DeleteModels":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteModels(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModelsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteModelsInterceptors() ?? [],
+        userFunction: self.deleteModels(request:context:)
+      )
+
+    case "PatchModelCheckConsents":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelCheckConsentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelCheckConsentResponse>(),
+        interceptors: self.interceptors?.makePatchModelCheckConsentsInterceptors() ?? [],
+        userFunction: self.patchModelCheckConsents(request:context:)
+      )
 
     case "PatchModelToolkits":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchModelToolkits(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelToolkitsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelToolkitResponse>(),
+        interceptors: self.interceptors?.makePatchModelToolkitsInterceptors() ?? [],
+        userFunction: self.patchModelToolkits(request:context:)
+      )
 
     case "PatchModelUseCases":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchModelUseCases(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelUseCasesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelUseCaseResponse>(),
+        interceptors: self.interceptors?.makePatchModelUseCasesInterceptors() ?? [],
+        userFunction: self.patchModelUseCases(request:context:)
+      )
 
     case "PatchModelLanguages":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchModelLanguages(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelLanguagesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelLanguageResponse>(),
+        interceptors: self.interceptors?.makePatchModelLanguagesInterceptors() ?? [],
+        userFunction: self.patchModelLanguages(request:context:)
+      )
 
     case "ListModelInputs":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModelInputs(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelInputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makeListModelInputsInterceptors() ?? [],
+        userFunction: self.listModelInputs(request:context:)
+      )
 
     case "GetModelVersion":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModelVersion(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionResponse>(),
+        interceptors: self.interceptors?.makeGetModelVersionInterceptors() ?? [],
+        userFunction: self.getModelVersion(request:context:)
+      )
 
     case "ListModelVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModelVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelVersionResponse>(),
+        interceptors: self.interceptors?.makeListModelVersionsInterceptors() ?? [],
+        userFunction: self.listModelVersions(request:context:)
+      )
+
+    case "PostWorkflowVersionsUnPublish":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowVersionsUnPublishRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowVersionsUnPublishInterceptors() ?? [],
+        userFunction: self.postWorkflowVersionsUnPublish(request:context:)
+      )
+
+    case "PostWorkflowVersionsPublish":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowVersionsPublishRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowVersionsPublishInterceptors() ?? [],
+        userFunction: self.postWorkflowVersionsPublish(request:context:)
+      )
 
     case "PostModelVersionsPublish":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelVersionsPublish(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsPublishRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsPublishInterceptors() ?? [],
+        userFunction: self.postModelVersionsPublish(request:context:)
+      )
 
     case "PostModelVersionsUnPublish":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelVersionsUnPublish(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsUnPublishRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsUnPublishInterceptors() ?? [],
+        userFunction: self.postModelVersionsUnPublish(request:context:)
+      )
 
     case "PostModelVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsInterceptors() ?? [],
+        userFunction: self.postModelVersions(request:context:)
+      )
 
     case "PatchModelVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchModelVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModelVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelVersionResponse>(),
+        interceptors: self.interceptors?.makePatchModelVersionsInterceptors() ?? [],
+        userFunction: self.patchModelVersions(request:context:)
+      )
 
     case "DeleteModelVersion":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteModelVersion(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModelVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteModelVersionInterceptors() ?? [],
+        userFunction: self.deleteModelVersion(request:context:)
+      )
 
     case "GetModelVersionMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModelVersionMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelVersionMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionResponse>(),
+        interceptors: self.interceptors?.makeGetModelVersionMetricsInterceptors() ?? [],
+        userFunction: self.getModelVersionMetrics(request:context:)
+      )
 
     case "PostModelVersionMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postModelVersionMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionMetricsInterceptors() ?? [],
+        userFunction: self.postModelVersionMetrics(request:context:)
+      )
+
+    case "PostModelVersionEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionEvaluationsInterceptors() ?? [],
+        userFunction: self.postModelVersionEvaluations(request:context:)
+      )
+
+    case "ListModelVersionEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelVersionEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makeListModelVersionEvaluationsInterceptors() ?? [],
+        userFunction: self.listModelVersionEvaluations(request:context:)
+      )
+
+    case "GetModelVersionEvaluation":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelVersionEvaluationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makeGetModelVersionEvaluationInterceptors() ?? [],
+        userFunction: self.getModelVersionEvaluation(request:context:)
+      )
+
+    case "PostEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makePostEvaluationsInterceptors() ?? [],
+        userFunction: self.postEvaluations(request:context:)
+      )
+
+    case "ListEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makeListEvaluationsInterceptors() ?? [],
+        userFunction: self.listEvaluations(request:context:)
+      )
+
+    case "GetEvaluation":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetEvaluationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleEvalMetricsResponse>(),
+        interceptors: self.interceptors?.makeGetEvaluationInterceptors() ?? [],
+        userFunction: self.getEvaluation(request:context:)
+      )
 
     case "ListModelReferences":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModelReferences(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelReferencesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelReferenceResponse>(),
+        interceptors: self.interceptors?.makeListModelReferencesInterceptors() ?? [],
+        userFunction: self.listModelReferences(request:context:)
+      )
 
     case "GetModelVersionInputExample":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getModelVersionInputExample(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelVersionInputExampleRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionInputExampleResponse>(),
+        interceptors: self.interceptors?.makeGetModelVersionInputExampleInterceptors() ?? [],
+        userFunction: self.getModelVersionInputExample(request:context:)
+      )
 
     case "ListModelVersionInputExamples":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listModelVersionInputExamples(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModelVersionInputExamplesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModelVersionInputExampleResponse>(),
+        interceptors: self.interceptors?.makeListModelVersionInputExamplesInterceptors() ?? [],
+        userFunction: self.listModelVersionInputExamples(request:context:)
+      )
 
     case "GetWorkflow":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getWorkflow(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetWorkflowRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleWorkflowResponse>(),
+        interceptors: self.interceptors?.makeGetWorkflowInterceptors() ?? [],
+        userFunction: self.getWorkflow(request:context:)
+      )
 
     case "ListWorkflows":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listWorkflows(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListWorkflowsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowResponse>(),
+        interceptors: self.interceptors?.makeListWorkflowsInterceptors() ?? [],
+        userFunction: self.listWorkflows(request:context:)
+      )
 
     case "PostWorkflows":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postWorkflows(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowsInterceptors() ?? [],
+        userFunction: self.postWorkflows(request:context:)
+      )
 
     case "PatchWorkflows":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchWorkflows(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchWorkflowsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowResponse>(),
+        interceptors: self.interceptors?.makePatchWorkflowsInterceptors() ?? [],
+        userFunction: self.patchWorkflows(request:context:)
+      )
+
+    case "PatchWorkflowIds":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchWorkflowIdsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowResponse>(),
+        interceptors: self.interceptors?.makePatchWorkflowIdsInterceptors() ?? [],
+        userFunction: self.patchWorkflowIds(request:context:)
+      )
 
     case "DeleteWorkflow":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteWorkflow(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteWorkflowRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteWorkflowInterceptors() ?? [],
+        userFunction: self.deleteWorkflow(request:context:)
+      )
 
     case "DeleteWorkflows":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteWorkflows(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteWorkflowsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteWorkflowsInterceptors() ?? [],
+        userFunction: self.deleteWorkflows(request:context:)
+      )
 
     case "PostWorkflowResults":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postWorkflowResults(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowResultsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostWorkflowResultsResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowResultsInterceptors() ?? [],
+        userFunction: self.postWorkflowResults(request:context:)
+      )
 
     case "PostWorkflowResultsSimilarity":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postWorkflowResultsSimilarity(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowResultsSimilarityRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostWorkflowResultsSimilarityResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowResultsSimilarityInterceptors() ?? [],
+        userFunction: self.postWorkflowResultsSimilarity(request:context:)
+      )
 
     case "ListWorkflowVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listWorkflowVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListWorkflowVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowVersionResponse>(),
+        interceptors: self.interceptors?.makeListWorkflowVersionsInterceptors() ?? [],
+        userFunction: self.listWorkflowVersions(request:context:)
+      )
 
     case "GetWorkflowVersion":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getWorkflowVersion(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetWorkflowVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleWorkflowVersionResponse>(),
+        interceptors: self.interceptors?.makeGetWorkflowVersionInterceptors() ?? [],
+        userFunction: self.getWorkflowVersion(request:context:)
+      )
 
     case "DeleteWorkflowVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteWorkflowVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteWorkflowVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteWorkflowVersionsInterceptors() ?? [],
+        userFunction: self.deleteWorkflowVersions(request:context:)
+      )
 
     case "PatchWorkflowVersions":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchWorkflowVersions(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchWorkflowVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowVersionResponse>(),
+        interceptors: self.interceptors?.makePatchWorkflowVersionsInterceptors() ?? [],
+        userFunction: self.patchWorkflowVersions(request:context:)
+      )
 
     case "GetKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleKeyResponse>(),
+        interceptors: self.interceptors?.makeGetKeyInterceptors() ?? [],
+        userFunction: self.getKey(request:context:)
+      )
 
     case "ListKeys":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listKeys(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListKeysRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKeyResponse>(),
+        interceptors: self.interceptors?.makeListKeysInterceptors() ?? [],
+        userFunction: self.listKeys(request:context:)
+      )
 
     case "ListAppKeys":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listAppKeys(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAppKeysRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKeyResponse>(),
+        interceptors: self.interceptors?.makeListAppKeysInterceptors() ?? [],
+        userFunction: self.listAppKeys(request:context:)
+      )
 
     case "DeleteKey":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteKey(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteKeyInterceptors() ?? [],
+        userFunction: self.deleteKey(request:context:)
+      )
 
     case "PostKeys":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postKeys(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostKeysRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKeyResponse>(),
+        interceptors: self.interceptors?.makePostKeysInterceptors() ?? [],
+        userFunction: self.postKeys(request:context:)
+      )
 
     case "PatchKeys":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchKeys(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchKeysRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKeyResponse>(),
+        interceptors: self.interceptors?.makePatchKeysInterceptors() ?? [],
+        userFunction: self.patchKeys(request:context:)
+      )
 
     case "MyScopes":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.myScopes(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_MyScopesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiScopeResponse>(),
+        interceptors: self.interceptors?.makeMyScopesInterceptors() ?? [],
+        userFunction: self.myScopes(request:context:)
+      )
 
     case "MyScopesUser":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.myScopesUser(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_MyScopesUserRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiScopeUserResponse>(),
+        interceptors: self.interceptors?.makeMyScopesUserInterceptors() ?? [],
+        userFunction: self.myScopesUser(request:context:)
+      )
 
     case "MyScopesRoot":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.myScopesRoot(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_MyScopesRootRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiScopeRootResponse>(),
+        interceptors: self.interceptors?.makeMyScopesRootInterceptors() ?? [],
+        userFunction: self.myScopesRoot(request:context:)
+      )
 
     case "ListScopes":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listScopes(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListScopesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiScopeDepsResponse>(),
+        interceptors: self.interceptors?.makeListScopesInterceptors() ?? [],
+        userFunction: self.listScopes(request:context:)
+      )
 
     case "GetApp":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getApp(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAppRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAppResponse>(),
+        interceptors: self.interceptors?.makeGetAppInterceptors() ?? [],
+        userFunction: self.getApp(request:context:)
+      )
 
     case "ListApps":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listApps(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAppsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makeListAppsInterceptors() ?? [],
+        userFunction: self.listApps(request:context:)
+      )
 
     case "DeleteApp":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteApp(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAppRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAppInterceptors() ?? [],
+        userFunction: self.deleteApp(request:context:)
+      )
 
     case "PostApps":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postApps(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAppsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makePostAppsInterceptors() ?? [],
+        userFunction: self.postApps(request:context:)
+      )
 
     case "PatchApps":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchApps(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAppsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makePatchAppsInterceptors() ?? [],
+        userFunction: self.patchApps(request:context:)
+      )
+
+    case "PatchAppsIds":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAppsIdsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makePatchAppsIdsInterceptors() ?? [],
+        userFunction: self.patchAppsIds(request:context:)
+      )
+
+    case "PatchApp":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAppRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAppResponse>(),
+        interceptors: self.interceptors?.makePatchAppInterceptors() ?? [],
+        userFunction: self.patchApp(request:context:)
+      )
 
     case "PostAppsSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postAppsSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAppsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makePostAppsSearchesInterceptors() ?? [],
+        userFunction: self.postAppsSearches(request:context:)
+      )
+
+    case "GetUser":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetUserRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleUserResponse>(),
+        interceptors: self.interceptors?.makeGetUserInterceptors() ?? [],
+        userFunction: self.getUser(request:context:)
+      )
 
     case "PostValidatePassword":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postValidatePassword(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostValidatePasswordRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePasswordValidationResponse>(),
+        interceptors: self.interceptors?.makePostValidatePasswordInterceptors() ?? [],
+        userFunction: self.postValidatePassword(request:context:)
+      )
 
     case "GetSearch":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getSearch(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetSearchRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleSearchResponse>(),
+        interceptors: self.interceptors?.makeGetSearchInterceptors() ?? [],
+        userFunction: self.getSearch(request:context:)
+      )
 
     case "ListSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makeListSearchesInterceptors() ?? [],
+        userFunction: self.listSearches(request:context:)
+      )
+
+    case "PatchSearches":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePatchSearchesInterceptors() ?? [],
+        userFunction: self.patchSearches(request:context:)
+      )
 
     case "PostSearches":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postSearches(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePostSearchesInterceptors() ?? [],
+        userFunction: self.postSearches(request:context:)
+      )
 
     case "PostSearchesByID":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postSearchesByID(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostSearchesByIDRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
+        interceptors: self.interceptors?.makePostSearchesByIDInterceptors() ?? [],
+        userFunction: self.postSearchesByID(request:context:)
+      )
 
     case "PostAnnotationSearchMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postAnnotationSearchMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationSearchMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
+        interceptors: self.interceptors?.makePostAnnotationSearchMetricsInterceptors() ?? [],
+        userFunction: self.postAnnotationSearchMetrics(request:context:)
+      )
 
     case "GetAnnotationSearchMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getAnnotationSearchMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAnnotationSearchMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
+        interceptors: self.interceptors?.makeGetAnnotationSearchMetricsInterceptors() ?? [],
+        userFunction: self.getAnnotationSearchMetrics(request:context:)
+      )
 
     case "ListAnnotationSearchMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listAnnotationSearchMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationSearchMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationSearchMetricsInterceptors() ?? [],
+        userFunction: self.listAnnotationSearchMetrics(request:context:)
+      )
 
     case "DeleteAnnotationSearchMetrics":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteAnnotationSearchMetrics(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationSearchMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAnnotationSearchMetricsInterceptors() ?? [],
+        userFunction: self.deleteAnnotationSearchMetrics(request:context:)
+      )
 
     case "DeleteSearch":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteSearch(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteSearchRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteSearchInterceptors() ?? [],
+        userFunction: self.deleteSearch(request:context:)
+      )
+
+    case "ListAnnotationFilters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationFiltersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationFilterResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationFiltersInterceptors() ?? [],
+        userFunction: self.listAnnotationFilters(request:context:)
+      )
+
+    case "GetAnnotationFilter":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAnnotationFilterRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAnnotationFilterResponse>(),
+        interceptors: self.interceptors?.makeGetAnnotationFilterInterceptors() ?? [],
+        userFunction: self.getAnnotationFilter(request:context:)
+      )
+
+    case "PostAnnotationFilters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationFiltersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationFilterResponse>(),
+        interceptors: self.interceptors?.makePostAnnotationFiltersInterceptors() ?? [],
+        userFunction: self.postAnnotationFilters(request:context:)
+      )
+
+    case "PatchAnnotationFilters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAnnotationFiltersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationFilterResponse>(),
+        interceptors: self.interceptors?.makePatchAnnotationFiltersInterceptors() ?? [],
+        userFunction: self.patchAnnotationFilters(request:context:)
+      )
+
+    case "DeleteAnnotationFilters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationFiltersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAnnotationFiltersInterceptors() ?? [],
+        userFunction: self.deleteAnnotationFilters(request:context:)
+      )
 
     case "ListStatusCodes":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listStatusCodes(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListStatusCodesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiStatusCodeResponse>(),
+        interceptors: self.interceptors?.makeListStatusCodesInterceptors() ?? [],
+        userFunction: self.listStatusCodes(request:context:)
+      )
 
     case "GetStatusCode":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getStatusCode(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetStatusCodeRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleStatusCodeResponse>(),
+        interceptors: self.interceptors?.makeGetStatusCodeInterceptors() ?? [],
+        userFunction: self.getStatusCode(request:context:)
+      )
 
     case "ListCollaborators":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listCollaborators(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCollaboratorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollaboratorsResponse>(),
+        interceptors: self.interceptors?.makeListCollaboratorsInterceptors() ?? [],
+        userFunction: self.listCollaborators(request:context:)
+      )
 
     case "PostCollaborators":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postCollaborators(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostCollaboratorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollaboratorsResponse>(),
+        interceptors: self.interceptors?.makePostCollaboratorsInterceptors() ?? [],
+        userFunction: self.postCollaborators(request:context:)
+      )
 
     case "PatchCollaborators":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchCollaborators(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchCollaboratorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollaboratorsResponse>(),
+        interceptors: self.interceptors?.makePatchCollaboratorsInterceptors() ?? [],
+        userFunction: self.patchCollaborators(request:context:)
+      )
 
     case "DeleteCollaborators":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteCollaborators(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteCollaboratorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteCollaboratorsInterceptors() ?? [],
+        userFunction: self.deleteCollaborators(request:context:)
+      )
 
     case "ListCollaborations":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listCollaborations(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCollaborationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollaborationsResponse>(),
+        interceptors: self.interceptors?.makeListCollaborationsInterceptors() ?? [],
+        userFunction: self.listCollaborations(request:context:)
+      )
 
     case "PostAppDuplications":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postAppDuplications(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAppDuplicationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppDuplicationsResponse>(),
+        interceptors: self.interceptors?.makePostAppDuplicationsInterceptors() ?? [],
+        userFunction: self.postAppDuplications(request:context:)
+      )
 
     case "ListAppDuplications":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listAppDuplications(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAppDuplicationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppDuplicationsResponse>(),
+        interceptors: self.interceptors?.makeListAppDuplicationsInterceptors() ?? [],
+        userFunction: self.listAppDuplications(request:context:)
+      )
 
     case "GetAppDuplication":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getAppDuplication(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAppDuplicationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAppDuplicationResponse>(),
+        interceptors: self.interceptors?.makeGetAppDuplicationInterceptors() ?? [],
+        userFunction: self.getAppDuplication(request:context:)
+      )
 
     case "PostTasks":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postTasks(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostTasksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTaskResponse>(),
+        interceptors: self.interceptors?.makePostTasksInterceptors() ?? [],
+        userFunction: self.postTasks(request:context:)
+      )
 
     case "GetTaskAnnotationCount":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getTaskAnnotationCount(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetTaskCountRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleTaskCountResponse>(),
+        interceptors: self.interceptors?.makeGetTaskAnnotationCountInterceptors() ?? [],
+        userFunction: self.getTaskAnnotationCount(request:context:)
+      )
 
     case "GetTaskInputCount":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getTaskInputCount(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetTaskCountRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleTaskCountResponse>(),
+        interceptors: self.interceptors?.makeGetTaskInputCountInterceptors() ?? [],
+        userFunction: self.getTaskInputCount(request:context:)
+      )
 
     case "GetTask":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getTask(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetTaskRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleTaskResponse>(),
+        interceptors: self.interceptors?.makeGetTaskInterceptors() ?? [],
+        userFunction: self.getTask(request:context:)
+      )
 
     case "ListTasks":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listTasks(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListTasksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTaskResponse>(),
+        interceptors: self.interceptors?.makeListTasksInterceptors() ?? [],
+        userFunction: self.listTasks(request:context:)
+      )
 
     case "PatchTasks":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchTasks(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchTasksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTaskResponse>(),
+        interceptors: self.interceptors?.makePatchTasksInterceptors() ?? [],
+        userFunction: self.patchTasks(request:context:)
+      )
 
     case "DeleteTasks":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteTasks(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteTasksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteTasksInterceptors() ?? [],
+        userFunction: self.deleteTasks(request:context:)
+      )
 
     case "PostLabelOrders":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postLabelOrders(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostLabelOrdersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLabelOrderResponse>(),
+        interceptors: self.interceptors?.makePostLabelOrdersInterceptors() ?? [],
+        userFunction: self.postLabelOrders(request:context:)
+      )
 
     case "GetLabelOrder":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getLabelOrder(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetLabelOrderRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleLabelOrderResponse>(),
+        interceptors: self.interceptors?.makeGetLabelOrderInterceptors() ?? [],
+        userFunction: self.getLabelOrder(request:context:)
+      )
 
     case "ListLabelOrders":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listLabelOrders(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListLabelOrdersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLabelOrderResponse>(),
+        interceptors: self.interceptors?.makeListLabelOrdersInterceptors() ?? [],
+        userFunction: self.listLabelOrders(request:context:)
+      )
 
     case "PatchLabelOrders":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchLabelOrders(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchLabelOrdersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLabelOrderResponse>(),
+        interceptors: self.interceptors?.makePatchLabelOrdersInterceptors() ?? [],
+        userFunction: self.patchLabelOrders(request:context:)
+      )
 
     case "DeleteLabelOrders":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteLabelOrders(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteLabelOrdersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteLabelOrdersInterceptors() ?? [],
+        userFunction: self.deleteLabelOrders(request:context:)
+      )
 
     case "PostCollectors":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postCollectors(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostCollectorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
+        interceptors: self.interceptors?.makePostCollectorsInterceptors() ?? [],
+        userFunction: self.postCollectors(request:context:)
+      )
 
     case "GetCollector":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.getCollector(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetCollectorRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleCollectorResponse>(),
+        interceptors: self.interceptors?.makeGetCollectorInterceptors() ?? [],
+        userFunction: self.getCollector(request:context:)
+      )
 
     case "ListCollectors":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listCollectors(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCollectorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
+        interceptors: self.interceptors?.makeListCollectorsInterceptors() ?? [],
+        userFunction: self.listCollectors(request:context:)
+      )
 
     case "PatchCollectors":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.patchCollectors(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchCollectorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
+        interceptors: self.interceptors?.makePatchCollectorsInterceptors() ?? [],
+        userFunction: self.patchCollectors(request:context:)
+      )
 
     case "DeleteCollectors":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.deleteCollectors(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteCollectorsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteCollectorsInterceptors() ?? [],
+        userFunction: self.deleteCollectors(request:context:)
+      )
 
     case "PostStatValues":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postStatValues(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostStatValuesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiStatValueResponse>(),
+        interceptors: self.interceptors?.makePostStatValuesInterceptors() ?? [],
+        userFunction: self.postStatValues(request:context:)
+      )
 
     case "PostStatValuesAggregate":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postStatValuesAggregate(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostStatValuesAggregateRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiStatValueAggregateResponse>(),
+        interceptors: self.interceptors?.makePostStatValuesAggregateInterceptors() ?? [],
+        userFunction: self.postStatValuesAggregate(request:context:)
+      )
 
     case "PostTrendingMetricsView":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.postTrendingMetricsView(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostTrendingMetricsViewRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostTrendingMetricsViewInterceptors() ?? [],
+        userFunction: self.postTrendingMetricsView(request:context:)
+      )
 
     case "ListTrendingMetricsViews":
-      return CallHandlerFactory.makeUnary(callHandlerContext: callHandlerContext) { context in
-        return { request in
-          self.listTrendingMetricsViews(request: request, context: context)
-        }
-      }
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListTrendingMetricsViewsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTrendingMetricsViewResponse>(),
+        interceptors: self.interceptors?.makeListTrendingMetricsViewsInterceptors() ?? [],
+        userFunction: self.listTrendingMetricsViews(request:context:)
+      )
 
-    default: return nil
+    case "GetModule":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleResponse>(),
+        interceptors: self.interceptors?.makeGetModuleInterceptors() ?? [],
+        userFunction: self.getModule(request:context:)
+      )
+
+    case "ListModules":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModulesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
+        interceptors: self.interceptors?.makeListModulesInterceptors() ?? [],
+        userFunction: self.listModules(request:context:)
+      )
+
+    case "PostModules":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModulesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
+        interceptors: self.interceptors?.makePostModulesInterceptors() ?? [],
+        userFunction: self.postModules(request:context:)
+      )
+
+    case "PatchModules":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModulesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
+        interceptors: self.interceptors?.makePatchModulesInterceptors() ?? [],
+        userFunction: self.patchModules(request:context:)
+      )
+
+    case "DeleteModules":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModulesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteModulesInterceptors() ?? [],
+        userFunction: self.deleteModules(request:context:)
+      )
+
+    case "GetModuleVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleVersionResponse>(),
+        interceptors: self.interceptors?.makeGetModuleVersionInterceptors() ?? [],
+        userFunction: self.getModuleVersion(request:context:)
+      )
+
+    case "ListModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
+        interceptors: self.interceptors?.makeListModuleVersionsInterceptors() ?? [],
+        userFunction: self.listModuleVersions(request:context:)
+      )
+
+    case "PostModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
+        interceptors: self.interceptors?.makePostModuleVersionsInterceptors() ?? [],
+        userFunction: self.postModuleVersions(request:context:)
+      )
+
+    case "DeleteModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteModuleVersionsInterceptors() ?? [],
+        userFunction: self.deleteModuleVersions(request:context:)
+      )
+
+    case "GetInstalledModuleVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInstalledModuleVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInstalledModuleVersionResponse>(),
+        interceptors: self.interceptors?.makeGetInstalledModuleVersionInterceptors() ?? [],
+        userFunction: self.getInstalledModuleVersion(request:context:)
+      )
+
+    case "ListInstalledModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInstalledModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInstalledModuleVersionResponse>(),
+        interceptors: self.interceptors?.makeListInstalledModuleVersionsInterceptors() ?? [],
+        userFunction: self.listInstalledModuleVersions(request:context:)
+      )
+
+    case "PostInstalledModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInstalledModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInstalledModuleVersionResponse>(),
+        interceptors: self.interceptors?.makePostInstalledModuleVersionsInterceptors() ?? [],
+        userFunction: self.postInstalledModuleVersions(request:context:)
+      )
+
+    case "DeleteInstalledModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteInstalledModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteInstalledModuleVersionsInterceptors() ?? [],
+        userFunction: self.deleteInstalledModuleVersions(request:context:)
+      )
+
+    case "PostInstalledModuleVersionsKey":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInstalledModuleVersionsKeyRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleKeyResponse>(),
+        interceptors: self.interceptors?.makePostInstalledModuleVersionsKeyInterceptors() ?? [],
+        userFunction: self.postInstalledModuleVersionsKey(request:context:)
+      )
+
+    case "PostBulkOperations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostBulkOperationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiBulkOperationsResponse>(),
+        interceptors: self.interceptors?.makePostBulkOperationsInterceptors() ?? [],
+        userFunction: self.postBulkOperations(request:context:)
+      )
+
+    case "ListBulkOperations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListBulkOperationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiBulkOperationsResponse>(),
+        interceptors: self.interceptors?.makeListBulkOperationsInterceptors() ?? [],
+        userFunction: self.listBulkOperations(request:context:)
+      )
+
+    case "GetBulkOperation":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetBulkOperationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleBulkOperationsResponse>(),
+        interceptors: self.interceptors?.makeGetBulkOperationInterceptors() ?? [],
+        userFunction: self.getBulkOperation(request:context:)
+      )
+
+    case "CancelBulkOperations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_CancelBulkOperationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiBulkOperationsResponse>(),
+        interceptors: self.interceptors?.makeCancelBulkOperationsInterceptors() ?? [],
+        userFunction: self.cancelBulkOperations(request:context:)
+      )
+
+    case "DeleteBulkOperations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteBulkOperationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteBulkOperationsInterceptors() ?? [],
+        userFunction: self.deleteBulkOperations(request:context:)
+      )
+
+    case "GetDatasetInputsSearchAddJob":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetInputsSearchAddJobRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>(),
+        interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? [],
+        userFunction: self.getDatasetInputsSearchAddJob(request:context:)
+      )
+
+    case "ListNextTaskAssignments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListNextTaskAssignmentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputResponse>(),
+        interceptors: self.interceptors?.makeListNextTaskAssignmentsInterceptors() ?? [],
+        userFunction: self.listNextTaskAssignments(request:context:)
+      )
+
+    case "PutTaskAssignments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PutTaskAssignmentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePutTaskAssignmentsInterceptors() ?? [],
+        userFunction: self.putTaskAssignments(request:context:)
+      )
+
+    case "ListInputsAddJobs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInputsAddJobsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputsAddJobResponse>(),
+        interceptors: self.interceptors?.makeListInputsAddJobsInterceptors() ?? [],
+        userFunction: self.listInputsAddJobs(request:context:)
+      )
+
+    case "GetInputsAddJob":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInputsAddJobRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInputsAddJobResponse>(),
+        interceptors: self.interceptors?.makeGetInputsAddJobInterceptors() ?? [],
+        userFunction: self.getInputsAddJob(request:context:)
+      )
+
+    case "CancelInputsAddJob":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_CancelInputsAddJobRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInputsAddJobResponse>(),
+        interceptors: self.interceptors?.makeCancelInputsAddJobInterceptors() ?? [],
+        userFunction: self.cancelInputsAddJob(request:context:)
+      )
+
+    case "PostUploads":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostUploadsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiUploadResponse>(),
+        interceptors: self.interceptors?.makePostUploadsInterceptors() ?? [],
+        userFunction: self.postUploads(request:context:)
+      )
+
+    case "PutUploadContentParts":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PutUploadContentPartsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleUploadResponse>(),
+        interceptors: self.interceptors?.makePutUploadContentPartsInterceptors() ?? [],
+        userFunction: self.putUploadContentParts(request:context:)
+      )
+
+    case "GetUpload":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetUploadRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleUploadResponse>(),
+        interceptors: self.interceptors?.makeGetUploadInterceptors() ?? [],
+        userFunction: self.getUpload(request:context:)
+      )
+
+    case "ListUploads":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListUploadsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiUploadResponse>(),
+        interceptors: self.interceptors?.makeListUploadsInterceptors() ?? [],
+        userFunction: self.listUploads(request:context:)
+      )
+
+    case "DeleteUploads":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteUploadsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteUploadsInterceptors() ?? [],
+        userFunction: self.deleteUploads(request:context:)
+      )
+
+    case "PostInputsDataSources":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInputsDataSourcesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputsAddJobResponse>(),
+        interceptors: self.interceptors?.makePostInputsDataSourcesInterceptors() ?? [],
+        userFunction: self.postInputsDataSources(request:context:)
+      )
+
+    case "GetInputsExtractionJob":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInputsExtractionJobRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInputsExtractionJobResponse>(),
+        interceptors: self.interceptors?.makeGetInputsExtractionJobInterceptors() ?? [],
+        userFunction: self.getInputsExtractionJob(request:context:)
+      )
+
+    case "ListInputsExtractionJobs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInputsExtractionJobsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputsExtractionJobResponse>(),
+        interceptors: self.interceptors?.makeListInputsExtractionJobsInterceptors() ?? [],
+        userFunction: self.listInputsExtractionJobs(request:context:)
+      )
+
+    case "CancelInputsExtractionJobs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_CancelInputsExtractionJobsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputsExtractionJobResponse>(),
+        interceptors: self.interceptors?.makeCancelInputsExtractionJobsInterceptors() ?? [],
+        userFunction: self.cancelInputsExtractionJobs(request:context:)
+      )
+
+    case "PostInputsUploads":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInputsUploadsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInputsAddJobResponse>(),
+        interceptors: self.interceptors?.makePostInputsUploadsInterceptors() ?? [],
+        userFunction: self.postInputsUploads(request:context:)
+      )
+
+    case "GetRunner":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetRunnerRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleRunnerResponse>(),
+        interceptors: self.interceptors?.makeGetRunnerInterceptors() ?? [],
+        userFunction: self.getRunner(request:context:)
+      )
+
+    case "ListRunners":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListRunnersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerResponse>(),
+        interceptors: self.interceptors?.makeListRunnersInterceptors() ?? [],
+        userFunction: self.listRunners(request:context:)
+      )
+
+    case "PostRunners":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostRunnersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerResponse>(),
+        interceptors: self.interceptors?.makePostRunnersInterceptors() ?? [],
+        userFunction: self.postRunners(request:context:)
+      )
+
+    case "DeleteRunners":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteRunnersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteRunnersInterceptors() ?? [],
+        userFunction: self.deleteRunners(request:context:)
+      )
+
+    case "ListRunnerItems":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListRunnerItemsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerItemResponse>(),
+        interceptors: self.interceptors?.makeListRunnerItemsInterceptors() ?? [],
+        userFunction: self.listRunnerItems(request:context:)
+      )
+
+    case "PostRunnerItemOutputs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostRunnerItemOutputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerItemOutputResponse>(),
+        interceptors: self.interceptors?.makePostRunnerItemOutputsInterceptors() ?? [],
+        userFunction: self.postRunnerItemOutputs(request:context:)
+      )
+
+    default:
+      return nil
     }
   }
 }
 
+public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'listConceptRelations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListConceptRelationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postConceptRelations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostConceptRelationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptRelationsRequest, Clarifai_Api_MultiConceptRelationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteConceptRelations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteConceptRelationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteConceptRelationsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getConceptCounts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetConceptCountsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetConceptCountsRequest, Clarifai_Api_MultiConceptCountResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getConcept'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetConceptInterceptors() -> [ServerInterceptor<Clarifai_Api_GetConceptRequest, Clarifai_Api_SingleConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listConcepts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListConceptsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelConcepts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelConceptsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postConceptsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostConceptsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptsSearchesRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postConcepts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostConceptsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchConcepts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchConceptsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchConceptsRequest, Clarifai_Api_MultiConceptResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getConceptLanguage'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetConceptLanguageInterceptors() -> [ServerInterceptor<Clarifai_Api_GetConceptLanguageRequest, Clarifai_Api_SingleConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listConceptLanguages'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListConceptLanguagesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postConceptLanguages'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostConceptLanguagesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchConceptLanguages'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchConceptLanguagesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchConceptLanguagesRequest, Clarifai_Api_MultiConceptLanguageResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listKnowledgeGraphs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListKnowledgeGraphsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postKnowledgeGraphs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostKnowledgeGraphsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postConceptMappingJobs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostConceptMappingJobsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAnnotation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAnnotationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAnnotationRequest, Clarifai_Api_SingleAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAnnotations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAnnotations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAnnotationsStatus'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAnnotationsStatusInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAnnotationsStatusRequest, Clarifai_Api_PatchAnnotationsStatusResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteAnnotation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAnnotationInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteAnnotations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAnnotationsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAnnotationsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInputCount'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputCountInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInputCountRequest, Clarifai_Api_SingleInputCountResponse>]
+
+  /// - Returns: Interceptors to use when handling 'streamInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInputSamples'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputSamplesInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInputSamplesRequest, Clarifai_Api_MultiInputAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInput'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInputRequest, Clarifai_Api_SingleInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInputVideoManifest'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputVideoManifestInterceptors() -> [ServerInterceptor<Clarifai_Api_GetVideoManifestRequest, Clarifai_Api_GetVideoManifestResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteInput'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteInputInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteInputRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteInputsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchInputsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchInputsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInputsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInputsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInputsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelOutputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listDatasets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListDatasetsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDataset'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDatasetInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetRequest, Clarifai_Api_SingleDatasetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postDatasets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostDatasetsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchDatasets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchDatasetsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteDatasets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteDatasetsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteDatasetsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listDatasetInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListDatasetInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDatasetInput'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDatasetInputInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetInputRequest, Clarifai_Api_SingleDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postDatasetInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostDatasetInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostDatasetInputsRequest, Clarifai_Api_MultiDatasetInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteDatasetInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteDatasetInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteDatasetInputsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listDatasetVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListDatasetVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDatasetVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDatasetVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetVersionRequest, Clarifai_Api_SingleDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listDatasetVersionMetricsGroups'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListDatasetVersionMetricsGroupsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListDatasetVersionMetricsGroupsRequest, Clarifai_Api_MultiDatasetVersionMetricsGroupResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postDatasetVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostDatasetVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchDatasetVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchDatasetVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchDatasetVersionsRequest, Clarifai_Api_MultiDatasetVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteDatasetVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteDatasetVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteDatasetVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'putDatasetVersionExports'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePutDatasetVersionExportsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutDatasetVersionExportsRequest, Clarifai_Api_MultiDatasetVersionExportResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelType'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelTypeInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelTypeRequest, Clarifai_Api_SingleModelTypeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listOpenSourceLicenses'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListOpenSourceLicensesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListOpenSourceLicensesRequest, Clarifai_Api_ListOpenSourceLicensesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelTypes'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelTypesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelTypesRequest, Clarifai_Api_MultiModelTypeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModel'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelOutputInfo'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelOutputInfoInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModels'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getResourceCounts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetResourceCountsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetResourceCountsRequest, Clarifai_Api_GetResourceCountsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelsSearchesRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModels'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelsRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModels'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelIds'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelIdsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelIdsRequest, Clarifai_Api_MultiModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModel'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModelInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModels'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModelsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelCheckConsents'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelCheckConsentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelCheckConsentsRequest, Clarifai_Api_MultiModelCheckConsentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelToolkits'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelToolkitsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelToolkitsRequest, Clarifai_Api_MultiModelToolkitResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelUseCases'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelUseCasesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelUseCasesRequest, Clarifai_Api_MultiModelUseCaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelLanguages'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelLanguagesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelLanguagesRequest, Clarifai_Api_MultiModelLanguageResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelInputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelInputsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelInputsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowVersionsUnPublish'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowVersionsUnPublishInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowVersionsPublish'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowVersionsPublishInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionsPublish'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsPublishInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionsUnPublish'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsUnPublishInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsUnPublishRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModelVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModelVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModelVersionsRequest, Clarifai_Api_MultiModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModelVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModelVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelVersionMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelVersionMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelVersionEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelVersionEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelVersionEvaluation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelVersionEvaluationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListEvaluationsRequest, Clarifai_Api_MultiEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getEvaluation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetEvaluationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetEvaluationRequest, Clarifai_Api_SingleEvalMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelReferences'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelReferencesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelReferencesRequest, Clarifai_Api_MultiModelReferenceResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelVersionInputExample'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelVersionInputExampleInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionInputExampleRequest, Clarifai_Api_SingleModelVersionInputExampleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModelVersionInputExamples'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModelVersionInputExamplesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModelVersionInputExamplesRequest, Clarifai_Api_MultiModelVersionInputExampleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getWorkflow'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetWorkflowInterceptors() -> [ServerInterceptor<Clarifai_Api_GetWorkflowRequest, Clarifai_Api_SingleWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listWorkflows'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListWorkflowsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflows'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchWorkflows'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchWorkflowsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchWorkflowIds'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchWorkflowIdsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowIdsRequest, Clarifai_Api_MultiWorkflowResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteWorkflow'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteWorkflowInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteWorkflowRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteWorkflows'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteWorkflowsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteWorkflowsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowResults'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowResultsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowResultsRequest, Clarifai_Api_PostWorkflowResultsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowResultsSimilarity'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowResultsSimilarityInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listWorkflowVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListWorkflowVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowVersionsRequest, Clarifai_Api_MultiWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getWorkflowVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetWorkflowVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetWorkflowVersionRequest, Clarifai_Api_SingleWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteWorkflowVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteWorkflowVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteWorkflowVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchWorkflowVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchWorkflowVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowVersionsRequest, Clarifai_Api_MultiWorkflowVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetKeyInterceptors() -> [ServerInterceptor<Clarifai_Api_GetKeyRequest, Clarifai_Api_SingleKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listKeys'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListKeysInterceptors() -> [ServerInterceptor<Clarifai_Api_ListKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAppKeys'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAppKeysInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAppKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteKeyInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteKeyRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postKeys'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostKeysInterceptors() -> [ServerInterceptor<Clarifai_Api_PostKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchKeys'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchKeysInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchKeysRequest, Clarifai_Api_MultiKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'myScopes'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeMyScopesInterceptors() -> [ServerInterceptor<Clarifai_Api_MyScopesRequest, Clarifai_Api_MultiScopeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'myScopesUser'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeMyScopesUserInterceptors() -> [ServerInterceptor<Clarifai_Api_MyScopesUserRequest, Clarifai_Api_MultiScopeUserResponse>]
+
+  /// - Returns: Interceptors to use when handling 'myScopesRoot'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeMyScopesRootInterceptors() -> [ServerInterceptor<Clarifai_Api_MyScopesRootRequest, Clarifai_Api_MultiScopeRootResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listScopes'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListScopesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListScopesRequest, Clarifai_Api_MultiScopeDepsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getApp'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAppInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAppRequest, Clarifai_Api_SingleAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listApps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAppsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteApp'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAppInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAppRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postApps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAppsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchApps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAppsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAppsIds'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAppsIdsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAppsIdsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchApp'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAppInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAppRequest, Clarifai_Api_SingleAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAppsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAppsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAppsSearchesRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getUser'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetUserInterceptors() -> [ServerInterceptor<Clarifai_Api_GetUserRequest, Clarifai_Api_SingleUserResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postValidatePassword'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostValidatePasswordInterceptors() -> [ServerInterceptor<Clarifai_Api_PostValidatePasswordRequest, Clarifai_Api_SinglePasswordValidationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getSearch'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetSearchInterceptors() -> [ServerInterceptor<Clarifai_Api_GetSearchRequest, Clarifai_Api_SingleSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postSearchesByID'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostSearchesByIDInterceptors() -> [ServerInterceptor<Clarifai_Api_PostSearchesByIDRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAnnotationSearchMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAnnotationSearchMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotationSearchMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteAnnotationSearchMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteSearch'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteSearchInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteSearchRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotationFilters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationFiltersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAnnotationFilter'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAnnotationFilterInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAnnotationFilterRequest, Clarifai_Api_SingleAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAnnotationFilters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAnnotationFiltersInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAnnotationFilters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAnnotationFiltersInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAnnotationFiltersRequest, Clarifai_Api_MultiAnnotationFilterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteAnnotationFilters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAnnotationFiltersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationFiltersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listStatusCodes'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListStatusCodesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListStatusCodesRequest, Clarifai_Api_MultiStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getStatusCode'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetStatusCodeInterceptors() -> [ServerInterceptor<Clarifai_Api_GetStatusCodeRequest, Clarifai_Api_SingleStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listCollaborators'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListCollaboratorsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postCollaborators'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostCollaboratorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchCollaborators'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchCollaboratorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteCollaborators'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteCollaboratorsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteCollaboratorsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listCollaborations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListCollaborationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCollaborationsRequest, Clarifai_Api_MultiCollaborationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAppDuplications'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAppDuplicationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAppDuplicationsRequest, Clarifai_Api_MultiAppDuplicationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAppDuplications'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAppDuplicationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAppDuplicationsRequest, Clarifai_Api_MultiAppDuplicationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAppDuplication'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAppDuplicationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAppDuplicationRequest, Clarifai_Api_SingleAppDuplicationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postTasks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostTasksInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getTaskAnnotationCount'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetTaskAnnotationCountInterceptors() -> [ServerInterceptor<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getTaskInputCount'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetTaskInputCountInterceptors() -> [ServerInterceptor<Clarifai_Api_GetTaskCountRequest, Clarifai_Api_SingleTaskCountResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getTask'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetTaskInterceptors() -> [ServerInterceptor<Clarifai_Api_GetTaskRequest, Clarifai_Api_SingleTaskResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listTasks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListTasksInterceptors() -> [ServerInterceptor<Clarifai_Api_ListTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchTasks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchTasksInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchTasksRequest, Clarifai_Api_MultiTaskResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteTasks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteTasksInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteTasksRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postLabelOrders'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_PostLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getLabelOrder'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetLabelOrderInterceptors() -> [ServerInterceptor<Clarifai_Api_GetLabelOrderRequest, Clarifai_Api_SingleLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listLabelOrders'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchLabelOrders'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchLabelOrdersRequest, Clarifai_Api_MultiLabelOrderResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteLabelOrders'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postCollectors'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getCollector'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetCollectorInterceptors() -> [ServerInterceptor<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listCollectors'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchCollectors'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteCollectors'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postStatValues'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostStatValuesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postStatValuesAggregate'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostStatValuesAggregateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postTrendingMetricsView'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostTrendingMetricsViewInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listTrendingMetricsViews'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListTrendingMetricsViewsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModule'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModuleInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModules'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModules'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModules'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModules'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModuleVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModuleVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInstalledModuleVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInstalledModuleVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listInstalledModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInstalledModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteInstalledModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInstalledModuleVersionsKey'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInstalledModuleVersionsKeyInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postBulkOperations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listBulkOperations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getBulkOperation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBulkOperationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetBulkOperationRequest, Clarifai_Api_SingleBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'cancelBulkOperations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeCancelBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_CancelBulkOperationRequest, Clarifai_Api_MultiBulkOperationsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteBulkOperations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDatasetInputsSearchAddJob'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listNextTaskAssignments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListNextTaskAssignmentsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'putTaskAssignments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePutTaskAssignmentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listInputsAddJobs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListInputsAddJobsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInputsAddJobsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInputsAddJob'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputsAddJobInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'cancelInputsAddJob'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeCancelInputsAddJobInterceptors() -> [ServerInterceptor<Clarifai_Api_CancelInputsAddJobRequest, Clarifai_Api_SingleInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postUploads'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostUploadsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostUploadsRequest, Clarifai_Api_MultiUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'putUploadContentParts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePutUploadContentPartsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutUploadContentPartsRequest, Clarifai_Api_SingleUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getUpload'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_GetUploadRequest, Clarifai_Api_SingleUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listUploads'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListUploadsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListUploadsRequest, Clarifai_Api_MultiUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteUploads'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteUploadsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteUploadsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInputsDataSources'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInputsDataSourcesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInputsDataSourcesRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getInputsExtractionJob'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetInputsExtractionJobInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInputsExtractionJobRequest, Clarifai_Api_SingleInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listInputsExtractionJobs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListInputsExtractionJobsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'cancelInputsExtractionJobs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeCancelInputsExtractionJobsInterceptors() -> [ServerInterceptor<Clarifai_Api_CancelInputsExtractionJobsRequest, Clarifai_Api_MultiInputsExtractionJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postInputsUploads'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostInputsUploadsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getRunner'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetRunnerInterceptors() -> [ServerInterceptor<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listRunners'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListRunnersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postRunners'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostRunnersInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteRunners'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteRunnersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteRunnersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listRunnerItems'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListRunnerItemsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListRunnerItemsRequest, Clarifai_Api_MultiRunnerItemResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postRunnerItemOutputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostRunnerItemOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+}
