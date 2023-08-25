@@ -10,7 +10,7 @@ enum ClarifaiError: Error {
 
 final class ClarifaiGrpcTests: XCTestCase {
 
-    private let GENERAL_MODEL_ID = "aaa03c23b3724a16a56b629203edc62c"
+    private let GENERAL_MODEL_ID = "general-image-recognition"
 
     private let TRUCK_IMAGE_URL = "https://samples.clarifai.com/red-truck.png"
     private let DOG_IMAGE_URL = "https://samples.clarifai.com/dog2.jpeg"
