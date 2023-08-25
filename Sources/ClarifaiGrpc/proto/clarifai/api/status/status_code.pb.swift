@@ -31,10 +31,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case mixedStatus // = 10010
   case failure // = 10020
   case tryAgain // = 10030
-
-  ///SUCCESS_WARNING_API_DEPRECATED = 10001;
-  ///SUCCESS_WARNING_CLIENT_DEPRECATED = 10002;
   case notImplemented // = 10040
+
+  /// Resource moved. Respond with Http status 307 and add new Location header to response
+  case moved // = 10050
 
   /// Clarifai Connection Codes: 11xxx
   case connAccountIssues // = 11000
@@ -98,32 +98,37 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case modelUploading // = 21104
   case modelUploadingFailed // = 21105
 
-  /// Custom model training had no data.
+  /// generic err msg for any type of model training err.
+  case modelTrainingFailed // = 21106
+
+  /// Custom model training had no data.  FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingNoData // = 21110
 
-  /// Custom model training had no positive examples.
+  /// Custom model training had no positive examples. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingNoPositives // = 21111
 
-  /// Custom model training was ONE_VS_N but with a single class.
+  /// Custom model training was ONE_VS_N but with a single class. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingOneVsNSingleClass // = 21112
 
-  /// Training took longer than hard coded timeouts.
+  /// Training took longer than hard coded timeouts. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingTimedOut // = 21113
 
-  /// Training got error waiting on asset pipeline to finish.
+  /// Training got error waiting on asset pipeline to finish. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingWaitingError // = 21114
 
   /// Training threw an unknown exception.
   case modelTrainingUnknownError // = 21115
 
-  /// Training message was redelivered.
+  /// Training message was redelivered. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingMsgRedeliver // = 21116
 
-  /// Training got error due to insufficient labelled data
+  /// Training got error due to insufficient labelled data. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingInsufficientData // = 21117
+
+  /// FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingInvalidParams // = 21118
 
-  /// Training is stopped because too much data was dropped
+  /// Training is stopped because too much data was dropped. FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingInvalidDataToleranceExceeded // = 21119
   case modelModifySuccess // = 21150
   case modelModifyPending // = 21151
@@ -137,24 +142,27 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case modelNotEvaluated // = 21302
   case modelQueuedForEvaluation // = 21303
 
-  /// Evaluation took longer than hard coded timeouts.
+  /// Evaluation took longer than hard coded timeouts. FIXME(yang): deprecate this. Use the 21317 + errStatusMsg
   case modelEvaluationTimedOut // = 21310
 
-  /// Evaluation got error waiting on asset pipeline to finish.
+  /// Evaluation got error waiting on asset pipeline to finish.FIXME(yang): deprecate this. Use the 21317 + errStatusMsg
   case modelEvaluationWaitingError // = 21311
 
   /// EVALUATION THREW AN UNKNOWN EXCEPTION.
   case modelEvaluationUnknownError // = 21312
   case modelPredictionFailed // = 21313
 
-  /// Eval message was redelivered.
+  /// Eval message was redelivered. FIXME(yang): deprecate this. Use the 21317 + errStatusMsg
   case modelEvaluationMsgRedeliver // = 21314
 
-  /// Don't have enough concepts labelled to perform evaluation
+  /// Don't have enough concepts labelled to perform evaluation. FIXME(yang): deprecate this. Use the 21317 + errStatusMsg
   case modelEvaluationNeedLabels // = 21315
 
-  /// Don't have enough inputs per concept to perform evaluation
+  /// Don't have enough inputs per concept to perform evaluation. FIXME(yang): deprecate this. Use the 21317 + errStatusMsg
   case modelEvaluationNeedInputs // = 21316
+
+  /// Generic err code for eval failure.
+  case modelEvaluationFailed // = 21317
 
   /// Used when inference coordinator failed to deploy spire and throws an error
   case modelDeploymentFailed // = 21350
@@ -234,7 +242,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case dataDumpPending // = 25151
   case dataDumpFailed // = 25152
   case dataDumpInProgress // = 25153
+
+  /// DEPRECATED: Not used anymore. Now for an empty data dump, DATA_DUMP_SUCCESS is returned. To detect an empty data dump, check if the inptus count is 0.
   case dataDumpNoData // = 25154
+  case dataDumpUnexpectedError // = 25155
+  case dataDumpExportSuccess // = 25170
+  case dataDumpExportPending // = 25171
+  case dataDumpExportFailed // = 25172
+  case dataDumpExportInProgress // = 25173
+  case dataDumpExportUnexpectedError // = 25174
 
   /// Duplicate related 252xx
   case appDuplicationSuccess // = 25200
@@ -248,6 +264,22 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case modulePermissionDenied // = 25301
   case moduleInvalidArgument // = 25302
   case moduleInvalidRequest // = 25303
+
+  /// Bulk Operation related codes 254xx
+  case bulkOperationSuccess // = 25400
+  case bulkOperationFailed // = 25401
+  case bulkOperationPending // = 25402
+  case bulkOperationInProgress // = 25403
+  case bulkOperationInvalidRequest // = 25404
+  case bulkOperationCancelled // = 25405
+  case bulkOperationUnexpectedError // = 25406
+
+  /// Runner related codes 256xx
+  case runnerDoesNotExist // = 25600
+  case runnerPermissionDenied // = 25601
+  case runnerInvalidArgument // = 25602
+  case runnerInvalidRequest // = 25603
+  case runnerNeedsRetry // = 25604
 
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
@@ -297,8 +329,16 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case inputVideoModifyFailed // = 31203
   case inputVideoStorageHostFailed // = 31210
   case allInputVideosInvalidBytes // = 31300
+  case inputVideoProcessingSuccess // = 31400
+  case inputVideoProcessingPending // = 31410
+  case inputVideoProcessingFailed // = 31420
+  case inputVideoStorageInconsistency // = 31430
+  case inputVideoStorageFailure // = 31440
+  case inputVideoURLGenerationFailure // = 31450
   case inputConnectionFailed // = 39996
   case requestDisabledForMaintenance // = 39997
+
+  /// deprecate this one. Use REQUEST_DISABLED_FOR_MAINTENANCE
   case inputWritesDisabledForMaintenance // = 39998
   case inputInvalidRequest // = 39999
 
@@ -317,6 +357,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case databaseFailToGetConnections // = 40015
   case databaseTooManyClients // = 40016
   case databaseConstraintViolated // = 40017
+  case databaseCanceled // = 40021
   case asyncWorkerMultiErrors // = 40020
   case rpcRequestQueueFull // = 40030
   case rpcServerUnavailable // = 40031
@@ -329,6 +370,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// could not connect to external services
   case externalConnectionError // = 40034
+  case queryInvalidSyntax // = 40050
 
   /// Queue related errors 41xxx
   case queueConnError // = 41000
@@ -354,6 +396,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case searchPredictionFailure // = 43003
   case searchByNotFullyIndexedInput // = 43004
   case savedSearchModifyFailed // = 43005
+  case searchCountsUnavailable // = 43006
+
+  /// Workflow evaluation err code
   case evaluationQueued // = 43100
   case evaluationInProgress // = 43101
   case evaluationSuccess // = 43102
@@ -424,8 +469,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// The task is marked as abandoned.
   case taskWontDo // = 54003
 
-  /// An error occurred during add-task-annotations pipeline.
-  case taskAddAnnotationsFailure // = 54005
+  /// An error occurred during add-task-annotations or add-auto-annotations pipeline.
+  case taskFailed // = 54005
+
+  /// When an Auto Annotation task job has finished processing its last batch and is waiting for more dataset assets.
+  case taskIdle // = 54006
 
   /// The task operation is in conflict with the current state of the server.
   case taskConflict // = 54100
@@ -483,14 +531,56 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// An unexpected error occurred during the dataset version processing.
   case datasetVersionUnexpectedError // = 64025
 
+  /// An alteration to dataset version would create a conflict
+  case datasetVersionConflict // = 64030
+
+  /// The dataset input was successfully added.
+  case datasetInputSuccess // = 64100
+
+  /// The dataset input is a duplicate.
+  /// Deprecated: Unused.
+  case datasetInputDuplicate // = 64101
+
+  /// The dataset version export is completed.
+  case datasetVersionExportSuccess // = 64200
+
+  /// The dataset version is pending to be exported.
+  case datasetVersionExportPending // = 64201
+
+  /// An error occurred during the dataset version export.
+  case datasetVersionExportFailed // = 64202
+
+  /// The dataset version is currently being exported.
+  case datasetVersionExportInProgress // = 64203
+
+  /// An unexpected error occurred during the dataset version export.
+  case datasetVersionExportUnexpectedError // = 64204
+
   /// Generic Job status codes
   case jobQueued // = 64000
   case jobRunning // = 64001
   case jobCompleted // = 64002
   case jobFailed // = 64003
+  case jobCancelled // = 64004
+  case jobUnexpectedError // = 64006
+  case jobConflict // = 64007
 
   ///auth issues
   case authMissingIdpAssoc // = 65000
+  case listObjectsFailed // = 66000
+  case archiveExtractFailed // = 67000
+
+  /// Multipart uploading status codes
+  case uploadInProgress // = 68000
+  case uploadDone // = 68001
+  case uploadFailed // = 68002
+  case uploadUnexpectedError // = 68003
+  case uploadExpired // = 68004
+  case uploadCanceled // = 68005
+  case uploadConflict // = 68006
+
+  /// Billing related issues: 69xxx
+  case billingInvalidInfo // = 69000
 
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
@@ -533,6 +623,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 10020: self = .failure
     case 10030: self = .tryAgain
     case 10040: self = .notImplemented
+    case 10050: self = .moved
     case 11000: self = .connAccountIssues
     case 11001: self = .connTokenInvalid
     case 11002: self = .connCredentialsInvalid
@@ -555,6 +646,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21103: self = .modelQueuedForTraining
     case 21104: self = .modelUploading
     case 21105: self = .modelUploadingFailed
+    case 21106: self = .modelTrainingFailed
     case 21110: self = .modelTrainingNoData
     case 21111: self = .modelTrainingNoPositives
     case 21112: self = .modelTrainingOneVsNSingleClass
@@ -583,6 +675,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21314: self = .modelEvaluationMsgRedeliver
     case 21315: self = .modelEvaluationNeedLabels
     case 21316: self = .modelEvaluationNeedInputs
+    case 21317: self = .modelEvaluationFailed
     case 21350: self = .modelDeploymentFailed
     case 21351: self = .modelDeploying
     case 21352: self = .modelQueuedForDeployment
@@ -633,6 +726,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25152: self = .dataDumpFailed
     case 25153: self = .dataDumpInProgress
     case 25154: self = .dataDumpNoData
+    case 25155: self = .dataDumpUnexpectedError
+    case 25170: self = .dataDumpExportSuccess
+    case 25171: self = .dataDumpExportPending
+    case 25172: self = .dataDumpExportFailed
+    case 25173: self = .dataDumpExportInProgress
+    case 25174: self = .dataDumpExportUnexpectedError
     case 25200: self = .appDuplicationSuccess
     case 25201: self = .appDuplicationFailed
     case 25202: self = .appDuplicationPending
@@ -642,6 +741,18 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25301: self = .modulePermissionDenied
     case 25302: self = .moduleInvalidArgument
     case 25303: self = .moduleInvalidRequest
+    case 25400: self = .bulkOperationSuccess
+    case 25401: self = .bulkOperationFailed
+    case 25402: self = .bulkOperationPending
+    case 25403: self = .bulkOperationInProgress
+    case 25404: self = .bulkOperationInvalidRequest
+    case 25405: self = .bulkOperationCancelled
+    case 25406: self = .bulkOperationUnexpectedError
+    case 25600: self = .runnerDoesNotExist
+    case 25601: self = .runnerPermissionDenied
+    case 25602: self = .runnerInvalidArgument
+    case 25603: self = .runnerInvalidRequest
+    case 25604: self = .runnerNeedsRetry
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -683,6 +794,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 31203: self = .inputVideoModifyFailed
     case 31210: self = .inputVideoStorageHostFailed
     case 31300: self = .allInputVideosInvalidBytes
+    case 31400: self = .inputVideoProcessingSuccess
+    case 31410: self = .inputVideoProcessingPending
+    case 31420: self = .inputVideoProcessingFailed
+    case 31430: self = .inputVideoStorageInconsistency
+    case 31440: self = .inputVideoStorageFailure
+    case 31450: self = .inputVideoURLGenerationFailure
     case 39996: self = .inputConnectionFailed
     case 39997: self = .requestDisabledForMaintenance
     case 39998: self = .inputWritesDisabledForMaintenance
@@ -700,6 +817,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 40016: self = .databaseTooManyClients
     case 40017: self = .databaseConstraintViolated
     case 40020: self = .asyncWorkerMultiErrors
+    case 40021: self = .databaseCanceled
     case 40030: self = .rpcRequestQueueFull
     case 40031: self = .rpcServerUnavailable
     case 40032: self = .rpcRequestTimeout
@@ -708,6 +826,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 40035: self = .rpcCanceled
     case 40036: self = .rpcUnknownMethod
     case 40037: self = .requestCanceledByUser
+    case 40050: self = .queryInvalidSyntax
     case 41000: self = .queueConnError
     case 41002: self = .queueCloseRequestTimeout
     case 41003: self = .queueConnClosed
@@ -727,6 +846,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 43003: self = .searchPredictionFailure
     case 43004: self = .searchByNotFullyIndexedInput
     case 43005: self = .savedSearchModifyFailed
+    case 43006: self = .searchCountsUnavailable
     case 43040: self = .clusterInternalFailure
     case 43100: self = .evaluationQueued
     case 43101: self = .evaluationInProgress
@@ -770,7 +890,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 54001: self = .taskInProgress
     case 54002: self = .taskDone
     case 54003: self = .taskWontDo
-    case 54005: self = .taskAddAnnotationsFailure
+    case 54005: self = .taskFailed
+    case 54006: self = .taskIdle
     case 54100: self = .taskConflict
     case 54101: self = .taskNotImplemented
     case 54102: self = .taskMissing
@@ -797,12 +918,33 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 64001: self = .jobRunning
     case 64002: self = .jobCompleted
     case 64003: self = .jobFailed
+    case 64004: self = .jobCancelled
     case 64005: self = .datasetVersionPending
+    case 64006: self = .jobUnexpectedError
+    case 64007: self = .jobConflict
     case 64010: self = .datasetVersionInProgress
     case 64015: self = .datasetVersionReady
     case 64020: self = .datasetVersionFailure
     case 64025: self = .datasetVersionUnexpectedError
+    case 64030: self = .datasetVersionConflict
+    case 64100: self = .datasetInputSuccess
+    case 64101: self = .datasetInputDuplicate
+    case 64200: self = .datasetVersionExportSuccess
+    case 64201: self = .datasetVersionExportPending
+    case 64202: self = .datasetVersionExportFailed
+    case 64203: self = .datasetVersionExportInProgress
+    case 64204: self = .datasetVersionExportUnexpectedError
     case 65000: self = .authMissingIdpAssoc
+    case 66000: self = .listObjectsFailed
+    case 67000: self = .archiveExtractFailed
+    case 68000: self = .uploadInProgress
+    case 68001: self = .uploadDone
+    case 68002: self = .uploadFailed
+    case 68003: self = .uploadUnexpectedError
+    case 68004: self = .uploadExpired
+    case 68005: self = .uploadCanceled
+    case 68006: self = .uploadConflict
+    case 69000: self = .billingInvalidInfo
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -835,6 +977,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .failure: return 10020
     case .tryAgain: return 10030
     case .notImplemented: return 10040
+    case .moved: return 10050
     case .connAccountIssues: return 11000
     case .connTokenInvalid: return 11001
     case .connCredentialsInvalid: return 11002
@@ -857,6 +1000,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelQueuedForTraining: return 21103
     case .modelUploading: return 21104
     case .modelUploadingFailed: return 21105
+    case .modelTrainingFailed: return 21106
     case .modelTrainingNoData: return 21110
     case .modelTrainingNoPositives: return 21111
     case .modelTrainingOneVsNSingleClass: return 21112
@@ -885,6 +1029,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelEvaluationMsgRedeliver: return 21314
     case .modelEvaluationNeedLabels: return 21315
     case .modelEvaluationNeedInputs: return 21316
+    case .modelEvaluationFailed: return 21317
     case .modelDeploymentFailed: return 21350
     case .modelDeploying: return 21351
     case .modelQueuedForDeployment: return 21352
@@ -935,6 +1080,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .dataDumpFailed: return 25152
     case .dataDumpInProgress: return 25153
     case .dataDumpNoData: return 25154
+    case .dataDumpUnexpectedError: return 25155
+    case .dataDumpExportSuccess: return 25170
+    case .dataDumpExportPending: return 25171
+    case .dataDumpExportFailed: return 25172
+    case .dataDumpExportInProgress: return 25173
+    case .dataDumpExportUnexpectedError: return 25174
     case .appDuplicationSuccess: return 25200
     case .appDuplicationFailed: return 25201
     case .appDuplicationPending: return 25202
@@ -944,6 +1095,18 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modulePermissionDenied: return 25301
     case .moduleInvalidArgument: return 25302
     case .moduleInvalidRequest: return 25303
+    case .bulkOperationSuccess: return 25400
+    case .bulkOperationFailed: return 25401
+    case .bulkOperationPending: return 25402
+    case .bulkOperationInProgress: return 25403
+    case .bulkOperationInvalidRequest: return 25404
+    case .bulkOperationCancelled: return 25405
+    case .bulkOperationUnexpectedError: return 25406
+    case .runnerDoesNotExist: return 25600
+    case .runnerPermissionDenied: return 25601
+    case .runnerInvalidArgument: return 25602
+    case .runnerInvalidRequest: return 25603
+    case .runnerNeedsRetry: return 25604
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -985,6 +1148,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .inputVideoModifyFailed: return 31203
     case .inputVideoStorageHostFailed: return 31210
     case .allInputVideosInvalidBytes: return 31300
+    case .inputVideoProcessingSuccess: return 31400
+    case .inputVideoProcessingPending: return 31410
+    case .inputVideoProcessingFailed: return 31420
+    case .inputVideoStorageInconsistency: return 31430
+    case .inputVideoStorageFailure: return 31440
+    case .inputVideoURLGenerationFailure: return 31450
     case .inputConnectionFailed: return 39996
     case .requestDisabledForMaintenance: return 39997
     case .inputWritesDisabledForMaintenance: return 39998
@@ -1002,6 +1171,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .databaseTooManyClients: return 40016
     case .databaseConstraintViolated: return 40017
     case .asyncWorkerMultiErrors: return 40020
+    case .databaseCanceled: return 40021
     case .rpcRequestQueueFull: return 40030
     case .rpcServerUnavailable: return 40031
     case .rpcRequestTimeout: return 40032
@@ -1010,6 +1180,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .rpcCanceled: return 40035
     case .rpcUnknownMethod: return 40036
     case .requestCanceledByUser: return 40037
+    case .queryInvalidSyntax: return 40050
     case .queueConnError: return 41000
     case .queueCloseRequestTimeout: return 41002
     case .queueConnClosed: return 41003
@@ -1029,6 +1200,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .searchPredictionFailure: return 43003
     case .searchByNotFullyIndexedInput: return 43004
     case .savedSearchModifyFailed: return 43005
+    case .searchCountsUnavailable: return 43006
     case .clusterInternalFailure: return 43040
     case .evaluationQueued: return 43100
     case .evaluationInProgress: return 43101
@@ -1072,7 +1244,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .taskInProgress: return 54001
     case .taskDone: return 54002
     case .taskWontDo: return 54003
-    case .taskAddAnnotationsFailure: return 54005
+    case .taskFailed: return 54005
+    case .taskIdle: return 54006
     case .taskConflict: return 54100
     case .taskNotImplemented: return 54101
     case .taskMissing: return 54102
@@ -1099,12 +1272,33 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .jobRunning: return 64001
     case .jobCompleted: return 64002
     case .jobFailed: return 64003
+    case .jobCancelled: return 64004
     case .datasetVersionPending: return 64005
+    case .jobUnexpectedError: return 64006
+    case .jobConflict: return 64007
     case .datasetVersionInProgress: return 64010
     case .datasetVersionReady: return 64015
     case .datasetVersionFailure: return 64020
     case .datasetVersionUnexpectedError: return 64025
+    case .datasetVersionConflict: return 64030
+    case .datasetInputSuccess: return 64100
+    case .datasetInputDuplicate: return 64101
+    case .datasetVersionExportSuccess: return 64200
+    case .datasetVersionExportPending: return 64201
+    case .datasetVersionExportFailed: return 64202
+    case .datasetVersionExportInProgress: return 64203
+    case .datasetVersionExportUnexpectedError: return 64204
     case .authMissingIdpAssoc: return 65000
+    case .listObjectsFailed: return 66000
+    case .archiveExtractFailed: return 67000
+    case .uploadInProgress: return 68000
+    case .uploadDone: return 68001
+    case .uploadFailed: return 68002
+    case .uploadUnexpectedError: return 68003
+    case .uploadExpired: return 68004
+    case .uploadCanceled: return 68005
+    case .uploadConflict: return 68006
+    case .billingInvalidInfo: return 69000
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -1142,6 +1336,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .failure,
     .tryAgain,
     .notImplemented,
+    .moved,
     .connAccountIssues,
     .connTokenInvalid,
     .connCredentialsInvalid,
@@ -1164,6 +1359,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelQueuedForTraining,
     .modelUploading,
     .modelUploadingFailed,
+    .modelTrainingFailed,
     .modelTrainingNoData,
     .modelTrainingNoPositives,
     .modelTrainingOneVsNSingleClass,
@@ -1192,6 +1388,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelEvaluationMsgRedeliver,
     .modelEvaluationNeedLabels,
     .modelEvaluationNeedInputs,
+    .modelEvaluationFailed,
     .modelDeploymentFailed,
     .modelDeploying,
     .modelQueuedForDeployment,
@@ -1242,6 +1439,12 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .dataDumpFailed,
     .dataDumpInProgress,
     .dataDumpNoData,
+    .dataDumpUnexpectedError,
+    .dataDumpExportSuccess,
+    .dataDumpExportPending,
+    .dataDumpExportFailed,
+    .dataDumpExportInProgress,
+    .dataDumpExportUnexpectedError,
     .appDuplicationSuccess,
     .appDuplicationFailed,
     .appDuplicationPending,
@@ -1251,6 +1454,18 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modulePermissionDenied,
     .moduleInvalidArgument,
     .moduleInvalidRequest,
+    .bulkOperationSuccess,
+    .bulkOperationFailed,
+    .bulkOperationPending,
+    .bulkOperationInProgress,
+    .bulkOperationInvalidRequest,
+    .bulkOperationCancelled,
+    .bulkOperationUnexpectedError,
+    .runnerDoesNotExist,
+    .runnerPermissionDenied,
+    .runnerInvalidArgument,
+    .runnerInvalidRequest,
+    .runnerNeedsRetry,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1292,6 +1507,12 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .inputVideoModifyFailed,
     .inputVideoStorageHostFailed,
     .allInputVideosInvalidBytes,
+    .inputVideoProcessingSuccess,
+    .inputVideoProcessingPending,
+    .inputVideoProcessingFailed,
+    .inputVideoStorageInconsistency,
+    .inputVideoStorageFailure,
+    .inputVideoURLGenerationFailure,
     .inputConnectionFailed,
     .requestDisabledForMaintenance,
     .inputWritesDisabledForMaintenance,
@@ -1308,6 +1529,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .databaseFailToGetConnections,
     .databaseTooManyClients,
     .databaseConstraintViolated,
+    .databaseCanceled,
     .asyncWorkerMultiErrors,
     .rpcRequestQueueFull,
     .rpcServerUnavailable,
@@ -1318,6 +1540,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .requestCanceledByUser,
     .clusterInternalFailure,
     .externalConnectionError,
+    .queryInvalidSyntax,
     .queueConnError,
     .queueCloseRequestTimeout,
     .queueConnClosed,
@@ -1337,6 +1560,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .searchPredictionFailure,
     .searchByNotFullyIndexedInput,
     .savedSearchModifyFailed,
+    .searchCountsUnavailable,
     .evaluationQueued,
     .evaluationInProgress,
     .evaluationSuccess,
@@ -1379,7 +1603,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .taskInProgress,
     .taskDone,
     .taskWontDo,
-    .taskAddAnnotationsFailure,
+    .taskFailed,
+    .taskIdle,
     .taskConflict,
     .taskNotImplemented,
     .taskMissing,
@@ -1407,11 +1632,32 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .datasetVersionReady,
     .datasetVersionFailure,
     .datasetVersionUnexpectedError,
+    .datasetVersionConflict,
+    .datasetInputSuccess,
+    .datasetInputDuplicate,
+    .datasetVersionExportSuccess,
+    .datasetVersionExportPending,
+    .datasetVersionExportFailed,
+    .datasetVersionExportInProgress,
+    .datasetVersionExportUnexpectedError,
     .jobQueued,
     .jobRunning,
     .jobCompleted,
     .jobFailed,
+    .jobCancelled,
+    .jobUnexpectedError,
+    .jobConflict,
     .authMissingIdpAssoc,
+    .listObjectsFailed,
+    .archiveExtractFailed,
+    .uploadInProgress,
+    .uploadDone,
+    .uploadFailed,
+    .uploadUnexpectedError,
+    .uploadExpired,
+    .uploadCanceled,
+    .uploadConflict,
+    .billingInvalidInfo,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -1447,6 +1693,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     10020: .same(proto: "FAILURE"),
     10030: .same(proto: "TRY_AGAIN"),
     10040: .same(proto: "NOT_IMPLEMENTED"),
+    10050: .same(proto: "MOVED"),
     11000: .same(proto: "CONN_ACCOUNT_ISSUES"),
     11001: .same(proto: "CONN_TOKEN_INVALID"),
     11002: .same(proto: "CONN_CREDENTIALS_INVALID"),
@@ -1469,6 +1716,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21103: .same(proto: "MODEL_QUEUED_FOR_TRAINING"),
     21104: .same(proto: "MODEL_UPLOADING"),
     21105: .same(proto: "MODEL_UPLOADING_FAILED"),
+    21106: .same(proto: "MODEL_TRAINING_FAILED"),
     21110: .same(proto: "MODEL_TRAINING_NO_DATA"),
     21111: .same(proto: "MODEL_TRAINING_NO_POSITIVES"),
     21112: .same(proto: "MODEL_TRAINING_ONE_VS_N_SINGLE_CLASS"),
@@ -1497,6 +1745,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21314: .same(proto: "MODEL_EVALUATION_MSG_REDELIVER"),
     21315: .same(proto: "MODEL_EVALUATION_NEED_LABELS"),
     21316: .same(proto: "MODEL_EVALUATION_NEED_INPUTS"),
+    21317: .same(proto: "MODEL_EVALUATION_FAILED"),
     21350: .same(proto: "MODEL_DEPLOYMENT_FAILED"),
     21351: .same(proto: "MODEL_DEPLOYING"),
     21352: .same(proto: "MODEL_QUEUED_FOR_DEPLOYMENT"),
@@ -1547,6 +1796,12 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25152: .same(proto: "DATA_DUMP_FAILED"),
     25153: .same(proto: "DATA_DUMP_IN_PROGRESS"),
     25154: .same(proto: "DATA_DUMP_NO_DATA"),
+    25155: .same(proto: "DATA_DUMP_UNEXPECTED_ERROR"),
+    25170: .same(proto: "DATA_DUMP_EXPORT_SUCCESS"),
+    25171: .same(proto: "DATA_DUMP_EXPORT_PENDING"),
+    25172: .same(proto: "DATA_DUMP_EXPORT_FAILED"),
+    25173: .same(proto: "DATA_DUMP_EXPORT_IN_PROGRESS"),
+    25174: .same(proto: "DATA_DUMP_EXPORT_UNEXPECTED_ERROR"),
     25200: .same(proto: "APP_DUPLICATION_SUCCESS"),
     25201: .same(proto: "APP_DUPLICATION_FAILED"),
     25202: .same(proto: "APP_DUPLICATION_PENDING"),
@@ -1556,6 +1811,18 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25301: .same(proto: "MODULE_PERMISSION_DENIED"),
     25302: .same(proto: "MODULE_INVALID_ARGUMENT"),
     25303: .same(proto: "MODULE_INVALID_REQUEST"),
+    25400: .same(proto: "BULK_OPERATION_SUCCESS"),
+    25401: .same(proto: "BULK_OPERATION_FAILED"),
+    25402: .same(proto: "BULK_OPERATION_PENDING"),
+    25403: .same(proto: "BULK_OPERATION_IN_PROGRESS"),
+    25404: .same(proto: "BULK_OPERATION_INVALID_REQUEST"),
+    25405: .same(proto: "BULK_OPERATION_CANCELLED"),
+    25406: .same(proto: "BULK_OPERATION_UNEXPECTED_ERROR"),
+    25600: .same(proto: "RUNNER_DOES_NOT_EXIST"),
+    25601: .same(proto: "RUNNER_PERMISSION_DENIED"),
+    25602: .same(proto: "RUNNER_INVALID_ARGUMENT"),
+    25603: .same(proto: "RUNNER_INVALID_REQUEST"),
+    25604: .same(proto: "RUNNER_NEEDS_RETRY"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
@@ -1597,6 +1864,12 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     31203: .same(proto: "INPUT_VIDEO_MODIFY_FAILED"),
     31210: .same(proto: "INPUT_VIDEO_STORAGE_HOST_FAILED"),
     31300: .same(proto: "ALL_INPUT_VIDEOS_INVALID_BYTES"),
+    31400: .same(proto: "INPUT_VIDEO_PROCESSING_SUCCESS"),
+    31410: .same(proto: "INPUT_VIDEO_PROCESSING_PENDING"),
+    31420: .same(proto: "INPUT_VIDEO_PROCESSING_FAILED"),
+    31430: .same(proto: "INPUT_VIDEO_STORAGE_INCONSISTENCY"),
+    31440: .same(proto: "INPUT_VIDEO_STORAGE_FAILURE"),
+    31450: .same(proto: "INPUT_VIDEO_URL_GENERATION_FAILURE"),
     39996: .same(proto: "INPUT_CONNECTION_FAILED"),
     39997: .same(proto: "REQUEST_DISABLED_FOR_MAINTENANCE"),
     39998: .same(proto: "INPUT_WRITES_DISABLED_FOR_MAINTENANCE"),
@@ -1614,6 +1887,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     40016: .same(proto: "DATABASE_TOO_MANY_CLIENTS"),
     40017: .same(proto: "DATABASE_CONSTRAINT_VIOLATED"),
     40020: .same(proto: "ASYNC_WORKER_MULTI_ERRORS"),
+    40021: .same(proto: "DATABASE_CANCELED"),
     40030: .same(proto: "RPC_REQUEST_QUEUE_FULL"),
     40031: .same(proto: "RPC_SERVER_UNAVAILABLE"),
     40032: .same(proto: "RPC_REQUEST_TIMEOUT"),
@@ -1622,6 +1896,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     40035: .same(proto: "RPC_CANCELED"),
     40036: .same(proto: "RPC_UNKNOWN_METHOD"),
     40037: .same(proto: "REQUEST_CANCELED_BY_USER"),
+    40050: .same(proto: "QUERY_INVALID_SYNTAX"),
     41000: .same(proto: "QUEUE_CONN_ERROR"),
     41002: .same(proto: "QUEUE_CLOSE_REQUEST_TIMEOUT"),
     41003: .same(proto: "QUEUE_CONN_CLOSED"),
@@ -1641,6 +1916,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     43003: .same(proto: "SEARCH_PREDICTION_FAILURE"),
     43004: .same(proto: "SEARCH_BY_NOT_FULLY_INDEXED_INPUT"),
     43005: .same(proto: "SAVED_SEARCH_MODIFY_FAILED"),
+    43006: .same(proto: "SEARCH_COUNTS_UNAVAILABLE"),
     43040: .same(proto: "CLUSTER_INTERNAL_FAILURE"),
     43100: .same(proto: "EVALUATION_QUEUED"),
     43101: .same(proto: "EVALUATION_IN_PROGRESS"),
@@ -1684,7 +1960,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     54001: .same(proto: "TASK_IN_PROGRESS"),
     54002: .same(proto: "TASK_DONE"),
     54003: .same(proto: "TASK_WONT_DO"),
-    54005: .same(proto: "TASK_ADD_ANNOTATIONS_FAILURE"),
+    54005: .same(proto: "TASK_FAILED"),
+    54006: .same(proto: "TASK_IDLE"),
     54100: .same(proto: "TASK_CONFLICT"),
     54101: .same(proto: "TASK_NOT_IMPLEMENTED"),
     54102: .same(proto: "TASK_MISSING"),
@@ -1711,12 +1988,33 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     64001: .same(proto: "JOB_RUNNING"),
     64002: .same(proto: "JOB_COMPLETED"),
     64003: .same(proto: "JOB_FAILED"),
+    64004: .same(proto: "JOB_CANCELLED"),
     64005: .same(proto: "DATASET_VERSION_PENDING"),
+    64006: .same(proto: "JOB_UNEXPECTED_ERROR"),
+    64007: .same(proto: "JOB_CONFLICT"),
     64010: .same(proto: "DATASET_VERSION_IN_PROGRESS"),
     64015: .same(proto: "DATASET_VERSION_READY"),
     64020: .same(proto: "DATASET_VERSION_FAILURE"),
     64025: .same(proto: "DATASET_VERSION_UNEXPECTED_ERROR"),
+    64030: .same(proto: "DATASET_VERSION_CONFLICT"),
+    64100: .same(proto: "DATASET_INPUT_SUCCESS"),
+    64101: .same(proto: "DATASET_INPUT_DUPLICATE"),
+    64200: .same(proto: "DATASET_VERSION_EXPORT_SUCCESS"),
+    64201: .same(proto: "DATASET_VERSION_EXPORT_PENDING"),
+    64202: .same(proto: "DATASET_VERSION_EXPORT_FAILED"),
+    64203: .same(proto: "DATASET_VERSION_EXPORT_IN_PROGRESS"),
+    64204: .same(proto: "DATASET_VERSION_EXPORT_UNEXPECTED_ERROR"),
     65000: .same(proto: "AUTH_MISSING_IDP_ASSOC"),
+    66000: .same(proto: "LIST_OBJECTS_FAILED"),
+    67000: .same(proto: "ARCHIVE_EXTRACT_FAILED"),
+    68000: .same(proto: "UPLOAD_IN_PROGRESS"),
+    68001: .same(proto: "UPLOAD_DONE"),
+    68002: .same(proto: "UPLOAD_FAILED"),
+    68003: .same(proto: "UPLOAD_UNEXPECTED_ERROR"),
+    68004: .same(proto: "UPLOAD_EXPIRED"),
+    68005: .same(proto: "UPLOAD_CANCELED"),
+    68006: .same(proto: "UPLOAD_CONFLICT"),
+    69000: .same(proto: "BILLING_INVALID_INFO"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),

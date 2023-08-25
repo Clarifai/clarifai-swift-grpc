@@ -50,6 +50,40 @@ public struct Clarifai_Api_Status_Status {
   /// Internal Annotation (do not set in production, for internal Clarifai use only).
   public var internalDetails: String = String()
 
+  /// Resource location info for redirect, when resource location has been changed.
+  public var redirectInfo: Clarifai_Api_Status_RedirectInfo {
+    get {return _redirectInfo ?? Clarifai_Api_Status_RedirectInfo()}
+    set {_redirectInfo = newValue}
+  }
+  /// Returns true if `redirectInfo` has been explicitly set.
+  public var hasRedirectInfo: Bool {return self._redirectInfo != nil}
+  /// Clears the value of `redirectInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearRedirectInfo() {self._redirectInfo = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _redirectInfo: Clarifai_Api_Status_RedirectInfo? = nil
+}
+
+public struct Clarifai_Api_Status_RedirectInfo {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// New location for the resource. Used to set response Location header.
+  public var url: String = String()
+
+  /// Resource type
+  public var resourceType: String = String()
+
+  /// Old resource id
+  public var oldResourceID: String = String()
+
+  /// New resource id
+  public var newResourceID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -93,25 +127,34 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     6: .standard(proto: "time_remaining"),
     7: .standard(proto: "req_id"),
     8: .standard(proto: "internal_details"),
+    9: .standard(proto: "redirect_info"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularEnumField(value: &self.code)
-      case 2: try decoder.decodeSingularStringField(value: &self.description_p)
-      case 3: try decoder.decodeSingularStringField(value: &self.details)
-      case 4: try decoder.decodeRepeatedStringField(value: &self.stackTrace)
-      case 5: try decoder.decodeSingularUInt32Field(value: &self.percentCompleted)
-      case 6: try decoder.decodeSingularUInt32Field(value: &self.timeRemaining)
-      case 7: try decoder.decodeSingularStringField(value: &self.reqID)
-      case 8: try decoder.decodeSingularStringField(value: &self.internalDetails)
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.code) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.details) }()
+      case 4: try { try decoder.decodeRepeatedStringField(value: &self.stackTrace) }()
+      case 5: try { try decoder.decodeSingularUInt32Field(value: &self.percentCompleted) }()
+      case 6: try { try decoder.decodeSingularUInt32Field(value: &self.timeRemaining) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.reqID) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.internalDetails) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._redirectInfo) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if self.code != .zero {
       try visitor.visitSingularEnumField(value: self.code, fieldNumber: 1)
     }
@@ -136,6 +179,9 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if !self.internalDetails.isEmpty {
       try visitor.visitSingularStringField(value: self.internalDetails, fieldNumber: 8)
     }
+    try { if let v = self._redirectInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -148,6 +194,57 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if lhs.timeRemaining != rhs.timeRemaining {return false}
     if lhs.reqID != rhs.reqID {return false}
     if lhs.internalDetails != rhs.internalDetails {return false}
+    if lhs._redirectInfo != rhs._redirectInfo {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Status_RedirectInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RedirectInfo"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "url"),
+    2: .standard(proto: "resource_type"),
+    3: .standard(proto: "old_resource_id"),
+    4: .standard(proto: "new_resource_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.url) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.resourceType) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.oldResourceID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.newResourceID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.url.isEmpty {
+      try visitor.visitSingularStringField(value: self.url, fieldNumber: 1)
+    }
+    if !self.resourceType.isEmpty {
+      try visitor.visitSingularStringField(value: self.resourceType, fieldNumber: 2)
+    }
+    if !self.oldResourceID.isEmpty {
+      try visitor.visitSingularStringField(value: self.oldResourceID, fieldNumber: 3)
+    }
+    if !self.newResourceID.isEmpty {
+      try visitor.visitSingularStringField(value: self.newResourceID, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Status_RedirectInfo, rhs: Clarifai_Api_Status_RedirectInfo) -> Bool {
+    if lhs.url != rhs.url {return false}
+    if lhs.resourceType != rhs.resourceType {return false}
+    if lhs.oldResourceID != rhs.oldResourceID {return false}
+    if lhs.newResourceID != rhs.newResourceID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -161,17 +258,24 @@ extension Clarifai_Api_Status_BaseResponse: SwiftProtobuf.Message, SwiftProtobuf
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try decoder.decodeSingularMessageField(value: &self._status)
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if let v = self._status {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
