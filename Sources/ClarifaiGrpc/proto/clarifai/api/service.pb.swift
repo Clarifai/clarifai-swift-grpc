@@ -518,6 +518,9 @@ public struct Clarifai_Api_ListAppsRequest {
   /// Deprecated in favor of query
   public var name: String = String()
 
+  /// Filter by the user-unique-id of the app. This supports wilcard queries like "gen*" to match "general" as an example.
+  public var id: String = String()
+
   /// If true, we only return apps that are handpicked by clarifai staff
   public var featuredOnly: Bool = false
 
@@ -1219,6 +1222,16 @@ public struct Clarifai_Api_PostConceptsSearchesRequest {
   /// Clears the value of `conceptQuery`. Subsequent reads from it will return its default value.
   public mutating func clearConceptQuery() {self._conceptQuery = nil}
 
+  /// Request additional info to be retrieved for each concept in the response.
+  public var extraInfo: Clarifai_Api_ConceptExtraInfoRequest {
+    get {return _extraInfo ?? Clarifai_Api_ConceptExtraInfoRequest()}
+    set {_extraInfo = newValue}
+  }
+  /// Returns true if `extraInfo` has been explicitly set.
+  public var hasExtraInfo: Bool {return self._extraInfo != nil}
+  /// Clears the value of `extraInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearExtraInfo() {self._extraInfo = nil}
+
   /// Pagination parameters here since there are no url args in this
   /// POST request.
   public var pagination: Clarifai_Api_Pagination {
@@ -1236,7 +1249,36 @@ public struct Clarifai_Api_PostConceptsSearchesRequest {
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
   fileprivate var _conceptQuery: Clarifai_Api_ConceptQuery? = nil
+  fileprivate var _extraInfo: Clarifai_Api_ConceptExtraInfoRequest? = nil
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
+}
+
+public struct Clarifai_Api_ConceptExtraInfoRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Determine if the concept is searchable by rank using this model.
+  /// Currently, only embedder models are supported.
+  /// ########## Supported fields ##########
+  /// - app_id
+  /// - id
+  /// - model_version.id
+  /// - user_id
+  public var rankableModel: Clarifai_Api_Model {
+    get {return _rankableModel ?? Clarifai_Api_Model()}
+    set {_rankableModel = newValue}
+  }
+  /// Returns true if `rankableModel` has been explicitly set.
+  public var hasRankableModel: Bool {return self._rankableModel != nil}
+  /// Clears the value of `rankableModel`. Subsequent reads from it will return its default value.
+  public mutating func clearRankableModel() {self._rankableModel = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _rankableModel: Clarifai_Api_Model? = nil
 }
 
 /// PostConceptsRequest
@@ -1432,19 +1474,25 @@ public struct Clarifai_Api_ListConceptRelationsRequest {
   /// concept_id so that we can return a reliable page size always.
   ///
   /// When providing a concept_id, if a hyponym is present in the DB such as:
-  /// 'honey' (subject), 'hyponym' (predict for "is a kind of"), 'food' (object)
+  /// 'honey' (subject), 'hyponym' (predicate for "is a kind of"), 'food' (object)
   /// then you can list the concept relations for 'honey' and get hyponym predicate with 'food'
   /// object.
   /// But you can also list the concept relations for 'food' and it will return the same hyponym
-  /// relationship with 'honey' as subject and 'food' as predicate.
+  /// relationship with 'honey' as object and 'hypernym' as predicate.
   /// Synonyms by nature are symmetrical relationships so either side can be the concept_id (subject)
   /// when listing the relations.
   public var conceptID: String = String()
 
-  /// This is part of the url so we can extend to multiple link types in the future.
+  /// If predicate is provided then only list relations with that predicate.
+  ///
+  /// Note that if no subject is set in concept_id and predicate is set to
+  /// 'hypernym', then it will return any stored hyponyms as hypernyms with
+  /// just the subject and object swapped since they are reversed relations.
+  ///
   /// Valid predicates are:
-  /// 'hypernyms'
-  /// 'hyponyms'
+  /// - 'hypernym'
+  /// - 'hyponym'
+  /// - 'synonym'
   public var predicate: String = String()
 
   /// If knowledge_graph_id is provided then just list relations from that knowledge graph.
@@ -2353,6 +2401,15 @@ public struct Clarifai_Api_ListDatasetsRequest {
     set {sortBy = .sortByModifiedAt(newValue)}
   }
 
+  /// Whether to order by the external id
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
+  }
+
   /// Filter datasets by bookmark. If set, only return bookmarked datasets. Otherwise none bookmarked datasets only.
   public var bookmark: Bool = false
 
@@ -2365,6 +2422,8 @@ public struct Clarifai_Api_ListDatasetsRequest {
     case sortByStarCount(Bool)
     /// If neither sort option is set to true, will sort by modified_at.
     case sortByModifiedAt(Bool)
+    /// Whether to order by the external id
+    case sortByID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy) -> Bool {
@@ -2382,6 +2441,10 @@ public struct Clarifai_Api_ListDatasetsRequest {
       }()
       case (.sortByModifiedAt, .sortByModifiedAt): return {
         guard case .sortByModifiedAt(let l) = lhs, case .sortByModifiedAt(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByID, .sortByID): return {
+        guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -4796,6 +4859,42 @@ public struct Clarifai_Api_ListEvaluationsRequest {
     set {sortBy = .sortByRecall(newValue)}
   }
 
+  public var sortByModelID: Bool {
+    get {
+      if case .sortByModelID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByModelID(newValue)}
+  }
+
+  public var sortByEvalDatasetID: Bool {
+    get {
+      if case .sortByEvalDatasetID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByEvalDatasetID(newValue)}
+  }
+
+  public var sortByTrainDatasetID: Bool {
+    get {
+      if case .sortByTrainDatasetID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByTrainDatasetID(newValue)}
+  }
+
+  /// Filter on model type id
+  public var modelTypeID: String = String()
+
+  /// Filter on dataset ID of the dataset version specified in the metric version
+  public var evalDatasetIds: [String] = []
+
+  /// Filter on dataset ID of the dataset version specified by the model version
+  public var trainDatasetIds: [String] = []
+
+  /// Filter on concept IDs specified in the modele version's output_info
+  public var conceptIds: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -4813,6 +4912,9 @@ public struct Clarifai_Api_ListEvaluationsRequest {
     case sortByPrecision(Bool)
     /// Whether to order by eval metric summary.macro_avg_recall
     case sortByRecall(Bool)
+    case sortByModelID(Bool)
+    case sortByEvalDatasetID(Bool)
+    case sortByTrainDatasetID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListEvaluationsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListEvaluationsRequest.OneOf_SortBy) -> Bool {
@@ -4846,6 +4948,18 @@ public struct Clarifai_Api_ListEvaluationsRequest {
       }()
       case (.sortByRecall, .sortByRecall): return {
         guard case .sortByRecall(let l) = lhs, case .sortByRecall(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByModelID, .sortByModelID): return {
+        guard case .sortByModelID(let l) = lhs, case .sortByModelID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByEvalDatasetID, .sortByEvalDatasetID): return {
+        guard case .sortByEvalDatasetID(let l) = lhs, case .sortByEvalDatasetID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByTrainDatasetID, .sortByTrainDatasetID): return {
+        guard case .sortByTrainDatasetID(let l) = lhs, case .sortByTrainDatasetID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -8396,6 +8510,15 @@ public struct Clarifai_Api_ListModulesRequest {
     set {sortBy = .sortByModifiedAt(newValue)}
   }
 
+  /// Whether to order by the external id
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
+  }
+
   /// Filter modules by bookmark. If set, only return bookmarked modules. Otherwise none bookmarked modules only.
   public var bookmark: Bool = false
 
@@ -8408,6 +8531,8 @@ public struct Clarifai_Api_ListModulesRequest {
     case sortByStarCount(Bool)
     /// If neither sort option is set to true, will sort by modified_at.
     case sortByModifiedAt(Bool)
+    /// Whether to order by the external id
+    case sortByID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy, rhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy) -> Bool {
@@ -8425,6 +8550,10 @@ public struct Clarifai_Api_ListModulesRequest {
       }()
       case (.sortByModifiedAt, .sortByModifiedAt): return {
         guard case .sortByModifiedAt(let l) = lhs, case .sortByModifiedAt(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByID, .sortByID): return {
+        guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -10622,6 +10751,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     13: .standard(proto: "sort_by_star_count"),
     8: .same(proto: "query"),
     4: .same(proto: "name"),
+    14: .same(proto: "id"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     10: .standard(proto: "additional_fields"),
@@ -10674,6 +10804,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
           self.sortBy = .sortByStarCount(v)
         }
       }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -10733,6 +10864,9 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     }()
     default: break
     }
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 14)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -10744,6 +10878,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.sortBy != rhs.sortBy {return false}
     if lhs.query != rhs.query {return false}
     if lhs.name != rhs.name {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.featuredOnly != rhs.featuredOnly {return false}
     if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.additionalFields != rhs.additionalFields {return false}
@@ -11738,6 +11873,7 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "concept_query"),
+    4: .standard(proto: "extra_info"),
     3: .same(proto: "pagination"),
   ]
 
@@ -11750,6 +11886,7 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._conceptQuery) }()
       case 3: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._extraInfo) }()
       default: break
       }
     }
@@ -11769,13 +11906,53 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
     try { if let v = self._pagination {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     } }()
+    try { if let v = self._extraInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostConceptsSearchesRequest, rhs: Clarifai_Api_PostConceptsSearchesRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs._conceptQuery != rhs._conceptQuery {return false}
+    if lhs._extraInfo != rhs._extraInfo {return false}
     if lhs._pagination != rhs._pagination {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ConceptExtraInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ConceptExtraInfoRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "rankable_model"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._rankableModel) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._rankableModel {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ConceptExtraInfoRequest, rhs: Clarifai_Api_ConceptExtraInfoRequest) -> Bool {
+    if lhs._rankableModel != rhs._rankableModel {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -13551,6 +13728,7 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     7: .standard(proto: "sort_by_created_at"),
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
+    11: .standard(proto: "sort_by_id"),
     10: .same(proto: "bookmark"),
   ]
 
@@ -13591,6 +13769,14 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
         }
       }()
       case 10: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
+      case 11: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByID(v)
+        }
+      }()
       default: break
       }
     }
@@ -13632,11 +13818,14 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
       guard case .sortByModifiedAt(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 9)
     }()
-    case nil: break
+    default: break
     }
     if self.bookmark != false {
       try visitor.visitSingularBoolField(value: self.bookmark, fieldNumber: 10)
     }
+    try { if case .sortByID(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -17416,6 +17605,13 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
     9: .standard(proto: "sort_by_mean_avg_precision"),
     10: .standard(proto: "sort_by_precision"),
     11: .standard(proto: "sort_by_recall"),
+    16: .standard(proto: "sort_by_model_id"),
+    17: .standard(proto: "sort_by_eval_dataset_id"),
+    18: .standard(proto: "sort_by_train_dataset_id"),
+    12: .standard(proto: "model_type_id"),
+    13: .standard(proto: "eval_dataset_ids"),
+    14: .standard(proto: "train_dataset_ids"),
+    15: .standard(proto: "concept_ids"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -17484,6 +17680,34 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
           self.sortBy = .sortByRecall(v)
         }
       }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.modelTypeID) }()
+      case 13: try { try decoder.decodeRepeatedStringField(value: &self.evalDatasetIds) }()
+      case 14: try { try decoder.decodeRepeatedStringField(value: &self.trainDatasetIds) }()
+      case 15: try { try decoder.decodeRepeatedStringField(value: &self.conceptIds) }()
+      case 16: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByModelID(v)
+        }
+      }()
+      case 17: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByEvalDatasetID(v)
+        }
+      }()
+      case 18: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByTrainDatasetID(v)
+        }
+      }()
       default: break
       }
     }
@@ -17535,7 +17759,34 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
       guard case .sortByRecall(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
     }()
-    case nil: break
+    default: break
+    }
+    if !self.modelTypeID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelTypeID, fieldNumber: 12)
+    }
+    if !self.evalDatasetIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.evalDatasetIds, fieldNumber: 13)
+    }
+    if !self.trainDatasetIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.trainDatasetIds, fieldNumber: 14)
+    }
+    if !self.conceptIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.conceptIds, fieldNumber: 15)
+    }
+    switch self.sortBy {
+    case .sortByModelID?: try {
+      guard case .sortByModelID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 16)
+    }()
+    case .sortByEvalDatasetID?: try {
+      guard case .sortByEvalDatasetID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 17)
+    }()
+    case .sortByTrainDatasetID?: try {
+      guard case .sortByTrainDatasetID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 18)
+    }()
+    default: break
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17546,6 +17797,10 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
     if lhs.perPage != rhs.perPage {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.modelTypeID != rhs.modelTypeID {return false}
+    if lhs.evalDatasetIds != rhs.evalDatasetIds {return false}
+    if lhs.trainDatasetIds != rhs.trainDatasetIds {return false}
+    if lhs.conceptIds != rhs.conceptIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -23192,6 +23447,7 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     7: .standard(proto: "sort_by_created_at"),
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
+    11: .standard(proto: "sort_by_id"),
     10: .same(proto: "bookmark"),
   ]
 
@@ -23232,6 +23488,14 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
         }
       }()
       case 10: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
+      case 11: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByID(v)
+        }
+      }()
       default: break
       }
     }
@@ -23273,11 +23537,14 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
       guard case .sortByModifiedAt(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 9)
     }()
-    case nil: break
+    default: break
     }
     if self.bookmark != false {
       try visitor.visitSingularBoolField(value: self.bookmark, fieldNumber: 10)
     }
+    try { if case .sortByID(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
