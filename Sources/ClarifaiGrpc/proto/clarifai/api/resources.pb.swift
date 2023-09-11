@@ -4154,19 +4154,29 @@ public struct Clarifai_Api_TrainInfo {
   /// defined for each ModelType as a Struct (JSON object) here. During training, the settings
   /// contained within are sent to the training processor to alter the training process.
   public var params: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _params ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_params = newValue}
+    get {return _storage._params ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_uniqueStorage()._params = newValue}
   }
   /// Returns true if `params` has been explicitly set.
-  public var hasParams: Bool {return self._params != nil}
+  public var hasParams: Bool {return _storage._params != nil}
   /// Clears the value of `params`. Subsequent reads from it will return its default value.
-  public mutating func clearParams() {self._params = nil}
+  public mutating func clearParams() {_uniqueStorage()._params = nil}
+
+  /// The dataset and dataset version this model version was or will be trained on
+  public var dataset: Clarifai_Api_Dataset {
+    get {return _storage._dataset ?? Clarifai_Api_Dataset()}
+    set {_uniqueStorage()._dataset = newValue}
+  }
+  /// Returns true if `dataset` has been explicitly set.
+  public var hasDataset: Bool {return _storage._dataset != nil}
+  /// Clears the value of `dataset`. Subsequent reads from it will return its default value.
+  public mutating func clearDataset() {_uniqueStorage()._dataset = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct Clarifai_Api_EvalInfo {
@@ -4527,6 +4537,12 @@ public struct Clarifai_Api_ModelTypeField {
 
     /// For auto-completing to concepts in the model.
     case arrayOfModelConcepts // = 18
+
+    /// For selecting a dataset
+    case dataset // = 19
+
+    /// For selecting a dataset version
+    case datasetVersion // = 20
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -4553,6 +4569,8 @@ public struct Clarifai_Api_ModelTypeField {
       case 16: self = .datasetID
       case 17: self = .datasetVersionID
       case 18: self = .arrayOfModelConcepts
+      case 19: self = .dataset
+      case 20: self = .datasetVersion
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -4577,6 +4595,8 @@ public struct Clarifai_Api_ModelTypeField {
       case .datasetID: return 16
       case .datasetVersionID: return 17
       case .arrayOfModelConcepts: return 18
+      case .dataset: return 19
+      case .datasetVersion: return 20
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -4612,6 +4632,8 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
     .datasetID,
     .datasetVersionID,
     .arrayOfModelConcepts,
+    .dataset,
+    .datasetVersion,
   ]
 }
 
@@ -4873,6 +4895,7 @@ public struct Clarifai_Api_ModelVersion {
   /// Clears the value of `importInfo`. Subsequent reads from it will return its default value.
   public mutating func clearImportInfo() {_uniqueStorage()._importInfo = nil}
 
+  /// Contains the training logs if available
   public var trainLog: String {
     get {return _storage._trainLog}
     set {_uniqueStorage()._trainLog = newValue}
@@ -8293,6 +8316,10 @@ public struct Clarifai_Api_APIPostModelOutputsCollectorSource {
   /// PAT. This needs the permissions that are needed for POST /inputs for the app_id this
   /// Collector is defined in.
   public var postInputsKeyID: String = String()
+
+  /// This is a private field that defaults to the app owner for public users.
+  /// If this is left blank then this collector will collect from ALL users calling the given model.
+  public var callerUserID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -15228,33 +15255,73 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   public static let protoMessageName: String = _protobuf_package + ".TrainInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "params"),
+    2: .same(proto: "dataset"),
   ]
 
+  fileprivate class _StorageClass {
+    var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
+    var _dataset: Clarifai_Api_Dataset? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _params = source._params
+      _dataset = source._dataset
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._params) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._params) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._dataset) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._params {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._params {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._dataset {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TrainInfo, rhs: Clarifai_Api_TrainInfo) -> Bool {
-    if lhs._params != rhs._params {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._params != rhs_storage._params {return false}
+        if _storage._dataset != rhs_storage._dataset {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -15786,6 +15853,8 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: SwiftProtobuf._ProtoNa
     16: .same(proto: "DATASET_ID"),
     17: .same(proto: "DATASET_VERSION_ID"),
     18: .same(proto: "ARRAY_OF_MODEL_CONCEPTS"),
+    19: .same(proto: "DATASET"),
+    20: .same(proto: "DATASET_VERSION"),
   ]
 }
 
@@ -20850,6 +20919,7 @@ extension Clarifai_Api_APIPostModelOutputsCollectorSource: SwiftProtobuf.Message
     3: .standard(proto: "model_id"),
     4: .standard(proto: "model_version_id"),
     5: .standard(proto: "post_inputs_key_id"),
+    6: .standard(proto: "caller_user_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20863,6 +20933,7 @@ extension Clarifai_Api_APIPostModelOutputsCollectorSource: SwiftProtobuf.Message
       case 3: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.postInputsKeyID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.callerUserID) }()
       default: break
       }
     }
@@ -20884,6 +20955,9 @@ extension Clarifai_Api_APIPostModelOutputsCollectorSource: SwiftProtobuf.Message
     if !self.postInputsKeyID.isEmpty {
       try visitor.visitSingularStringField(value: self.postInputsKeyID, fieldNumber: 5)
     }
+    if !self.callerUserID.isEmpty {
+      try visitor.visitSingularStringField(value: self.callerUserID, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20893,6 +20967,7 @@ extension Clarifai_Api_APIPostModelOutputsCollectorSource: SwiftProtobuf.Message
     if lhs.modelID != rhs.modelID {return false}
     if lhs.modelVersionID != rhs.modelVersionID {return false}
     if lhs.postInputsKeyID != rhs.postInputsKeyID {return false}
+    if lhs.callerUserID != rhs.callerUserID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
