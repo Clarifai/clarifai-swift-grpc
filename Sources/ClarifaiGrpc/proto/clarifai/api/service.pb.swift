@@ -1153,6 +1153,9 @@ public struct Clarifai_Api_ListConceptsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Fuzzy match on concept ID
+  public var id: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -2412,6 +2415,9 @@ public struct Clarifai_Api_ListDatasetsRequest {
 
   /// Filter datasets by bookmark. If set, only return bookmarked datasets. Otherwise none bookmarked datasets only.
   public var bookmark: Bool = false
+
+  /// Fuzzy filter on dataset ID
+  public var id: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -11766,6 +11772,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    4: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -11777,6 +11784,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -11796,6 +11804,9 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -11803,6 +11814,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -13730,6 +13742,7 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     9: .standard(proto: "sort_by_modified_at"),
     11: .standard(proto: "sort_by_id"),
     10: .same(proto: "bookmark"),
+    12: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -13777,6 +13790,7 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
           self.sortBy = .sortByID(v)
         }
       }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -13826,6 +13840,9 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     try { if case .sortByID(let v)? = self.sortBy {
       try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
     } }()
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 12)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -13838,6 +13855,7 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
