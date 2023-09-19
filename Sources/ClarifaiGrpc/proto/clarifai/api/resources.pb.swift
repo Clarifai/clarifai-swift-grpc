@@ -993,6 +993,84 @@ public struct Clarifai_Api_Annotation {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
+/// Worker is the author of an annotation.
+public struct Clarifai_Api_Worker {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var worker: Clarifai_Api_Worker.OneOf_Worker? = nil
+
+  /// User is the human that created the annotation.
+  ///
+  /// By default no real names of users are returned in responses. These can
+  /// be requested with the 'names' additional field.
+  public var user: Clarifai_Api_User {
+    get {
+      if case .user(let v)? = worker {return v}
+      return Clarifai_Api_User()
+    }
+    set {worker = .user(newValue)}
+  }
+
+  /// Model is the model that created the annotation.
+  public var model: Clarifai_Api_Model {
+    get {
+      if case .model(let v)? = worker {return v}
+      return Clarifai_Api_Model()
+    }
+    set {worker = .model(newValue)}
+  }
+
+  /// Workflow is the workflow that created the annotation.
+  public var workflow: Clarifai_Api_Workflow {
+    get {
+      if case .workflow(let v)? = worker {return v}
+      return Clarifai_Api_Workflow()
+    }
+    set {worker = .workflow(newValue)}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_Worker: Equatable {
+    /// User is the human that created the annotation.
+    ///
+    /// By default no real names of users are returned in responses. These can
+    /// be requested with the 'names' additional field.
+    case user(Clarifai_Api_User)
+    /// Model is the model that created the annotation.
+    case model(Clarifai_Api_Model)
+    /// Workflow is the workflow that created the annotation.
+    case workflow(Clarifai_Api_Workflow)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_Worker.OneOf_Worker, rhs: Clarifai_Api_Worker.OneOf_Worker) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.user, .user): return {
+        guard case .user(let l) = lhs, case .user(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.model, .model): return {
+        guard case .model(let l) = lhs, case .model(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.workflow, .workflow): return {
+        guard case .workflow(let l) = lhs, case .workflow(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
 /// Application with tasks and datasets
 public struct Clarifai_Api_App {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -10086,6 +10164,16 @@ public struct Clarifai_Api_InputsExtractionJob {
     set {_uniqueStorage()._inputIDConflictResolution = newValue}
   }
 
+  /// Fields set in the template are added to all generated inputs
+  public var inputTemplate: Clarifai_Api_Input {
+    get {return _storage._inputTemplate ?? Clarifai_Api_Input()}
+    set {_uniqueStorage()._inputTemplate = newValue}
+  }
+  /// Returns true if `inputTemplate` has been explicitly set.
+  public var hasInputTemplate: Bool {return _storage._inputTemplate != nil}
+  /// Clears the value of `inputTemplate`. Subsequent reads from it will return its default value.
+  public mutating func clearInputTemplate() {_uniqueStorage()._inputTemplate = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -10142,11 +10230,22 @@ public struct Clarifai_Api_InputsDataSource {
   /// How to handle input ID conflicts.
   public var inputIDConflictResolution: Clarifai_Api_InputIDConflictResolution = .notSet
 
+  /// Fields set in the template will also be added to all generated inputs
+  public var inputTemplate: Clarifai_Api_Input {
+    get {return _inputTemplate ?? Clarifai_Api_Input()}
+    set {_inputTemplate = newValue}
+  }
+  /// Returns true if `inputTemplate` has been explicitly set.
+  public var hasInputTemplate: Bool {return self._inputTemplate != nil}
+  /// Clears the value of `inputTemplate`. Subsequent reads from it will return its default value.
+  public mutating func clearInputTemplate() {self._inputTemplate = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _url: Clarifai_Api_DataSourceURL? = nil
+  fileprivate var _inputTemplate: Clarifai_Api_Input? = nil
 }
 
 public struct Clarifai_Api_DataSourceURL {
@@ -10304,11 +10403,22 @@ public struct Clarifai_Api_InputsUpload {
   /// How to handle input ID conflicts.
   public var inputIDConflictResolution: Clarifai_Api_InputIDConflictResolution = .notSet
 
+  /// Fields set in the template will also be added to all generated inputs
+  public var inputTemplate: Clarifai_Api_Input {
+    get {return _inputTemplate ?? Clarifai_Api_Input()}
+    set {_inputTemplate = newValue}
+  }
+  /// Returns true if `inputTemplate` has been explicitly set.
+  public var hasInputTemplate: Bool {return self._inputTemplate != nil}
+  /// Clears the value of `inputTemplate`. Subsequent reads from it will return its default value.
+  public mutating func clearInputTemplate() {self._inputTemplate = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _upload: Clarifai_Api_Upload? = nil
+  fileprivate var _inputTemplate: Clarifai_Api_Input? = nil
 }
 
 public struct Clarifai_Api_BookmarkOrigin {
@@ -10770,6 +10880,94 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Worker: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Worker"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "user"),
+    2: .same(proto: "model"),
+    3: .same(proto: "workflow"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Clarifai_Api_User?
+        var hadOneofValue = false
+        if let current = self.worker {
+          hadOneofValue = true
+          if case .user(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.worker = .user(v)
+        }
+      }()
+      case 2: try {
+        var v: Clarifai_Api_Model?
+        var hadOneofValue = false
+        if let current = self.worker {
+          hadOneofValue = true
+          if case .model(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.worker = .model(v)
+        }
+      }()
+      case 3: try {
+        var v: Clarifai_Api_Workflow?
+        var hadOneofValue = false
+        if let current = self.worker {
+          hadOneofValue = true
+          if case .workflow(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.worker = .workflow(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.worker {
+    case .user?: try {
+      guard case .user(let v)? = self.worker else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .model?: try {
+      guard case .model(let v)? = self.worker else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case .workflow?: try {
+      guard case .workflow(let v)? = self.worker else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Worker, rhs: Clarifai_Api_Worker) -> Bool {
+    if lhs.worker != rhs.worker {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -23336,6 +23534,7 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
     5: .standard(proto: "created_at"),
     6: .standard(proto: "modified_at"),
     7: .standard(proto: "input_id_conflict_resolution"),
+    8: .standard(proto: "input_template"),
   ]
 
   fileprivate class _StorageClass {
@@ -23346,6 +23545,7 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _inputIDConflictResolution: Clarifai_Api_InputIDConflictResolution = .notSet
+    var _inputTemplate: Clarifai_Api_Input? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -23359,6 +23559,7 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
       _createdAt = source._createdAt
       _modifiedAt = source._modifiedAt
       _inputIDConflictResolution = source._inputIDConflictResolution
+      _inputTemplate = source._inputTemplate
     }
   }
 
@@ -23384,6 +23585,7 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
         case 7: try { try decoder.decodeSingularEnumField(value: &_storage._inputIDConflictResolution) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._inputTemplate) }()
         default: break
         }
       }
@@ -23417,6 +23619,9 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
       if _storage._inputIDConflictResolution != .notSet {
         try visitor.visitSingularEnumField(value: _storage._inputIDConflictResolution, fieldNumber: 7)
       }
+      try { if let v = _storage._inputTemplate {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -23433,6 +23638,7 @@ extension Clarifai_Api_InputsExtractionJob: SwiftProtobuf.Message, SwiftProtobuf
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
         if _storage._inputIDConflictResolution != rhs_storage._inputIDConflictResolution {return false}
+        if _storage._inputTemplate != rhs_storage._inputTemplate {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -23522,6 +23728,7 @@ extension Clarifai_Api_InputsDataSource: SwiftProtobuf.Message, SwiftProtobuf._M
     1: .standard(proto: "inputs_add_job_id"),
     2: .same(proto: "url"),
     3: .standard(proto: "input_id_conflict_resolution"),
+    4: .standard(proto: "input_template"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23533,6 +23740,7 @@ extension Clarifai_Api_InputsDataSource: SwiftProtobuf.Message, SwiftProtobuf._M
       case 1: try { try decoder.decodeSingularStringField(value: &self.inputsAddJobID) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._url) }()
       case 3: try { try decoder.decodeSingularEnumField(value: &self.inputIDConflictResolution) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._inputTemplate) }()
       default: break
       }
     }
@@ -23552,6 +23760,9 @@ extension Clarifai_Api_InputsDataSource: SwiftProtobuf.Message, SwiftProtobuf._M
     if self.inputIDConflictResolution != .notSet {
       try visitor.visitSingularEnumField(value: self.inputIDConflictResolution, fieldNumber: 3)
     }
+    try { if let v = self._inputTemplate {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -23559,6 +23770,7 @@ extension Clarifai_Api_InputsDataSource: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.inputsAddJobID != rhs.inputsAddJobID {return false}
     if lhs._url != rhs._url {return false}
     if lhs.inputIDConflictResolution != rhs.inputIDConflictResolution {return false}
+    if lhs._inputTemplate != rhs._inputTemplate {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -23784,6 +23996,7 @@ extension Clarifai_Api_InputsUpload: SwiftProtobuf.Message, SwiftProtobuf._Messa
     2: .standard(proto: "app_pat"),
     3: .same(proto: "upload"),
     4: .standard(proto: "input_id_conflict_resolution"),
+    5: .standard(proto: "input_template"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23796,6 +24009,7 @@ extension Clarifai_Api_InputsUpload: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 2: try { try decoder.decodeSingularStringField(value: &self.appPat) }()
       case 3: try { try decoder.decodeSingularMessageField(value: &self._upload) }()
       case 4: try { try decoder.decodeSingularEnumField(value: &self.inputIDConflictResolution) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._inputTemplate) }()
       default: break
       }
     }
@@ -23818,6 +24032,9 @@ extension Clarifai_Api_InputsUpload: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if self.inputIDConflictResolution != .notSet {
       try visitor.visitSingularEnumField(value: self.inputIDConflictResolution, fieldNumber: 4)
     }
+    try { if let v = self._inputTemplate {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -23826,6 +24043,7 @@ extension Clarifai_Api_InputsUpload: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs.appPat != rhs.appPat {return false}
     if lhs._upload != rhs._upload {return false}
     if lhs.inputIDConflictResolution != rhs.inputIDConflictResolution {return false}
+    if lhs._inputTemplate != rhs._inputTemplate {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -160,6 +160,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>
 
+  func listAnnotationWorkers(
+    _ request: Clarifai_Api_ListAnnotationWorkersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>
+
   func getInputCount(
     _ request: Clarifai_Api_GetInputCountRequest,
     callOptions: CallOptions?
@@ -1571,6 +1576,25 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// ListAnnotationWorkers lists users, models, and workflows (collectively
+  /// known as "workers") that have added annotations to the application.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListAnnotationWorkers.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listAnnotationWorkers(
+    _ request: Clarifai_Api_ListAnnotationWorkersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListAnnotationWorkers",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationWorkersInterceptors() ?? []
     )
   }
 
@@ -5084,6 +5108,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postAnnotationsSearches'.
   func makePostAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listAnnotationWorkers'.
+  func makeListAnnotationWorkersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getInputCount'.
   func makeGetInputCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputCountRequest, Clarifai_Api_SingleInputCountResponse>]
 
@@ -5754,6 +5781,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Execute a search over annotations
   func postAnnotationsSearches(request: Clarifai_Api_PostAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
+  /// ListAnnotationWorkers lists users, models, and workflows (collectively
+  /// known as "workers") that have added annotations to the application.
+  func listAnnotationWorkers(request: Clarifai_Api_ListAnnotationWorkersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkerResponse>
 
   /// Get input count per status.
   func getInputCount(request: Clarifai_Api_GetInputCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputCountResponse>
@@ -6609,6 +6640,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
         interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? [],
         userFunction: self.postAnnotationsSearches(request:context:)
+      )
+
+    case "ListAnnotationWorkers":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationWorkersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkerResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationWorkersInterceptors() ?? [],
+        userFunction: self.listAnnotationWorkers(request:context:)
       )
 
     case "GetInputCount":
@@ -8405,6 +8445,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postAnnotationsSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotationWorkers'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationWorkersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>]
 
   /// - Returns: Interceptors to use when handling 'getInputCount'.
   ///   Defaults to calling `self.makeInterceptors()`.
