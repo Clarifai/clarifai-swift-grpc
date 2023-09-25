@@ -572,10 +572,10 @@ public struct Clarifai_Api_ListAppsRequest {
   }
 
   /// Filtering options:
-  /// Query various text fields that can contain the words in the query string
+  /// Query various text fields ( id, name, description, and notes) that can contain the words in the query string
   public var query: String = String()
 
-  /// Filter by the name of the app. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Filter by the id, name and notes of the app. This supports wilcard queries like "gen*" to match "general" as an example.
   /// Deprecated in favor of query
   public var name: String = String()
 
@@ -6906,7 +6906,7 @@ public struct Clarifai_Api_ListWorkflowsRequest {
     set {sortBy = .sortByStarCount(newValue)}
   }
 
-  /// Query various text fields that can contain the words in the query string.
+  /// Query various text fields (id, description and notes) that can contain the words in the query string.
   public var query: String = String()
 
   /// Filter by the id of the workflow. This supports wilcard queries like "gen*" to match "general" as an example.
@@ -6922,7 +6922,7 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars
   public var additionalFields: [String] = []
 
-  /// (optional) search_term. Full text and prefix matching on description, id, owner id. Searchable fields may be added
+  /// (optional) search_term. Full text and prefix matching on id, owner id, description and notes. Searchable fields may be added
   public var searchTerm: String = String()
 
   /// Filter workflows by bookmark. If set, only return bookmarked workflows. Otherwise none bookmarked workflows only.
@@ -8591,6 +8591,12 @@ public struct Clarifai_Api_ListModulesRequest {
 
   /// Filter modules by bookmark. If set, only return bookmarked modules. Otherwise none bookmarked modules only.
   public var bookmark: Bool = false
+
+  /// Filter by the description and name of the model. This supports wildcard queries like "gen*" to match "general" as an example.
+  public var name: String = String()
+
+  /// Filter by the application owner whose this module belongs to
+  public var filterByUserID: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -23639,6 +23645,8 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     9: .standard(proto: "sort_by_modified_at"),
     11: .standard(proto: "sort_by_id"),
     10: .same(proto: "bookmark"),
+    12: .same(proto: "name"),
+    13: .standard(proto: "filter_by_user_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23686,6 +23694,8 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
           self.sortBy = .sortByID(v)
         }
       }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 13: try { try decoder.decodeSingularBoolField(value: &self.filterByUserID) }()
       default: break
       }
     }
@@ -23735,6 +23745,12 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     try { if case .sortByID(let v)? = self.sortBy {
       try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
     } }()
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 12)
+    }
+    if self.filterByUserID != false {
+      try visitor.visitSingularBoolField(value: self.filterByUserID, fieldNumber: 13)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -23747,6 +23763,8 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.filterByUserID != rhs.filterByUserID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

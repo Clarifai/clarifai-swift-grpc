@@ -3017,6 +3017,16 @@ public struct Clarifai_Api_Dataset {
   /// Clears the value of `bookmarkOrigin`. Subsequent reads from it will return its default value.
   public mutating func clearBookmarkOrigin() {_uniqueStorage()._bookmarkOrigin = nil}
 
+  /// Representative image for this dataset
+  public var image: Clarifai_Api_Image {
+    get {return _storage._image ?? Clarifai_Api_Image()}
+    set {_uniqueStorage()._image = newValue}
+  }
+  /// Returns true if `image` has been explicitly set.
+  public var hasImage: Bool {return _storage._image != nil}
+  /// Clears the value of `image`. Subsequent reads from it will return its default value.
+  public mutating func clearImage() {_uniqueStorage()._image = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4026,6 +4036,16 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `bookmarkOrigin`. Subsequent reads from it will return its default value.
   public mutating func clearBookmarkOrigin() {_uniqueStorage()._bookmarkOrigin = nil}
 
+  /// Representative image for this model
+  public var image: Clarifai_Api_Image {
+    get {return _storage._image ?? Clarifai_Api_Image()}
+    set {_uniqueStorage()._image = newValue}
+  }
+  /// Returns true if `image` has been explicitly set.
+  public var hasImage: Bool {return _storage._image != nil}
+  /// Clears the value of `image`. Subsequent reads from it will return its default value.
+  public mutating func clearImage() {_uniqueStorage()._image = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4621,6 +4641,9 @@ public struct Clarifai_Api_ModelTypeField {
 
     /// For selecting a dataset version
     case datasetVersion // = 20
+
+    /// To pass a string downstream, that is encrypted in the DB and API.
+    case encryptedString // = 21
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -4649,6 +4672,7 @@ public struct Clarifai_Api_ModelTypeField {
       case 18: self = .arrayOfModelConcepts
       case 19: self = .dataset
       case 20: self = .datasetVersion
+      case 21: self = .encryptedString
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -4675,6 +4699,7 @@ public struct Clarifai_Api_ModelTypeField {
       case .arrayOfModelConcepts: return 18
       case .dataset: return 19
       case .datasetVersion: return 20
+      case .encryptedString: return 21
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -4712,6 +4737,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
     .arrayOfModelConcepts,
     .dataset,
     .datasetVersion,
+    .encryptedString,
   ]
 }
 
@@ -6985,6 +7011,16 @@ public struct Clarifai_Api_Workflow {
   /// Clears the value of `bookmarkOrigin`. Subsequent reads from it will return its default value.
   public mutating func clearBookmarkOrigin() {_uniqueStorage()._bookmarkOrigin = nil}
 
+  /// Representative image for this workflow
+  public var image: Clarifai_Api_Image {
+    get {return _storage._image ?? Clarifai_Api_Image()}
+    set {_uniqueStorage()._image = newValue}
+  }
+  /// Returns true if `image` has been explicitly set.
+  public var hasImage: Bool {return _storage._image != nil}
+  /// Clears the value of `image`. Subsequent reads from it will return its default value.
+  public mutating func clearImage() {_uniqueStorage()._image = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -8960,6 +8996,16 @@ public struct Clarifai_Api_Module {
   public var hasBookmarkOrigin: Bool {return _storage._bookmarkOrigin != nil}
   /// Clears the value of `bookmarkOrigin`. Subsequent reads from it will return its default value.
   public mutating func clearBookmarkOrigin() {_uniqueStorage()._bookmarkOrigin = nil}
+
+  /// Representative image for this module
+  public var image: Clarifai_Api_Image {
+    get {return _storage._image ?? Clarifai_Api_Image()}
+    set {_uniqueStorage()._image = newValue}
+  }
+  /// Returns true if `image` has been explicitly set.
+  public var hasImage: Bool {return _storage._image != nil}
+  /// Clears the value of `image`. Subsequent reads from it will return its default value.
+  public mutating func clearImage() {_uniqueStorage()._image = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -13686,6 +13732,7 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     14: .standard(proto: "is_starred"),
     15: .standard(proto: "star_count"),
     17: .standard(proto: "bookmark_origin"),
+    18: .same(proto: "image"),
   ]
 
   fileprivate class _StorageClass {
@@ -13704,6 +13751,7 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     var _isStarred: Bool = false
     var _starCount: Int32 = 0
     var _bookmarkOrigin: Clarifai_Api_BookmarkOrigin? = nil
+    var _image: Clarifai_Api_Image? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -13725,6 +13773,7 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       _isStarred = source._isStarred
       _starCount = source._starCount
       _bookmarkOrigin = source._bookmarkOrigin
+      _image = source._image
     }
   }
 
@@ -13758,6 +13807,7 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         case 15: try { try decoder.decodeSingularInt32Field(value: &_storage._starCount) }()
         case 16: try { try decoder.decodeSingularMessageField(value: &_storage._defaultProcessingInfo) }()
         case 17: try { try decoder.decodeSingularMessageField(value: &_storage._bookmarkOrigin) }()
+        case 18: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
         default: break
         }
       }
@@ -13815,6 +13865,9 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       try { if let v = _storage._bookmarkOrigin {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
       } }()
+      try { if let v = _storage._image {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -13839,6 +13892,7 @@ extension Clarifai_Api_Dataset: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         if _storage._isStarred != rhs_storage._isStarred {return false}
         if _storage._starCount != rhs_storage._starCount {return false}
         if _storage._bookmarkOrigin != rhs_storage._bookmarkOrigin {return false}
+        if _storage._image != rhs_storage._image {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -14900,6 +14954,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     23: .standard(proto: "star_count"),
     29: .standard(proto: "workflow_recommended"),
     33: .standard(proto: "bookmark_origin"),
+    34: .same(proto: "image"),
   ]
 
   fileprivate class _StorageClass {
@@ -14929,6 +14984,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _starCount: Int32 = 0
     var _workflowRecommended: SwiftProtobuf.Google_Protobuf_BoolValue? = nil
     var _bookmarkOrigin: Clarifai_Api_BookmarkOrigin? = nil
+    var _image: Clarifai_Api_Image? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -14961,6 +15017,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _starCount = source._starCount
       _workflowRecommended = source._workflowRecommended
       _bookmarkOrigin = source._bookmarkOrigin
+      _image = source._image
     }
   }
 
@@ -15005,6 +15062,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 31: try { try decoder.decodeRepeatedMessageField(value: &_storage._languagesFull) }()
         case 32: try { try decoder.decodeRepeatedStringField(value: &_storage._checkConsents) }()
         case 33: try { try decoder.decodeSingularMessageField(value: &_storage._bookmarkOrigin) }()
+        case 34: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
         default: break
         }
       }
@@ -15095,6 +15153,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       try { if let v = _storage._bookmarkOrigin {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 33)
       } }()
+      try { if let v = _storage._image {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 34)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -15130,6 +15191,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._starCount != rhs_storage._starCount {return false}
         if _storage._workflowRecommended != rhs_storage._workflowRecommended {return false}
         if _storage._bookmarkOrigin != rhs_storage._bookmarkOrigin {return false}
+        if _storage._image != rhs_storage._image {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -16053,6 +16115,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: SwiftProtobuf._ProtoNa
     18: .same(proto: "ARRAY_OF_MODEL_CONCEPTS"),
     19: .same(proto: "DATASET"),
     20: .same(proto: "DATASET_VERSION"),
+    21: .same(proto: "ENCRYPTED_STRING"),
   ]
 }
 
@@ -19195,6 +19258,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     14: .standard(proto: "use_cases"),
     15: .standard(proto: "check_consents"),
     16: .standard(proto: "bookmark_origin"),
+    17: .same(proto: "image"),
   ]
 
   fileprivate class _StorageClass {
@@ -19214,6 +19278,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     var _useCases: [String] = []
     var _checkConsents: [String] = []
     var _bookmarkOrigin: Clarifai_Api_BookmarkOrigin? = nil
+    var _image: Clarifai_Api_Image? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -19236,6 +19301,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       _useCases = source._useCases
       _checkConsents = source._checkConsents
       _bookmarkOrigin = source._bookmarkOrigin
+      _image = source._image
     }
   }
 
@@ -19270,6 +19336,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         case 14: try { try decoder.decodeRepeatedStringField(value: &_storage._useCases) }()
         case 15: try { try decoder.decodeRepeatedStringField(value: &_storage._checkConsents) }()
         case 16: try { try decoder.decodeSingularMessageField(value: &_storage._bookmarkOrigin) }()
+        case 17: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
         default: break
         }
       }
@@ -19330,6 +19397,9 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       try { if let v = _storage._bookmarkOrigin {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
       } }()
+      try { if let v = _storage._image {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -19355,6 +19425,7 @@ extension Clarifai_Api_Workflow: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         if _storage._useCases != rhs_storage._useCases {return false}
         if _storage._checkConsents != rhs_storage._checkConsents {return false}
         if _storage._bookmarkOrigin != rhs_storage._bookmarkOrigin {return false}
+        if _storage._image != rhs_storage._image {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -21865,6 +21936,7 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     12: .standard(proto: "is_starred"),
     13: .standard(proto: "star_count"),
     14: .standard(proto: "bookmark_origin"),
+    15: .same(proto: "image"),
   ]
 
   fileprivate class _StorageClass {
@@ -21880,6 +21952,7 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _isStarred: Bool = false
     var _starCount: Int32 = 0
     var _bookmarkOrigin: Clarifai_Api_BookmarkOrigin? = nil
+    var _image: Clarifai_Api_Image? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -21898,6 +21971,7 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _isStarred = source._isStarred
       _starCount = source._starCount
       _bookmarkOrigin = source._bookmarkOrigin
+      _image = source._image
     }
   }
 
@@ -21928,6 +22002,7 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 12: try { try decoder.decodeSingularBoolField(value: &_storage._isStarred) }()
         case 13: try { try decoder.decodeSingularInt32Field(value: &_storage._starCount) }()
         case 14: try { try decoder.decodeSingularMessageField(value: &_storage._bookmarkOrigin) }()
+        case 15: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
         default: break
         }
       }
@@ -21976,6 +22051,9 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       try { if let v = _storage._bookmarkOrigin {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
       } }()
+      try { if let v = _storage._image {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -21997,6 +22075,7 @@ extension Clarifai_Api_Module: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._isStarred != rhs_storage._isStarred {return false}
         if _storage._starCount != rhs_storage._starCount {return false}
         if _storage._bookmarkOrigin != rhs_storage._bookmarkOrigin {return false}
+        if _storage._image != rhs_storage._image {return false}
         return true
       }
       if !storagesAreEqual {return false}
