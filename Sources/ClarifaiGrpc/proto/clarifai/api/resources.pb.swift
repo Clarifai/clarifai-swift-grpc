@@ -4190,6 +4190,11 @@ public struct Clarifai_Api_OutputInfo {
   /// Clears the value of `params`. Subsequent reads from it will return its default value.
   public mutating func clearParams() {_uniqueStorage()._params = nil}
 
+  public var paramsSpecs: [Clarifai_Api_ModelTypeField] {
+    get {return _storage._paramsSpecs}
+    set {_uniqueStorage()._paramsSpecs = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -8849,10 +8854,10 @@ public struct Clarifai_Api_TimeInfo {
   public var numFrames: UInt32 = 0
 
   /// Timestamp where track begins.
-  public var beginTime: UInt32 = 0
+  public var beginTime: Float = 0
 
   /// Timestamp where track ends.
-  public var endTime: UInt32 = 0
+  public var endTime: Float = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -15335,6 +15340,7 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     3: .same(proto: "message"),
     6: .standard(proto: "fields_map"),
     7: .same(proto: "params"),
+    8: .standard(proto: "params_specs"),
   ]
 
   fileprivate class _StorageClass {
@@ -15343,6 +15349,7 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _message: String = String()
     var _fieldsMap: SwiftProtobuf.Google_Protobuf_Struct? = nil
     var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
+    var _paramsSpecs: [Clarifai_Api_ModelTypeField] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -15354,6 +15361,7 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
       _message = source._message
       _fieldsMap = source._fieldsMap
       _params = source._params
+      _paramsSpecs = source._paramsSpecs
     }
   }
 
@@ -15377,6 +15385,7 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
         case 3: try { try decoder.decodeSingularStringField(value: &_storage._message) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._fieldsMap) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._params) }()
+        case 8: try { try decoder.decodeRepeatedMessageField(value: &_storage._paramsSpecs) }()
         default: break
         }
       }
@@ -15404,6 +15413,9 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
       try { if let v = _storage._params {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
       } }()
+      if !_storage._paramsSpecs.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._paramsSpecs, fieldNumber: 8)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -15418,6 +15430,7 @@ extension Clarifai_Api_OutputInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
         if _storage._message != rhs_storage._message {return false}
         if _storage._fieldsMap != rhs_storage._fieldsMap {return false}
         if _storage._params != rhs_storage._params {return false}
+        if _storage._paramsSpecs != rhs_storage._paramsSpecs {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -21817,8 +21830,8 @@ extension Clarifai_Api_TimeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public static let protoMessageName: String = _protobuf_package + ".TimeInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "num_frames"),
-    2: .standard(proto: "begin_time"),
-    3: .standard(proto: "end_time"),
+    4: .standard(proto: "begin_time"),
+    5: .standard(proto: "end_time"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -21828,8 +21841,8 @@ extension Clarifai_Api_TimeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self.numFrames) }()
-      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.beginTime) }()
-      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.endTime) }()
+      case 4: try { try decoder.decodeSingularFloatField(value: &self.beginTime) }()
+      case 5: try { try decoder.decodeSingularFloatField(value: &self.endTime) }()
       default: break
       }
     }
@@ -21840,10 +21853,10 @@ extension Clarifai_Api_TimeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       try visitor.visitSingularUInt32Field(value: self.numFrames, fieldNumber: 1)
     }
     if self.beginTime != 0 {
-      try visitor.visitSingularUInt32Field(value: self.beginTime, fieldNumber: 2)
+      try visitor.visitSingularFloatField(value: self.beginTime, fieldNumber: 4)
     }
     if self.endTime != 0 {
-      try visitor.visitSingularUInt32Field(value: self.endTime, fieldNumber: 3)
+      try visitor.visitSingularFloatField(value: self.endTime, fieldNumber: 5)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
