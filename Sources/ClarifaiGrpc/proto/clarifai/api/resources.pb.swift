@@ -6241,6 +6241,7 @@ public struct Clarifai_Api_Filter {
   ///  - model_version_id
   ///  - status.code
   ///  - task_id
+  ///  - trusted
   ///  - user_id
   ///  - workflow_version_id
   public var annotation: Clarifai_Api_Annotation {
