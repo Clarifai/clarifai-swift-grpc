@@ -1099,6 +1099,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostRunnerItemOutputsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>
+
+  func postModelVersionsTrainingTimeEstimate(
+    _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5026,6 +5031,24 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePostRunnerItemOutputsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostModelVersionsTrainingTimeEstimate
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModelVersionsTrainingTimeEstimate.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModelVersionsTrainingTimeEstimate(
+    _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModelVersionsTrainingTimeEstimate",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsTrainingTimeEstimateInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -5671,6 +5694,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postRunnerItemOutputs'.
   func makePostRunnerItemOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
+  func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6396,6 +6422,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Post back outputs from remote runners
   func postRunnerItemOutputs(request: Clarifai_Api_PostRunnerItemOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemOutputResponse>
+
+  func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -8334,6 +8362,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postRunnerItemOutputs(request:context:)
       )
 
+    case "PostModelVersionsTrainingTimeEstimate":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTrainingTimeEstimateResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsTrainingTimeEstimateInterceptors() ?? [],
+        userFunction: self.postModelVersionsTrainingTimeEstimate(request:context:)
+      )
+
     default:
       return nil
     }
@@ -9197,4 +9234,8 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postRunnerItemOutputs'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostRunnerItemOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionsTrainingTimeEstimate'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 }

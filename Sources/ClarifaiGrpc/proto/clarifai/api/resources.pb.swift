@@ -5659,11 +5659,41 @@ public struct Clarifai_Api_EvalMetrics {
   /// Clears the value of `evalInfo`. Subsequent reads from it will return its default value.
   public mutating func clearEvalInfo() {_uniqueStorage()._evalInfo = nil}
 
+  public var extendedMetrics: Clarifai_Api_ExtendedMetrics {
+    get {return _storage._extendedMetrics ?? Clarifai_Api_ExtendedMetrics()}
+    set {_uniqueStorage()._extendedMetrics = newValue}
+  }
+  /// Returns true if `extendedMetrics` has been explicitly set.
+  public var hasExtendedMetrics: Bool {return _storage._extendedMetrics != nil}
+  /// Clears the value of `extendedMetrics`. Subsequent reads from it will return its default value.
+  public mutating func clearExtendedMetrics() {_uniqueStorage()._extendedMetrics = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_ExtendedMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userMetrics: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _userMetrics ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_userMetrics = newValue}
+  }
+  /// Returns true if `userMetrics` has been explicitly set.
+  public var hasUserMetrics: Bool {return self._userMetrics != nil}
+  /// Clears the value of `userMetrics`. Subsequent reads from it will return its default value.
+  public mutating func clearUserMetrics() {self._userMetrics = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userMetrics: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
 /// FieldsValue
@@ -17580,6 +17610,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     9: .standard(proto: "metrics_by_class"),
     11: .standard(proto: "tracker_metrics"),
     12: .standard(proto: "eval_info"),
+    17: .standard(proto: "extended_metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -17599,6 +17630,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     var _metricsByClass: [Clarifai_Api_BinaryMetrics] = []
     var _trackerMetrics: [Clarifai_Api_TrackerMetrics] = []
     var _evalInfo: Clarifai_Api_EvalInfo? = nil
+    var _extendedMetrics: Clarifai_Api_ExtendedMetrics? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -17621,6 +17653,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       _metricsByClass = source._metricsByClass
       _trackerMetrics = source._trackerMetrics
       _evalInfo = source._evalInfo
+      _extendedMetrics = source._extendedMetrics
     }
   }
 
@@ -17655,6 +17688,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
         case 14: try { try decoder.decodeSingularMessageField(value: &_storage._groundTruthDataset) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._appID) }()
+        case 17: try { try decoder.decodeSingularMessageField(value: &_storage._extendedMetrics) }()
         default: break
         }
       }
@@ -17715,6 +17749,9 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       if !_storage._appID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._appID, fieldNumber: 16)
       }
+      try { if let v = _storage._extendedMetrics {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17740,10 +17777,47 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
         if _storage._metricsByClass != rhs_storage._metricsByClass {return false}
         if _storage._trackerMetrics != rhs_storage._trackerMetrics {return false}
         if _storage._evalInfo != rhs_storage._evalInfo {return false}
+        if _storage._extendedMetrics != rhs_storage._extendedMetrics {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ExtendedMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ExtendedMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_metrics"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userMetrics) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userMetrics {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ExtendedMetrics, rhs: Clarifai_Api_ExtendedMetrics) -> Bool {
+    if lhs._userMetrics != rhs._userMetrics {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
