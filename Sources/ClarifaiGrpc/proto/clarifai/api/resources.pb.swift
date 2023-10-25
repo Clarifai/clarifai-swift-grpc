@@ -6564,6 +6564,12 @@ public struct Clarifai_Api_User {
     set {_uniqueStorage()._jobRole = newValue}
   }
 
+  /// This specifies user intent when registering on clarifai
+  public var intention: String {
+    get {return _storage._intention}
+    set {_uniqueStorage()._intention = newValue}
+  }
+
   public var billType: String {
     get {return _storage._billType}
     set {_uniqueStorage()._billType = newValue}
@@ -18755,6 +18761,7 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     5: .standard(proto: "company_name"),
     19: .standard(proto: "job_title"),
     20: .standard(proto: "job_role"),
+    24: .same(proto: "intention"),
     7: .standard(proto: "bill_type"),
     6: .standard(proto: "created_at"),
     8: .standard(proto: "date_gdpr_consent"),
@@ -18779,6 +18786,7 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _companyName: String = String()
     var _jobTitle: String = String()
     var _jobRole: String = String()
+    var _intention: String = String()
     var _billType: String = String()
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _dateGdprConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
@@ -18806,6 +18814,7 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _companyName = source._companyName
       _jobTitle = source._jobTitle
       _jobRole = source._jobRole
+      _intention = source._intention
       _billType = source._billType
       _createdAt = source._createdAt
       _dateGdprConsent = source._dateGdprConsent
@@ -18859,6 +18868,7 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 21: try { try decoder.decodeSingularBoolField(value: &_storage._isStarred) }()
         case 22: try { try decoder.decodeSingularInt32Field(value: &_storage._starCount) }()
         case 23: try { try decoder.decodeSingularMessageField(value: &_storage._datePiiConsent) }()
+        case 24: try { try decoder.decodeSingularStringField(value: &_storage._intention) }()
         default: break
         }
       }
@@ -18934,6 +18944,9 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._datePiiConsent {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 23)
       } }()
+      if !_storage._intention.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._intention, fieldNumber: 24)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -18950,6 +18963,7 @@ extension Clarifai_Api_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._companyName != rhs_storage._companyName {return false}
         if _storage._jobTitle != rhs_storage._jobTitle {return false}
         if _storage._jobRole != rhs_storage._jobRole {return false}
+        if _storage._intention != rhs_storage._intention {return false}
         if _storage._billType != rhs_storage._billType {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._dateGdprConsent != rhs_storage._dateGdprConsent {return false}
