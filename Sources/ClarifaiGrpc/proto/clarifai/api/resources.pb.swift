@@ -6867,7 +6867,10 @@ public struct Clarifai_Api_Video {
 
   /// This is a URL to a publicly accessible video file. The platform will download this file server
   /// side and then process.
-  public var url: String = String()
+  public var url: String {
+    get {return _storage._url}
+    set {_uniqueStorage()._url = newValue}
+  }
 
   /// The base64 field is using video file bytes directly in the request.
   /// NOTE: if you're sending a json request, then this MUST be base64 encoded before sending (hence
@@ -6875,41 +6878,61 @@ public struct Clarifai_Api_Video {
   /// When using our grpc clients, you DO NOT need to base64 encode
   /// it yourself since the clients know how to do this for you automatically and will avoid the
   /// base64 encoding if they send a binary request.
-  public var base64: Data = Data()
+  public var base64: Data {
+    get {return _storage._base64}
+    set {_uniqueStorage()._base64 = newValue}
+  }
 
-  public var allowDuplicateURL: Bool = false
+  public var allowDuplicateURL: Bool {
+    get {return _storage._allowDuplicateURL}
+    set {_uniqueStorage()._allowDuplicateURL = newValue}
+  }
 
   /// URL of thumbnail image, which is currently frame at position of 1s. This field is currently
   /// used only in response.
-  public var thumbnailURL: String = String()
+  /// Deprecated in favour of thumbnail_hosted, which also contains alternate sizes of thumbnail
+  public var thumbnailURL: String {
+    get {return _storage._thumbnailURL}
+    set {_uniqueStorage()._thumbnailURL = newValue}
+  }
 
   /// The hosted field lists original video hosted in Clarifai storage. This field is currently used
   /// only in response.
   public var hosted: Clarifai_Api_HostedURL {
-    get {return _hosted ?? Clarifai_Api_HostedURL()}
-    set {_hosted = newValue}
+    get {return _storage._hosted ?? Clarifai_Api_HostedURL()}
+    set {_uniqueStorage()._hosted = newValue}
   }
   /// Returns true if `hosted` has been explicitly set.
-  public var hasHosted: Bool {return self._hosted != nil}
+  public var hasHosted: Bool {return _storage._hosted != nil}
   /// Clears the value of `hosted`. Subsequent reads from it will return its default value.
-  public mutating func clearHosted() {self._hosted = nil}
+  public mutating func clearHosted() {_uniqueStorage()._hosted = nil}
+
+  /// The hosted field lists various sizes of the vide thumbnail hosted in Clarifai storage, with 'thumbnail' as the full size
+  /// This field is currently used only in response.
+  public var hostedThumbnail: Clarifai_Api_HostedURL {
+    get {return _storage._hostedThumbnail ?? Clarifai_Api_HostedURL()}
+    set {_uniqueStorage()._hostedThumbnail = newValue}
+  }
+  /// Returns true if `hostedThumbnail` has been explicitly set.
+  public var hasHostedThumbnail: Bool {return _storage._hostedThumbnail != nil}
+  /// Clears the value of `hostedThumbnail`. Subsequent reads from it will return its default value.
+  public mutating func clearHostedThumbnail() {_uniqueStorage()._hostedThumbnail = nil}
 
   /// video info
   public var videoInfo: Clarifai_Api_VideoInfo {
-    get {return _videoInfo ?? Clarifai_Api_VideoInfo()}
-    set {_videoInfo = newValue}
+    get {return _storage._videoInfo ?? Clarifai_Api_VideoInfo()}
+    set {_uniqueStorage()._videoInfo = newValue}
   }
   /// Returns true if `videoInfo` has been explicitly set.
-  public var hasVideoInfo: Bool {return self._videoInfo != nil}
+  public var hasVideoInfo: Bool {return _storage._videoInfo != nil}
   /// Clears the value of `videoInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearVideoInfo() {self._videoInfo = nil}
+  public mutating func clearVideoInfo() {_uniqueStorage()._videoInfo = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _hosted: Clarifai_Api_HostedURL? = nil
-  fileprivate var _videoInfo: Clarifai_Api_VideoInfo? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct Clarifai_Api_VideoInfo {
@@ -19283,59 +19306,109 @@ extension Clarifai_Api_Video: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     4: .standard(proto: "allow_duplicate_url"),
     5: .standard(proto: "thumbnail_url"),
     6: .same(proto: "hosted"),
+    8: .standard(proto: "hosted_thumbnail"),
     7: .standard(proto: "video_info"),
   ]
 
+  fileprivate class _StorageClass {
+    var _url: String = String()
+    var _base64: Data = Data()
+    var _allowDuplicateURL: Bool = false
+    var _thumbnailURL: String = String()
+    var _hosted: Clarifai_Api_HostedURL? = nil
+    var _hostedThumbnail: Clarifai_Api_HostedURL? = nil
+    var _videoInfo: Clarifai_Api_VideoInfo? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _url = source._url
+      _base64 = source._base64
+      _allowDuplicateURL = source._allowDuplicateURL
+      _thumbnailURL = source._thumbnailURL
+      _hosted = source._hosted
+      _hostedThumbnail = source._hostedThumbnail
+      _videoInfo = source._videoInfo
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.url) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.base64) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.allowDuplicateURL) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.thumbnailURL) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._hosted) }()
-      case 7: try { try decoder.decodeSingularMessageField(value: &self._videoInfo) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._url) }()
+        case 2: try { try decoder.decodeSingularBytesField(value: &_storage._base64) }()
+        case 4: try { try decoder.decodeSingularBoolField(value: &_storage._allowDuplicateURL) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._thumbnailURL) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._hosted) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._videoInfo) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._hostedThumbnail) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.url.isEmpty {
-      try visitor.visitSingularStringField(value: self.url, fieldNumber: 1)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._url.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._url, fieldNumber: 1)
+      }
+      if !_storage._base64.isEmpty {
+        try visitor.visitSingularBytesField(value: _storage._base64, fieldNumber: 2)
+      }
+      if _storage._allowDuplicateURL != false {
+        try visitor.visitSingularBoolField(value: _storage._allowDuplicateURL, fieldNumber: 4)
+      }
+      if !_storage._thumbnailURL.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._thumbnailURL, fieldNumber: 5)
+      }
+      try { if let v = _storage._hosted {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._videoInfo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._hostedThumbnail {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
     }
-    if !self.base64.isEmpty {
-      try visitor.visitSingularBytesField(value: self.base64, fieldNumber: 2)
-    }
-    if self.allowDuplicateURL != false {
-      try visitor.visitSingularBoolField(value: self.allowDuplicateURL, fieldNumber: 4)
-    }
-    if !self.thumbnailURL.isEmpty {
-      try visitor.visitSingularStringField(value: self.thumbnailURL, fieldNumber: 5)
-    }
-    try { if let v = self._hosted {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    } }()
-    try { if let v = self._videoInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_Video, rhs: Clarifai_Api_Video) -> Bool {
-    if lhs.url != rhs.url {return false}
-    if lhs.base64 != rhs.base64 {return false}
-    if lhs.allowDuplicateURL != rhs.allowDuplicateURL {return false}
-    if lhs.thumbnailURL != rhs.thumbnailURL {return false}
-    if lhs._hosted != rhs._hosted {return false}
-    if lhs._videoInfo != rhs._videoInfo {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._url != rhs_storage._url {return false}
+        if _storage._base64 != rhs_storage._base64 {return false}
+        if _storage._allowDuplicateURL != rhs_storage._allowDuplicateURL {return false}
+        if _storage._thumbnailURL != rhs_storage._thumbnailURL {return false}
+        if _storage._hosted != rhs_storage._hosted {return false}
+        if _storage._hostedThumbnail != rhs_storage._hostedThumbnail {return false}
+        if _storage._videoInfo != rhs_storage._videoInfo {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
