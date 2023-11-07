@@ -2392,8 +2392,10 @@ public struct Clarifai_Api_FrameInfo {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The index of the frame. Keep in mind that this depends on the sampling rate used during
-  /// processing.
+  /// Deprecated. Use Time instead.
+  /// The index of the frame, informational and optional.
+  /// Depends on the sampling rate used during processing
+  /// May be 0 for interpolated frames that are generated for brief time (training) or if new frame is manually added
   public var index: UInt32 = 0
 
   /// time in the video in milliseconds. This is independent of the sampling rates used during
@@ -6372,7 +6374,6 @@ public struct Clarifai_Api_Rank {
   ///  - data.embeddings[].vector[]
   ///  - data.image.base64[]
   ///  - data.image.url
-  ///  - data.lopq_code[]
   ///  - data.text.raw
   ///  - input_id
   ///  - model_version_id
