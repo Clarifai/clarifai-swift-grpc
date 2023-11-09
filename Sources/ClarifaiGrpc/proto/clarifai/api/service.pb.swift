@@ -719,7 +719,10 @@ public struct Clarifai_Api_PatchAppsRequest {
   public var apps: [Clarifai_Api_App] = []
 
   /// The action to perform on the patched App objects except App.Metadata
-  /// For now only action 'overwrite' is supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the app image by setting
+  /// 'image.url' in the request to the current value returned for that app.
   public var action: String = String()
 
   /// The action to perform on the patched App.Metadata
@@ -768,7 +771,10 @@ public struct Clarifai_Api_PatchAppRequest {
   public mutating func clearApp() {self._app = nil}
 
   /// The action to perform on the patched App object except App.Metadata
-  /// For now only action 'overwrite' is supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the app image by setting
+  /// 'image.url' in the request to the current value returned for the app.
   public var action: String = String()
 
   /// The action to perform on the patched App.Metadata
@@ -2631,7 +2637,10 @@ public struct Clarifai_Api_PatchDatasetsRequest {
   public var datasets: [Clarifai_Api_Dataset] = []
 
   /// The action to perform on the patched objects
-  /// Supported values: 'overwrite' and 'merge'
+  /// Supported values: 'overwrite', 'merge', and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the dataset image by setting
+  /// 'image.url' in the request to the current value returned for that dataset.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -4209,6 +4218,10 @@ public struct Clarifai_Api_PatchModelsRequest {
 
   /// The action to perform on the patched objects
   /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  ///
+  /// Note that 'remove' can be used to remove the model image by setting
+  /// 'image.url' in the request to the current value returned for that model.
+  /// This cannot be used in a request that is patching other fields as well.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -7092,6 +7105,10 @@ public struct Clarifai_Api_PatchWorkflowsRequest {
 
   /// The action to perform on the patched objects
   /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  ///
+  /// Note that 'remove' can be used to remove the workflow image by setting
+  /// 'image.url' in the request to the current value returned for that workflow.
+  /// This cannot be used in a request that is patching other fields as well.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -8778,7 +8795,10 @@ public struct Clarifai_Api_PatchModulesRequest {
   public var modules: [Clarifai_Api_Module] = []
 
   /// The action to perform on the patched objects
-  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the module image by setting
+  /// 'image.url' in the request to the current value returned for that module.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
