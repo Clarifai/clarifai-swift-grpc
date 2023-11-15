@@ -1217,6 +1217,17 @@ public struct Clarifai_Api_App {
   /// Clears the value of `image`. Subsequent reads from it will return its default value.
   public mutating func clearImage() {_uniqueStorage()._image = nil}
 
+  /// An app marked as a template can be duplicated by any user that can see it,
+  /// including all visible resources within it.
+  public var isTemplate: SwiftProtobuf.Google_Protobuf_BoolValue {
+    get {return _storage._isTemplate ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
+    set {_uniqueStorage()._isTemplate = newValue}
+  }
+  /// Returns true if `isTemplate` has been explicitly set.
+  public var hasIsTemplate: Bool {return _storage._isTemplate != nil}
+  /// Clears the value of `isTemplate`. Subsequent reads from it will return its default value.
+  public mutating func clearIsTemplate() {_uniqueStorage()._isTemplate = nil}
+
   public var extraInfo: Clarifai_Api_AppExtraInfo {
     get {return _storage._extraInfo ?? Clarifai_Api_AppExtraInfo()}
     set {_uniqueStorage()._extraInfo = newValue}
@@ -3105,15 +3116,15 @@ public struct Clarifai_Api_AnnotationFilter {
   /// The app the annotation filter belongs to.
   public var appID: String = String()
 
-  /// The saved search that this filter uses.
-  public var savedSearch: Clarifai_Api_Search {
-    get {return _savedSearch ?? Clarifai_Api_Search()}
-    set {_savedSearch = newValue}
+  /// The search that this filter uses.
+  public var search: Clarifai_Api_Search {
+    get {return _search ?? Clarifai_Api_Search()}
+    set {_search = newValue}
   }
-  /// Returns true if `savedSearch` has been explicitly set.
-  public var hasSavedSearch: Bool {return self._savedSearch != nil}
-  /// Clears the value of `savedSearch`. Subsequent reads from it will return its default value.
-  public mutating func clearSavedSearch() {self._savedSearch = nil}
+  /// Returns true if `search` has been explicitly set.
+  public var hasSearch: Bool {return self._search != nil}
+  /// Clears the value of `search`. Subsequent reads from it will return its default value.
+  public mutating func clearSearch() {self._search = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -3121,7 +3132,7 @@ public struct Clarifai_Api_AnnotationFilter {
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _savedSearch: Clarifai_Api_Search? = nil
+  fileprivate var _search: Clarifai_Api_Search? = nil
 }
 
 /// DatasetInput
@@ -7367,19 +7378,40 @@ public struct Clarifai_Api_AppDuplication {
     set {_uniqueStorage()._id = newValue}
   }
 
-  /// the id of new app. If provided, we will create a new application with this id. If the app id exists, we will return err.
-  /// if new_app_name is empty, the name will be the same as this id.
-  /// You can not set this if existing_app_id is set.
+  /// The ID of an existing app you want to copy data into.
+  ///
+  /// If not provided, then we will create a new application as the destination instead.
+  /// The various new_app_* fields can be used to set fields of this new application.
+  public var existingAppID: String {
+    get {return _storage._existingAppID}
+    set {_uniqueStorage()._existingAppID = newValue}
+  }
+
+  /// The ID to use when creating a new application.
+  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
+  ///
+  /// If not provided, then it will be generated automatically.
   public var newAppID: String {
     get {return _storage._newAppID}
     set {_uniqueStorage()._newAppID = newValue}
   }
 
-  /// the name of new app. If provided, we will create a new application with this name.
-  /// You can not set this if existing_app_id is set.
+  /// The name to use when creating a new application.
+  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
+  ///
+  /// If not provided, then the ID of the new application is also used as the name.
   public var newAppName: String {
     get {return _storage._newAppName}
     set {_uniqueStorage()._newAppName = newValue}
+  }
+
+  /// The description to use when creating a new application.
+  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
+  ///
+  /// If not provided, then the description of the source application is copied.
+  public var newAppDescription: String {
+    get {return _storage._newAppDescription}
+    set {_uniqueStorage()._newAppDescription = newValue}
   }
 
   /// the status of app duplication
@@ -7421,14 +7453,6 @@ public struct Clarifai_Api_AppDuplication {
   public var hasFilter: Bool {return _storage._filter != nil}
   /// Clears the value of `filter`. Subsequent reads from it will return its default value.
   public mutating func clearFilter() {_uniqueStorage()._filter = nil}
-
-  /// the id of existing app you want to copy data into.
-  /// you can not set this if either new_app_id or new_app_name is set.
-  /// if new_app_id, new_app_name and existing_app_id are all empty, we will create a new app with random app id/name
-  public var existingAppID: String {
-    get {return _storage._existingAppID}
-    set {_uniqueStorage()._existingAppID = newValue}
-  }
 
   /// contains progress for each requested filter
   public var progress: [Clarifai_Api_AppCopyProgress] {
@@ -11134,6 +11158,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     20: .standard(proto: "star_count"),
     21: .same(proto: "notes"),
     22: .same(proto: "image"),
+    25: .standard(proto: "is_template"),
     24: .standard(proto: "extra_info"),
   ]
 
@@ -11156,6 +11181,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _starCount: Int32 = 0
     var _notes: String = String()
     var _image: Clarifai_Api_Image? = nil
+    var _isTemplate: SwiftProtobuf.Google_Protobuf_BoolValue? = nil
     var _extraInfo: Clarifai_Api_AppExtraInfo? = nil
 
     static let defaultInstance = _StorageClass()
@@ -11181,6 +11207,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _starCount = source._starCount
       _notes = source._notes
       _image = source._image
+      _isTemplate = source._isTemplate
       _extraInfo = source._extraInfo
     }
   }
@@ -11219,6 +11246,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 22: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
         case 23: try { try decoder.decodeSingularMessageField(value: &_storage._defaultWorkflow) }()
         case 24: try { try decoder.decodeSingularMessageField(value: &_storage._extraInfo) }()
+        case 25: try { try decoder.decodeSingularMessageField(value: &_storage._isTemplate) }()
         default: break
         }
       }
@@ -11288,6 +11316,9 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._extraInfo {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
       } }()
+      try { if let v = _storage._isTemplate {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -11315,6 +11346,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._starCount != rhs_storage._starCount {return false}
         if _storage._notes != rhs_storage._notes {return false}
         if _storage._image != rhs_storage._image {return false}
+        if _storage._isTemplate != rhs_storage._isTemplate {return false}
         if _storage._extraInfo != rhs_storage._extraInfo {return false}
         return true
       }
@@ -14044,7 +14076,7 @@ extension Clarifai_Api_AnnotationFilter: SwiftProtobuf.Message, SwiftProtobuf._M
     3: .standard(proto: "modified_at"),
     4: .standard(proto: "user_id"),
     5: .standard(proto: "app_id"),
-    8: .standard(proto: "saved_search"),
+    9: .same(proto: "search"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14058,7 +14090,7 @@ extension Clarifai_Api_AnnotationFilter: SwiftProtobuf.Message, SwiftProtobuf._M
       case 3: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.userID) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.appID) }()
-      case 8: try { try decoder.decodeSingularMessageField(value: &self._savedSearch) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._search) }()
       default: break
       }
     }
@@ -14084,8 +14116,8 @@ extension Clarifai_Api_AnnotationFilter: SwiftProtobuf.Message, SwiftProtobuf._M
     if !self.appID.isEmpty {
       try visitor.visitSingularStringField(value: self.appID, fieldNumber: 5)
     }
-    try { if let v = self._savedSearch {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    try { if let v = self._search {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -14096,7 +14128,7 @@ extension Clarifai_Api_AnnotationFilter: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs._modifiedAt != rhs._modifiedAt {return false}
     if lhs.userID != rhs.userID {return false}
     if lhs.appID != rhs.appID {return false}
-    if lhs._savedSearch != rhs._savedSearch {return false}
+    if lhs._search != rhs._search {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -20019,25 +20051,27 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
   public static let protoMessageName: String = _protobuf_package + ".AppDuplication"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
+    8: .standard(proto: "existing_app_id"),
     2: .standard(proto: "new_app_id"),
     3: .standard(proto: "new_app_name"),
+    10: .standard(proto: "new_app_description"),
     4: .same(proto: "status"),
     5: .standard(proto: "created_at"),
     6: .standard(proto: "last_modified_at"),
     7: .same(proto: "filter"),
-    8: .standard(proto: "existing_app_id"),
     9: .same(proto: "progress"),
   ]
 
   fileprivate class _StorageClass {
     var _id: String = String()
+    var _existingAppID: String = String()
     var _newAppID: String = String()
     var _newAppName: String = String()
+    var _newAppDescription: String = String()
     var _status: Clarifai_Api_Status_Status? = nil
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _lastModifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _filter: Clarifai_Api_AppDuplicationFilters? = nil
-    var _existingAppID: String = String()
     var _progress: [Clarifai_Api_AppCopyProgress] = []
 
     static let defaultInstance = _StorageClass()
@@ -20046,13 +20080,14 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
     init(copying source: _StorageClass) {
       _id = source._id
+      _existingAppID = source._existingAppID
       _newAppID = source._newAppID
       _newAppName = source._newAppName
+      _newAppDescription = source._newAppDescription
       _status = source._status
       _createdAt = source._createdAt
       _lastModifiedAt = source._lastModifiedAt
       _filter = source._filter
-      _existingAppID = source._existingAppID
       _progress = source._progress
     }
   }
@@ -20081,6 +20116,7 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._filter) }()
         case 8: try { try decoder.decodeSingularStringField(value: &_storage._existingAppID) }()
         case 9: try { try decoder.decodeRepeatedMessageField(value: &_storage._progress) }()
+        case 10: try { try decoder.decodeSingularStringField(value: &_storage._newAppDescription) }()
         default: break
         }
       }
@@ -20120,6 +20156,9 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
       if !_storage._progress.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._progress, fieldNumber: 9)
       }
+      if !_storage._newAppDescription.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._newAppDescription, fieldNumber: 10)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20130,13 +20169,14 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
         let _storage = _args.0
         let rhs_storage = _args.1
         if _storage._id != rhs_storage._id {return false}
+        if _storage._existingAppID != rhs_storage._existingAppID {return false}
         if _storage._newAppID != rhs_storage._newAppID {return false}
         if _storage._newAppName != rhs_storage._newAppName {return false}
+        if _storage._newAppDescription != rhs_storage._newAppDescription {return false}
         if _storage._status != rhs_storage._status {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._lastModifiedAt != rhs_storage._lastModifiedAt {return false}
         if _storage._filter != rhs_storage._filter {return false}
-        if _storage._existingAppID != rhs_storage._existingAppID {return false}
         if _storage._progress != rhs_storage._progress {return false}
         return true
       }
