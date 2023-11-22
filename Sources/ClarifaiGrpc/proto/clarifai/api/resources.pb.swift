@@ -4316,6 +4316,16 @@ public struct Clarifai_Api_TrainInfo {
   /// Clears the value of `dataset`. Subsequent reads from it will return its default value.
   public mutating func clearDataset() {_uniqueStorage()._dataset = nil}
 
+  /// The model to resume training from.
+  public var resumeFromModel: Clarifai_Api_Model {
+    get {return _storage._resumeFromModel ?? Clarifai_Api_Model()}
+    set {_uniqueStorage()._resumeFromModel = newValue}
+  }
+  /// Returns true if `resumeFromModel` has been explicitly set.
+  public var hasResumeFromModel: Bool {return _storage._resumeFromModel != nil}
+  /// Clears the value of `resumeFromModel`. Subsequent reads from it will return its default value.
+  public mutating func clearResumeFromModel() {_uniqueStorage()._resumeFromModel = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4660,7 +4670,6 @@ public struct Clarifai_Api_ModelTypeField {
     case arrayOfNumbers // = 11
 
     /// For selecting the embed_model_version_id for context based models.
-    /// This is a string type in the API request.
     case workflowEmbedModels // = 12
 
     /// Such as ['a', 'b', 'cantaloupe']
@@ -4690,6 +4699,9 @@ public struct Clarifai_Api_ModelTypeField {
 
     /// To pass a string downstream, that is encrypted in the DB and API.
     case encryptedString // = 21
+
+    /// For selecting a model version of the same model type to resume training from. 
+    case checkpointModel // = 22
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -4719,6 +4731,7 @@ public struct Clarifai_Api_ModelTypeField {
       case 19: self = .dataset
       case 20: self = .datasetVersion
       case 21: self = .encryptedString
+      case 22: self = .checkpointModel
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -4746,6 +4759,7 @@ public struct Clarifai_Api_ModelTypeField {
       case .dataset: return 19
       case .datasetVersion: return 20
       case .encryptedString: return 21
+      case .checkpointModel: return 22
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -4784,6 +4798,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
     .dataset,
     .datasetVersion,
     .encryptedString,
+    .checkpointModel,
   ]
 }
 
@@ -15690,11 +15705,13 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "params"),
     2: .same(proto: "dataset"),
+    3: .standard(proto: "resume_from_model"),
   ]
 
   fileprivate class _StorageClass {
     var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
     var _dataset: Clarifai_Api_Dataset? = nil
+    var _resumeFromModel: Clarifai_Api_Model? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -15703,6 +15720,7 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     init(copying source: _StorageClass) {
       _params = source._params
       _dataset = source._dataset
+      _resumeFromModel = source._resumeFromModel
     }
   }
 
@@ -15723,6 +15741,7 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         switch fieldNumber {
         case 1: try { try decoder.decodeSingularMessageField(value: &_storage._params) }()
         case 2: try { try decoder.decodeSingularMessageField(value: &_storage._dataset) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._resumeFromModel) }()
         default: break
         }
       }
@@ -15741,6 +15760,9 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       try { if let v = _storage._dataset {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
       } }()
+      try { if let v = _storage._resumeFromModel {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -15752,6 +15774,7 @@ extension Clarifai_Api_TrainInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         let rhs_storage = _args.1
         if _storage._params != rhs_storage._params {return false}
         if _storage._dataset != rhs_storage._dataset {return false}
+        if _storage._resumeFromModel != rhs_storage._resumeFromModel {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -16290,6 +16313,7 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: SwiftProtobuf._ProtoNa
     19: .same(proto: "DATASET"),
     20: .same(proto: "DATASET_VERSION"),
     21: .same(proto: "ENCRYPTED_STRING"),
+    22: .same(proto: "CHECKPOINT_MODEL"),
   ]
 }
 
