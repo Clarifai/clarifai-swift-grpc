@@ -5932,38 +5932,46 @@ public struct Clarifai_Api_MultiScopeResponse {
 
   /// The status of the request.
   public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
+  public var hasStatus: Bool {return _storage._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
   /// This is a list of the scopes that your key has.
-  public var scopes: [String] = []
+  public var scopes: [String] {
+    get {return _storage._scopes}
+    set {_uniqueStorage()._scopes = newValue}
+  }
 
   /// The app that the key has access to.
   public var app: Clarifai_Api_App {
-    get {return _app ?? Clarifai_Api_App()}
-    set {_app = newValue}
+    get {return _storage._app ?? Clarifai_Api_App()}
+    set {_uniqueStorage()._app = newValue}
   }
   /// Returns true if `app` has been explicitly set.
-  public var hasApp: Bool {return self._app != nil}
+  public var hasApp: Bool {return _storage._app != nil}
   /// Clears the value of `app`. Subsequent reads from it will return its default value.
-  public mutating func clearApp() {self._app = nil}
+  public mutating func clearApp() {_uniqueStorage()._app = nil}
 
   /// This is a list of endpoint permissions that your key has.
-  public var endpoints: [String] = []
+  public var endpoints: [String] {
+    get {return _storage._endpoints}
+    set {_uniqueStorage()._endpoints = newValue}
+  }
 
-  public var userFeatureFlags: String = String()
+  public var userFeatureFlags: String {
+    get {return _storage._userFeatureFlags}
+    set {_uniqueStorage()._userFeatureFlags = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _app: Clarifai_Api_App? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// MultiScopeUserResponse
@@ -19605,51 +19613,91 @@ extension Clarifai_Api_MultiScopeResponse: SwiftProtobuf.Message, SwiftProtobuf.
     5: .standard(proto: "user_feature_flags"),
   ]
 
+  fileprivate class _StorageClass {
+    var _status: Clarifai_Api_Status_Status? = nil
+    var _scopes: [String] = []
+    var _app: Clarifai_Api_App? = nil
+    var _endpoints: [String] = []
+    var _userFeatureFlags: String = String()
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _status = source._status
+      _scopes = source._scopes
+      _app = source._app
+      _endpoints = source._endpoints
+      _userFeatureFlags = source._userFeatureFlags
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeRepeatedStringField(value: &self.scopes) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._app) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.userFeatureFlags) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 2: try { try decoder.decodeRepeatedStringField(value: &_storage._scopes) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._app) }()
+        case 4: try { try decoder.decodeRepeatedStringField(value: &_storage._endpoints) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._userFeatureFlags) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.scopes.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.scopes, fieldNumber: 2)
-    }
-    try { if let v = self._app {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    if !self.endpoints.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.endpoints, fieldNumber: 4)
-    }
-    if !self.userFeatureFlags.isEmpty {
-      try visitor.visitSingularStringField(value: self.userFeatureFlags, fieldNumber: 5)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._status {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      if !_storage._scopes.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._scopes, fieldNumber: 2)
+      }
+      try { if let v = _storage._app {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      if !_storage._endpoints.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._endpoints, fieldNumber: 4)
+      }
+      if !_storage._userFeatureFlags.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._userFeatureFlags, fieldNumber: 5)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiScopeResponse, rhs: Clarifai_Api_MultiScopeResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.scopes != rhs.scopes {return false}
-    if lhs._app != rhs._app {return false}
-    if lhs.endpoints != rhs.endpoints {return false}
-    if lhs.userFeatureFlags != rhs.userFeatureFlags {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._scopes != rhs_storage._scopes {return false}
+        if _storage._app != rhs_storage._app {return false}
+        if _storage._endpoints != rhs_storage._endpoints {return false}
+        if _storage._userFeatureFlags != rhs_storage._userFeatureFlags {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

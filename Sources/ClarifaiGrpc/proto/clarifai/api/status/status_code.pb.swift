@@ -36,6 +36,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Resource moved. Respond with Http status 307 and add new Location header to response
   case moved // = 10050
 
+  ///SUCCESS_WARNING_API_DEPRECATED = 10001;
+  ///SUCCESS_WARNING_CLIENT_DEPRECATED = 10002;
+  case teapot // = 10060
+
   /// Clarifai Connection Codes: 11xxx
   case connAccountIssues // = 11000
 
@@ -624,6 +628,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 10030: self = .tryAgain
     case 10040: self = .notImplemented
     case 10050: self = .moved
+    case 10060: self = .teapot
     case 11000: self = .connAccountIssues
     case 11001: self = .connTokenInvalid
     case 11002: self = .connCredentialsInvalid
@@ -978,6 +983,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .tryAgain: return 10030
     case .notImplemented: return 10040
     case .moved: return 10050
+    case .teapot: return 10060
     case .connAccountIssues: return 11000
     case .connTokenInvalid: return 11001
     case .connCredentialsInvalid: return 11002
@@ -1337,6 +1343,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .tryAgain,
     .notImplemented,
     .moved,
+    .teapot,
     .connAccountIssues,
     .connTokenInvalid,
     .connCredentialsInvalid,
@@ -1694,6 +1701,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     10030: .same(proto: "TRY_AGAIN"),
     10040: .same(proto: "NOT_IMPLEMENTED"),
     10050: .same(proto: "MOVED"),
+    10060: .same(proto: "TEAPOT"),
     11000: .same(proto: "CONN_ACCOUNT_ISSUES"),
     11001: .same(proto: "CONN_TOKEN_INVALID"),
     11002: .same(proto: "CONN_CREDENTIALS_INVALID"),

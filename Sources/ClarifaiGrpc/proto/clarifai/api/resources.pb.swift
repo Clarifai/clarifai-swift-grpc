@@ -3650,39 +3650,41 @@ public struct Clarifai_Api_DatasetVersionExportInfo {
 
   /// clarifai_data_protobuf is a CLARIFAI_DATA_PROTOBUF export of the dataset version.
   public var clarifaiDataProtobuf: Clarifai_Api_DatasetVersionExport {
-    get {return _storage._clarifaiDataProtobuf ?? Clarifai_Api_DatasetVersionExport()}
-    set {_uniqueStorage()._clarifaiDataProtobuf = newValue}
+    get {return _clarifaiDataProtobuf ?? Clarifai_Api_DatasetVersionExport()}
+    set {_clarifaiDataProtobuf = newValue}
   }
   /// Returns true if `clarifaiDataProtobuf` has been explicitly set.
-  public var hasClarifaiDataProtobuf: Bool {return _storage._clarifaiDataProtobuf != nil}
+  public var hasClarifaiDataProtobuf: Bool {return self._clarifaiDataProtobuf != nil}
   /// Clears the value of `clarifaiDataProtobuf`. Subsequent reads from it will return its default value.
-  public mutating func clearClarifaiDataProtobuf() {_uniqueStorage()._clarifaiDataProtobuf = nil}
+  public mutating func clearClarifaiDataProtobuf() {self._clarifaiDataProtobuf = nil}
 
   /// clarifai_data_json is a CLARIFAI_DATA_JSON export of the dataset version.
   public var clarifaiDataJson: Clarifai_Api_DatasetVersionExport {
-    get {return _storage._clarifaiDataJson ?? Clarifai_Api_DatasetVersionExport()}
-    set {_uniqueStorage()._clarifaiDataJson = newValue}
+    get {return _clarifaiDataJson ?? Clarifai_Api_DatasetVersionExport()}
+    set {_clarifaiDataJson = newValue}
   }
   /// Returns true if `clarifaiDataJson` has been explicitly set.
-  public var hasClarifaiDataJson: Bool {return _storage._clarifaiDataJson != nil}
+  public var hasClarifaiDataJson: Bool {return self._clarifaiDataJson != nil}
   /// Clears the value of `clarifaiDataJson`. Subsequent reads from it will return its default value.
-  public mutating func clearClarifaiDataJson() {_uniqueStorage()._clarifaiDataJson = nil}
+  public mutating func clearClarifaiDataJson() {self._clarifaiDataJson = nil}
 
   /// coco is a COCO export of the dataset version.
   public var coco: Clarifai_Api_DatasetVersionExport {
-    get {return _storage._coco ?? Clarifai_Api_DatasetVersionExport()}
-    set {_uniqueStorage()._coco = newValue}
+    get {return _coco ?? Clarifai_Api_DatasetVersionExport()}
+    set {_coco = newValue}
   }
   /// Returns true if `coco` has been explicitly set.
-  public var hasCoco: Bool {return _storage._coco != nil}
+  public var hasCoco: Bool {return self._coco != nil}
   /// Clears the value of `coco`. Subsequent reads from it will return its default value.
-  public mutating func clearCoco() {_uniqueStorage()._coco = nil}
+  public mutating func clearCoco() {self._coco = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _clarifaiDataProtobuf: Clarifai_Api_DatasetVersionExport? = nil
+  fileprivate var _clarifaiDataJson: Clarifai_Api_DatasetVersionExport? = nil
+  fileprivate var _coco: Clarifai_Api_DatasetVersionExport? = nil
 }
 
 /// DatasetVersionExport contains metadata for a single dataset version export.
@@ -3692,32 +3694,44 @@ public struct Clarifai_Api_DatasetVersionExport {
   // methods supported on all messages.
 
   /// format is the format of the dataset version export.
-  public var format: Clarifai_Api_DatasetVersionExportFormat = .notSet
+  public var format: Clarifai_Api_DatasetVersionExportFormat {
+    get {return _storage._format}
+    set {_uniqueStorage()._format = newValue}
+  }
 
   /// status is the current status of the dataset version export.
   public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
+  public var hasStatus: Bool {return _storage._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
   /// url is the URL from where the dataset version export can be downloaded.
-  public var url: String = String()
+  public var url: String {
+    get {return _storage._url}
+    set {_uniqueStorage()._url = newValue}
+  }
 
   /// size is the size of the dataset version export in number of bytes.
-  public var size: UInt64 = 0
+  public var size: UInt64 {
+    get {return _storage._size}
+    set {_uniqueStorage()._size = newValue}
+  }
 
   /// whether to include embeddings in the export or not.
-  public var includeEmbeddings: Bool = false
+  public var includeEmbeddings: Bool {
+    get {return _storage._includeEmbeddings}
+    set {_uniqueStorage()._includeEmbeddings = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// DatasetVersionProcessingInfo contains information about processing applied
@@ -14776,19 +14790,73 @@ extension Clarifai_Api_DatasetVersionExportInfo: SwiftProtobuf.Message, SwiftPro
     2: .same(proto: "coco"),
   ]
 
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._clarifaiDataProtobuf) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._coco) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._clarifaiDataJson) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._clarifaiDataProtobuf {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._coco {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._clarifaiDataJson {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_DatasetVersionExportInfo, rhs: Clarifai_Api_DatasetVersionExportInfo) -> Bool {
+    if lhs._clarifaiDataProtobuf != rhs._clarifaiDataProtobuf {return false}
+    if lhs._clarifaiDataJson != rhs._clarifaiDataJson {return false}
+    if lhs._coco != rhs._coco {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_DatasetVersionExport: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DatasetVersionExport"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "format"),
+    2: .same(proto: "status"),
+    3: .same(proto: "url"),
+    4: .same(proto: "size"),
+    5: .standard(proto: "include_embeddings"),
+  ]
+
   fileprivate class _StorageClass {
-    var _clarifaiDataProtobuf: Clarifai_Api_DatasetVersionExport? = nil
-    var _clarifaiDataJson: Clarifai_Api_DatasetVersionExport? = nil
-    var _coco: Clarifai_Api_DatasetVersionExport? = nil
+    var _format: Clarifai_Api_DatasetVersionExportFormat = .notSet
+    var _status: Clarifai_Api_Status_Status? = nil
+    var _url: String = String()
+    var _size: UInt64 = 0
+    var _includeEmbeddings: Bool = false
 
     static let defaultInstance = _StorageClass()
 
     private init() {}
 
     init(copying source: _StorageClass) {
-      _clarifaiDataProtobuf = source._clarifaiDataProtobuf
-      _clarifaiDataJson = source._clarifaiDataJson
-      _coco = source._coco
+      _format = source._format
+      _status = source._status
+      _url = source._url
+      _size = source._size
+      _includeEmbeddings = source._includeEmbeddings
     }
   }
 
@@ -14807,9 +14875,11 @@ extension Clarifai_Api_DatasetVersionExportInfo: SwiftProtobuf.Message, SwiftPro
         // allocates stack space for every case branch when no optimizations are
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
-        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._clarifaiDataProtobuf) }()
-        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._coco) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._clarifaiDataJson) }()
+        case 1: try { try decoder.decodeSingularEnumField(value: &_storage._format) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._url) }()
+        case 4: try { try decoder.decodeSingularUInt64Field(value: &_storage._size) }()
+        case 5: try { try decoder.decodeSingularBoolField(value: &_storage._includeEmbeddings) }()
         default: break
         }
       }
@@ -14822,91 +14892,39 @@ extension Clarifai_Api_DatasetVersionExportInfo: SwiftProtobuf.Message, SwiftPro
       // allocates stack space for every if/case branch local when no optimizations
       // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
       // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._clarifaiDataProtobuf {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-      } }()
-      try { if let v = _storage._coco {
+      if _storage._format != .notSet {
+        try visitor.visitSingularEnumField(value: _storage._format, fieldNumber: 1)
+      }
+      try { if let v = _storage._status {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
       } }()
-      try { if let v = _storage._clarifaiDataJson {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_DatasetVersionExportInfo, rhs: Clarifai_Api_DatasetVersionExportInfo) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._clarifaiDataProtobuf != rhs_storage._clarifaiDataProtobuf {return false}
-        if _storage._clarifaiDataJson != rhs_storage._clarifaiDataJson {return false}
-        if _storage._coco != rhs_storage._coco {return false}
-        return true
+      if !_storage._url.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._url, fieldNumber: 3)
       }
-      if !storagesAreEqual {return false}
-    }
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_DatasetVersionExport: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DatasetVersionExport"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "format"),
-    2: .same(proto: "status"),
-    3: .same(proto: "url"),
-    4: .same(proto: "size"),
-    5: .standard(proto: "include_embeddings"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularEnumField(value: &self.format) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.url) }()
-      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.size) }()
-      case 5: try { try decoder.decodeSingularBoolField(value: &self.includeEmbeddings) }()
-      default: break
+      if _storage._size != 0 {
+        try visitor.visitSingularUInt64Field(value: _storage._size, fieldNumber: 4)
       }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if self.format != .notSet {
-      try visitor.visitSingularEnumField(value: self.format, fieldNumber: 1)
-    }
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    if !self.url.isEmpty {
-      try visitor.visitSingularStringField(value: self.url, fieldNumber: 3)
-    }
-    if self.size != 0 {
-      try visitor.visitSingularUInt64Field(value: self.size, fieldNumber: 4)
-    }
-    if self.includeEmbeddings != false {
-      try visitor.visitSingularBoolField(value: self.includeEmbeddings, fieldNumber: 5)
+      if _storage._includeEmbeddings != false {
+        try visitor.visitSingularBoolField(value: _storage._includeEmbeddings, fieldNumber: 5)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_DatasetVersionExport, rhs: Clarifai_Api_DatasetVersionExport) -> Bool {
-    if lhs.format != rhs.format {return false}
-    if lhs._status != rhs._status {return false}
-    if lhs.url != rhs.url {return false}
-    if lhs.size != rhs.size {return false}
-    if lhs.includeEmbeddings != rhs.includeEmbeddings {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._format != rhs_storage._format {return false}
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._url != rhs_storage._url {return false}
+        if _storage._size != rhs_storage._size {return false}
+        if _storage._includeEmbeddings != rhs_storage._includeEmbeddings {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
