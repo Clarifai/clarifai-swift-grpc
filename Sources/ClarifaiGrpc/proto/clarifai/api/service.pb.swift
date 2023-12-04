@@ -2906,21 +2906,21 @@ public struct Clarifai_Api_MultiDatasetInputResponse {
 
   public var datasetInputs: [Clarifai_Api_DatasetInput] = []
 
-  public var datasetInputsSearchAddJob: Clarifai_Api_DatasetInputsSearchAddJob {
-    get {return _datasetInputsSearchAddJob ?? Clarifai_Api_DatasetInputsSearchAddJob()}
-    set {_datasetInputsSearchAddJob = newValue}
+  public var bulkOperation: Clarifai_Api_BulkOperation {
+    get {return _bulkOperation ?? Clarifai_Api_BulkOperation()}
+    set {_bulkOperation = newValue}
   }
-  /// Returns true if `datasetInputsSearchAddJob` has been explicitly set.
-  public var hasDatasetInputsSearchAddJob: Bool {return self._datasetInputsSearchAddJob != nil}
-  /// Clears the value of `datasetInputsSearchAddJob`. Subsequent reads from it will return its default value.
-  public mutating func clearDatasetInputsSearchAddJob() {self._datasetInputsSearchAddJob = nil}
+  /// Returns true if `bulkOperation` has been explicitly set.
+  public var hasBulkOperation: Bool {return self._bulkOperation != nil}
+  /// Clears the value of `bulkOperation`. Subsequent reads from it will return its default value.
+  public mutating func clearBulkOperation() {self._bulkOperation = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _datasetInputsSearchAddJob: Clarifai_Api_DatasetInputsSearchAddJob? = nil
+  fileprivate var _bulkOperation: Clarifai_Api_BulkOperation? = nil
 }
 
 /// SingleDatasetInputResponse
@@ -3278,60 +3278,6 @@ public struct Clarifai_Api_SingleDatasetVersionResponse {
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
   fileprivate var _datasetVersion: Clarifai_Api_DatasetVersion? = nil
-}
-
-public struct Clarifai_Api_GetDatasetInputsSearchAddJobRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  public var jobID: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-public struct Clarifai_Api_SingleDatasetInputsSearchAddJobResponse {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
-
-  public var job: Clarifai_Api_DatasetInputsSearchAddJob {
-    get {return _job ?? Clarifai_Api_DatasetInputsSearchAddJob()}
-    set {_job = newValue}
-  }
-  /// Returns true if `job` has been explicitly set.
-  public var hasJob: Bool {return self._job != nil}
-  /// Clears the value of `job`. Subsequent reads from it will return its default value.
-  public mutating func clearJob() {self._job = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _job: Clarifai_Api_DatasetInputsSearchAddJob? = nil
 }
 
 /////////////////////////////////////////////////////
@@ -14761,7 +14707,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .standard(proto: "dataset_inputs"),
-    3: .standard(proto: "dataset_inputs_search_add_job"),
+    4: .standard(proto: "bulk_operation"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14772,7 +14718,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.datasetInputs) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._datasetInputsSearchAddJob) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._bulkOperation) }()
       default: break
       }
     }
@@ -14789,8 +14735,8 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
     if !self.datasetInputs.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.datasetInputs, fieldNumber: 2)
     }
-    try { if let v = self._datasetInputsSearchAddJob {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    try { if let v = self._bulkOperation {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -14798,7 +14744,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
   public static func ==(lhs: Clarifai_Api_MultiDatasetInputResponse, rhs: Clarifai_Api_MultiDatasetInputResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.datasetInputs != rhs.datasetInputs {return false}
-    if lhs._datasetInputsSearchAddJob != rhs._datasetInputsSearchAddJob {return false}
+    if lhs._bulkOperation != rhs._bulkOperation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -15393,90 +15339,6 @@ extension Clarifai_Api_SingleDatasetVersionResponse: SwiftProtobuf.Message, Swif
   public static func ==(lhs: Clarifai_Api_SingleDatasetVersionResponse, rhs: Clarifai_Api_SingleDatasetVersionResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._datasetVersion != rhs._datasetVersion {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_GetDatasetInputsSearchAddJobRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".GetDatasetInputsSearchAddJobRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "job_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.jobID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.jobID.isEmpty {
-      try visitor.visitSingularStringField(value: self.jobID, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_GetDatasetInputsSearchAddJobRequest, rhs: Clarifai_Api_GetDatasetInputsSearchAddJobRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.jobID != rhs.jobID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_SingleDatasetInputsSearchAddJobResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".SingleDatasetInputsSearchAddJobResponse"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "job"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._job) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._job {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_SingleDatasetInputsSearchAddJobResponse, rhs: Clarifai_Api_SingleDatasetInputsSearchAddJobResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs._job != rhs._job {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

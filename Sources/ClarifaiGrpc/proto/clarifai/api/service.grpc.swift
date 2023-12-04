@@ -990,11 +990,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>
 
-  func getDatasetInputsSearchAddJob(
-    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
-
   func listNextTaskAssignments(
     _ request: Clarifai_Api_ListNextTaskAssignmentsRequest,
     callOptions: CallOptions?
@@ -4619,24 +4614,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a specific job.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetDatasetInputsSearchAddJob.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getDatasetInputsSearchAddJob(
-    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetDatasetInputsSearchAddJob",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? []
-    )
-  }
-
   /// List next non-labeled and unassigned inputs from task's dataset
   ///
   /// - Parameters:
@@ -5629,9 +5606,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteBulkOperations'.
   func makeDeleteBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'getDatasetInputsSearchAddJob'.
-  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
-
   /// - Returns: Interceptors to use when invoking 'listNextTaskAssignments'.
   func makeListNextTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
 
@@ -6344,9 +6318,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// delete one or more terminated bulk operations
   func deleteBulkOperations(request: Clarifai_Api_DeleteBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// Get a specific job.
-  func getDatasetInputsSearchAddJob(request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
 
   /// List next non-labeled and unassigned inputs from task's dataset
   func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
@@ -8164,15 +8135,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteBulkOperations(request:context:)
       )
 
-    case "GetDatasetInputsSearchAddJob":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetInputsSearchAddJobRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>(),
-        interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? [],
-        userFunction: self.getDatasetInputsSearchAddJob(request:context:)
-      )
-
     case "ListNextTaskAssignments":
       return UnaryServerHandler(
         context: context,
@@ -9146,10 +9108,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteBulkOperations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getDatasetInputsSearchAddJob'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
 
   /// - Returns: Interceptors to use when handling 'listNextTaskAssignments'.
   ///   Defaults to calling `self.makeInterceptors()`.

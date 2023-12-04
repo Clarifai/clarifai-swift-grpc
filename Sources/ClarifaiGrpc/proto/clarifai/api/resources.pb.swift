@@ -4714,7 +4714,7 @@ public struct Clarifai_Api_ModelTypeField {
     /// To pass a string downstream, that is encrypted in the DB and API.
     case encryptedString // = 21
 
-    /// For selecting a model version of the same model type to resume training from. 
+    /// For selecting a model version of the same model type to resume training from.
     case checkpointModel // = 22
     case UNRECOGNIZED(Int)
 
@@ -8740,70 +8740,6 @@ public struct Clarifai_Api_StatValueAggregateQuery {
 
   fileprivate var _startTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-}
-
-public struct Clarifai_Api_DatasetInputsSearchAddJob {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The id of this job
-  public var id: String {
-    get {return _storage._id}
-    set {_uniqueStorage()._id = newValue}
-  }
-
-  /// When the job was created.
-  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_uniqueStorage()._createdAt = newValue}
-  }
-  /// Returns true if `createdAt` has been explicitly set.
-  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
-  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
-  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
-
-  /// When the job was last modified.
-  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_uniqueStorage()._modifiedAt = newValue}
-  }
-  /// Returns true if `modifiedAt` has been explicitly set.
-  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
-  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
-  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
-
-  /// Status of the job and rough estimated progress
-  public var status: Clarifai_Api_Status_Status {
-    get {return _storage._status ?? Clarifai_Api_Status_Status()}
-    set {_uniqueStorage()._status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return _storage._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {_uniqueStorage()._status = nil}
-
-  /// Dataset which will receive inputs
-  public var datasetID: String {
-    get {return _storage._datasetID}
-    set {_uniqueStorage()._datasetID = newValue}
-  }
-
-  /// The search that the job uses
-  public var search: Clarifai_Api_Search {
-    get {return _storage._search ?? Clarifai_Api_Search()}
-    set {_uniqueStorage()._search = newValue}
-  }
-  /// Returns true if `search` has been explicitly set.
-  public var hasSearch: Bool {return _storage._search != nil}
-  /// Clears the value of `search`. Subsequent reads from it will return its default value.
-  public mutating func clearSearch() {_uniqueStorage()._search = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// PCAProjectionComparator
@@ -21773,114 +21709,6 @@ extension Clarifai_Api_StatValueAggregateQuery: SwiftProtobuf.Message, SwiftProt
     if lhs.statTimeAggType != rhs.statTimeAggType {return false}
     if lhs._startTime != rhs._startTime {return false}
     if lhs._endTime != rhs._endTime {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_DatasetInputsSearchAddJob: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DatasetInputsSearchAddJob"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .standard(proto: "created_at"),
-    3: .standard(proto: "modified_at"),
-    4: .same(proto: "status"),
-    5: .standard(proto: "dataset_id"),
-    6: .same(proto: "search"),
-  ]
-
-  fileprivate class _StorageClass {
-    var _id: String = String()
-    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _status: Clarifai_Api_Status_Status? = nil
-    var _datasetID: String = String()
-    var _search: Clarifai_Api_Search? = nil
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _id = source._id
-      _createdAt = source._createdAt
-      _modifiedAt = source._modifiedAt
-      _status = source._status
-      _datasetID = source._datasetID
-      _search = source._search
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
-        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
-        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
-        case 5: try { try decoder.decodeSingularStringField(value: &_storage._datasetID) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._search) }()
-        default: break
-        }
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      if !_storage._id.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
-      }
-      try { if let v = _storage._createdAt {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-      } }()
-      try { if let v = _storage._modifiedAt {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-      try { if let v = _storage._status {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-      } }()
-      if !_storage._datasetID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._datasetID, fieldNumber: 5)
-      }
-      try { if let v = _storage._search {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-      } }()
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_DatasetInputsSearchAddJob, rhs: Clarifai_Api_DatasetInputsSearchAddJob) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._id != rhs_storage._id {return false}
-        if _storage._createdAt != rhs_storage._createdAt {return false}
-        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
-        if _storage._status != rhs_storage._status {return false}
-        if _storage._datasetID != rhs_storage._datasetID {return false}
-        if _storage._search != rhs_storage._search {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
