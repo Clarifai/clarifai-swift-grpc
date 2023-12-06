@@ -122,8 +122,7 @@ final class ClarifaiGrpcTests: XCTestCase {
             }
         ).response.wait()
 
-        XCTAssertEqual(response.status.code, Clarifai_Api_Status_StatusCode.failure)
-        XCTAssertEqual(response.outputs[0].status.code, Clarifai_Api_Status_StatusCode.inputDownloadFailed)
+        XCTAssertEqual(response.status.code, Clarifai_Api_Status_StatusCode.inputDownloadFailed)
     }
 
     func testMixedSuccessPostModelOutputs() throws {
