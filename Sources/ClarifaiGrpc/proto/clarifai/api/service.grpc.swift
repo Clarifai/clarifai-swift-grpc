@@ -160,6 +160,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>
 
+  func listAnnotationWorkers(
+    _ request: Clarifai_Api_ListAnnotationWorkersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>
+
   func getInputCount(
     _ request: Clarifai_Api_GetInputCountRequest,
     callOptions: CallOptions?
@@ -985,11 +990,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>
 
-  func getDatasetInputsSearchAddJob(
-    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
-
   func listNextTaskAssignments(
     _ request: Clarifai_Api_ListNextTaskAssignmentsRequest,
     callOptions: CallOptions?
@@ -1094,6 +1094,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostRunnerItemOutputsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>
+
+  func postModelVersionsTrainingTimeEstimate(
+    _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -1571,6 +1576,25 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// ListAnnotationWorkers lists users, models, and workflows (collectively
+  /// known as "workers") that have added annotations to the application.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListAnnotationWorkers.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listAnnotationWorkers(
+    _ request: Clarifai_Api_ListAnnotationWorkersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListAnnotationWorkers",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationWorkersInterceptors() ?? []
     )
   }
 
@@ -4590,24 +4614,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a specific job.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetDatasetInputsSearchAddJob.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getDatasetInputsSearchAddJob(
-    _ request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetDatasetInputsSearchAddJob",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? []
-    )
-  }
-
   /// List next non-labeled and unassigned inputs from task's dataset
   ///
   /// - Parameters:
@@ -5002,6 +5008,24 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePostRunnerItemOutputsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostModelVersionsTrainingTimeEstimate
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModelVersionsTrainingTimeEstimate.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModelVersionsTrainingTimeEstimate(
+    _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModelVersionsTrainingTimeEstimate",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsTrainingTimeEstimateInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -5083,6 +5107,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postAnnotationsSearches'.
   func makePostAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listAnnotationWorkers'.
+  func makeListAnnotationWorkersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getInputCount'.
   func makeGetInputCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInputCountRequest, Clarifai_Api_SingleInputCountResponse>]
@@ -5579,9 +5606,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteBulkOperations'.
   func makeDeleteBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'getDatasetInputsSearchAddJob'.
-  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
-
   /// - Returns: Interceptors to use when invoking 'listNextTaskAssignments'.
   func makeListNextTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
 
@@ -5644,6 +5668,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postRunnerItemOutputs'.
   func makePostRunnerItemOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
+  func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -5754,6 +5781,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Execute a search over annotations
   func postAnnotationsSearches(request: Clarifai_Api_PostAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
+
+  /// ListAnnotationWorkers lists users, models, and workflows (collectively
+  /// known as "workers") that have added annotations to the application.
+  func listAnnotationWorkers(request: Clarifai_Api_ListAnnotationWorkersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkerResponse>
 
   /// Get input count per status.
   func getInputCount(request: Clarifai_Api_GetInputCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInputCountResponse>
@@ -6288,9 +6319,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// delete one or more terminated bulk operations
   func deleteBulkOperations(request: Clarifai_Api_DeleteBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
-  /// Get a specific job.
-  func getDatasetInputsSearchAddJob(request: Clarifai_Api_GetDatasetInputsSearchAddJobRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>
-
   /// List next non-labeled and unassigned inputs from task's dataset
   func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
@@ -6365,6 +6393,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Post back outputs from remote runners
   func postRunnerItemOutputs(request: Clarifai_Api_PostRunnerItemOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemOutputResponse>
+
+  func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -6609,6 +6639,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
         interceptors: self.interceptors?.makePostAnnotationsSearchesInterceptors() ?? [],
         userFunction: self.postAnnotationsSearches(request:context:)
+      )
+
+    case "ListAnnotationWorkers":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationWorkersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkerResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationWorkersInterceptors() ?? [],
+        userFunction: self.listAnnotationWorkers(request:context:)
       )
 
     case "GetInputCount":
@@ -8096,15 +8135,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteBulkOperations(request:context:)
       )
 
-    case "GetDatasetInputsSearchAddJob":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDatasetInputsSearchAddJobRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>(),
-        interceptors: self.interceptors?.makeGetDatasetInputsSearchAddJobInterceptors() ?? [],
-        userFunction: self.getDatasetInputsSearchAddJob(request:context:)
-      )
-
     case "ListNextTaskAssignments":
       return UnaryServerHandler(
         context: context,
@@ -8294,6 +8324,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postRunnerItemOutputs(request:context:)
       )
 
+    case "PostModelVersionsTrainingTimeEstimate":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTrainingTimeEstimateResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsTrainingTimeEstimateInterceptors() ?? [],
+        userFunction: self.postModelVersionsTrainingTimeEstimate(request:context:)
+      )
+
     default:
       return nil
     }
@@ -8405,6 +8444,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postAnnotationsSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotationWorkers'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationWorkersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationWorkersRequest, Clarifai_Api_MultiWorkerResponse>]
 
   /// - Returns: Interceptors to use when handling 'getInputCount'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -9066,10 +9109,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteBulkOperationRequest, Clarifai_Api_Status_BaseResponse>]
 
-  /// - Returns: Interceptors to use when handling 'getDatasetInputsSearchAddJob'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetDatasetInputsSearchAddJobInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDatasetInputsSearchAddJobRequest, Clarifai_Api_SingleDatasetInputsSearchAddJobResponse>]
-
   /// - Returns: Interceptors to use when handling 'listNextTaskAssignments'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListNextTaskAssignmentsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
@@ -9153,4 +9192,8 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postRunnerItemOutputs'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostRunnerItemOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelVersionsTrainingTimeEstimate'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 }

@@ -261,15 +261,20 @@ public struct Clarifai_Api_PatchAnnotationsStatusRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  /// Annotation Status code
-  public var statusCode: Clarifai_Api_Status_StatusCode = .zero
-
+  /// Filter by user IDs
   public var userIds: [String] = []
 
+  /// Filter by task ID
   public var taskID: String = String()
+
+  /// Filter by Status codes
+  public var statusCodes: [Clarifai_Api_Status_StatusCode] = []
 
   /// 'overwrite' is supported
   public var action: String = String()
+
+  /// Update filtered annotations to this status
+  public var statusCode: Clarifai_Api_Status_StatusCode = .zero
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -419,6 +424,67 @@ public struct Clarifai_Api_MultiAnnotationResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// ListAnnotationWorkersRequest
+public struct Clarifai_Api_ListAnnotationWorkersRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
+  /// Defaults to 1.
+  public var page: UInt32 = 0
+
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
+  /// to 128.
+  public var perPage: UInt32 = 0
+
+  /// (optional URL parameter) List of additional fields to be included in the response.
+  /// Currently supported: all, names
+  public var additionalFields: [String] = []
+
+  /// (optional URL parameter) Only list workers that have created trusted annotations.
+  public var trustedOnly: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// MultiWorkerResponse
+public struct Clarifai_Api_MultiWorkerResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var workers: [Clarifai_Api_Worker] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// GetAppRequest
 public struct Clarifai_Api_GetAppRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -467,7 +533,10 @@ public struct Clarifai_Api_ListAppsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
-  /// Sorting opitons:
+  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars
+  public var additionalFields: [String] = []
+
+  /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool = false
 
@@ -511,21 +580,42 @@ public struct Clarifai_Api_ListAppsRequest {
   }
 
   /// Filtering options:
-  /// Query various text fields that can contain the words in the query string
-  public var query: String = String()
-
-  /// Filter by the name of the app. This supports wilcard queries like "gen*" to match "general" as an example.
-  /// Deprecated in favor of query
-  public var name: String = String()
-
   /// If true, we only return apps that are handpicked by clarifai staff
   public var featuredOnly: Bool = false
 
   /// If true, we only return apps that are starred by the requesting user
   public var starredOnly: Bool = false
 
-  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars
-  public var additionalFields: [String] = []
+  /// If true, we only return apps that are marked as a template by the app owner.
+  public var templateOnly: Bool = false
+
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the application:
+  ///   - id
+  ///   - name
+  ///   - description
+  ///   - notes
+  ///   - user_id (unless user_app_id.user_id is already set)
+  ///
+  /// Keywords are both normalized for search (so searching for "satisfy" matches "satisfied")
+  /// and used for partial prefix-matching (so searching for "clari" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String = String()
+
+  /// Query various text fields (id, name, description, and notes) that can contain the words in the query string
+  /// Deprecated: use search instead.
+  public var query: String = String()
+
+  /// Filter by the id, name and notes of the app. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated: use search instead.
+  public var name: String = String()
+
+  /// Filter by the user-unique-id of the app. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated: use search instead.
+  public var id: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -637,7 +727,10 @@ public struct Clarifai_Api_PatchAppsRequest {
   public var apps: [Clarifai_Api_App] = []
 
   /// The action to perform on the patched App objects except App.Metadata
-  /// For now only action 'overwrite' is supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the app image by setting
+  /// 'image.url' in the request to the current value returned for that app.
   public var action: String = String()
 
   /// The action to perform on the patched App.Metadata
@@ -686,7 +779,10 @@ public struct Clarifai_Api_PatchAppRequest {
   public mutating func clearApp() {self._app = nil}
 
   /// The action to perform on the patched App object except App.Metadata
-  /// For now only action 'overwrite' is supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the app image by setting
+  /// 'image.url' in the request to the current value returned for the app.
   public var action: String = String()
 
   /// The action to perform on the patched App.Metadata
@@ -970,11 +1066,29 @@ public struct Clarifai_Api_MultiCollaboratorsResponse {
 
   public var collaborators: [Clarifai_Api_Collaborator] = []
 
+  /// The owner of the application.
+  ///
+  /// When listing users that have access to the application, i.e. collaborators,
+  /// it is often relevant to also include the application owner, so return
+  /// their information here for convenience.
+  ///
+  /// Note: app_owner is only returned by ListCollaborators and only if the
+  /// owner is a regular user, not an organization.
+  public var appOwner: Clarifai_Api_User {
+    get {return _appOwner ?? Clarifai_Api_User()}
+    set {_appOwner = newValue}
+  }
+  /// Returns true if `appOwner` has been explicitly set.
+  public var hasAppOwner: Bool {return self._appOwner != nil}
+  /// Clears the value of `appOwner`. Subsequent reads from it will return its default value.
+  public mutating func clearAppOwner() {self._appOwner = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _appOwner: Clarifai_Api_User? = nil
 }
 
 /// ListCollaborationsRequest
@@ -999,6 +1113,10 @@ public struct Clarifai_Api_ListCollaborationsRequest {
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
   /// to 128.
   public var perPage: UInt32 = 0
+
+  /// Filtering options:
+  /// If true, we only return collaborations on apps that are marked as a template by the app owner.
+  public var templateOnly: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1150,6 +1268,9 @@ public struct Clarifai_Api_ListConceptsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Fuzzy match on concept ID
+  public var id: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1219,6 +1340,16 @@ public struct Clarifai_Api_PostConceptsSearchesRequest {
   /// Clears the value of `conceptQuery`. Subsequent reads from it will return its default value.
   public mutating func clearConceptQuery() {self._conceptQuery = nil}
 
+  /// Request additional info to be retrieved for each concept in the response.
+  public var extraInfo: Clarifai_Api_ConceptExtraInfoRequest {
+    get {return _extraInfo ?? Clarifai_Api_ConceptExtraInfoRequest()}
+    set {_extraInfo = newValue}
+  }
+  /// Returns true if `extraInfo` has been explicitly set.
+  public var hasExtraInfo: Bool {return self._extraInfo != nil}
+  /// Clears the value of `extraInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearExtraInfo() {self._extraInfo = nil}
+
   /// Pagination parameters here since there are no url args in this
   /// POST request.
   public var pagination: Clarifai_Api_Pagination {
@@ -1236,7 +1367,36 @@ public struct Clarifai_Api_PostConceptsSearchesRequest {
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
   fileprivate var _conceptQuery: Clarifai_Api_ConceptQuery? = nil
+  fileprivate var _extraInfo: Clarifai_Api_ConceptExtraInfoRequest? = nil
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
+}
+
+public struct Clarifai_Api_ConceptExtraInfoRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Determine if the concept is searchable by rank using this model.
+  /// Currently, only embedder models are supported.
+  /// ########## Supported fields ##########
+  /// - app_id
+  /// - id
+  /// - model_version.id
+  /// - user_id
+  public var rankableModel: Clarifai_Api_Model {
+    get {return _rankableModel ?? Clarifai_Api_Model()}
+    set {_rankableModel = newValue}
+  }
+  /// Returns true if `rankableModel` has been explicitly set.
+  public var hasRankableModel: Bool {return self._rankableModel != nil}
+  /// Clears the value of `rankableModel`. Subsequent reads from it will return its default value.
+  public mutating func clearRankableModel() {self._rankableModel = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _rankableModel: Clarifai_Api_Model? = nil
 }
 
 /// PostConceptsRequest
@@ -1432,19 +1592,25 @@ public struct Clarifai_Api_ListConceptRelationsRequest {
   /// concept_id so that we can return a reliable page size always.
   ///
   /// When providing a concept_id, if a hyponym is present in the DB such as:
-  /// 'honey' (subject), 'hyponym' (predict for "is a kind of"), 'food' (object)
+  /// 'honey' (subject), 'hyponym' (predicate for "is a kind of"), 'food' (object)
   /// then you can list the concept relations for 'honey' and get hyponym predicate with 'food'
   /// object.
   /// But you can also list the concept relations for 'food' and it will return the same hyponym
-  /// relationship with 'honey' as subject and 'food' as predicate.
+  /// relationship with 'honey' as object and 'hypernym' as predicate.
   /// Synonyms by nature are symmetrical relationships so either side can be the concept_id (subject)
   /// when listing the relations.
   public var conceptID: String = String()
 
-  /// This is part of the url so we can extend to multiple link types in the future.
+  /// If predicate is provided then only list relations with that predicate.
+  ///
+  /// Note that if no subject is set in concept_id and predicate is set to
+  /// 'hypernym', then it will return any stored hyponyms as hypernyms with
+  /// just the subject and object swapped since they are reversed relations.
+  ///
   /// Valid predicates are:
-  /// 'hypernyms'
-  /// 'hyponyms'
+  /// - 'hypernym'
+  /// - 'hyponym'
+  /// - 'synonym'
   public var predicate: String = String()
 
   /// If knowledge_graph_id is provided then just list relations from that knowledge graph.
@@ -2316,11 +2482,9 @@ public struct Clarifai_Api_ListDatasetsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
-  public var starredOnly: Bool = false
-
   public var additionalFields: [String] = []
 
-  /// Sorting opitons:
+  /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool = false
 
@@ -2353,8 +2517,39 @@ public struct Clarifai_Api_ListDatasetsRequest {
     set {sortBy = .sortByModifiedAt(newValue)}
   }
 
+  /// Whether to order by the external id
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
+  }
+
+  /// Filtering options:
+  public var starredOnly: Bool = false
+
   /// Filter datasets by bookmark. If set, only return bookmarked datasets. Otherwise none bookmarked datasets only.
   public var bookmark: Bool = false
+
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the dataset:
+  ///   - id
+  ///   - description
+  ///   - notes
+  ///   - user_id (unless user_app_id.user_id is already set)
+  ///
+  /// Keywords are both normalized for search (so searching for "satisfy" matches "satisfied")
+  /// and used for partial prefix-matching (so searching for "clari" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String = String()
+
+  /// Fuzzy filter on dataset ID
+  /// Deprecated: use search instead.
+  public var id: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -2365,6 +2560,8 @@ public struct Clarifai_Api_ListDatasetsRequest {
     case sortByStarCount(Bool)
     /// If neither sort option is set to true, will sort by modified_at.
     case sortByModifiedAt(Bool)
+    /// Whether to order by the external id
+    case sortByID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy) -> Bool {
@@ -2382,6 +2579,10 @@ public struct Clarifai_Api_ListDatasetsRequest {
       }()
       case (.sortByModifiedAt, .sortByModifiedAt): return {
         guard case .sortByModifiedAt(let l) = lhs, case .sortByModifiedAt(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByID, .sortByID): return {
+        guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -2466,7 +2667,10 @@ public struct Clarifai_Api_PatchDatasetsRequest {
   public var datasets: [Clarifai_Api_Dataset] = []
 
   /// The action to perform on the patched objects
-  /// Supported values: 'overwrite' and 'merge'
+  /// Supported values: 'overwrite', 'merge', and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the dataset image by setting
+  /// 'image.url' in the request to the current value returned for that dataset.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -2702,21 +2906,21 @@ public struct Clarifai_Api_MultiDatasetInputResponse {
 
   public var datasetInputs: [Clarifai_Api_DatasetInput] = []
 
-  public var datasetInputsSearchAddJob: Clarifai_Api_DatasetInputsSearchAddJob {
-    get {return _datasetInputsSearchAddJob ?? Clarifai_Api_DatasetInputsSearchAddJob()}
-    set {_datasetInputsSearchAddJob = newValue}
+  public var bulkOperation: Clarifai_Api_BulkOperation {
+    get {return _bulkOperation ?? Clarifai_Api_BulkOperation()}
+    set {_bulkOperation = newValue}
   }
-  /// Returns true if `datasetInputsSearchAddJob` has been explicitly set.
-  public var hasDatasetInputsSearchAddJob: Bool {return self._datasetInputsSearchAddJob != nil}
-  /// Clears the value of `datasetInputsSearchAddJob`. Subsequent reads from it will return its default value.
-  public mutating func clearDatasetInputsSearchAddJob() {self._datasetInputsSearchAddJob = nil}
+  /// Returns true if `bulkOperation` has been explicitly set.
+  public var hasBulkOperation: Bool {return self._bulkOperation != nil}
+  /// Clears the value of `bulkOperation`. Subsequent reads from it will return its default value.
+  public mutating func clearBulkOperation() {self._bulkOperation = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _datasetInputsSearchAddJob: Clarifai_Api_DatasetInputsSearchAddJob? = nil
+  fileprivate var _bulkOperation: Clarifai_Api_BulkOperation? = nil
 }
 
 /// SingleDatasetInputResponse
@@ -3074,60 +3278,6 @@ public struct Clarifai_Api_SingleDatasetVersionResponse {
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
   fileprivate var _datasetVersion: Clarifai_Api_DatasetVersion? = nil
-}
-
-public struct Clarifai_Api_GetDatasetInputsSearchAddJobRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  public var jobID: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-public struct Clarifai_Api_SingleDatasetInputsSearchAddJobResponse {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
-
-  public var job: Clarifai_Api_DatasetInputsSearchAddJob {
-    get {return _job ?? Clarifai_Api_DatasetInputsSearchAddJob()}
-    set {_job = newValue}
-  }
-  /// Returns true if `job` has been explicitly set.
-  public var hasJob: Bool {return self._job != nil}
-  /// Clears the value of `job`. Subsequent reads from it will return its default value.
-  public mutating func clearJob() {self._job = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _job: Clarifai_Api_DatasetInputsSearchAddJob? = nil
 }
 
 /////////////////////////////////////////////////////
@@ -3492,6 +3642,12 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._perPage = newValue}
   }
 
+  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars, outputs, presets
+  public var additionalFields: [String] {
+    get {return _storage._additionalFields}
+    set {_uniqueStorage()._additionalFields = newValue}
+  }
+
   /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool {
@@ -3551,24 +3707,6 @@ public struct Clarifai_Api_ListModelsRequest {
   }
 
   /// Filtering options:
-  /// Query name, description and id fields, that can contain the words in the query string. Does NOT support wildcards - full words only. Supports operators "OR" and "-" as NOT.
-  public var query: String {
-    get {return _storage._query}
-    set {_uniqueStorage()._query = newValue}
-  }
-
-  /// Filter by the description and id of the model. This supports wildcard queries like "gen*" to match "general" as an example.
-  public var name: String {
-    get {return _storage._name}
-    set {_uniqueStorage()._name = newValue}
-  }
-
-  /// Extends the name filter to include the user_id of the application owner that the model belongs to.
-  public var filterByUserID: Bool {
-    get {return _storage._filterByUserID}
-    set {_uniqueStorage()._filterByUserID = newValue}
-  }
-
   /// Filter models by the specific model_type_id. See ListModelTypes for the list of ModelType.Id's
   /// supported.
   public var modelTypeID: String {
@@ -3632,12 +3770,6 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._languages = newValue}
   }
 
-  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars, outputs, presets
-  public var additionalFields: [String] {
-    get {return _storage._additionalFields}
-    set {_uniqueStorage()._additionalFields = newValue}
-  }
-
   /// Old API behavior resulted in returning clarifai main models when calling ListModels while scoped to an app. While we transition
   /// away from that, we can use this flag to not always fetch clarifai main models, unless that is the app we are explicitly listing for.
   public var dontFetchFromMain: Bool {
@@ -3651,6 +3783,46 @@ public struct Clarifai_Api_ListModelsRequest {
   public var bookmark: Bool {
     get {return _storage._bookmark}
     set {_uniqueStorage()._bookmark = newValue}
+  }
+
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the model:
+  ///   - id
+  ///   - name
+  ///   - description
+  ///   - notes
+  ///   - user_id (unless user_app_id.user_id is already set)
+  ///
+  /// Keywords are both normalized for search (so searching for "satisfy" matches "satisfied")
+  /// and used for partial prefix-matching (so searching for "clari" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String {
+    get {return _storage._search}
+    set {_uniqueStorage()._search = newValue}
+  }
+
+  /// Query name, description and id fields, that can contain the words in the query string. Does NOT support wildcards - full words only. Supports operators "OR" and "-" as NOT.
+  /// Deprecated: use search instead.
+  public var query: String {
+    get {return _storage._query}
+    set {_uniqueStorage()._query = newValue}
+  }
+
+  /// Filter by the description and id of the model. This supports wildcard queries like "gen*" to match "general" as an example.
+  /// Deprecated: use search instead.
+  public var name: String {
+    get {return _storage._name}
+    set {_uniqueStorage()._name = newValue}
+  }
+
+  /// Extends the name filter to include the user_id of the application owner that the model belongs to.
+  /// Deprecated: use search instead of name.
+  public var filterByUserID: Bool {
+    get {return _storage._filterByUserID}
+    set {_uniqueStorage()._filterByUserID = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -3734,27 +3906,44 @@ public struct Clarifai_Api_GetResourceCountsResponse {
   // methods supported on all messages.
 
   public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
+  public var hasStatus: Bool {return _storage._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
-  public var datasets: Int64 = 0
+  public var datasets: Int64 {
+    get {return _storage._datasets}
+    set {_uniqueStorage()._datasets = newValue}
+  }
 
-  public var models: Int64 = 0
+  public var models: Int64 {
+    get {return _storage._models}
+    set {_uniqueStorage()._models = newValue}
+  }
 
-  public var workflows: Int64 = 0
+  public var workflows: Int64 {
+    get {return _storage._workflows}
+    set {_uniqueStorage()._workflows = newValue}
+  }
 
-  public var modules: Int64 = 0
+  public var modules: Int64 {
+    get {return _storage._modules}
+    set {_uniqueStorage()._modules = newValue}
+  }
+
+  public var inputs: Int64 {
+    get {return _storage._inputs}
+    set {_uniqueStorage()._inputs = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct Clarifai_Api_PatchModelToolkitsRequest {
@@ -4022,6 +4211,10 @@ public struct Clarifai_Api_PatchModelsRequest {
 
   /// The action to perform on the patched objects
   /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  ///
+  /// Note that 'remove' can be used to remove the model image by setting
+  /// 'image.url' in the request to the current value returned for that model.
+  /// This cannot be used in a request that is patching other fields as well.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -4796,6 +4989,45 @@ public struct Clarifai_Api_ListEvaluationsRequest {
     set {sortBy = .sortByRecall(newValue)}
   }
 
+  public var sortByModelID: Bool {
+    get {
+      if case .sortByModelID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByModelID(newValue)}
+  }
+
+  public var sortByEvalDatasetID: Bool {
+    get {
+      if case .sortByEvalDatasetID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByEvalDatasetID(newValue)}
+  }
+
+  public var sortByTrainDatasetID: Bool {
+    get {
+      if case .sortByTrainDatasetID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByTrainDatasetID(newValue)}
+  }
+
+  /// Filter on model type id
+  public var modelTypeID: String = String()
+
+  /// Filter on dataset ID of the dataset version specified in the metric version
+  public var evalDatasetIds: [String] = []
+
+  /// Filter on dataset ID of the dataset version specified by the model version
+  public var trainDatasetIds: [String] = []
+
+  /// Filter on concept IDs specified in the modele version's output_info
+  public var conceptIds: [String] = []
+
+  /// Whether to show failed metrics, defaults to false
+  public var showFailedMetrics: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -4813,6 +5045,9 @@ public struct Clarifai_Api_ListEvaluationsRequest {
     case sortByPrecision(Bool)
     /// Whether to order by eval metric summary.macro_avg_recall
     case sortByRecall(Bool)
+    case sortByModelID(Bool)
+    case sortByEvalDatasetID(Bool)
+    case sortByTrainDatasetID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListEvaluationsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListEvaluationsRequest.OneOf_SortBy) -> Bool {
@@ -4846,6 +5081,18 @@ public struct Clarifai_Api_ListEvaluationsRequest {
       }()
       case (.sortByRecall, .sortByRecall): return {
         guard case .sortByRecall(let l) = lhs, case .sortByRecall(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByModelID, .sortByModelID): return {
+        guard case .sortByModelID(let l) = lhs, case .sortByModelID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByEvalDatasetID, .sortByEvalDatasetID): return {
+        guard case .sortByEvalDatasetID(let l) = lhs, case .sortByEvalDatasetID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByTrainDatasetID, .sortByTrainDatasetID): return {
+        guard case .sortByTrainDatasetID(let l) = lhs, case .sortByTrainDatasetID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -5631,38 +5878,46 @@ public struct Clarifai_Api_MultiScopeResponse {
 
   /// The status of the request.
   public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
+  public var hasStatus: Bool {return _storage._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
   /// This is a list of the scopes that your key has.
-  public var scopes: [String] = []
+  public var scopes: [String] {
+    get {return _storage._scopes}
+    set {_uniqueStorage()._scopes = newValue}
+  }
 
   /// The app that the key has access to.
   public var app: Clarifai_Api_App {
-    get {return _app ?? Clarifai_Api_App()}
-    set {_app = newValue}
+    get {return _storage._app ?? Clarifai_Api_App()}
+    set {_uniqueStorage()._app = newValue}
   }
   /// Returns true if `app` has been explicitly set.
-  public var hasApp: Bool {return self._app != nil}
+  public var hasApp: Bool {return _storage._app != nil}
   /// Clears the value of `app`. Subsequent reads from it will return its default value.
-  public mutating func clearApp() {self._app = nil}
+  public mutating func clearApp() {_uniqueStorage()._app = nil}
 
   /// This is a list of endpoint permissions that your key has.
-  public var endpoints: [String] = []
+  public var endpoints: [String] {
+    get {return _storage._endpoints}
+    set {_uniqueStorage()._endpoints = newValue}
+  }
 
-  public var userFeatureFlags: String = String()
+  public var userFeatureFlags: String {
+    get {return _storage._userFeatureFlags}
+    set {_uniqueStorage()._userFeatureFlags = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-  fileprivate var _app: Clarifai_Api_App? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// MultiScopeUserResponse
@@ -6679,6 +6934,9 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars
+  public var additionalFields: [String] = []
+
   /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool = false
@@ -6722,27 +6980,42 @@ public struct Clarifai_Api_ListWorkflowsRequest {
     set {sortBy = .sortByStarCount(newValue)}
   }
 
-  /// Query various text fields that can contain the words in the query string.
-  public var query: String = String()
-
-  /// Filter by the id of the workflow. This supports wilcard queries like "gen*" to match "general" as an example.
-  /// Deprecated in favor of query
-  public var id: String = String()
-
+  /// Filtering options:
   /// If true, we only return workflows that are handpicked by clarifai staff
   public var featuredOnly: Bool = false
 
   /// If true, we only return workflows that are starred by the requesting user
   public var starredOnly: Bool = false
 
-  /// (optional URL parameter) List of additional fields to be included in the response. Currently supported: all, stars
-  public var additionalFields: [String] = []
-
-  /// (optional) search_term. Full text and prefix matching on description, id, owner id. Searchable fields may be added
-  public var searchTerm: String = String()
-
   /// Filter workflows by bookmark. If set, only return bookmarked workflows. Otherwise none bookmarked workflows only.
   public var bookmark: Bool = false
+
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the workflow:
+  ///   - id
+  ///   - description
+  ///   - notes
+  ///   - user_id (unless user_app_id.user_id is already set)
+  ///
+  /// Keywords are both normalized for search (so searching for "satisfy" matches "satisfied")
+  /// and used for partial prefix-matching (so searching for "clari" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String = String()
+
+  /// Query various text fields (id, description and notes) that can contain the words in the query string.
+  /// Deprecated: use search instead.
+  public var query: String = String()
+
+  /// Filter by the id of the workflow. This supports wilcard queries like "gen*" to match "general" as an example.
+  /// Deprecated: use search instead.
+  public var id: String = String()
+
+  /// Full text and prefix matching on id, owner id, description and notes. Searchable fields may be added
+  /// Deprecated: use search instead.
+  public var searchTerm: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -6833,6 +7106,10 @@ public struct Clarifai_Api_PatchWorkflowsRequest {
 
   /// The action to perform on the patched objects
   /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  ///
+  /// Note that 'remove' can be used to remove the workflow image by setting
+  /// 'image.url' in the request to the current value returned for that workflow.
+  /// This cannot be used in a request that is patching other fields as well.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -8359,11 +8636,9 @@ public struct Clarifai_Api_ListModulesRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
-  public var starredOnly: Bool = false
-
   public var additionalFields: [String] = []
 
-  /// Sorting opitons:
+  /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool = false
 
@@ -8396,8 +8671,42 @@ public struct Clarifai_Api_ListModulesRequest {
     set {sortBy = .sortByModifiedAt(newValue)}
   }
 
+  /// Whether to order by the external id
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
+  }
+
+  /// Filtering options:
+  public var starredOnly: Bool = false
+
   /// Filter modules by bookmark. If set, only return bookmarked modules. Otherwise none bookmarked modules only.
   public var bookmark: Bool = false
+
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the module:
+  ///   - id
+  ///   - description
+  ///   - user_id (unless user_app_id.user_id is already set)
+  ///
+  /// Keywords are both normalized for search (so searching for "satisfy" matches "satisfied")
+  /// and used for partial prefix-matching (so searching for "clari" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String = String()
+
+  /// Filter by the id and description of the module. This supports wildcard queries like "gen*" to match "general" as an example.
+  /// Deprecated: use search instead.
+  public var name: String = String()
+
+  /// Filter by the application owner whose this module belongs to
+  /// Deprecated: use search instead of name.
+  public var filterByUserID: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -8408,6 +8717,8 @@ public struct Clarifai_Api_ListModulesRequest {
     case sortByStarCount(Bool)
     /// If neither sort option is set to true, will sort by modified_at.
     case sortByModifiedAt(Bool)
+    /// Whether to order by the external id
+    case sortByID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy, rhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy) -> Bool {
@@ -8425,6 +8736,10 @@ public struct Clarifai_Api_ListModulesRequest {
       }()
       case (.sortByModifiedAt, .sortByModifiedAt): return {
         guard case .sortByModifiedAt(let l) = lhs, case .sortByModifiedAt(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByID, .sortByID): return {
+        guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -8481,7 +8796,10 @@ public struct Clarifai_Api_PatchModulesRequest {
   public var modules: [Clarifai_Api_Module] = []
 
   /// The action to perform on the patched objects
-  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  /// Supported values: 'overwrite' and 'remove'.
+  ///
+  /// Note that 'remove' can only be used to remove the module image by setting
+  /// 'image.url' in the request to the current value returned for that module.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -9986,6 +10304,58 @@ public struct Clarifai_Api_MultiRunnerItemOutputResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// Get the estimated training time for a model version
+public struct Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var modelID: String = String()
+
+  public var modelVersions: [Clarifai_Api_ModelVersion] = []
+
+  public var estimatedInputCount: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// Estimated training time in seconds
+public struct Clarifai_Api_MultiTrainingTimeEstimateResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var trainingTimeEstimates: [SwiftProtobuf.Google_Protobuf_Duration] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "clarifai.api"
@@ -10283,10 +10653,11 @@ extension Clarifai_Api_PatchAnnotationsStatusRequest: SwiftProtobuf.Message, Swi
   public static let protoMessageName: String = _protobuf_package + ".PatchAnnotationsStatusRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "status_code"),
     3: .standard(proto: "user_ids"),
     4: .standard(proto: "task_id"),
+    6: .standard(proto: "status_codes"),
     5: .same(proto: "action"),
+    2: .standard(proto: "status_code"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -10300,6 +10671,7 @@ extension Clarifai_Api_PatchAnnotationsStatusRequest: SwiftProtobuf.Message, Swi
       case 3: try { try decoder.decodeRepeatedStringField(value: &self.userIds) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.taskID) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.action) }()
+      case 6: try { try decoder.decodeRepeatedEnumField(value: &self.statusCodes) }()
       default: break
       }
     }
@@ -10325,15 +10697,19 @@ extension Clarifai_Api_PatchAnnotationsStatusRequest: SwiftProtobuf.Message, Swi
     if !self.action.isEmpty {
       try visitor.visitSingularStringField(value: self.action, fieldNumber: 5)
     }
+    if !self.statusCodes.isEmpty {
+      try visitor.visitPackedEnumField(value: self.statusCodes, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PatchAnnotationsStatusRequest, rhs: Clarifai_Api_PatchAnnotationsStatusRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.statusCode != rhs.statusCode {return false}
     if lhs.userIds != rhs.userIds {return false}
     if lhs.taskID != rhs.taskID {return false}
+    if lhs.statusCodes != rhs.statusCodes {return false}
     if lhs.action != rhs.action {return false}
+    if lhs.statusCode != rhs.statusCode {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -10567,6 +10943,108 @@ extension Clarifai_Api_MultiAnnotationResponse: SwiftProtobuf.Message, SwiftProt
   }
 }
 
+extension Clarifai_Api_ListAnnotationWorkersRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListAnnotationWorkersRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "page"),
+    3: .standard(proto: "per_page"),
+    4: .standard(proto: "additional_fields"),
+    5: .standard(proto: "trusted_only"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 4: try { try decoder.decodeRepeatedStringField(value: &self.additionalFields) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self.trustedOnly) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 2)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
+    }
+    if !self.additionalFields.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.additionalFields, fieldNumber: 4)
+    }
+    if self.trustedOnly != false {
+      try visitor.visitSingularBoolField(value: self.trustedOnly, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListAnnotationWorkersRequest, rhs: Clarifai_Api_ListAnnotationWorkersRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.additionalFields != rhs.additionalFields {return false}
+    if lhs.trustedOnly != rhs.trustedOnly {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiWorkerResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiWorkerResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "workers"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.workers) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.workers.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.workers, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiWorkerResponse, rhs: Clarifai_Api_MultiWorkerResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.workers != rhs.workers {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_GetAppRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GetAppRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -10615,16 +11093,19 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    10: .standard(proto: "additional_fields"),
     5: .standard(proto: "sort_ascending"),
     6: .standard(proto: "sort_by_name"),
     7: .standard(proto: "sort_by_modified_at"),
     12: .standard(proto: "sort_by_created_at"),
     13: .standard(proto: "sort_by_star_count"),
-    8: .same(proto: "query"),
-    4: .same(proto: "name"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
-    10: .standard(proto: "additional_fields"),
+    16: .standard(proto: "template_only"),
+    15: .same(proto: "search"),
+    8: .same(proto: "query"),
+    4: .same(proto: "name"),
+    14: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -10674,6 +11155,9 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
           self.sortBy = .sortByStarCount(v)
         }
       }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 15: try { try decoder.decodeSingularStringField(value: &self.search) }()
+      case 16: try { try decoder.decodeSingularBoolField(value: &self.templateOnly) }()
       default: break
       }
     }
@@ -10733,6 +11217,15 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     }()
     default: break
     }
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 14)
+    }
+    if !self.search.isEmpty {
+      try visitor.visitSingularStringField(value: self.search, fieldNumber: 15)
+    }
+    if self.templateOnly != false {
+      try visitor.visitSingularBoolField(value: self.templateOnly, fieldNumber: 16)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -10740,13 +11233,16 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.additionalFields != rhs.additionalFields {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
-    if lhs.query != rhs.query {return false}
-    if lhs.name != rhs.name {return false}
     if lhs.featuredOnly != rhs.featuredOnly {return false}
     if lhs.starredOnly != rhs.starredOnly {return false}
-    if lhs.additionalFields != rhs.additionalFields {return false}
+    if lhs.templateOnly != rhs.templateOnly {return false}
+    if lhs.search != rhs.search {return false}
+    if lhs.query != rhs.query {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -11327,6 +11823,7 @@ extension Clarifai_Api_MultiCollaboratorsResponse: SwiftProtobuf.Message, SwiftP
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "collaborators"),
+    3: .standard(proto: "app_owner"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -11337,6 +11834,7 @@ extension Clarifai_Api_MultiCollaboratorsResponse: SwiftProtobuf.Message, SwiftP
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.collaborators) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._appOwner) }()
       default: break
       }
     }
@@ -11353,12 +11851,16 @@ extension Clarifai_Api_MultiCollaboratorsResponse: SwiftProtobuf.Message, SwiftP
     if !self.collaborators.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.collaborators, fieldNumber: 2)
     }
+    try { if let v = self._appOwner {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiCollaboratorsResponse, rhs: Clarifai_Api_MultiCollaboratorsResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.collaborators != rhs.collaborators {return false}
+    if lhs._appOwner != rhs._appOwner {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -11370,6 +11872,7 @@ extension Clarifai_Api_ListCollaborationsRequest: SwiftProtobuf.Message, SwiftPr
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    4: .standard(proto: "template_only"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -11381,6 +11884,7 @@ extension Clarifai_Api_ListCollaborationsRequest: SwiftProtobuf.Message, SwiftPr
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.templateOnly) }()
       default: break
       }
     }
@@ -11400,6 +11904,9 @@ extension Clarifai_Api_ListCollaborationsRequest: SwiftProtobuf.Message, SwiftPr
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
+    if self.templateOnly != false {
+      try visitor.visitSingularBoolField(value: self.templateOnly, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -11407,6 +11914,7 @@ extension Clarifai_Api_ListCollaborationsRequest: SwiftProtobuf.Message, SwiftPr
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.templateOnly != rhs.templateOnly {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -11631,6 +12139,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    4: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -11642,6 +12151,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -11661,6 +12171,9 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 3)
     }
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -11668,6 +12181,7 @@ extension Clarifai_Api_ListConceptsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -11738,6 +12252,7 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "concept_query"),
+    4: .standard(proto: "extra_info"),
     3: .same(proto: "pagination"),
   ]
 
@@ -11750,6 +12265,7 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._conceptQuery) }()
       case 3: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._extraInfo) }()
       default: break
       }
     }
@@ -11769,13 +12285,53 @@ extension Clarifai_Api_PostConceptsSearchesRequest: SwiftProtobuf.Message, Swift
     try { if let v = self._pagination {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     } }()
+    try { if let v = self._extraInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostConceptsSearchesRequest, rhs: Clarifai_Api_PostConceptsSearchesRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs._conceptQuery != rhs._conceptQuery {return false}
+    if lhs._extraInfo != rhs._extraInfo {return false}
     if lhs._pagination != rhs._pagination {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ConceptExtraInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ConceptExtraInfoRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "rankable_model"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._rankableModel) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._rankableModel {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ConceptExtraInfoRequest, rhs: Clarifai_Api_ConceptExtraInfoRequest) -> Bool {
+    if lhs._rankableModel != rhs._rankableModel {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -13545,13 +14101,16 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
-    4: .standard(proto: "starred_only"),
     5: .standard(proto: "additional_fields"),
     6: .standard(proto: "sort_ascending"),
     7: .standard(proto: "sort_by_created_at"),
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
+    11: .standard(proto: "sort_by_id"),
+    4: .standard(proto: "starred_only"),
     10: .same(proto: "bookmark"),
+    13: .same(proto: "search"),
+    12: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -13591,6 +14150,16 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
         }
       }()
       case 10: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
+      case 11: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByID(v)
+        }
+      }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 13: try { try decoder.decodeSingularStringField(value: &self.search) }()
       default: break
       }
     }
@@ -13632,10 +14201,19 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
       guard case .sortByModifiedAt(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 9)
     }()
-    case nil: break
+    default: break
     }
     if self.bookmark != false {
       try visitor.visitSingularBoolField(value: self.bookmark, fieldNumber: 10)
+    }
+    try { if case .sortByID(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+    } }()
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 12)
+    }
+    if !self.search.isEmpty {
+      try visitor.visitSingularStringField(value: self.search, fieldNumber: 13)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -13644,11 +14222,13 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
-    if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.additionalFields != rhs.additionalFields {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs.search != rhs.search {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -14127,7 +14707,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .standard(proto: "dataset_inputs"),
-    3: .standard(proto: "dataset_inputs_search_add_job"),
+    4: .standard(proto: "bulk_operation"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14138,7 +14718,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.datasetInputs) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._datasetInputsSearchAddJob) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._bulkOperation) }()
       default: break
       }
     }
@@ -14155,8 +14735,8 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
     if !self.datasetInputs.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.datasetInputs, fieldNumber: 2)
     }
-    try { if let v = self._datasetInputsSearchAddJob {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    try { if let v = self._bulkOperation {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -14164,7 +14744,7 @@ extension Clarifai_Api_MultiDatasetInputResponse: SwiftProtobuf.Message, SwiftPr
   public static func ==(lhs: Clarifai_Api_MultiDatasetInputResponse, rhs: Clarifai_Api_MultiDatasetInputResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.datasetInputs != rhs.datasetInputs {return false}
-    if lhs._datasetInputsSearchAddJob != rhs._datasetInputsSearchAddJob {return false}
+    if lhs._bulkOperation != rhs._bulkOperation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -14759,90 +15339,6 @@ extension Clarifai_Api_SingleDatasetVersionResponse: SwiftProtobuf.Message, Swif
   public static func ==(lhs: Clarifai_Api_SingleDatasetVersionResponse, rhs: Clarifai_Api_SingleDatasetVersionResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._datasetVersion != rhs._datasetVersion {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_GetDatasetInputsSearchAddJobRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".GetDatasetInputsSearchAddJobRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "job_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.jobID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.jobID.isEmpty {
-      try visitor.visitSingularStringField(value: self.jobID, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_GetDatasetInputsSearchAddJobRequest, rhs: Clarifai_Api_GetDatasetInputsSearchAddJobRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.jobID != rhs.jobID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_SingleDatasetInputsSearchAddJobResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".SingleDatasetInputsSearchAddJobResponse"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "job"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._job) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._job {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_SingleDatasetInputsSearchAddJobResponse, rhs: Clarifai_Api_SingleDatasetInputsSearchAddJobResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs._job != rhs._job {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -15446,15 +15942,13 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    19: .standard(proto: "additional_fields"),
     10: .standard(proto: "sort_ascending"),
     11: .standard(proto: "sort_by_name"),
     12: .standard(proto: "sort_by_num_inputs"),
     13: .standard(proto: "sort_by_modified_at"),
     24: .standard(proto: "sort_by_created_at"),
     25: .standard(proto: "sort_by_star_count"),
-    14: .same(proto: "query"),
-    5: .same(proto: "name"),
-    22: .standard(proto: "filter_by_user_id"),
     6: .standard(proto: "model_type_id"),
     7: .standard(proto: "trained_only"),
     8: .standard(proto: "input_fields"),
@@ -15465,20 +15959,21 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     17: .same(proto: "toolkits"),
     18: .standard(proto: "use_cases"),
     21: .same(proto: "languages"),
-    19: .standard(proto: "additional_fields"),
     23: .standard(proto: "dont_fetch_from_main"),
     26: .same(proto: "bookmark"),
+    27: .same(proto: "search"),
+    14: .same(proto: "query"),
+    5: .same(proto: "name"),
+    22: .standard(proto: "filter_by_user_id"),
   ]
 
   fileprivate class _StorageClass {
     var _userAppID: Clarifai_Api_UserAppIDSet? = nil
     var _page: UInt32 = 0
     var _perPage: UInt32 = 0
+    var _additionalFields: [String] = []
     var _sortAscending: Bool = false
     var _sortBy: Clarifai_Api_ListModelsRequest.OneOf_SortBy?
-    var _query: String = String()
-    var _name: String = String()
-    var _filterByUserID: Bool = false
     var _modelTypeID: String = String()
     var _trainedOnly: Bool = false
     var _inputFields: [String] = []
@@ -15489,9 +15984,12 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _toolkits: [String] = []
     var _useCases: [String] = []
     var _languages: [String] = []
-    var _additionalFields: [String] = []
     var _dontFetchFromMain: Bool = false
     var _bookmark: Bool = false
+    var _search: String = String()
+    var _query: String = String()
+    var _name: String = String()
+    var _filterByUserID: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -15501,11 +15999,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _userAppID = source._userAppID
       _page = source._page
       _perPage = source._perPage
+      _additionalFields = source._additionalFields
       _sortAscending = source._sortAscending
       _sortBy = source._sortBy
-      _query = source._query
-      _name = source._name
-      _filterByUserID = source._filterByUserID
       _modelTypeID = source._modelTypeID
       _trainedOnly = source._trainedOnly
       _inputFields = source._inputFields
@@ -15516,9 +16012,12 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _toolkits = source._toolkits
       _useCases = source._useCases
       _languages = source._languages
-      _additionalFields = source._additionalFields
       _dontFetchFromMain = source._dontFetchFromMain
       _bookmark = source._bookmark
+      _search = source._search
+      _query = source._query
+      _name = source._name
+      _filterByUserID = source._filterByUserID
     }
   }
 
@@ -15597,6 +16096,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
           }
         }()
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._bookmark) }()
+        case 27: try { try decoder.decodeSingularStringField(value: &_storage._search) }()
         default: break
         }
       }
@@ -15695,6 +16195,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       if _storage._bookmark != false {
         try visitor.visitSingularBoolField(value: _storage._bookmark, fieldNumber: 26)
       }
+      if !_storage._search.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._search, fieldNumber: 27)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -15707,11 +16210,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._userAppID != rhs_storage._userAppID {return false}
         if _storage._page != rhs_storage._page {return false}
         if _storage._perPage != rhs_storage._perPage {return false}
+        if _storage._additionalFields != rhs_storage._additionalFields {return false}
         if _storage._sortAscending != rhs_storage._sortAscending {return false}
         if _storage._sortBy != rhs_storage._sortBy {return false}
-        if _storage._query != rhs_storage._query {return false}
-        if _storage._name != rhs_storage._name {return false}
-        if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
         if _storage._modelTypeID != rhs_storage._modelTypeID {return false}
         if _storage._trainedOnly != rhs_storage._trainedOnly {return false}
         if _storage._inputFields != rhs_storage._inputFields {return false}
@@ -15722,9 +16223,12 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._toolkits != rhs_storage._toolkits {return false}
         if _storage._useCases != rhs_storage._useCases {return false}
         if _storage._languages != rhs_storage._languages {return false}
-        if _storage._additionalFields != rhs_storage._additionalFields {return false}
         if _storage._dontFetchFromMain != rhs_storage._dontFetchFromMain {return false}
         if _storage._bookmark != rhs_storage._bookmark {return false}
+        if _storage._search != rhs_storage._search {return false}
+        if _storage._query != rhs_storage._query {return false}
+        if _storage._name != rhs_storage._name {return false}
+        if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -15778,53 +16282,101 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
     3: .same(proto: "models"),
     4: .same(proto: "workflows"),
     5: .same(proto: "modules"),
+    6: .same(proto: "inputs"),
   ]
 
+  fileprivate class _StorageClass {
+    var _status: Clarifai_Api_Status_Status? = nil
+    var _datasets: Int64 = 0
+    var _models: Int64 = 0
+    var _workflows: Int64 = 0
+    var _modules: Int64 = 0
+    var _inputs: Int64 = 0
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _status = source._status
+      _datasets = source._datasets
+      _models = source._models
+      _workflows = source._workflows
+      _modules = source._modules
+      _inputs = source._inputs
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.datasets) }()
-      case 3: try { try decoder.decodeSingularInt64Field(value: &self.models) }()
-      case 4: try { try decoder.decodeSingularInt64Field(value: &self.workflows) }()
-      case 5: try { try decoder.decodeSingularInt64Field(value: &self.modules) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 2: try { try decoder.decodeSingularInt64Field(value: &_storage._datasets) }()
+        case 3: try { try decoder.decodeSingularInt64Field(value: &_storage._models) }()
+        case 4: try { try decoder.decodeSingularInt64Field(value: &_storage._workflows) }()
+        case 5: try { try decoder.decodeSingularInt64Field(value: &_storage._modules) }()
+        case 6: try { try decoder.decodeSingularInt64Field(value: &_storage._inputs) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if self.datasets != 0 {
-      try visitor.visitSingularInt64Field(value: self.datasets, fieldNumber: 2)
-    }
-    if self.models != 0 {
-      try visitor.visitSingularInt64Field(value: self.models, fieldNumber: 3)
-    }
-    if self.workflows != 0 {
-      try visitor.visitSingularInt64Field(value: self.workflows, fieldNumber: 4)
-    }
-    if self.modules != 0 {
-      try visitor.visitSingularInt64Field(value: self.modules, fieldNumber: 5)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._status {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      if _storage._datasets != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._datasets, fieldNumber: 2)
+      }
+      if _storage._models != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._models, fieldNumber: 3)
+      }
+      if _storage._workflows != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._workflows, fieldNumber: 4)
+      }
+      if _storage._modules != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._modules, fieldNumber: 5)
+      }
+      if _storage._inputs != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._inputs, fieldNumber: 6)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_GetResourceCountsResponse, rhs: Clarifai_Api_GetResourceCountsResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.datasets != rhs.datasets {return false}
-    if lhs.models != rhs.models {return false}
-    if lhs.workflows != rhs.workflows {return false}
-    if lhs.modules != rhs.modules {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._datasets != rhs_storage._datasets {return false}
+        if _storage._models != rhs_storage._models {return false}
+        if _storage._workflows != rhs_storage._workflows {return false}
+        if _storage._modules != rhs_storage._modules {return false}
+        if _storage._inputs != rhs_storage._inputs {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -17416,6 +17968,14 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
     9: .standard(proto: "sort_by_mean_avg_precision"),
     10: .standard(proto: "sort_by_precision"),
     11: .standard(proto: "sort_by_recall"),
+    16: .standard(proto: "sort_by_model_id"),
+    17: .standard(proto: "sort_by_eval_dataset_id"),
+    18: .standard(proto: "sort_by_train_dataset_id"),
+    12: .standard(proto: "model_type_id"),
+    13: .standard(proto: "eval_dataset_ids"),
+    14: .standard(proto: "train_dataset_ids"),
+    15: .standard(proto: "concept_ids"),
+    19: .standard(proto: "show_failed_metrics"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -17484,6 +18044,35 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
           self.sortBy = .sortByRecall(v)
         }
       }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.modelTypeID) }()
+      case 13: try { try decoder.decodeRepeatedStringField(value: &self.evalDatasetIds) }()
+      case 14: try { try decoder.decodeRepeatedStringField(value: &self.trainDatasetIds) }()
+      case 15: try { try decoder.decodeRepeatedStringField(value: &self.conceptIds) }()
+      case 16: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByModelID(v)
+        }
+      }()
+      case 17: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByEvalDatasetID(v)
+        }
+      }()
+      case 18: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByTrainDatasetID(v)
+        }
+      }()
+      case 19: try { try decoder.decodeSingularBoolField(value: &self.showFailedMetrics) }()
       default: break
       }
     }
@@ -17535,7 +18124,37 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
       guard case .sortByRecall(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
     }()
-    case nil: break
+    default: break
+    }
+    if !self.modelTypeID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelTypeID, fieldNumber: 12)
+    }
+    if !self.evalDatasetIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.evalDatasetIds, fieldNumber: 13)
+    }
+    if !self.trainDatasetIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.trainDatasetIds, fieldNumber: 14)
+    }
+    if !self.conceptIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.conceptIds, fieldNumber: 15)
+    }
+    switch self.sortBy {
+    case .sortByModelID?: try {
+      guard case .sortByModelID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 16)
+    }()
+    case .sortByEvalDatasetID?: try {
+      guard case .sortByEvalDatasetID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 17)
+    }()
+    case .sortByTrainDatasetID?: try {
+      guard case .sortByTrainDatasetID(let v)? = self.sortBy else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 18)
+    }()
+    default: break
+    }
+    if self.showFailedMetrics != false {
+      try visitor.visitSingularBoolField(value: self.showFailedMetrics, fieldNumber: 19)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17546,6 +18165,11 @@ extension Clarifai_Api_ListEvaluationsRequest: SwiftProtobuf.Message, SwiftProto
     if lhs.perPage != rhs.perPage {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.modelTypeID != rhs.modelTypeID {return false}
+    if lhs.evalDatasetIds != rhs.evalDatasetIds {return false}
+    if lhs.trainDatasetIds != rhs.trainDatasetIds {return false}
+    if lhs.conceptIds != rhs.conceptIds {return false}
+    if lhs.showFailedMetrics != rhs.showFailedMetrics {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -18851,51 +19475,91 @@ extension Clarifai_Api_MultiScopeResponse: SwiftProtobuf.Message, SwiftProtobuf.
     5: .standard(proto: "user_feature_flags"),
   ]
 
+  fileprivate class _StorageClass {
+    var _status: Clarifai_Api_Status_Status? = nil
+    var _scopes: [String] = []
+    var _app: Clarifai_Api_App? = nil
+    var _endpoints: [String] = []
+    var _userFeatureFlags: String = String()
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _status = source._status
+      _scopes = source._scopes
+      _app = source._app
+      _endpoints = source._endpoints
+      _userFeatureFlags = source._userFeatureFlags
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeRepeatedStringField(value: &self.scopes) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._app) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.userFeatureFlags) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 2: try { try decoder.decodeRepeatedStringField(value: &_storage._scopes) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._app) }()
+        case 4: try { try decoder.decodeRepeatedStringField(value: &_storage._endpoints) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._userFeatureFlags) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.scopes.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.scopes, fieldNumber: 2)
-    }
-    try { if let v = self._app {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    if !self.endpoints.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.endpoints, fieldNumber: 4)
-    }
-    if !self.userFeatureFlags.isEmpty {
-      try visitor.visitSingularStringField(value: self.userFeatureFlags, fieldNumber: 5)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._status {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      if !_storage._scopes.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._scopes, fieldNumber: 2)
+      }
+      try { if let v = _storage._app {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      if !_storage._endpoints.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._endpoints, fieldNumber: 4)
+      }
+      if !_storage._userFeatureFlags.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._userFeatureFlags, fieldNumber: 5)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiScopeResponse, rhs: Clarifai_Api_MultiScopeResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.scopes != rhs.scopes {return false}
-    if lhs._app != rhs._app {return false}
-    if lhs.endpoints != rhs.endpoints {return false}
-    if lhs.userFeatureFlags != rhs.userFeatureFlags {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._scopes != rhs_storage._scopes {return false}
+        if _storage._app != rhs_storage._app {return false}
+        if _storage._endpoints != rhs_storage._endpoints {return false}
+        if _storage._userFeatureFlags != rhs_storage._userFeatureFlags {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -20475,18 +21139,19 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
+    10: .standard(proto: "additional_fields"),
     5: .standard(proto: "sort_ascending"),
     6: .standard(proto: "sort_by_id"),
     7: .standard(proto: "sort_by_modified_at"),
     13: .standard(proto: "sort_by_created_at"),
     14: .standard(proto: "sort_by_star_count"),
-    8: .same(proto: "query"),
-    4: .same(proto: "id"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
-    10: .standard(proto: "additional_fields"),
-    12: .standard(proto: "search_term"),
     15: .same(proto: "bookmark"),
+    16: .same(proto: "search"),
+    8: .same(proto: "query"),
+    4: .same(proto: "id"),
+    12: .standard(proto: "search_term"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20538,6 +21203,7 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
         }
       }()
       case 15: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
+      case 16: try { try decoder.decodeSingularStringField(value: &self.search) }()
       default: break
       }
     }
@@ -20603,6 +21269,9 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if self.bookmark != false {
       try visitor.visitSingularBoolField(value: self.bookmark, fieldNumber: 15)
     }
+    if !self.search.isEmpty {
+      try visitor.visitSingularStringField(value: self.search, fieldNumber: 16)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20610,15 +21279,16 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.additionalFields != rhs.additionalFields {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
-    if lhs.query != rhs.query {return false}
-    if lhs.id != rhs.id {return false}
     if lhs.featuredOnly != rhs.featuredOnly {return false}
     if lhs.starredOnly != rhs.starredOnly {return false}
-    if lhs.additionalFields != rhs.additionalFields {return false}
-    if lhs.searchTerm != rhs.searchTerm {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs.search != rhs.search {return false}
+    if lhs.query != rhs.query {return false}
+    if lhs.id != rhs.id {return false}
+    if lhs.searchTerm != rhs.searchTerm {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -23186,13 +23856,17 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     1: .standard(proto: "user_app_id"),
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
-    4: .standard(proto: "starred_only"),
     5: .standard(proto: "additional_fields"),
     6: .standard(proto: "sort_ascending"),
     7: .standard(proto: "sort_by_created_at"),
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
+    11: .standard(proto: "sort_by_id"),
+    4: .standard(proto: "starred_only"),
     10: .same(proto: "bookmark"),
+    14: .same(proto: "search"),
+    12: .same(proto: "name"),
+    13: .standard(proto: "filter_by_user_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23232,6 +23906,17 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
         }
       }()
       case 10: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
+      case 11: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByID(v)
+        }
+      }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 13: try { try decoder.decodeSingularBoolField(value: &self.filterByUserID) }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.search) }()
       default: break
       }
     }
@@ -23273,10 +23958,22 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
       guard case .sortByModifiedAt(let v)? = self.sortBy else { preconditionFailure() }
       try visitor.visitSingularBoolField(value: v, fieldNumber: 9)
     }()
-    case nil: break
+    default: break
     }
     if self.bookmark != false {
       try visitor.visitSingularBoolField(value: self.bookmark, fieldNumber: 10)
+    }
+    try { if case .sortByID(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+    } }()
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 12)
+    }
+    if self.filterByUserID != false {
+      try visitor.visitSingularBoolField(value: self.filterByUserID, fieldNumber: 13)
+    }
+    if !self.search.isEmpty {
+      try visitor.visitSingularStringField(value: self.search, fieldNumber: 14)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -23285,11 +23982,14 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
-    if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.additionalFields != rhs.additionalFields {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs.search != rhs.search {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.filterByUserID != rhs.filterByUserID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -25902,6 +26602,102 @@ extension Clarifai_Api_MultiRunnerItemOutputResponse: SwiftProtobuf.Message, Swi
   public static func ==(lhs: Clarifai_Api_MultiRunnerItemOutputResponse, rhs: Clarifai_Api_MultiRunnerItemOutputResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.runnerItemOutputs != rhs.runnerItemOutputs {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostModelVersionsTrainingTimeEstimateRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_versions"),
+    4: .standard(proto: "estimated_input_count"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.modelVersions) }()
+      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.estimatedInputCount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.modelVersions.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.modelVersions, fieldNumber: 3)
+    }
+    if self.estimatedInputCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.estimatedInputCount, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, rhs: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.modelVersions != rhs.modelVersions {return false}
+    if lhs.estimatedInputCount != rhs.estimatedInputCount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiTrainingTimeEstimateResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiTrainingTimeEstimateResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "training_time_estimates"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.trainingTimeEstimates) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.trainingTimeEstimates.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.trainingTimeEstimates, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiTrainingTimeEstimateResponse, rhs: Clarifai_Api_MultiTrainingTimeEstimateResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.trainingTimeEstimates != rhs.trainingTimeEstimates {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
