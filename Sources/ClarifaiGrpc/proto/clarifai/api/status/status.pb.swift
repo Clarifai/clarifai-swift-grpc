@@ -28,10 +28,12 @@ public struct Clarifai_Api_Status_Status {
   /// Status code from internal codes.
   public var code: Clarifai_Api_Status_StatusCode = .zero
 
-  /// A longer description of the error.
+  /// A short description of the error.
   public var description_p: String = String()
 
   /// More details of the given error.
+  /// These details may be exposed to non-technical users.
+  /// For technical details, try to use developer_notes field.
   public var details: String = String()
 
   /// For some environment we may return a stack trace to help debug
@@ -44,7 +46,7 @@ public struct Clarifai_Api_Status_Status {
   /// if status is pending, how much time is remaining (in seconds)
   public var timeRemaining: UInt32 = 0
 
-  /// If we want to return a request id in the base status field
+  /// A request ID may be present, to help monitoring and tracking requests
   public var reqID: String = String()
 
   /// Internal Annotation (do not set in production, for internal Clarifai use only).
@@ -61,6 +63,8 @@ public struct Clarifai_Api_Status_Status {
   public mutating func clearRedirectInfo() {self._redirectInfo = nil}
 
   /// Notes for developer.
+  /// These notes are rather technical details for developers how to interpret the status,
+  /// e.g. why an error occurred and how to avoid getting the error.
   public var developerNotes: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()

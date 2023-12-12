@@ -1307,6 +1307,18 @@ public struct Clarifai_Api_ListModelConceptsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Searching options:
+  /// Specify a search parameter in order to perform keyword search on the
+  /// following fields of the concept:
+  ///   - id
+  ///   - name
+  ///
+  /// Keywords are used for partial prefix-matching (so searching for "larif" matches "clarifai").
+  ///
+  /// NOTE: Both the list of fields searched and the exact keyword matching
+  /// rules are subject to change and not guaranteed to be backwards-compatible.
+  public var search: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -8300,7 +8312,6 @@ public struct Clarifai_Api_GetCollectorRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  ///The collecgtor id
   public var collectorID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -12195,6 +12206,7 @@ extension Clarifai_Api_ListModelConceptsRequest: SwiftProtobuf.Message, SwiftPro
     3: .standard(proto: "version_id"),
     4: .same(proto: "page"),
     5: .standard(proto: "per_page"),
+    6: .same(proto: "search"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -12208,6 +12220,7 @@ extension Clarifai_Api_ListModelConceptsRequest: SwiftProtobuf.Message, SwiftPro
       case 3: try { try decoder.decodeSingularStringField(value: &self.versionID) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.search) }()
       default: break
       }
     }
@@ -12233,6 +12246,9 @@ extension Clarifai_Api_ListModelConceptsRequest: SwiftProtobuf.Message, SwiftPro
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 5)
     }
+    if !self.search.isEmpty {
+      try visitor.visitSingularStringField(value: self.search, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -12242,6 +12258,7 @@ extension Clarifai_Api_ListModelConceptsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs.versionID != rhs.versionID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.search != rhs.search {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

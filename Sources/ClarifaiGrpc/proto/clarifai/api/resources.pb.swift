@@ -6281,41 +6281,88 @@ public struct Clarifai_Api_Filter {
 
   /// FILTER by annotation information.
   /// ########## Supported fields ##########
-  ///  - annotation_info - allows searching by empty annotation info
-  ///    note that searching by empty annotation info will actually not influence the search results.
-  ///    however, in order to be user-friendly, we are still supporting searching by empty annotation info.
-  ///  - annotation_info.fields - filter by annotation info
+  ///  # Filter by ID fields
+  ///  - id                                      - example: `{"id": "xyz"}`
+  ///  - input_id
+  ///  - model_version_id
+  ///  - task_id
+  ///  - user_id
+  ///  - workflow_version_id
+  ///
+  ///  # Filter by other top-level fields
+  ///  - annotation_info                         - allows searching by empty annotation-info, i.e. `{"data": "annotation_info": {}}`;
+  ///                                              note that searching by empty annotation-info will actually not influence the search results.
+  ///                                              however, in order to be user-friendly, we still support searching by empty annotation-info.
+  ///  - annotation_info.fields                  - filter by annotation info
+  ///  - input_level                             - filter only input-level annotations
+  ///  - status.code                             - filter by annotation status code
+  ///  - trusted                                 - filter only trusted annotations
+  ///
+  ///  # Filter by space-time info fields, i.e. region, frames and time-segments
+  ///  - data                                    - filter only annotations without space-time info, e.g. classifications
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {}}`
+  ///  - data.frames[].frame_info                - filter only frame annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"frames": [{"frame_info": {}}]}}`
+  ///  - data.regions[].region_info.bounding_box - filter only bounding box annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"bounding_box":{}}}]}}`
+  ///  - data.regions[].region_info.mask         - filter only mask annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"mask":{}}}]}}`
+  ///  - data.regions[].region_info.point        - filter only point annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"point":{}}}]}}`
+  ///  - data.regions[].region_info.polygon      - filter only polygon annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"polygon":{}}}]}}`
+  ///  - data.regions[].region_info.span         - filter only span annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"span":{}}}]}}`
+  ///  - data.time_segments[].time_info          - filter only time-segment annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"time_segments": [{"time_info": {}}]}}`
+  ///
+  ///  # Filter by other data fields
   ///  - data.clusters[].id
   ///  - data.concepts[].id
   ///  - data.concepts[].name
   ///  - data.concepts[].value
-  ///  - data.frames[].frame_info - filter by frame annotations
   ///  - data.geo.geo_box[].geo_point.latitude
   ///  - data.geo.geo_box[].geo_point.longitude
   ///  - data.geo.geo_limit.type
   ///  - data.geo.geo_limit.value
   ///  - data.geo.geo_point.latitude
   ///  - data.geo.geo_point.longitude
-  ///  - data.metadata - allow search with empty metadata
-  ///    note that searching by empty metadata will actually not influence the search results.
-  ///    however, in order to be user-friendly, we are still supporting searching by empty metadata.
-  ///  - data.metadata.fields - filter by metadata. metadata key&value fields are OR-ed.
-  ///  - data.regions[].region_info.bounding_box - filter by bounding box annotations
-  ///  - data.regions[].region_info.mask - filter by mask annotations
-  ///  - data.regions[].region_info.point - filter by point annotations
-  ///  - data.regions[].region_info.polygon - filter by polygon annotations
-  ///  - data.regions[].region_info.span - filter by span annotations
-  ///  - data.text - filter by text annotations
-  ///  - data.time_segments[].time_info - filter by time-segment annotations
-  ///  - id
-  ///  - input_id
-  ///  - input_level
-  ///  - model_version_id
-  ///  - status.code
-  ///  - task_id
-  ///  - trusted
-  ///  - user_id
-  ///  - workflow_version_id
+  ///  - data.metadata                           - allow search with empty metadata, i.e. `{"data": "metadata": {}}`;
+  ///                                              note that searching by empty metadata will actually not influence the search results;
+  ///                                              however, in order to be user-friendly, we still support searching by empty metadata.
+  ///  - data.metadata.fields                    - filter by metadata
+  ///                                            - Important to note: metadata key&value fields are OR-ed.
+  ///                                            - example with 1 metadata key: searching by
+  ///                                                      `{
+  ///                                                      `  "data": {
+  ///                                                      `    "metadata": {
+  ///                                                      `      "fields": {
+  ///                                                      `        "foo": {
+  ///                                                      `          "string_value": "bar"
+  ///                                                      `        },
+  ///                                                      `      }
+  ///                                                      `    }
+  ///                                                      `  }
+  ///                                                      `}
+  ///                                                      will result in a search condition like `metadata includes {"foo": "bar}`;
+  ///                                            - example with 2 metadata keys: searching by
+  ///                                                      `{
+  ///                                                      `  "data": {
+  ///                                                      `    "metadata": {
+  ///                                                      `      "fields": {
+  ///                                                      `        "foo1": {
+  ///                                                      `          "string_value": "bar2"
+  ///                                                      `        },
+  ///                                                      `        "foo2": {
+  ///                                                      `          "string_value": "bar2"
+  ///                                                      `        }
+  ///                                                      `      }
+  ///                                                      `    }
+  ///                                                      `  }
+  ///                                                      `}
+  ///                                                      will result in a search condition like `(metadata includes {"foo1": "bar1"}) OR (metadata includes {"foo2": "bar2"})`.
+  ///  - data.text                               - filter only text annotations
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"text": {}}}`
   public var annotation: Clarifai_Api_Annotation {
     get {return _annotation ?? Clarifai_Api_Annotation()}
     set {_annotation = newValue}
@@ -6327,12 +6374,18 @@ public struct Clarifai_Api_Filter {
 
   /// FILTER by input information.
   /// ########## Supported fields ##########
-  ///  - data.audio - filter audio inputs
-  ///  - data.image - filter image inputs
-  ///  - data.text - filter text inputs
-  ///  - data.video - filter video inputs
-  ///  - dataset_ids[] - filter by dataset IDs
-  ///  - status.code - filter by input status
+  ///  - data.audio                              - filter only audio inputs
+  ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"audio": {}}`
+  ///  - data.image                              - filter only image inputs
+  ///                                            - enable using `{"image": {}}`
+  ///  - data.text                               - filter only text inputs
+  ///                                            - enable using `{"text": {}}`
+  ///  - data.video                              - filter only video inputs
+  ///                                            - enable using `{"video": {}}`
+  ///  - dataset_ids[]                           - filter by dataset IDs
+  ///                                            - example: `{"dataset_ids": ["d1", "d2"]}` will filter for inputs in d1 OR d2
+  ///  - status.code                             - filter by input status
+  ///                                            - example: `{"status": {"code": 30000}}` to filter only for SUCCESS inputs
   public var input: Clarifai_Api_Input {
     get {return _input ?? Clarifai_Api_Input()}
     set {_input = newValue}
@@ -8480,9 +8533,19 @@ public struct Clarifai_Api_Collector {
   /// outputs to make deciions (for example: thresholding based on concepts). If the workflow
   /// output has any field that is non-empty then the input will be queued for the collector
   /// to process with the post_queue_workflow_id.
+  ///
+  /// As a simpler alternative, pre_queue_random_sample can be set to just use random sampling instead.
   public var preQueueWorkflowID: String {
     get {return _storage._preQueueWorkflowID}
     set {_uniqueStorage()._preQueueWorkflowID = newValue}
+  }
+
+  /// Instead of needing to create a new workflow for pre_queue_workflow_id, if just random sampling
+  /// of the model inputs is required, then pre_queue_random_sample can be set to a value from (0-1]
+  /// to denote the fraction of inputs to collect.
+  public var preQueueRandomSample: Float {
+    get {return _storage._preQueueRandomSample}
+    set {_uniqueStorage()._preQueueRandomSample = newValue}
   }
 
   /// A workflow to run to after the collector is processing the queued input. This workflow
@@ -21297,6 +21360,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     2: .same(proto: "description"),
     3: .standard(proto: "created_at"),
     4: .standard(proto: "pre_queue_workflow_id"),
+    8: .standard(proto: "pre_queue_random_sample"),
     5: .standard(proto: "post_queue_workflow_id"),
     6: .standard(proto: "collector_source"),
     7: .same(proto: "status"),
@@ -21307,6 +21371,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     var _description_p: String = String()
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _preQueueWorkflowID: String = String()
+    var _preQueueRandomSample: Float = 0
     var _postQueueWorkflowID: String = String()
     var _collectorSource: Clarifai_Api_CollectorSource? = nil
     var _status: Clarifai_Api_Status_Status? = nil
@@ -21320,6 +21385,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       _description_p = source._description_p
       _createdAt = source._createdAt
       _preQueueWorkflowID = source._preQueueWorkflowID
+      _preQueueRandomSample = source._preQueueRandomSample
       _postQueueWorkflowID = source._postQueueWorkflowID
       _collectorSource = source._collectorSource
       _status = source._status
@@ -21348,6 +21414,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         case 5: try { try decoder.decodeSingularStringField(value: &_storage._postQueueWorkflowID) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._collectorSource) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 8: try { try decoder.decodeSingularFloatField(value: &_storage._preQueueRandomSample) }()
         default: break
         }
       }
@@ -21381,6 +21448,9 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       try { if let v = _storage._status {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
       } }()
+      if _storage._preQueueRandomSample != 0 {
+        try visitor.visitSingularFloatField(value: _storage._preQueueRandomSample, fieldNumber: 8)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -21394,6 +21464,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         if _storage._description_p != rhs_storage._description_p {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._preQueueWorkflowID != rhs_storage._preQueueWorkflowID {return false}
+        if _storage._preQueueRandomSample != rhs_storage._preQueueRandomSample {return false}
         if _storage._postQueueWorkflowID != rhs_storage._postQueueWorkflowID {return false}
         if _storage._collectorSource != rhs_storage._collectorSource {return false}
         if _storage._status != rhs_storage._status {return false}
