@@ -7454,16 +7454,40 @@ public struct Clarifai_Api_AppDuplication {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// the id of app duplication
+  /// The unique identifier of an app duplication job.
   public var id: String {
     get {return _storage._id}
     set {_uniqueStorage()._id = newValue}
   }
 
+  /// The destination application where resources are written.
+  ///
+  /// If the destination does not exist, then the fields from the request are
+  /// used to create the application. If a field is not set or not supported,
+  /// then it will be copied from the source app, unless otherwise noted.
+  ///
+  /// Note: this field can be empty when reading app duplication jobs in cases
+  /// where the app has been deleted or is just not visible to the caller.
+  ///
+  /// ########## Supported fields ##########
+  ///  - description
+  ///  - id      - if not set, then generated automatically
+  ///  - user_id - if not set, then the calling user is used as the app owner
+  public var destinationApp: Clarifai_Api_App {
+    get {return _storage._destinationApp ?? Clarifai_Api_App()}
+    set {_uniqueStorage()._destinationApp = newValue}
+  }
+  /// Returns true if `destinationApp` has been explicitly set.
+  public var hasDestinationApp: Bool {return _storage._destinationApp != nil}
+  /// Clears the value of `destinationApp`. Subsequent reads from it will return its default value.
+  public mutating func clearDestinationApp() {_uniqueStorage()._destinationApp = nil}
+
   /// The ID of an existing app you want to copy data into.
   ///
   /// If not provided, then we will create a new application as the destination instead.
   /// The various new_app_* fields can be used to set fields of this new application.
+  ///
+  /// Deprecated: Use destination_app.id with an existing ID instead.
   public var existingAppID: String {
     get {return _storage._existingAppID}
     set {_uniqueStorage()._existingAppID = newValue}
@@ -7473,6 +7497,8 @@ public struct Clarifai_Api_AppDuplication {
   /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
   ///
   /// If not provided, then it will be generated automatically.
+  ///
+  /// Deprecated: Use destination_app.id with a new ID instead.
   public var newAppID: String {
     get {return _storage._newAppID}
     set {_uniqueStorage()._newAppID = newValue}
@@ -7482,21 +7508,14 @@ public struct Clarifai_Api_AppDuplication {
   /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
   ///
   /// If not provided, then the ID of the new application is also used as the name.
+  ///
+  /// Deprecated: Application names are deprecated, use application IDs instead.
   public var newAppName: String {
     get {return _storage._newAppName}
     set {_uniqueStorage()._newAppName = newValue}
   }
 
-  /// The description to use when creating a new application.
-  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
-  ///
-  /// If not provided, then the description of the source application is copied.
-  public var newAppDescription: String {
-    get {return _storage._newAppDescription}
-    set {_uniqueStorage()._newAppDescription = newValue}
-  }
-
-  /// the status of app duplication
+  /// The status of the app duplication job.
   public var status: Clarifai_Api_Status_Status {
     get {return _storage._status ?? Clarifai_Api_Status_Status()}
     set {_uniqueStorage()._status = newValue}
@@ -7506,7 +7525,7 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
-  /// when is the app duplication triggered
+  /// The time when the app duplication job was created.
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_uniqueStorage()._createdAt = newValue}
@@ -7516,7 +7535,7 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
 
-  /// The last time when is the status got updated
+  /// The last time when the app duplication job status was updated.
   public var lastModifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _storage._lastModifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_uniqueStorage()._lastModifiedAt = newValue}
@@ -7526,7 +7545,7 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `lastModifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearLastModifiedAt() {_uniqueStorage()._lastModifiedAt = nil}
 
-  /// Only copy resources depending on the filters
+  /// The filter specifies which resources are copied by the app duplication job.
   public var filter: Clarifai_Api_AppDuplicationFilters {
     get {return _storage._filter ?? Clarifai_Api_AppDuplicationFilters()}
     set {_uniqueStorage()._filter = newValue}
@@ -7536,7 +7555,12 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `filter`. Subsequent reads from it will return its default value.
   public mutating func clearFilter() {_uniqueStorage()._filter = nil}
 
-  /// contains progress for each requested filter
+  /// Copy progress for each resource type requested by the filter. Possible fields:
+  ///  - inputs
+  ///  - concepts
+  ///  - annotations
+  ///  - models
+  ///  - workflows
   public var progress: [Clarifai_Api_AppCopyProgress] {
     get {return _storage._progress}
     set {_uniqueStorage()._progress = newValue}
@@ -7569,19 +7593,20 @@ public struct Clarifai_Api_AppDuplicationFilters {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Copy inputs what what it depends on: input level annotation and concepts
+  /// Copy inputs. Requires that copy_concepts is also set.
+  /// Note that this will still copy input-level annotations even if copy_annotations is not set.
   public var copyInputs: Bool = false
 
-  /// Copy only concepts
+  /// Copy concepts.
   public var copyConcepts: Bool = false
 
-  /// Copy annotations and what it depends on: inputs and concepts
+  /// Copy annotations. Requires that copy_inputs and copy_concepts are also set.
   public var copyAnnotations: Bool = false
 
-  /// Copy models and what it depends on: concepts
+  /// Copy models. Requires that copy_concepts is also set.
   public var copyModels: Bool = false
 
-  /// Copy workflows and what it depends on: models and concepts
+  /// Copy workflows. Requires that copy_models and copy_concepts are also set.
   public var copyWorkflows: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -20092,10 +20117,10 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
   public static let protoMessageName: String = _protobuf_package + ".AppDuplication"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
+    10: .standard(proto: "destination_app"),
     8: .standard(proto: "existing_app_id"),
     2: .standard(proto: "new_app_id"),
     3: .standard(proto: "new_app_name"),
-    10: .standard(proto: "new_app_description"),
     4: .same(proto: "status"),
     5: .standard(proto: "created_at"),
     6: .standard(proto: "last_modified_at"),
@@ -20105,10 +20130,10 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
   fileprivate class _StorageClass {
     var _id: String = String()
+    var _destinationApp: Clarifai_Api_App? = nil
     var _existingAppID: String = String()
     var _newAppID: String = String()
     var _newAppName: String = String()
-    var _newAppDescription: String = String()
     var _status: Clarifai_Api_Status_Status? = nil
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _lastModifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
@@ -20121,10 +20146,10 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
     init(copying source: _StorageClass) {
       _id = source._id
+      _destinationApp = source._destinationApp
       _existingAppID = source._existingAppID
       _newAppID = source._newAppID
       _newAppName = source._newAppName
-      _newAppDescription = source._newAppDescription
       _status = source._status
       _createdAt = source._createdAt
       _lastModifiedAt = source._lastModifiedAt
@@ -20157,7 +20182,7 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._filter) }()
         case 8: try { try decoder.decodeSingularStringField(value: &_storage._existingAppID) }()
         case 9: try { try decoder.decodeRepeatedMessageField(value: &_storage._progress) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._newAppDescription) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._destinationApp) }()
         default: break
         }
       }
@@ -20197,9 +20222,9 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
       if !_storage._progress.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._progress, fieldNumber: 9)
       }
-      if !_storage._newAppDescription.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._newAppDescription, fieldNumber: 10)
-      }
+      try { if let v = _storage._destinationApp {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20210,10 +20235,10 @@ extension Clarifai_Api_AppDuplication: SwiftProtobuf.Message, SwiftProtobuf._Mes
         let _storage = _args.0
         let rhs_storage = _args.1
         if _storage._id != rhs_storage._id {return false}
+        if _storage._destinationApp != rhs_storage._destinationApp {return false}
         if _storage._existingAppID != rhs_storage._existingAppID {return false}
         if _storage._newAppID != rhs_storage._newAppID {return false}
         if _storage._newAppName != rhs_storage._newAppName {return false}
-        if _storage._newAppDescription != rhs_storage._newAppDescription {return false}
         if _storage._status != rhs_storage._status {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._lastModifiedAt != rhs_storage._lastModifiedAt {return false}

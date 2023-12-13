@@ -3827,8 +3827,17 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// start to duplicate an app which copies all the inputs, annotations, models, concepts etc. to a new app.
-  /// this is an async process, you should use ListAppDuplications or GetAppDuplication to check the status.
+  /// PostAppDuplications starts async app duplication jobs which copy resources
+  /// (inputs, annotations, models etc) from one application to another. It can
+  /// also create the destination application if it does not exist, with fields
+  /// (description, metadata etc) copied from the source application.
+  ///
+  /// A duplication job can be started by any user that can read from the source
+  /// application (the target of this call) and can create and write to the
+  /// destination application. The duplication is associated with the user that
+  /// created it, so in order to read the status and progress of the job, that
+  /// user's ID has to be used in the call to GetAppDuplication, which might be
+  /// different to the source application owner ID in this call.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostAppDuplications.
@@ -3846,7 +3855,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// list all the app duplications user triggers
+  /// ListAppDuplications lists all app duplication jobs created by the user.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListAppDuplications.
@@ -3864,7 +3873,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// get the app duplication status
+  /// GetAppDuplication returns an app duplication job created by the user.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetAppDuplication.
@@ -6177,14 +6186,23 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Collaboration includes the app user are invitied to work on
   func listCollaborations(request: Clarifai_Api_ListCollaborationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaborationsResponse>
 
-  /// start to duplicate an app which copies all the inputs, annotations, models, concepts etc. to a new app.
-  /// this is an async process, you should use ListAppDuplications or GetAppDuplication to check the status.
+  /// PostAppDuplications starts async app duplication jobs which copy resources
+  /// (inputs, annotations, models etc) from one application to another. It can
+  /// also create the destination application if it does not exist, with fields
+  /// (description, metadata etc) copied from the source application.
+  ///
+  /// A duplication job can be started by any user that can read from the source
+  /// application (the target of this call) and can create and write to the
+  /// destination application. The duplication is associated with the user that
+  /// created it, so in order to read the status and progress of the job, that
+  /// user's ID has to be used in the call to GetAppDuplication, which might be
+  /// different to the source application owner ID in this call.
   func postAppDuplications(request: Clarifai_Api_PostAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
 
-  /// list all the app duplications user triggers
+  /// ListAppDuplications lists all app duplication jobs created by the user.
   func listAppDuplications(request: Clarifai_Api_ListAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
 
-  /// get the app duplication status
+  /// GetAppDuplication returns an app duplication job created by the user.
   func getAppDuplication(request: Clarifai_Api_GetAppDuplicationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppDuplicationResponse>
 
   /// Add tasks to an app.

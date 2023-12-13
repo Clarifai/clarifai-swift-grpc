@@ -7633,12 +7633,13 @@ public struct Clarifai_Api_SingleWorkflowVersionResponse {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-///Request to start a app duplication process
+/// Request to start app duplication jobs.
 public struct Clarifai_Api_PostAppDuplicationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// The user and application ID of the source application to duplicate.
   public var userAppID: Clarifai_Api_UserAppIDSet {
     get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
     set {_userAppID = newValue}
@@ -7657,12 +7658,13 @@ public struct Clarifai_Api_PostAppDuplicationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
-///Request to check app duplication status
+/// Request to get an app duplication job.
 public struct Clarifai_Api_GetAppDuplicationRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// The ID of the user that created the app duplication job.
   public var userAppID: Clarifai_Api_UserAppIDSet {
     get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
     set {_userAppID = newValue}
@@ -7672,7 +7674,6 @@ public struct Clarifai_Api_GetAppDuplicationRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  ///The app duplication id
   public var appDuplicationID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -7682,12 +7683,13 @@ public struct Clarifai_Api_GetAppDuplicationRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
-///Request to list all the app duplication that user triggered.
+/// Request to list all the app duplication jobs that a user created.
 public struct Clarifai_Api_ListAppDuplicationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// The ID of the user whose app duplication jobs to list.
   public var userAppID: Clarifai_Api_UserAppIDSet {
     get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
     set {_userAppID = newValue}
