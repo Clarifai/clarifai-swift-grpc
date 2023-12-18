@@ -9013,6 +9013,32 @@ public struct Clarifai_Api_DeleteModuleVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// Request to get the number of installations (by all users) for the module version 
+public struct Clarifai_Api_GetModuleVersionUsageCountRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var moduleID: String = String()
+
+  public var moduleVersionID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
 /// SingleModuleVersionResponse
 public struct Clarifai_Api_SingleModuleVersionResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -9060,6 +9086,30 @@ public struct Clarifai_Api_MultiModuleVersionResponse {
   public mutating func clearStatus() {self._status = nil}
 
   public var moduleVersions: [Clarifai_Api_ModuleVersion] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+/// SingleModuleVersionUsageCountResponse
+public struct Clarifai_Api_SingleModuleVersionUsageCountResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var usageCount: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -24428,6 +24478,54 @@ extension Clarifai_Api_DeleteModuleVersionsRequest: SwiftProtobuf.Message, Swift
   }
 }
 
+extension Clarifai_Api_GetModuleVersionUsageCountRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetModuleVersionUsageCountRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "module_id"),
+    3: .standard(proto: "module_version_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.moduleID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.moduleVersionID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.moduleID.isEmpty {
+      try visitor.visitSingularStringField(value: self.moduleID, fieldNumber: 2)
+    }
+    if !self.moduleVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.moduleVersionID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetModuleVersionUsageCountRequest, rhs: Clarifai_Api_GetModuleVersionUsageCountRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.moduleID != rhs.moduleID {return false}
+    if lhs.moduleVersionID != rhs.moduleVersionID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_SingleModuleVersionResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SingleModuleVersionResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -24541,6 +24639,48 @@ extension Clarifai_Api_MultiModuleVersionResponse: SwiftProtobuf.Message, SwiftP
   public static func ==(lhs: Clarifai_Api_MultiModuleVersionResponse, rhs: Clarifai_Api_MultiModuleVersionResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.moduleVersions != rhs.moduleVersions {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_SingleModuleVersionUsageCountResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleModuleVersionUsageCountResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "usage_count"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.usageCount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.usageCount != 0 {
+      try visitor.visitSingularUInt32Field(value: self.usageCount, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_SingleModuleVersionUsageCountResponse, rhs: Clarifai_Api_SingleModuleVersionUsageCountResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.usageCount != rhs.usageCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

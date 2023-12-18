@@ -940,6 +940,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func getModuleVersionUsageCount(
+    _ request: Clarifai_Api_GetModuleVersionUsageCountRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>
+
   func getInstalledModuleVersion(
     _ request: Clarifai_Api_GetInstalledModuleVersionRequest,
     callOptions: CallOptions?
@@ -4438,6 +4443,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Get usage count for specific module version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModuleVersionUsageCount.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModuleVersionUsageCount(
+    _ request: Clarifai_Api_GetModuleVersionUsageCountRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModuleVersionUsageCount",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModuleVersionUsageCountInterceptors() ?? []
+    )
+  }
+
   /// Get installed modules vesrions for an app.
   ///
   /// - Parameters:
@@ -5585,6 +5608,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteModuleVersions'.
   func makeDeleteModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'getModuleVersionUsageCount'.
+  func makeGetModuleVersionUsageCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getInstalledModuleVersion'.
   func makeGetInstalledModuleVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>]
 
@@ -6301,6 +6327,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete a multiple module version.
   func deleteModuleVersions(request: Clarifai_Api_DeleteModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Get usage count for specific module version.
+  func getModuleVersionUsageCount(request: Clarifai_Api_GetModuleVersionUsageCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleVersionUsageCountResponse>
 
   /// Get installed modules vesrions for an app.
   func getInstalledModuleVersion(request: Clarifai_Api_GetInstalledModuleVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInstalledModuleVersionResponse>
@@ -8063,6 +8092,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteModuleVersions(request:context:)
       )
 
+    case "GetModuleVersionUsageCount":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleVersionUsageCountRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleVersionUsageCountResponse>(),
+        interceptors: self.interceptors?.makeGetModuleVersionUsageCountInterceptors() ?? [],
+        userFunction: self.getModuleVersionUsageCount(request:context:)
+      )
+
     case "GetInstalledModuleVersion":
       return UnaryServerHandler(
         context: context,
@@ -9086,6 +9124,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteModuleVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModuleVersionUsageCount'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModuleVersionUsageCountInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>]
 
   /// - Returns: Interceptors to use when handling 'getInstalledModuleVersion'.
   ///   Defaults to calling `self.makeInterceptors()`.
