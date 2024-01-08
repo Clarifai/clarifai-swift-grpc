@@ -8608,6 +8608,13 @@ public struct Clarifai_Api_Collector {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
+  /// Whether to collect outputs or not. Default is false. If selected, outputs from the 
+  /// original model predict call will be posted as annotations along with the input with success status.
+  public var collectOutputs: Bool {
+    get {return _storage._collectOutputs}
+    set {_uniqueStorage()._collectOutputs = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -21389,6 +21396,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     5: .standard(proto: "post_queue_workflow_id"),
     6: .standard(proto: "collector_source"),
     7: .same(proto: "status"),
+    9: .standard(proto: "collect_outputs"),
   ]
 
   fileprivate class _StorageClass {
@@ -21400,6 +21408,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     var _postQueueWorkflowID: String = String()
     var _collectorSource: Clarifai_Api_CollectorSource? = nil
     var _status: Clarifai_Api_Status_Status? = nil
+    var _collectOutputs: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -21414,6 +21423,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       _postQueueWorkflowID = source._postQueueWorkflowID
       _collectorSource = source._collectorSource
       _status = source._status
+      _collectOutputs = source._collectOutputs
     }
   }
 
@@ -21440,6 +21450,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._collectorSource) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
         case 8: try { try decoder.decodeSingularFloatField(value: &_storage._preQueueRandomSample) }()
+        case 9: try { try decoder.decodeSingularBoolField(value: &_storage._collectOutputs) }()
         default: break
         }
       }
@@ -21476,6 +21487,9 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       if _storage._preQueueRandomSample != 0 {
         try visitor.visitSingularFloatField(value: _storage._preQueueRandomSample, fieldNumber: 8)
       }
+      if _storage._collectOutputs != false {
+        try visitor.visitSingularBoolField(value: _storage._collectOutputs, fieldNumber: 9)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -21493,6 +21507,7 @@ extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         if _storage._postQueueWorkflowID != rhs_storage._postQueueWorkflowID {return false}
         if _storage._collectorSource != rhs_storage._collectorSource {return false}
         if _storage._status != rhs_storage._status {return false}
+        if _storage._collectOutputs != rhs_storage._collectOutputs {return false}
         return true
       }
       if !storagesAreEqual {return false}

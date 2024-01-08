@@ -2450,7 +2450,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List all the inputs.
+  /// Deprecated: Unmaintained and ideally replaced with usage of datasets
   ///
   /// - Parameters:
   ///   - request: Request to send to ListModelInputs.
@@ -5977,7 +5977,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Update model languages tags
   func patchModelLanguages(request: Clarifai_Api_PatchModelLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelLanguageResponse>
 
-  /// List all the inputs.
+  /// Deprecated: Unmaintained and ideally replaced with usage of datasets
   func listModelInputs(request: Clarifai_Api_ListModelInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
   /// Get a specific model from an app.
