@@ -4474,31 +4474,27 @@ public struct Clarifai_Api_OutputConfig {
   fileprivate var _modelMetadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
-/// ModelSpec is a definition of a Model type. This is used in model mode of portal
-/// to list out the possible models that can be created and can be used to understand more about
-/// the possible models in our platform.
+/// ModelType is a definition of a set of models that generally have the same input and output fields. 
+/// This is used to understand more about the possible models in our platform.
 public struct Clarifai_Api_ModelType {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// A unique identifies for this model type. This is differnt than the 'type' field below because
-  /// the 'type' can be re-used for differnet input and output combinations whereas 'id' is always
-  /// unique.
+  /// A unique identifier for this model type.
   public var id: String = String()
 
-  /// title for this model in model gallery
+  /// A display title for this model.
   public var title: String = String()
 
   /// Description of this model type.
   public var description_p: String = String()
 
-  /// The list of input fields that this model accepts. These are the keys of the Model's
-  /// InputInfo.fields_map
+  /// The list of input fields that this model expects as inputs.
+  /// Used to validate that request input data has the expected fields.
   public var inputFields: [String] = []
 
-  /// The list of output fields that this model accepts. These are the keys of the Model's
-  /// OutputInfo.fields_map
+  /// The list of output fields that this model accepts.
   public var outputFields: [String] = []
 
   /// Is this model trainable in our platform.
@@ -4512,22 +4508,19 @@ public struct Clarifai_Api_ModelType {
   public var internalOnly: Bool = false
 
   /// The remaining fields are definitions of the configurable fields that exist.
-  /// Each field has path into the Model object such as "name" as a top level or "output_info.data"
-  /// if it's the Data object within the OutputInfo object. We decided to not break these up
-  /// into input_info, train_info and output_info related parameters and instead use the path
-  /// so that they are most flexible.
   public var modelTypeFields: [Clarifai_Api_ModelTypeField] = []
 
   /// For sequence models we need to know when processing that they require temporal time frames
   /// in sequential order. This will be true for model types like trackers as an example.
   public var requiresSequentialFrames: Bool = false
 
-  /// Expected input layers of an uploaded model
+  /// Expected input layers of an uploaded model.
   public var expectedInputLayers: [Clarifai_Api_ModelLayerInfo] = []
 
   /// Expected output layers of an uploaded model
   public var expectedOutputLayers: [Clarifai_Api_ModelLayerInfo] = []
 
+  /// What type of evaluation is supported for this model type.
   public var evaluationType: Clarifai_Api_EvaluationType = .undefined
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -4600,7 +4593,7 @@ public struct Clarifai_Api_ModelTypeField {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The path where the value of the field will be stored.
+  /// The path where the value of the field will be stored in the model version object.
   /// Example:
   /// "output_info.data" would be the Data message in the OutputInfo message.
   /// "output_info.output_config.language" is in the OutputConfig message within OutputInfo
@@ -5034,7 +5027,9 @@ public struct Clarifai_Api_ModelVersion {
     set {_uniqueStorage()._license = newValue}
   }
 
-  /// Info about the model's output and configuration.
+  /// Info about the model's output. Besides `output_info.data`, these fields should
+  /// be reserved for parameters that affect the models outputs when inferencing.
+  /// `output_info.data` is used to specify the training concepts for this model version.
   public var outputInfo: Clarifai_Api_OutputInfo {
     get {return _storage._outputInfo ?? Clarifai_Api_OutputInfo()}
     set {_uniqueStorage()._outputInfo = newValue}
@@ -5044,7 +5039,8 @@ public struct Clarifai_Api_ModelVersion {
   /// Clears the value of `outputInfo`. Subsequent reads from it will return its default value.
   public mutating func clearOutputInfo() {_uniqueStorage()._outputInfo = nil}
 
-  /// Info about the models' input and configuration of them.
+  /// Info about preprocessing the models inputs, before they are sent to this model for training or inferencing.
+  /// E.g.: `input_info.base_embed_model` lets us know inputs should be ran through a base model before being sent to an embedding-classifier.
   public var inputInfo: Clarifai_Api_InputInfo {
     get {return _storage._inputInfo ?? Clarifai_Api_InputInfo()}
     set {_uniqueStorage()._inputInfo = newValue}
@@ -5054,7 +5050,7 @@ public struct Clarifai_Api_ModelVersion {
   /// Clears the value of `inputInfo`. Subsequent reads from it will return its default value.
   public mutating func clearInputInfo() {_uniqueStorage()._inputInfo = nil}
 
-  /// Configuration for the training process of this model.
+  /// Configuration for the training process of this model version.
   public var trainInfo: Clarifai_Api_TrainInfo {
     get {return _storage._trainInfo ?? Clarifai_Api_TrainInfo()}
     set {_uniqueStorage()._trainInfo = newValue}
