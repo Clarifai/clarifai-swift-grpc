@@ -5625,6 +5625,16 @@ public struct Clarifai_Api_EvalMetrics {
   /// Clears the value of `groundTruthDataset`. Subsequent reads from it will return its default value.
   public mutating func clearGroundTruthDataset() {_uniqueStorage()._groundTruthDataset = nil}
 
+  /// The dataset with predictions
+  public var predictionsDataset: Clarifai_Api_Dataset {
+    get {return _storage._predictionsDataset ?? Clarifai_Api_Dataset()}
+    set {_uniqueStorage()._predictionsDataset = newValue}
+  }
+  /// Returns true if `predictionsDataset` has been explicitly set.
+  public var hasPredictionsDataset: Bool {return _storage._predictionsDataset != nil}
+  /// Clears the value of `predictionsDataset`. Subsequent reads from it will return its default value.
+  public mutating func clearPredictionsDataset() {_uniqueStorage()._predictionsDataset = nil}
+
   public var summary: Clarifai_Api_MetricsSummary {
     get {return _storage._summary ?? Clarifai_Api_MetricsSummary()}
     set {_uniqueStorage()._summary = newValue}
@@ -17731,6 +17741,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     10: .same(proto: "id"),
     13: .same(proto: "model"),
     14: .standard(proto: "ground_truth_dataset"),
+    18: .standard(proto: "predictions_dataset"),
     2: .same(proto: "summary"),
     3: .standard(proto: "confusion_matrix"),
     4: .standard(proto: "cooccurrence_matrix"),
@@ -17751,6 +17762,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
     var _id: String = String()
     var _model: Clarifai_Api_Model? = nil
     var _groundTruthDataset: Clarifai_Api_Dataset? = nil
+    var _predictionsDataset: Clarifai_Api_Dataset? = nil
     var _summary: Clarifai_Api_MetricsSummary? = nil
     var _confusionMatrix: Clarifai_Api_ConfusionMatrix? = nil
     var _cooccurrenceMatrix: Clarifai_Api_CooccurrenceMatrix? = nil
@@ -17774,6 +17786,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       _id = source._id
       _model = source._model
       _groundTruthDataset = source._groundTruthDataset
+      _predictionsDataset = source._predictionsDataset
       _summary = source._summary
       _confusionMatrix = source._confusionMatrix
       _cooccurrenceMatrix = source._cooccurrenceMatrix
@@ -17820,6 +17833,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._appID) }()
         case 17: try { try decoder.decodeSingularMessageField(value: &_storage._extendedMetrics) }()
+        case 18: try { try decoder.decodeSingularMessageField(value: &_storage._predictionsDataset) }()
         default: break
         }
       }
@@ -17883,6 +17897,9 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       try { if let v = _storage._extendedMetrics {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
       } }()
+      try { if let v = _storage._predictionsDataset {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17898,6 +17915,7 @@ extension Clarifai_Api_EvalMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
         if _storage._id != rhs_storage._id {return false}
         if _storage._model != rhs_storage._model {return false}
         if _storage._groundTruthDataset != rhs_storage._groundTruthDataset {return false}
+        if _storage._predictionsDataset != rhs_storage._predictionsDataset {return false}
         if _storage._summary != rhs_storage._summary {return false}
         if _storage._confusionMatrix != rhs_storage._confusionMatrix {return false}
         if _storage._cooccurrenceMatrix != rhs_storage._cooccurrenceMatrix {return false}

@@ -9013,7 +9013,7 @@ public struct Clarifai_Api_DeleteModuleVersionsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
-/// Request to get the number of installations (by all users) for the module version 
+/// Request to get the number of installations (by all users) for the module version
 public struct Clarifai_Api_GetModuleVersionUsageCountRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
