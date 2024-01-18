@@ -935,6 +935,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
 
+  func patchModuleVersions(
+    _ request: Clarifai_Api_PatchModuleVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
+
   func deleteModuleVersions(
     _ request: Clarifai_Api_DeleteModuleVersionsRequest,
     callOptions: CallOptions?
@@ -4425,6 +4430,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Modify details of an existing module version.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchModuleVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchModuleVersions(
+    _ request: Clarifai_Api_PatchModuleVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchModuleVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchModuleVersionsInterceptors() ?? []
+    )
+  }
+
   /// Delete a multiple module version.
   ///
   /// - Parameters:
@@ -5605,6 +5628,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postModuleVersions'.
   func makePostModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'patchModuleVersions'.
+  func makePatchModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
   /// - Returns: Interceptors to use when invoking 'deleteModuleVersions'.
   func makeDeleteModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
 
@@ -6324,6 +6350,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Create a new module version to trigger training of the module.
   func postModuleVersions(request: Clarifai_Api_PostModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
+
+  /// Modify details of an existing module version.
+  func patchModuleVersions(request: Clarifai_Api_PatchModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
 
   /// Delete a multiple module version.
   func deleteModuleVersions(request: Clarifai_Api_DeleteModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
@@ -8083,6 +8112,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postModuleVersions(request:context:)
       )
 
+    case "PatchModuleVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModuleVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
+        interceptors: self.interceptors?.makePatchModuleVersionsInterceptors() ?? [],
+        userFunction: self.patchModuleVersions(request:context:)
+      )
+
     case "DeleteModuleVersions":
       return UnaryServerHandler(
         context: context,
@@ -9120,6 +9158,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModuleVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchModuleVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
 
   /// - Returns: Interceptors to use when handling 'deleteModuleVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
