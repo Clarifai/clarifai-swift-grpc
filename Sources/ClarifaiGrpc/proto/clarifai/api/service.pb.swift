@@ -7862,6 +7862,9 @@ public struct Clarifai_Api_ListTasksRequest {
   /// Currently supported: all, worker.users, review.users.
   public var additionalFields: [String] = []
 
+  /// (optional) task IDs to filter on
+  public var ids: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -22639,6 +22642,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     8: .standard(proto: "label_order_ids"),
     6: .standard(proto: "including_label_order_tasks"),
     7: .standard(proto: "additional_fields"),
+    9: .same(proto: "ids"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -22655,6 +22659,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
       case 6: try { try decoder.decodeSingularBoolField(value: &self.includingLabelOrderTasks) }()
       case 7: try { try decoder.decodeRepeatedStringField(value: &self.additionalFields) }()
       case 8: try { try decoder.decodeRepeatedStringField(value: &self.labelOrderIds) }()
+      case 9: try { try decoder.decodeRepeatedStringField(value: &self.ids) }()
       default: break
       }
     }
@@ -22689,6 +22694,9 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if !self.labelOrderIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.labelOrderIds, fieldNumber: 8)
     }
+    if !self.ids.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -22701,6 +22709,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.labelOrderIds != rhs.labelOrderIds {return false}
     if lhs.includingLabelOrderTasks != rhs.includingLabelOrderTasks {return false}
     if lhs.additionalFields != rhs.additionalFields {return false}
+    if lhs.ids != rhs.ids {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
