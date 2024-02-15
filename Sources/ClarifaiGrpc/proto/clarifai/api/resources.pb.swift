@@ -20,6 +20,56 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+public enum Clarifai_Api_WorkflowModelUseCase: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case notSet // = 0
+
+  /// Classifier models without a detector parent (recursive check) in a workflow
+  /// are used for classification.
+  case classification // = 1
+
+  /// Detector models in a workflow are used for detection.
+  /// Classifier models that run after a detector model are also used for detection.
+  case detection // = 2
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .notSet
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .notSet
+    case 1: self = .classification
+    case 2: self = .detection
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .notSet: return 0
+    case .classification: return 1
+    case .detection: return 2
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_WorkflowModelUseCase: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_WorkflowModelUseCase] = [
+    .notSet,
+    .classification,
+    .detection,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public enum Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
@@ -1945,11 +1995,15 @@ public struct Clarifai_Api_ConceptQuery {
   /// The name of the concept to search.
   public var name: String = String()
 
-  /// (optional) The language of the concept name in a search. Defaults to English.
+  /// The language of the concept name in a search. Defaults to English.
   public var language: String = String()
 
-  /// (optional) The id of workflow. If no id is provided, then application base workflow is used.
+  /// The id of workflow. If no id is provided, then application base workflow is used.
   public var workflowID: String = String()
+
+  /// The concepts must belong to workflow models with specified use cases.
+  /// Multiple values are joined using an OR condition.
+  public var useCases: [Clarifai_Api_WorkflowModelUseCase] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4474,7 +4528,7 @@ public struct Clarifai_Api_OutputConfig {
   fileprivate var _modelMetadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
-/// ModelType is a definition of a set of models that generally have the same input and output fields. 
+/// ModelType is a definition of a set of models that generally have the same input and output fields.
 /// This is used to understand more about the possible models in our platform.
 public struct Clarifai_Api_ModelType {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -7567,6 +7621,7 @@ public struct Clarifai_Api_AppDuplication {
   ///  - annotations
   ///  - models
   ///  - workflows
+  ///  - installed_module_versions
   public var progress: [Clarifai_Api_AppCopyProgress] {
     get {return _storage._progress}
     set {_uniqueStorage()._progress = newValue}
@@ -7614,6 +7669,9 @@ public struct Clarifai_Api_AppDuplicationFilters {
 
   /// Copy workflows. Requires that copy_models and copy_concepts are also set.
   public var copyWorkflows: Bool = false
+
+  /// Copy installed module versions.
+  public var copyInstalledModuleVersions: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -8614,7 +8672,7 @@ public struct Clarifai_Api_Collector {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
-  /// Whether to collect outputs or not. Default is false. If selected, outputs from the 
+  /// Whether to collect outputs or not. Default is false. If selected, outputs from the
   /// original model predict call will be posted as annotations along with the input with success status.
   public var collectOutputs: Bool {
     get {return _storage._collectOutputs}
@@ -10788,6 +10846,14 @@ public struct Clarifai_Api_Runner {
 
 fileprivate let _protobuf_package = "clarifai.api"
 
+extension Clarifai_Api_WorkflowModelUseCase: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "WORKFLOW_MODEL_USE_CASE_NOT_SET"),
+    1: .same(proto: "CLASSIFICATION"),
+    2: .same(proto: "DETECTION"),
+  ]
+}
+
 extension Clarifai_Api_DatasetVersionMetricsGroupType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "DATASET_VERSION_METRICS_GROUP_TYPE_NOT_SET"),
@@ -12375,6 +12441,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     1: .same(proto: "name"),
     2: .same(proto: "language"),
     3: .standard(proto: "workflow_id"),
+    4: .standard(proto: "use_cases"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -12386,6 +12453,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.language) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.workflowID) }()
+      case 4: try { try decoder.decodeRepeatedEnumField(value: &self.useCases) }()
       default: break
       }
     }
@@ -12401,6 +12469,9 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.workflowID.isEmpty {
       try visitor.visitSingularStringField(value: self.workflowID, fieldNumber: 3)
     }
+    if !self.useCases.isEmpty {
+      try visitor.visitPackedEnumField(value: self.useCases, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -12408,6 +12479,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs.name != rhs.name {return false}
     if lhs.language != rhs.language {return false}
     if lhs.workflowID != rhs.workflowID {return false}
+    if lhs.useCases != rhs.useCases {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -20320,6 +20392,7 @@ extension Clarifai_Api_AppDuplicationFilters: SwiftProtobuf.Message, SwiftProtob
     3: .standard(proto: "copy_annotations"),
     4: .standard(proto: "copy_models"),
     5: .standard(proto: "copy_workflows"),
+    6: .standard(proto: "copy_installed_module_versions"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20333,6 +20406,7 @@ extension Clarifai_Api_AppDuplicationFilters: SwiftProtobuf.Message, SwiftProtob
       case 3: try { try decoder.decodeSingularBoolField(value: &self.copyAnnotations) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.copyModels) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self.copyWorkflows) }()
+      case 6: try { try decoder.decodeSingularBoolField(value: &self.copyInstalledModuleVersions) }()
       default: break
       }
     }
@@ -20354,6 +20428,9 @@ extension Clarifai_Api_AppDuplicationFilters: SwiftProtobuf.Message, SwiftProtob
     if self.copyWorkflows != false {
       try visitor.visitSingularBoolField(value: self.copyWorkflows, fieldNumber: 5)
     }
+    if self.copyInstalledModuleVersions != false {
+      try visitor.visitSingularBoolField(value: self.copyInstalledModuleVersions, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20363,6 +20440,7 @@ extension Clarifai_Api_AppDuplicationFilters: SwiftProtobuf.Message, SwiftProtob
     if lhs.copyAnnotations != rhs.copyAnnotations {return false}
     if lhs.copyModels != rhs.copyModels {return false}
     if lhs.copyWorkflows != rhs.copyWorkflows {return false}
+    if lhs.copyInstalledModuleVersions != rhs.copyInstalledModuleVersions {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
