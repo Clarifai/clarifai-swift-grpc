@@ -7812,7 +7812,7 @@ public struct Clarifai_Api_GetTaskRequest {
   public var taskID: String = String()
 
   /// (optional URL parameter) List of additional fields to be included in the response.
-  /// Currently supported: all, worker.users, review.users.
+  /// Currently supported: all, worker.users, review.users, metrics.estimated_labeled_inputs_count.
   public var additionalFields: [String] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -7859,7 +7859,7 @@ public struct Clarifai_Api_ListTasksRequest {
   public var includingLabelOrderTasks: Bool = false
 
   /// (optional URL parameter) List of additional fields to be included in the response.
-  /// Currently supported: all, worker.users, review.users.
+  /// Currently supported: all, worker.users, review.users, metrics.estimated_labeled_inputs_count.
   public var additionalFields: [String] = []
 
   /// (optional) task IDs to filter on

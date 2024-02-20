@@ -590,6 +590,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case internalServerIssue // = 98004
   case internalFetchingIssue // = 98005
   case internalDatabaseIssue // = 98006
+  case internalContextCanceled // = 98008
   case internalUnexpectedTimeout // = 98009
   case internalUnexpectedV1 // = 98010
   case internalUnexpectedPanic // = 98011
@@ -955,6 +956,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 98004: self = .internalServerIssue
     case 98005: self = .internalFetchingIssue
     case 98006: self = .internalDatabaseIssue
+    case 98008: self = .internalContextCanceled
     case 98009: self = .internalUnexpectedTimeout
     case 98010: self = .internalUnexpectedV1
     case 98011: self = .internalUnexpectedPanic
@@ -1310,6 +1312,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .internalServerIssue: return 98004
     case .internalFetchingIssue: return 98005
     case .internalDatabaseIssue: return 98006
+    case .internalContextCanceled: return 98008
     case .internalUnexpectedTimeout: return 98009
     case .internalUnexpectedV1: return 98010
     case .internalUnexpectedPanic: return 98011
@@ -1668,6 +1671,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
+    .internalContextCanceled,
     .internalUnexpectedTimeout,
     .internalUnexpectedV1,
     .internalUnexpectedPanic,
@@ -2028,6 +2032,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),
     98005: .same(proto: "INTERNAL_FETCHING_ISSUE"),
     98006: .same(proto: "INTERNAL_DATABASE_ISSUE"),
+    98008: .same(proto: "INTERNAL_CONTEXT_CANCELED"),
     98009: .same(proto: "INTERNAL_UNEXPECTED_TIMEOUT"),
     98010: .same(proto: "INTERNAL_UNEXPECTED_V1"),
     98011: .same(proto: "INTERNAL_UNEXPECTED_PANIC"),

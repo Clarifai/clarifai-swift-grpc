@@ -463,6 +463,7 @@ public enum Clarifai_Api_EvaluationType: SwiftProtobuf.Enum {
   case segmentation // = 3
   case clustering // = 4
   case tracker // = 5
+  case generation // = 6
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -477,6 +478,7 @@ public enum Clarifai_Api_EvaluationType: SwiftProtobuf.Enum {
     case 3: self = .segmentation
     case 4: self = .clustering
     case 5: self = .tracker
+    case 6: self = .generation
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -489,6 +491,7 @@ public enum Clarifai_Api_EvaluationType: SwiftProtobuf.Enum {
     case .segmentation: return 3
     case .clustering: return 4
     case .tracker: return 5
+    case .generation: return 6
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -506,6 +509,7 @@ extension Clarifai_Api_EvaluationType: CaseIterable {
     .segmentation,
     .clustering,
     .tracker,
+    .generation,
   ]
 }
 
@@ -7952,6 +7956,16 @@ public struct Clarifai_Api_Task {
     set {_uniqueStorage()._deletePreviousAnnotations = newValue}
   }
 
+  /// Tasks metrics are filled in upon user-request.
+  public var metrics: Clarifai_Api_TaskMetrics {
+    get {return _storage._metrics ?? Clarifai_Api_TaskMetrics()}
+    set {_uniqueStorage()._metrics = newValue}
+  }
+  /// Returns true if `metrics` has been explicitly set.
+  public var hasMetrics: Bool {return _storage._metrics != nil}
+  /// Clears the value of `metrics`. Subsequent reads from it will return its default value.
+  public mutating func clearMetrics() {_uniqueStorage()._metrics = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum TaskType: SwiftProtobuf.Enum {
@@ -8525,8 +8539,10 @@ public struct Clarifai_Api_TaskConceptAutoAnnotationConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Filter anontations by their annotation data type.
-  /// This specifies types in an OR fashion, e.g. a `dog` concept that appears as a mask or a bbox.
+  /// Filter annotations by their annotation data type.
+  /// This is a bit-mask field that holds multiple AnnotationDataType values that are combined in an OR fashion.
+  /// Example: if annotation_data_types = 34, then we filter annotations that appear as a mask or a bounding box,
+  /// because MASK = 32 and BOUNDING_BOX = 2.
   public var annotationDataTypes: UInt32 = 0
 
   /// Filter annotations by concept value.
@@ -8579,6 +8595,18 @@ public struct Clarifai_Api_TaskConcept {
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_TaskMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var estimatedLabeledInputsCount: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 /// Collector is a data pathway from a CollectorSource to an app to collect data automatically.
@@ -10925,6 +10953,7 @@ extension Clarifai_Api_EvaluationType: SwiftProtobuf._ProtoNameProviding {
     3: .same(proto: "Segmentation"),
     4: .same(proto: "Clustering"),
     5: .same(proto: "Tracker"),
+    6: .same(proto: "Generation"),
   ]
 }
 
@@ -20609,6 +20638,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     18: .standard(proto: "label_order_id"),
     19: .same(proto: "concepts"),
     20: .standard(proto: "delete_previous_annotations"),
+    21: .same(proto: "metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -20632,6 +20662,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _labelOrderID: String = String()
     var _concepts: [Clarifai_Api_TaskConcept] = []
     var _deletePreviousAnnotations: Bool = false
+    var _metrics: Clarifai_Api_TaskMetrics? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -20658,6 +20689,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _labelOrderID = source._labelOrderID
       _concepts = source._concepts
       _deletePreviousAnnotations = source._deletePreviousAnnotations
+      _metrics = source._metrics
     }
   }
 
@@ -20696,6 +20728,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 18: try { try decoder.decodeSingularStringField(value: &_storage._labelOrderID) }()
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._concepts) }()
         case 20: try { try decoder.decodeSingularBoolField(value: &_storage._deletePreviousAnnotations) }()
+        case 21: try { try decoder.decodeSingularMessageField(value: &_storage._metrics) }()
         default: break
         }
       }
@@ -20768,6 +20801,9 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       if _storage._deletePreviousAnnotations != false {
         try visitor.visitSingularBoolField(value: _storage._deletePreviousAnnotations, fieldNumber: 20)
       }
+      try { if let v = _storage._metrics {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20797,6 +20833,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._labelOrderID != rhs_storage._labelOrderID {return false}
         if _storage._concepts != rhs_storage._concepts {return false}
         if _storage._deletePreviousAnnotations != rhs_storage._deletePreviousAnnotations {return false}
+        if _storage._metrics != rhs_storage._metrics {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -21472,6 +21509,38 @@ extension Clarifai_Api_TaskConcept: SwiftProtobuf.Message, SwiftProtobuf._Messag
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_TaskMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TaskMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "estimated_labeled_inputs_count"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.estimatedLabeledInputsCount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.estimatedLabeledInputsCount != 0 {
+      try visitor.visitSingularUInt64Field(value: self.estimatedLabeledInputsCount, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TaskMetrics, rhs: Clarifai_Api_TaskMetrics) -> Bool {
+    if lhs.estimatedLabeledInputsCount != rhs.estimatedLabeledInputsCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
