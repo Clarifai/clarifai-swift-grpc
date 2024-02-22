@@ -5760,6 +5760,7 @@ public struct Clarifai_Api_MultiOutputResponse {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {self._status = nil}
 
+  /// For each input processed during model prediction we create one output.
   public var outputs: [Clarifai_Api_Output] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()

@@ -7426,6 +7426,7 @@ public struct Clarifai_Api_NodeInput {
 }
 
 /// WorkflowResult
+/// One result per input in the workflow.
 public struct Clarifai_Api_WorkflowResult {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -7459,6 +7460,9 @@ public struct Clarifai_Api_WorkflowResult {
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
 
+  /// The model that this WorkflowResult is for.
+  /// DEPRECATED: not sure why there ever was a model here because each output shows the model
+  /// that process this given input.
   public var model: Clarifai_Api_Model {
     get {return _storage._model ?? Clarifai_Api_Model()}
     set {_uniqueStorage()._model = newValue}
@@ -7468,6 +7472,7 @@ public struct Clarifai_Api_WorkflowResult {
   /// Clears the value of `model`. Subsequent reads from it will return its default value.
   public mutating func clearModel() {_uniqueStorage()._model = nil}
 
+  /// The input that ran through the workflow to generate the outputs in this WorkflowResult.
   public var input: Clarifai_Api_Input {
     get {return _storage._input ?? Clarifai_Api_Input()}
     set {_uniqueStorage()._input = newValue}
@@ -7477,6 +7482,7 @@ public struct Clarifai_Api_WorkflowResult {
   /// Clears the value of `input`. Subsequent reads from it will return its default value.
   public mutating func clearInput() {_uniqueStorage()._input = nil}
 
+  /// For each model in the workflow we return an Output.
   public var outputs: [Clarifai_Api_Output] {
     get {return _storage._outputs}
     set {_uniqueStorage()._outputs = newValue}
