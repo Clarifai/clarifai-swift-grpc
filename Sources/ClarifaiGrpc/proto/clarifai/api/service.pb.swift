@@ -1149,6 +1149,106 @@ public struct Clarifai_Api_MultiCollaborationsResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// Get Resource Price - new billing
+public struct Clarifai_Api_GetResourcePriceRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var resource: Clarifai_Api_GetResourcePriceRequest.OneOf_Resource? = nil
+
+  /// ########## Supported fields ##########
+  /// - id
+  /// - model_version.id
+  public var model: Clarifai_Api_Model {
+    get {
+      if case .model(let v)? = resource {return v}
+      return Clarifai_Api_Model()
+    }
+    set {resource = .model(newValue)}
+  }
+
+  /// ########## Supported fields ##########
+  /// - id
+  /// - version.id
+  public var workflow: Clarifai_Api_Workflow {
+    get {
+      if case .workflow(let v)? = resource {return v}
+      return Clarifai_Api_Workflow()
+    }
+    set {resource = .workflow(newValue)}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_Resource: Equatable {
+    /// ########## Supported fields ##########
+    /// - id
+    /// - model_version.id
+    case model(Clarifai_Api_Model)
+    /// ########## Supported fields ##########
+    /// - id
+    /// - version.id
+    case workflow(Clarifai_Api_Workflow)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_GetResourcePriceRequest.OneOf_Resource, rhs: Clarifai_Api_GetResourcePriceRequest.OneOf_Resource) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.model, .model): return {
+        guard case .model(let l) = lhs, case .model(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.workflow, .workflow): return {
+        guard case .workflow(let l) = lhs, case .workflow(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_GetResourcePriceResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  /// Price is in millicents, i.e. $1/100000
+  public var price: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// GetStatusCodeRequest
 public struct Clarifai_Api_GetStatusCodeRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -4731,6 +4831,122 @@ public struct Clarifai_Api_PostModelVersionsRequest {
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
   fileprivate var _evalInfo: Clarifai_Api_EvalInfo? = nil
+}
+
+public struct Clarifai_Api_PostModelVersionsUploadRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var uploadData: Clarifai_Api_PostModelVersionsUploadRequest.OneOf_UploadData? = nil
+
+  public var uploadConfig: Clarifai_Api_PostModelVersionsUploadConfig {
+    get {
+      if case .uploadConfig(let v)? = uploadData {return v}
+      return Clarifai_Api_PostModelVersionsUploadConfig()
+    }
+    set {uploadData = .uploadConfig(newValue)}
+  }
+
+  public var contentPart: Clarifai_Api_UploadContentPart {
+    get {
+      if case .contentPart(let v)? = uploadData {return v}
+      return Clarifai_Api_UploadContentPart()
+    }
+    set {uploadData = .contentPart(newValue)}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_UploadData: Equatable {
+    case uploadConfig(Clarifai_Api_PostModelVersionsUploadConfig)
+    case contentPart(Clarifai_Api_UploadContentPart)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_PostModelVersionsUploadRequest.OneOf_UploadData, rhs: Clarifai_Api_PostModelVersionsUploadRequest.OneOf_UploadData) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.uploadConfig, .uploadConfig): return {
+        guard case .uploadConfig(let l) = lhs, case .uploadConfig(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.contentPart, .contentPart): return {
+        guard case .contentPart(let l) = lhs, case .contentPart(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
+public struct Clarifai_Api_PostModelVersionsUploadResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var bytesRemaining: UInt64 = 0
+
+  /// ID of the model version being uploaded
+  public var modelVersionID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+public struct Clarifai_Api_PostModelVersionsUploadConfig {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// model to create version of
+  public var modelID: String = String()
+
+  /// specification for the model version to be uploaded
+  public var modelVersion: Clarifai_Api_ModelVersion {
+    get {return _modelVersion ?? Clarifai_Api_ModelVersion()}
+    set {_modelVersion = newValue}
+  }
+  /// Returns true if `modelVersion` has been explicitly set.
+  public var hasModelVersion: Bool {return self._modelVersion != nil}
+  /// Clears the value of `modelVersion`. Subsequent reads from it will return its default value.
+  public mutating func clearModelVersion() {self._modelVersion = nil}
+
+  /// number of bytes in the model files to be uploaded 
+  public var totalSize: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _modelVersion: Clarifai_Api_ModelVersion? = nil
 }
 
 public struct Clarifai_Api_PostWorkflowVersionsUnPublishRequest {
@@ -12070,6 +12286,124 @@ extension Clarifai_Api_MultiCollaborationsResponse: SwiftProtobuf.Message, Swift
   }
 }
 
+extension Clarifai_Api_GetResourcePriceRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetResourcePriceRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "model"),
+    3: .same(proto: "workflow"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try {
+        var v: Clarifai_Api_Model?
+        var hadOneofValue = false
+        if let current = self.resource {
+          hadOneofValue = true
+          if case .model(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.resource = .model(v)
+        }
+      }()
+      case 3: try {
+        var v: Clarifai_Api_Workflow?
+        var hadOneofValue = false
+        if let current = self.resource {
+          hadOneofValue = true
+          if case .workflow(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.resource = .workflow(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    switch self.resource {
+    case .model?: try {
+      guard case .model(let v)? = self.resource else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case .workflow?: try {
+      guard case .workflow(let v)? = self.resource else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetResourcePriceRequest, rhs: Clarifai_Api_GetResourcePriceRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.resource != rhs.resource {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_GetResourcePriceResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GetResourcePriceResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "price"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.price) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.price != 0 {
+      try visitor.visitSingularInt64Field(value: self.price, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GetResourcePriceResponse, rhs: Clarifai_Api_GetResourcePriceResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.price != rhs.price {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_GetStatusCodeRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GetStatusCodeRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -17701,6 +18035,178 @@ extension Clarifai_Api_PostModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs.modelVersions != rhs.modelVersions {return false}
     if lhs.description_p != rhs.description_p {return false}
     if lhs._evalInfo != rhs._evalInfo {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostModelVersionsUploadRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostModelVersionsUploadRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "upload_config"),
+    2: .standard(proto: "content_part"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Clarifai_Api_PostModelVersionsUploadConfig?
+        var hadOneofValue = false
+        if let current = self.uploadData {
+          hadOneofValue = true
+          if case .uploadConfig(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.uploadData = .uploadConfig(v)
+        }
+      }()
+      case 2: try {
+        var v: Clarifai_Api_UploadContentPart?
+        var hadOneofValue = false
+        if let current = self.uploadData {
+          hadOneofValue = true
+          if case .contentPart(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.uploadData = .contentPart(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.uploadData {
+    case .uploadConfig?: try {
+      guard case .uploadConfig(let v)? = self.uploadData else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .contentPart?: try {
+      guard case .contentPart(let v)? = self.uploadData else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostModelVersionsUploadRequest, rhs: Clarifai_Api_PostModelVersionsUploadRequest) -> Bool {
+    if lhs.uploadData != rhs.uploadData {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostModelVersionsUploadResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostModelVersionsUploadResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "bytes_remaining"),
+    3: .standard(proto: "model_version_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.bytesRemaining) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.bytesRemaining != 0 {
+      try visitor.visitSingularUInt64Field(value: self.bytesRemaining, fieldNumber: 2)
+    }
+    if !self.modelVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostModelVersionsUploadResponse, rhs: Clarifai_Api_PostModelVersionsUploadResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.bytesRemaining != rhs.bytesRemaining {return false}
+    if lhs.modelVersionID != rhs.modelVersionID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostModelVersionsUploadConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostModelVersionsUploadConfig"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_version"),
+    4: .standard(proto: "total_size"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._modelVersion) }()
+      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.totalSize) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    try { if let v = self._modelVersion {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    if self.totalSize != 0 {
+      try visitor.visitSingularUInt64Field(value: self.totalSize, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostModelVersionsUploadConfig, rhs: Clarifai_Api_PostModelVersionsUploadConfig) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs._modelVersion != rhs._modelVersion {return false}
+    if lhs.totalSize != rhs.totalSize {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

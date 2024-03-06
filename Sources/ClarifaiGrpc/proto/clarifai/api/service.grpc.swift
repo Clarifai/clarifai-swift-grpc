@@ -445,6 +445,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>
 
+  func postModelVersionsUpload(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_PostModelVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>
+
   func getModelVersionMetrics(
     _ request: Clarifai_Api_GetModelVersionMetricsRequest,
     callOptions: CallOptions?
@@ -749,6 +754,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_GetStatusCodeRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_GetStatusCodeRequest, Clarifai_Api_SingleStatusCodeResponse>
+
+  func getResourcePrice(
+    _ request: Clarifai_Api_GetResourcePriceRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetResourcePriceRequest, Clarifai_Api_GetResourcePriceResponse>
 
   func listCollaborators(
     _ request: Clarifai_Api_ListCollaboratorsRequest,
@@ -2635,6 +2645,31 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the model_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the model_version_id. 
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the model_version_id specified for your model_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the model_bytes.
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func postModelVersionsUpload(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_PostModelVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/PostModelVersionsUpload",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
   /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
   ///
@@ -3749,6 +3784,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetStatusCodeInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetResourcePrice
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetResourcePrice.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getResourcePrice(
+    _ request: Clarifai_Api_GetResourcePriceRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetResourcePriceRequest, Clarifai_Api_GetResourcePriceResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetResourcePrice",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetResourcePriceInterceptors() ?? []
     )
   }
 
@@ -5339,6 +5392,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteModelVersion'.
   func makeDeleteModelVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsUpload'.
+  func makePostModelVersionsUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getModelVersionMetrics'.
   func makeGetModelVersionMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
 
@@ -5521,6 +5577,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getStatusCode'.
   func makeGetStatusCodeInterceptors() -> [ClientInterceptor<Clarifai_Api_GetStatusCodeRequest, Clarifai_Api_SingleStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getResourcePrice'.
+  func makeGetResourcePriceInterceptors() -> [ClientInterceptor<Clarifai_Api_GetResourcePriceRequest, Clarifai_Api_GetResourcePriceResponse>]
 
   /// - Returns: Interceptors to use when invoking 'listCollaborators'.
   func makeListCollaboratorsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCollaboratorsRequest, Clarifai_Api_MultiCollaboratorsResponse>]
@@ -6036,6 +6095,13 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete a single model.
   func deleteModelVersion(request: Clarifai_Api_DeleteModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the model_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the model_version_id. 
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the model_version_id specified for your model_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the model_bytes.
+  func postModelVersionsUpload(context: StreamingResponseCallContext<Clarifai_Api_PostModelVersionsUploadResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostModelVersionsUploadRequest>) -> Void>
+
   /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
   func getModelVersionMetrics(request: Clarifai_Api_GetModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
@@ -6232,6 +6298,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Get more details for a status code.
   func getStatusCode(request: Clarifai_Api_GetStatusCodeRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleStatusCodeResponse>
+
+  func getResourcePrice(request: Clarifai_Api_GetResourcePriceRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_GetResourcePriceResponse>
 
   /// owner list users who the app is shared with
   func listCollaborators(request: Clarifai_Api_ListCollaboratorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaboratorsResponse>
@@ -7240,6 +7308,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteModelVersion(request:context:)
       )
 
+    case "PostModelVersionsUpload":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsUploadRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostModelVersionsUploadResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
+        observerFactory: self.postModelVersionsUpload(context:)
+      )
+
     case "GetModelVersionMetrics":
       return UnaryServerHandler(
         context: context,
@@ -7787,6 +7864,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_SingleStatusCodeResponse>(),
         interceptors: self.interceptors?.makeGetStatusCodeInterceptors() ?? [],
         userFunction: self.getStatusCode(request:context:)
+      )
+
+    case "GetResourcePrice":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetResourcePriceRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_GetResourcePriceResponse>(),
+        interceptors: self.interceptors?.makeGetResourcePriceInterceptors() ?? [],
+        userFunction: self.getResourcePrice(request:context:)
       )
 
     case "ListCollaborators":
@@ -8777,6 +8863,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteModelVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when handling 'postModelVersionsUpload'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
   /// - Returns: Interceptors to use when handling 'getModelVersionMetrics'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetModelVersionMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
@@ -9020,6 +9110,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getStatusCode'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetStatusCodeInterceptors() -> [ServerInterceptor<Clarifai_Api_GetStatusCodeRequest, Clarifai_Api_SingleStatusCodeResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getResourcePrice'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetResourcePriceInterceptors() -> [ServerInterceptor<Clarifai_Api_GetResourcePriceRequest, Clarifai_Api_GetResourcePriceResponse>]
 
   /// - Returns: Interceptors to use when handling 'listCollaborators'.
   ///   Defaults to calling `self.makeInterceptors()`.

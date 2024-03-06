@@ -8052,7 +8052,7 @@ public struct Clarifai_Api_AiAssistParameters {
   public init() {}
 }
 
-/// TaskWorker
+/// TaskWorker includes information about the workers that will work on this task.
 public struct Clarifai_Api_TaskWorker {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -8062,19 +8062,14 @@ public struct Clarifai_Api_TaskWorker {
   public var strategy: Clarifai_Api_TaskWorker.TaskWorkerStrategy = .workerStrategyNotSet
 
   /// Who will work on this task.
-  /// DEPRECATED: Use users.id instead.
+  /// DEPRECATED: Use workers.user.id instead.
   public var userIds: [String] = []
 
   /// Users who will work on this task.
   /// When the 'worker.users' field is additionally requested, then all user
   /// info is filled for the workers. Otherwise, only the user 'id' is filled.
+  /// DEPRECATED: Use workers.user instead.
   public var users: [Clarifai_Api_User] = []
-
-  /// Models that will work on this task. For Auto Annotation Tasks. Currently only supports 1 entry.
-  public var models: [Clarifai_Api_Model] = []
-
-  /// Workflows that will work on this task. For Auto Annotation Tasks. Currently only supports 1 entry.
-  public var workflows: [Clarifai_Api_Workflow] = []
 
   /// Info based on the worker strategy,
   public var strategyInfo: Clarifai_Api_TaskWorker.OneOf_StrategyInfo? = nil
@@ -8086,6 +8081,16 @@ public struct Clarifai_Api_TaskWorker {
     }
     set {strategyInfo = .partitionedStrategyInfo(newValue)}
   }
+
+  /// Workers that will work on this task.
+  ///
+  /// For Auto Annotation Tasks:
+  ///   the worker can be either a model or a workflow;
+  ///   currently only supports 1 worker.
+  /// For manual labeling Tasks:
+  ///   the workers can only be users;
+  ///   no limitation on number of workers.
+  public var workers: [Clarifai_Api_Worker] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -20908,9 +20913,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     1: .same(proto: "strategy"),
     2: .standard(proto: "user_ids"),
     4: .same(proto: "users"),
-    5: .same(proto: "models"),
-    6: .same(proto: "workflows"),
     3: .standard(proto: "partitioned_strategy_info"),
+    7: .same(proto: "workers"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20935,8 +20939,7 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
         }
       }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.users) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.models) }()
-      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.workflows) }()
+      case 7: try { try decoder.decodeRepeatedMessageField(value: &self.workers) }()
       default: break
       }
     }
@@ -20959,11 +20962,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if !self.users.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.users, fieldNumber: 4)
     }
-    if !self.models.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.models, fieldNumber: 5)
-    }
-    if !self.workflows.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.workflows, fieldNumber: 6)
+    if !self.workers.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.workers, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20972,9 +20972,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.strategy != rhs.strategy {return false}
     if lhs.userIds != rhs.userIds {return false}
     if lhs.users != rhs.users {return false}
-    if lhs.models != rhs.models {return false}
-    if lhs.workflows != rhs.workflows {return false}
     if lhs.strategyInfo != rhs.strategyInfo {return false}
+    if lhs.workers != rhs.workers {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
