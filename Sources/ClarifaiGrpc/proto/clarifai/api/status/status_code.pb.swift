@@ -186,6 +186,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Used when a model example input field is not set properly
   case modelExampleInputInvalidArgument // = 21420
 
+  /// Model Export status codes
+  case modelExported // = 21500
+  case modelExporting // = 21501
+  case modelExportingFailed // = 21502
+  case modelExportPending // = 21503
+
   /// specified model input not in workflow
   case workflowNoMatchingInput // = 22001
 
@@ -487,6 +493,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Task was not found.
   case taskMissing // = 54102
+  case taskAssignmentSuccess // = 54200
+  case taskAssignmentPending // = 54201
+  case taskAssignmentAwaitingReview // = 54202
+  case taskAssignmentAwaitingConsensusReview // = 54203
 
   /// Label Order Related Status Code 55xxx
   case labelOrderPending // = 55001
@@ -688,6 +698,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21353: self = .modelNotDeployed
     case 21400: self = .modelReferenceInvalidArgument
     case 21420: self = .modelExampleInputInvalidArgument
+    case 21500: self = .modelExported
+    case 21501: self = .modelExporting
+    case 21502: self = .modelExportingFailed
+    case 21503: self = .modelExportPending
     case 22001: self = .workflowNoMatchingInput
     case 22002: self = .workflowRequireTrainedModel
     case 22100: self = .workflowDuplicate
@@ -901,6 +915,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 54100: self = .taskConflict
     case 54101: self = .taskNotImplemented
     case 54102: self = .taskMissing
+    case 54200: self = .taskAssignmentSuccess
+    case 54201: self = .taskAssignmentPending
+    case 54202: self = .taskAssignmentAwaitingReview
+    case 54203: self = .taskAssignmentAwaitingConsensusReview
     case 55001: self = .labelOrderPending
     case 55002: self = .labelOrderInProgress
     case 55003: self = .labelOrderSuccess
@@ -1044,6 +1062,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelNotDeployed: return 21353
     case .modelReferenceInvalidArgument: return 21400
     case .modelExampleInputInvalidArgument: return 21420
+    case .modelExported: return 21500
+    case .modelExporting: return 21501
+    case .modelExportingFailed: return 21502
+    case .modelExportPending: return 21503
     case .workflowNoMatchingInput: return 22001
     case .workflowRequireTrainedModel: return 22002
     case .workflowDuplicate: return 22100
@@ -1257,6 +1279,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .taskConflict: return 54100
     case .taskNotImplemented: return 54101
     case .taskMissing: return 54102
+    case .taskAssignmentSuccess: return 54200
+    case .taskAssignmentPending: return 54201
+    case .taskAssignmentAwaitingReview: return 54202
+    case .taskAssignmentAwaitingConsensusReview: return 54203
     case .labelOrderPending: return 55001
     case .labelOrderInProgress: return 55002
     case .labelOrderSuccess: return 55003
@@ -1405,6 +1431,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelNotDeployed,
     .modelReferenceInvalidArgument,
     .modelExampleInputInvalidArgument,
+    .modelExported,
+    .modelExporting,
+    .modelExportingFailed,
+    .modelExportPending,
     .workflowNoMatchingInput,
     .workflowRequireTrainedModel,
     .workflowDuplicate,
@@ -1618,6 +1648,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .taskConflict,
     .taskNotImplemented,
     .taskMissing,
+    .taskAssignmentSuccess,
+    .taskAssignmentPending,
+    .taskAssignmentAwaitingReview,
+    .taskAssignmentAwaitingConsensusReview,
     .labelOrderPending,
     .labelOrderInProgress,
     .labelOrderSuccess,
@@ -1764,6 +1798,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21353: .same(proto: "MODEL_NOT_DEPLOYED"),
     21400: .same(proto: "MODEL_REFERENCE_INVALID_ARGUMENT"),
     21420: .same(proto: "MODEL_EXAMPLE_INPUT_INVALID_ARGUMENT"),
+    21500: .same(proto: "MODEL_EXPORTED"),
+    21501: .same(proto: "MODEL_EXPORTING"),
+    21502: .same(proto: "MODEL_EXPORTING_FAILED"),
+    21503: .same(proto: "MODEL_EXPORT_PENDING"),
     22001: .same(proto: "WORKFLOW_NO_MATCHING_INPUT"),
     22002: .same(proto: "WORKFLOW_REQUIRE_TRAINED_MODEL"),
     22100: .same(proto: "WORKFLOW_DUPLICATE"),
@@ -1977,6 +2015,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     54100: .same(proto: "TASK_CONFLICT"),
     54101: .same(proto: "TASK_NOT_IMPLEMENTED"),
     54102: .same(proto: "TASK_MISSING"),
+    54200: .same(proto: "TASK_ASSIGNMENT_SUCCESS"),
+    54201: .same(proto: "TASK_ASSIGNMENT_PENDING"),
+    54202: .same(proto: "TASK_ASSIGNMENT_AWAITING_REVIEW"),
+    54203: .same(proto: "TASK_ASSIGNMENT_AWAITING_CONSENSUS_REVIEW"),
     55001: .same(proto: "LABEL_ORDER_PENDING"),
     55002: .same(proto: "LABEL_ORDER_IN_PROGRESS"),
     55003: .same(proto: "LABEL_ORDER_SUCCESS"),

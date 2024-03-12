@@ -5141,6 +5141,35 @@ public struct Clarifai_Api_ModelVersion {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
+/// ModelVersionExport contains metadata for a single Model version export.
+public struct Clarifai_Api_ModelVersionExport {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// status is the current status of the dataset version export.
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  /// url is the URL from where the model version export can be downloaded.
+  public var url: String = String()
+
+  /// size of model file
+  public var size: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// PretrainedModelConfig
 public struct Clarifai_Api_PretrainedModelConfig {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -8052,7 +8081,7 @@ public struct Clarifai_Api_AiAssistParameters {
   public init() {}
 }
 
-/// TaskWorker
+/// TaskWorker includes information about the workers that will work on this task.
 public struct Clarifai_Api_TaskWorker {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -8062,19 +8091,14 @@ public struct Clarifai_Api_TaskWorker {
   public var strategy: Clarifai_Api_TaskWorker.TaskWorkerStrategy = .workerStrategyNotSet
 
   /// Who will work on this task.
-  /// DEPRECATED: Use users.id instead.
+  /// DEPRECATED: Use workers.user.id instead.
   public var userIds: [String] = []
 
   /// Users who will work on this task.
   /// When the 'worker.users' field is additionally requested, then all user
   /// info is filled for the workers. Otherwise, only the user 'id' is filled.
+  /// DEPRECATED: Use workers.user instead.
   public var users: [Clarifai_Api_User] = []
-
-  /// Models that will work on this task. For Auto Annotation Tasks. Currently only supports 1 entry.
-  public var models: [Clarifai_Api_Model] = []
-
-  /// Workflows that will work on this task. For Auto Annotation Tasks. Currently only supports 1 entry.
-  public var workflows: [Clarifai_Api_Workflow] = []
 
   /// Info based on the worker strategy,
   public var strategyInfo: Clarifai_Api_TaskWorker.OneOf_StrategyInfo? = nil
@@ -8086,6 +8110,16 @@ public struct Clarifai_Api_TaskWorker {
     }
     set {strategyInfo = .partitionedStrategyInfo(newValue)}
   }
+
+  /// Workers that will work on this task.
+  ///
+  /// For Auto Annotation Tasks:
+  ///   the worker can be either a model or a workflow;
+  ///   currently only supports 1 worker.
+  /// For manual labeling Tasks:
+  ///   the workers can only be users;
+  ///   no limitation on number of workers.
+  public var workers: [Clarifai_Api_Worker] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -8495,6 +8529,78 @@ public struct Clarifai_Api_TaskAIAssistant {
   public init() {}
 }
 
+public struct Clarifai_Api_TaskAssignment {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var id: String {
+    get {return _storage._id}
+    set {_uniqueStorage()._id = newValue}
+  }
+
+  /// Creation time.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
+
+  /// Most recent modification time.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
+
+  /// Assigned worker.
+  public var worker: Clarifai_Api_Worker {
+    get {return _storage._worker ?? Clarifai_Api_Worker()}
+    set {_uniqueStorage()._worker = newValue}
+  }
+  /// Returns true if `worker` has been explicitly set.
+  public var hasWorker: Bool {return _storage._worker != nil}
+  /// Clears the value of `worker`. Subsequent reads from it will return its default value.
+  public mutating func clearWorker() {_uniqueStorage()._worker = nil}
+
+  /// Assigned input.
+  public var input: Clarifai_Api_Input {
+    get {return _storage._input ?? Clarifai_Api_Input()}
+    set {_uniqueStorage()._input = newValue}
+  }
+  /// Returns true if `input` has been explicitly set.
+  public var hasInput: Bool {return _storage._input != nil}
+  /// Clears the value of `input`. Subsequent reads from it will return its default value.
+  public mutating func clearInput() {_uniqueStorage()._input = nil}
+
+  /// Assignment status.
+  /// Read as: This is the status of the work assigned to worker W, on input I in task T.
+  public var status: Clarifai_Api_Status_Status {
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return _storage._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
+}
+
 /// TaskStatusCountPerUser can represents count of human created annotations for a user for each valid status,
 /// count of inputs (anchor annotation) for a user for each valid status
 public struct Clarifai_Api_TaskStatusCountPerUser {
@@ -8608,7 +8714,33 @@ public struct Clarifai_Api_TaskMetrics {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var estimatedLabeledInputsCount: UInt64 = 0
+  public var work: Clarifai_Api_TaskWorkMetrics {
+    get {return _work ?? Clarifai_Api_TaskWorkMetrics()}
+    set {_work = newValue}
+  }
+  /// Returns true if `work` has been explicitly set.
+  public var hasWork: Bool {return self._work != nil}
+  /// Clears the value of `work`. Subsequent reads from it will return its default value.
+  public mutating func clearWork() {self._work = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _work: Clarifai_Api_TaskWorkMetrics? = nil
+}
+
+public struct Clarifai_Api_TaskWorkMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Estimated number of inputs that workers have worked on.
+  public var inputsCountEstimated: UInt64 = 0
+
+  /// Estimated percent of inputs that workers have worked on.
+  /// This is a value between 0 and 100, where 0 = 0% and 100 = 100%.
+  public var inputsPercentEstimated: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -16881,6 +17013,54 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
+extension Clarifai_Api_ModelVersionExport: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ModelVersionExport"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "url"),
+    3: .same(proto: "size"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.url) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.size) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.url.isEmpty {
+      try visitor.visitSingularStringField(value: self.url, fieldNumber: 2)
+    }
+    if self.size != 0 {
+      try visitor.visitSingularInt64Field(value: self.size, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ModelVersionExport, rhs: Clarifai_Api_ModelVersionExport) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.url != rhs.url {return false}
+    if lhs.size != rhs.size {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PretrainedModelConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -20908,9 +21088,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     1: .same(proto: "strategy"),
     2: .standard(proto: "user_ids"),
     4: .same(proto: "users"),
-    5: .same(proto: "models"),
-    6: .same(proto: "workflows"),
     3: .standard(proto: "partitioned_strategy_info"),
+    7: .same(proto: "workers"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20935,8 +21114,7 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
         }
       }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.users) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.models) }()
-      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.workflows) }()
+      case 7: try { try decoder.decodeRepeatedMessageField(value: &self.workers) }()
       default: break
       }
     }
@@ -20959,11 +21137,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if !self.users.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.users, fieldNumber: 4)
     }
-    if !self.models.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.models, fieldNumber: 5)
-    }
-    if !self.workflows.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.workflows, fieldNumber: 6)
+    if !self.workers.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.workers, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20972,9 +21147,8 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.strategy != rhs.strategy {return false}
     if lhs.userIds != rhs.userIds {return false}
     if lhs.users != rhs.users {return false}
-    if lhs.models != rhs.models {return false}
-    if lhs.workflows != rhs.workflows {return false}
     if lhs.strategyInfo != rhs.strategyInfo {return false}
+    if lhs.workers != rhs.workers {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21284,6 +21458,114 @@ extension Clarifai_Api_TaskAIAssistant: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
+extension Clarifai_Api_TaskAssignment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TaskAssignment"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "created_at"),
+    3: .standard(proto: "modified_at"),
+    4: .same(proto: "worker"),
+    5: .same(proto: "input"),
+    6: .same(proto: "status"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _id: String = String()
+    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _worker: Clarifai_Api_Worker? = nil
+    var _input: Clarifai_Api_Input? = nil
+    var _status: Clarifai_Api_Status_Status? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _id = source._id
+      _createdAt = source._createdAt
+      _modifiedAt = source._modifiedAt
+      _worker = source._worker
+      _input = source._input
+      _status = source._status
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._worker) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._input) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._id.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
+      }
+      try { if let v = _storage._createdAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._modifiedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._worker {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._input {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._status {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TaskAssignment, rhs: Clarifai_Api_TaskAssignment) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._id != rhs_storage._id {return false}
+        if _storage._createdAt != rhs_storage._createdAt {return false}
+        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
+        if _storage._worker != rhs_storage._worker {return false}
+        if _storage._input != rhs_storage._input {return false}
+        if _storage._status != rhs_storage._status {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_TaskStatusCountPerUser: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TaskStatusCountPerUser"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -21523,7 +21805,7 @@ extension Clarifai_Api_TaskConcept: SwiftProtobuf.Message, SwiftProtobuf._Messag
 extension Clarifai_Api_TaskMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TaskMetrics"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "estimated_labeled_inputs_count"),
+    2: .same(proto: "work"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -21532,21 +21814,63 @@ extension Clarifai_Api_TaskMetrics: SwiftProtobuf.Message, SwiftProtobuf._Messag
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.estimatedLabeledInputsCount) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._work) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.estimatedLabeledInputsCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.estimatedLabeledInputsCount, fieldNumber: 1)
-    }
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._work {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TaskMetrics, rhs: Clarifai_Api_TaskMetrics) -> Bool {
-    if lhs.estimatedLabeledInputsCount != rhs.estimatedLabeledInputsCount {return false}
+    if lhs._work != rhs._work {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_TaskWorkMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".TaskWorkMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "inputs_count_estimated"),
+    2: .standard(proto: "inputs_percent_estimated"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.inputsCountEstimated) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.inputsPercentEstimated) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.inputsCountEstimated != 0 {
+      try visitor.visitSingularUInt64Field(value: self.inputsCountEstimated, fieldNumber: 1)
+    }
+    if self.inputsPercentEstimated != 0 {
+      try visitor.visitSingularUInt32Field(value: self.inputsPercentEstimated, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_TaskWorkMetrics, rhs: Clarifai_Api_TaskWorkMetrics) -> Bool {
+    if lhs.inputsCountEstimated != rhs.inputsCountEstimated {return false}
+    if lhs.inputsPercentEstimated != rhs.inputsPercentEstimated {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
