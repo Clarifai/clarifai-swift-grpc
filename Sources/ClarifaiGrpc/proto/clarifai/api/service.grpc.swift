@@ -445,6 +445,21 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>
 
+  func postModelVersionsUpload(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_PostModelVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>
+
+  func putModelVersionExports(
+    _ request: Clarifai_Api_PutModelVersionExportsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse>
+
+  func getModelVersionExport(
+    _ request: Clarifai_Api_GetModelVersionExportRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionExportRequest, Clarifai_Api_SingleModelVersionExportResponse>
+
   func getModelVersionMetrics(
     _ request: Clarifai_Api_GetModelVersionMetricsRequest,
     callOptions: CallOptions?
@@ -1008,7 +1023,7 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
   func putTaskAssignments(
     _ request: Clarifai_Api_PutTaskAssignmentsRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>
+  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_MultiTaskAssignmentResponse>
 
   func listInputsAddJobs(
     _ request: Clarifai_Api_ListInputsAddJobsRequest,
@@ -2632,6 +2647,67 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeleteModelVersionInterceptors() ?? []
+    )
+  }
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the model_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the model_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the model_version_id specified for your model_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the model_bytes.
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func postModelVersionsUpload(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_PostModelVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/PostModelVersionsUpload",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Export a model
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PutModelVersionExports.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func putModelVersionExports(
+    _ request: Clarifai_Api_PutModelVersionExportsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PutModelVersionExports",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePutModelVersionExportsInterceptors() ?? []
+    )
+  }
+
+  /// GetModelVersionExport
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetModelVersionExport.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getModelVersionExport(
+    _ request: Clarifai_Api_GetModelVersionExportRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetModelVersionExportRequest, Clarifai_Api_SingleModelVersionExportResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetModelVersionExport",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetModelVersionExportInterceptors() ?? []
     )
   }
 
@@ -4692,7 +4768,9 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// PutTaskAssignments evaluates all the annotations by labeler (authenticated user) for given task (task_id) and input (input_id).
+  /// PutTaskAssignments performs an action for the task assignments in given task.
+  /// All the actions are theoretically idempotent, but practically, in the current implementation,
+  /// the REVIEW_START action is not idempotent. See PutTaskAssignmentsRequestAction for more details.
   ///
   /// - Parameters:
   ///   - request: Request to send to PutTaskAssignments.
@@ -4701,7 +4779,7 @@ extension Clarifai_Api_V2ClientProtocol {
   public func putTaskAssignments(
     _ request: Clarifai_Api_PutTaskAssignmentsRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse> {
+  ) -> UnaryCall<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_MultiTaskAssignmentResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PutTaskAssignments",
       request: request,
@@ -4961,7 +5039,8 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a specific runner from an app.
+  /// Get a specific runner.
+  /// TODO(zeiler): runner_id is a UUID so can list globally as well.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetRunner.
@@ -4979,7 +5058,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List all the runners in community, by user or by app.
+  /// List all the runners for the user.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListRunners.
@@ -4997,7 +5076,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Add a runners to an app.
+  /// Add a runners to a user.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostRunners.
@@ -5034,6 +5113,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// List items for the remote runner to work on.
+  /// since the runner_id is a UUID we can access it directly too.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListRunnerItems.
@@ -5052,6 +5132,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Post back outputs from remote runners
+  /// since the runner_id is a UUID we can access it directly too.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostRunnerItemOutputs.
@@ -5338,6 +5419,15 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deleteModelVersion'.
   func makeDeleteModelVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelVersionsUpload'.
+  func makePostModelVersionsUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'putModelVersionExports'.
+  func makePutModelVersionExportsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getModelVersionExport'.
+  func makeGetModelVersionExportInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionExportRequest, Clarifai_Api_SingleModelVersionExportResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getModelVersionMetrics'.
   func makeGetModelVersionMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
@@ -5676,7 +5766,7 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   func makeListNextTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListNextTaskAssignmentsRequest, Clarifai_Api_MultiInputResponse>]
 
   /// - Returns: Interceptors to use when invoking 'putTaskAssignments'.
-  func makePutTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>]
+  func makePutTaskAssignmentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_MultiTaskAssignmentResponse>]
 
   /// - Returns: Interceptors to use when invoking 'listInputsAddJobs'.
   func makeListInputsAddJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInputsAddJobsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
@@ -6035,6 +6125,19 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete a single model.
   func deleteModelVersion(request: Clarifai_Api_DeleteModelVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the model_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the model_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the model_version_id specified for your model_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the model_bytes.
+  func postModelVersionsUpload(context: StreamingResponseCallContext<Clarifai_Api_PostModelVersionsUploadResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostModelVersionsUploadRequest>) -> Void>
+
+  /// Export a model
+  func putModelVersionExports(request: Clarifai_Api_PutModelVersionExportsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionExportResponse>
+
+  /// GetModelVersionExport
+  func getModelVersionExport(request: Clarifai_Api_GetModelVersionExportRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionExportResponse>
 
   /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
@@ -6408,8 +6511,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// List next non-labeled and unassigned inputs from task's dataset
   func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
-  /// PutTaskAssignments evaluates all the annotations by labeler (authenticated user) for given task (task_id) and input (input_id).
-  func putTaskAssignments(request: Clarifai_Api_PutTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+  /// PutTaskAssignments performs an action for the task assignments in given task.
+  /// All the actions are theoretically idempotent, but practically, in the current implementation,
+  /// the REVIEW_START action is not idempotent. See PutTaskAssignmentsRequestAction for more details.
+  func putTaskAssignments(request: Clarifai_Api_PutTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskAssignmentResponse>
 
   /// List all the inputs add jobs
   func listInputsAddJobs(request: Clarifai_Api_ListInputsAddJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
@@ -6462,22 +6567,25 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Completing the upload will automatically begin unpacking the archive and uploading the contents as inputs.
   func postInputsUploads(request: Clarifai_Api_PostInputsUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
 
-  /// Get a specific runner from an app.
+  /// Get a specific runner.
+  /// TODO(zeiler): runner_id is a UUID so can list globally as well.
   func getRunner(request: Clarifai_Api_GetRunnerRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleRunnerResponse>
 
-  /// List all the runners in community, by user or by app.
+  /// List all the runners for the user.
   func listRunners(request: Clarifai_Api_ListRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
 
-  /// Add a runners to an app.
+  /// Add a runners to a user.
   func postRunners(request: Clarifai_Api_PostRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
 
   /// Delete multiple runners in one request.
   func deleteRunners(request: Clarifai_Api_DeleteRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   /// List items for the remote runner to work on.
+  /// since the runner_id is a UUID we can access it directly too.
   func listRunnerItems(request: Clarifai_Api_ListRunnerItemsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemResponse>
 
   /// Post back outputs from remote runners
+  /// since the runner_id is a UUID we can access it directly too.
   func postRunnerItemOutputs(request: Clarifai_Api_PostRunnerItemOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemOutputResponse>
 
   func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
@@ -7238,6 +7346,33 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeleteModelVersionInterceptors() ?? [],
         userFunction: self.deleteModelVersion(request:context:)
+      )
+
+    case "PostModelVersionsUpload":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelVersionsUploadRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostModelVersionsUploadResponse>(),
+        interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
+        observerFactory: self.postModelVersionsUpload(context:)
+      )
+
+    case "PutModelVersionExports":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PutModelVersionExportsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionExportResponse>(),
+        interceptors: self.interceptors?.makePutModelVersionExportsInterceptors() ?? [],
+        userFunction: self.putModelVersionExports(request:context:)
+      )
+
+    case "GetModelVersionExport":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModelVersionExportRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelVersionExportResponse>(),
+        interceptors: self.interceptors?.makeGetModelVersionExportInterceptors() ?? [],
+        userFunction: self.getModelVersionExport(request:context:)
       )
 
     case "GetModelVersionMetrics":
@@ -8252,7 +8387,7 @@ extension Clarifai_Api_V2Provider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Clarifai_Api_PutTaskAssignmentsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTaskAssignmentResponse>(),
         interceptors: self.interceptors?.makePutTaskAssignmentsInterceptors() ?? [],
         userFunction: self.putTaskAssignments(request:context:)
       )
@@ -8777,6 +8912,18 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteModelVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelVersionRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when handling 'postModelVersionsUpload'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelVersionsUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'putModelVersionExports'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePutModelVersionExportsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getModelVersionExport'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetModelVersionExportInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionExportRequest, Clarifai_Api_SingleModelVersionExportResponse>]
+
   /// - Returns: Interceptors to use when handling 'getModelVersionMetrics'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetModelVersionMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModelVersionMetricsRequest, Clarifai_Api_SingleModelVersionResponse>]
@@ -9227,7 +9374,7 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'putTaskAssignments'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makePutTaskAssignmentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_Status_BaseResponse>]
+  func makePutTaskAssignmentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PutTaskAssignmentsRequest, Clarifai_Api_MultiTaskAssignmentResponse>]
 
   /// - Returns: Interceptors to use when handling 'listInputsAddJobs'.
   ///   Defaults to calling `self.makeInterceptors()`.

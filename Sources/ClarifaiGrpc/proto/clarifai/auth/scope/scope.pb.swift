@@ -111,6 +111,12 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   /// Internal only model syncing.
   case modelsSync // = 27
 
+  /// To get model version export
+  case modelExportsGet // = 142
+
+  /// To create model version export
+  case modelExportsAdd // = 143
+
   /// Write to the workflows DB table.
   case workflowsAdd // = 18
 
@@ -284,7 +290,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case uploadsAdd // = 129
   case uploadsDelete // = 130
 
-  /// To read allo control over remote runners
+  /// To control remote runners
   case runnersGet // = 131
   case runnersAdd // = 132
   case runnersDelete // = 133
@@ -386,6 +392,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 133: self = .runnersDelete
     case 134: self = .runnerItemsGet
     case 135: self = .runnerItemsAdd
+    case 142: self = .modelExportsGet
+    case 143: self = .modelExportsAdd
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -480,6 +488,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .runnersDelete: return 133
     case .runnerItemsGet: return 134
     case .runnerItemsAdd: return 135
+    case .modelExportsGet: return 142
+    case .modelExportsAdd: return 143
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -509,6 +519,8 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .modelsDelete,
     .modelsTrain,
     .modelsSync,
+    .modelExportsGet,
+    .modelExportsAdd,
     .workflowsAdd,
     .workflowsGet,
     .workflowsPatch,
@@ -770,6 +782,8 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     133: .same(proto: "Runners_Delete"),
     134: .same(proto: "RunnerItems_Get"),
     135: .same(proto: "RunnerItems_Add"),
+    142: .same(proto: "ModelExports_Get"),
+    143: .same(proto: "ModelExports_Add"),
   ]
 }
 
