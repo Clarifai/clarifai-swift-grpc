@@ -230,6 +230,17 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>
 
+  func generateModelOutputs(
+    _ request: Clarifai_Api_PostModelOutputsRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_MultiOutputResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>
+
+  func streamModelOutputs(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_MultiOutputResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>
+
   func listDatasets(
     _ request: Clarifai_Api_ListDatasetsRequest,
     callOptions: CallOptions?
@@ -1120,6 +1131,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>
 
+  func processRunnerItems(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_MultiRunnerItemResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemResponse>
+
   func postModelVersionsTrainingTimeEstimate(
     _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
     callOptions: CallOptions?
@@ -1515,6 +1531,9 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Patch annotations status by worker id and task id.
+  /// Deprecated: Use PutTaskAssignments to update task annotations.
+  ///   For example, you can use PutTaskAssignments with action REVIEW_APPROVE
+  ///   to approve task assignments and associated annotations in bulk.
   ///
   /// - Parameters:
   ///   - request: Request to send to PatchAnnotationsStatus.
@@ -1856,6 +1875,49 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostModelOutputsInterceptors() ?? []
+    )
+  }
+
+  /// TODO(zeiler): will need to
+  /// Single request but streaming resopnses.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GenerateModelOutputs.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func generateModelOutputs(
+    _ request: Clarifai_Api_PostModelOutputsRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_MultiOutputResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse> {
+    return self.makeServerStreamingCall(
+      path: "/clarifai.api.V2/GenerateModelOutputs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGenerateModelOutputsInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Stream of requests and stream of responses
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func streamModelOutputs(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_MultiOutputResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/StreamModelOutputs",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamModelOutputsInterceptors() ?? [],
+      handler: handler
     )
   }
 
@@ -2471,6 +2533,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// Deprecated: Unmaintained and ideally replaced with usage of datasets
+  ///   The server may refuse to accept requests to this endpoint.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListModelInputs.
@@ -2711,8 +2774,9 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
+  /// Deprecated: Use GetEvaluation instead
+  ///   The server may refuse to accept requests to this endpoint.
   ///
   /// - Parameters:
   ///   - request: Request to send to GetModelVersionMetrics.
@@ -3577,6 +3641,7 @@ extension Clarifai_Api_V2ClientProtocol {
   /// Execute a new search and optionally save it.
   ///
   /// Deprecated: Use PostInputsSearches or PostAnnotationsSearches instead.
+  ///  The server may refuse to accept requests to this endpoint.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostSearches.
@@ -4750,7 +4815,11 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// List next non-labeled and unassigned inputs from task's dataset
+  /// Deprecated: Use PutTaskAssignments with action=LABEL_START.
+  ///   This endpoint has initially been designed as a GET request,
+  ///   but has been re-designed to serve a PUT logic.
+  ///   In order to clearly highlight that this endpoint serves a PUT request,
+  ///   this endpoint has been deprecated and replaced by PutTaskAssignments with action=LABEL_START.
   ///
   /// - Parameters:
   ///   - request: Request to send to ListNextTaskAssignments.
@@ -5150,7 +5219,33 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Unary call to PostModelVersionsTrainingTimeEstimate
+  /// This maintains a single request for asking the API if there is any work to be done, processing
+  /// it and streaming back results.
+  /// To do that first handshake the MultiRunnerItemOutputResponse will have RUNNER_STREAM_START
+  /// status filled in so that the API knows to respond with a MultiRunnerItemResponse.
+  /// For now there will only be one of those if the model prediction only has one request.
+  /// NOTE(zeiler): downside of this is you can't use HTTP REST requests to do runner work.
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func processRunnerItems(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_MultiRunnerItemResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/ProcessRunnerItems",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeProcessRunnerItemsInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Get the training time estimate based off train request and estimated input count.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostModelVersionsTrainingTimeEstimate.
@@ -5290,6 +5385,12 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postModelOutputs'.
   func makePostModelOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'generateModelOutputs'.
+  func makeGenerateModelOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'streamModelOutputs'.
+  func makeStreamModelOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
 
   /// - Returns: Interceptors to use when invoking 'listDatasets'.
   func makeListDatasetsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDatasetsRequest, Clarifai_Api_MultiDatasetResponse>]
@@ -5825,6 +5926,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postRunnerItemOutputs'.
   func makePostRunnerItemOutputsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'processRunnerItems'.
+  func makeProcessRunnerItemsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemResponse>]
+
   /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 }
@@ -5924,6 +6028,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func patchAnnotations(request: Clarifai_Api_PatchAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
 
   /// Patch annotations status by worker id and task id.
+  /// Deprecated: Use PutTaskAssignments to update task annotations.
+  ///   For example, you can use PutTaskAssignments with action REVIEW_APPROVE
+  ///   to approve task assignments and associated annotations in bulk.
   func patchAnnotationsStatus(request: Clarifai_Api_PatchAnnotationsStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PatchAnnotationsStatusResponse>
 
   /// Delete a single annotation.
@@ -5982,6 +6089,13 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Get predicted outputs from the model.
   func postModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiOutputResponse>
+
+  /// TODO(zeiler): will need to
+  /// Single request but streaming resopnses.
+  func generateModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StreamingResponseCallContext<Clarifai_Api_MultiOutputResponse>) -> EventLoopFuture<GRPCStatus>
+
+  /// Stream of requests and stream of responses
+  func streamModelOutputs(context: StreamingResponseCallContext<Clarifai_Api_MultiOutputResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostModelOutputsRequest>) -> Void>
 
   /// List all the datasets.
   func listDatasets(request: Clarifai_Api_ListDatasetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDatasetResponse>
@@ -6099,6 +6213,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func patchModelLanguages(request: Clarifai_Api_PatchModelLanguagesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModelLanguageResponse>
 
   /// Deprecated: Unmaintained and ideally replaced with usage of datasets
+  ///   The server may refuse to accept requests to this endpoint.
   func listModelInputs(request: Clarifai_Api_ListModelInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
   /// Get a specific model from an app.
@@ -6139,8 +6254,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// GetModelVersionExport
   func getModelVersionExport(request: Clarifai_Api_GetModelVersionExportRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionExportResponse>
 
-  /// Deprecated: Use GetEvaluation instead
   /// Get the evaluation metrics for a model version.
+  /// Deprecated: Use GetEvaluation instead
+  ///   The server may refuse to accept requests to this endpoint.
   func getModelVersionMetrics(request: Clarifai_Api_GetModelVersionMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionResponse>
 
   /// Deprecated, use PostEvaluations instead
@@ -6295,6 +6411,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Execute a new search and optionally save it.
   ///
   /// Deprecated: Use PostInputsSearches or PostAnnotationsSearches instead.
+  ///  The server may refuse to accept requests to this endpoint.
   func postSearches(request: Clarifai_Api_PostSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
 
   /// Execute a previously saved legacy search.
@@ -6508,7 +6625,11 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// delete one or more terminated bulk operations
   func deleteBulkOperations(request: Clarifai_Api_DeleteBulkOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
-  /// List next non-labeled and unassigned inputs from task's dataset
+  /// Deprecated: Use PutTaskAssignments with action=LABEL_START.
+  ///   This endpoint has initially been designed as a GET request,
+  ///   but has been re-designed to serve a PUT logic.
+  ///   In order to clearly highlight that this endpoint serves a PUT request,
+  ///   this endpoint has been deprecated and replaced by PutTaskAssignments with action=LABEL_START.
   func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
   /// PutTaskAssignments performs an action for the task assignments in given task.
@@ -6588,6 +6709,15 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// since the runner_id is a UUID we can access it directly too.
   func postRunnerItemOutputs(request: Clarifai_Api_PostRunnerItemOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerItemOutputResponse>
 
+  /// This maintains a single request for asking the API if there is any work to be done, processing
+  /// it and streaming back results.
+  /// To do that first handshake the MultiRunnerItemOutputResponse will have RUNNER_STREAM_START
+  /// status filled in so that the API knows to respond with a MultiRunnerItemResponse.
+  /// For now there will only be one of those if the model prediction only has one request.
+  /// NOTE(zeiler): downside of this is you can't use HTTP REST requests to do runner work.
+  func processRunnerItems(context: StreamingResponseCallContext<Clarifai_Api_MultiRunnerItemResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostRunnerItemOutputsRequest>) -> Void>
+
+  /// Get the training time estimate based off train request and estimated input count.
   func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
 }
 
@@ -6959,6 +7089,24 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiOutputResponse>(),
         interceptors: self.interceptors?.makePostModelOutputsInterceptors() ?? [],
         userFunction: self.postModelOutputs(request:context:)
+      )
+
+    case "GenerateModelOutputs":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelOutputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiOutputResponse>(),
+        interceptors: self.interceptors?.makeGenerateModelOutputsInterceptors() ?? [],
+        userFunction: self.generateModelOutputs(request:context:)
+      )
+
+    case "StreamModelOutputs":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelOutputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiOutputResponse>(),
+        interceptors: self.interceptors?.makeStreamModelOutputsInterceptors() ?? [],
+        observerFactory: self.streamModelOutputs(context:)
       )
 
     case "ListDatasets":
@@ -8563,6 +8711,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postRunnerItemOutputs(request:context:)
       )
 
+    case "ProcessRunnerItems":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostRunnerItemOutputsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerItemResponse>(),
+        interceptors: self.interceptors?.makeProcessRunnerItemsInterceptors() ?? [],
+        observerFactory: self.processRunnerItems(context:)
+      )
+
     case "PostModelVersionsTrainingTimeEstimate":
       return UnaryServerHandler(
         context: context,
@@ -8739,6 +8896,14 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModelOutputs'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'generateModelOutputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGenerateModelOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'streamModelOutputs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamModelOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelOutputsRequest, Clarifai_Api_MultiOutputResponse>]
 
   /// - Returns: Interceptors to use when handling 'listDatasets'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -9451,6 +9616,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postRunnerItemOutputs'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostRunnerItemOutputsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemOutputResponse>]
+
+  /// - Returns: Interceptors to use when handling 'processRunnerItems'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeProcessRunnerItemsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerItemOutputsRequest, Clarifai_Api_MultiRunnerItemResponse>]
 
   /// - Returns: Interceptors to use when handling 'postModelVersionsTrainingTimeEstimate'.
   ///   Defaults to calling `self.makeInterceptors()`.
