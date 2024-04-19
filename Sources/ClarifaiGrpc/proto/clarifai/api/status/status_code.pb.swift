@@ -290,6 +290,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case runnerInvalidArgument // = 25602
   case runnerInvalidRequest // = 25603
   case runnerNeedsRetry // = 25604
+  case runnerStreamStart // = 25605
+  case runnerStreamEnd // = 25606
+  case runnerItemCancelled // = 25607
+  case runnerProcessingFailed // = 25608
 
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
@@ -777,6 +781,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25602: self = .runnerInvalidArgument
     case 25603: self = .runnerInvalidRequest
     case 25604: self = .runnerNeedsRetry
+    case 25605: self = .runnerStreamStart
+    case 25606: self = .runnerStreamEnd
+    case 25607: self = .runnerItemCancelled
+    case 25608: self = .runnerProcessingFailed
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -1143,6 +1151,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .runnerInvalidArgument: return 25602
     case .runnerInvalidRequest: return 25603
     case .runnerNeedsRetry: return 25604
+    case .runnerStreamStart: return 25605
+    case .runnerStreamEnd: return 25606
+    case .runnerItemCancelled: return 25607
+    case .runnerProcessingFailed: return 25608
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -1514,6 +1526,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .runnerInvalidArgument,
     .runnerInvalidRequest,
     .runnerNeedsRetry,
+    .runnerStreamStart,
+    .runnerStreamEnd,
+    .runnerItemCancelled,
+    .runnerProcessingFailed,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1883,6 +1899,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25602: .same(proto: "RUNNER_INVALID_ARGUMENT"),
     25603: .same(proto: "RUNNER_INVALID_REQUEST"),
     25604: .same(proto: "RUNNER_NEEDS_RETRY"),
+    25605: .same(proto: "RUNNER_STREAM_START"),
+    25606: .same(proto: "RUNNER_STREAM_END"),
+    25607: .same(proto: "RUNNER_ITEM_CANCELLED"),
+    25608: .same(proto: "RUNNER_PROCESSING_FAILED"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
