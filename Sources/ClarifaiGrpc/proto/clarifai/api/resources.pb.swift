@@ -1063,13 +1063,13 @@ public struct Clarifai_Api_Annotation {
   /// Clears the value of `annotationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearAnnotationInfo() {_uniqueStorage()._annotationInfo = nil}
 
-  /// ID of the user this annotation is created by
+  /// DEPRECATED: Use worker.user.id instead.
   public var userID: String {
     get {return _storage._userID}
     set {_uniqueStorage()._userID = newValue}
   }
 
-  /// ID of the model version this annotation is created by
+  /// DEPRECATED: Use worker.model.model_version.id instead
   public var modelVersionID: String {
     get {return _storage._modelVersionID}
     set {_uniqueStorage()._modelVersionID = newValue}
@@ -1146,11 +1146,15 @@ public struct Clarifai_Api_Annotation {
     set {_uniqueStorage()._taskID = newValue}
   }
 
-  /// ID of the workflow version this annotation is created by
-  public var workflowVersionID: String {
-    get {return _storage._workflowVersionID}
-    set {_uniqueStorage()._workflowVersionID = newValue}
+  /// Worker is the worker that created the annotation.
+  public var worker: Clarifai_Api_Worker {
+    get {return _storage._worker ?? Clarifai_Api_Worker()}
+    set {_uniqueStorage()._worker = newValue}
   }
+  /// Returns true if `worker` has been explicitly set.
+  public var hasWorker: Bool {return _storage._worker != nil}
+  /// Clears the value of `worker`. Subsequent reads from it will return its default value.
+  public mutating func clearWorker() {_uniqueStorage()._worker = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -6269,9 +6273,6 @@ public struct Clarifai_Api_And {
   ///  - data.geo.geo_point.latitude
   ///  - data.geo.geo_point.longitude
   ///  - data.image.url
-  ///  - data.metadata - allow search with empty metadata
-  ///    note that searching by empty metadata will actually not influence the search results.
-  ///    however, in order to be user-friendly, we are still supporting searching by empty metadata.
   ///  - data.metadata.fields - filter by metadata. metadata key&value fields are OR-ed.
   ///  - dataset_ids[] - filter by dataset IDs
   ///  - id - filter by input ID
@@ -6302,7 +6303,6 @@ public struct Clarifai_Api_And {
   ///  - data.concepts[].id
   ///  - data.concepts[].name
   ///  - data.concepts[].value
-  ///  - input.data.image - empty image is required when searching by input ID
   ///  - input.data.image.base64[]
   ///  - input.data.image.url
   ///  - input.id
@@ -6331,9 +6331,6 @@ public struct Clarifai_Api_And {
   /// combinable with queries like visual search (a query with Output filled in).
   ///
   /// ########## Supported fields ##########
-  ///  - annotation_info - allows searching by empty annotation info
-  ///    note that searching by empty annotation info will actually not influence the search results.
-  ///    however, in order to be user-friendly, we are still supporting searching by empty annotation info.
   ///  - annotation_info.fields - filter by annotation info
   ///  - data.concepts[].id
   ///  - data.concepts[].name
@@ -6345,9 +6342,6 @@ public struct Clarifai_Api_And {
   ///  - data.geo.geo_point.latitude
   ///  - data.geo.geo_point.longitude
   ///  - data.image.url
-  ///  - data.metadata - allow search with empty metadata
-  ///    note that searching by empty metadata will actually not influence the search results.
-  ///    however, in order to be user-friendly, we are still supporting searching by empty metadata.
   ///  - data.metadata.fields - filter by metadata. metadata key&value fields are OR-ed.
   ///  - input_id
   ///  - input_level
@@ -6590,12 +6584,13 @@ public struct Clarifai_Api_Filter {
   ///  - model_version_id
   ///  - task_id
   ///  - user_id
-  ///  - workflow_version_id
+  ///
+  ///  # Filter by worker fields such as model, workflow and user IDs
+  ///  - worker.model.model_version.id
+  ///  - worker.user.id
+  ///  - worker.workflow.version.id
   ///
   ///  # Filter by other top-level fields
-  ///  - annotation_info                         - allows searching by empty annotation-info, i.e. `{"data": "annotation_info": {}}`;
-  ///                                              note that searching by empty annotation-info will actually not influence the search results.
-  ///                                              however, in order to be user-friendly, we still support searching by empty annotation-info.
   ///  - annotation_info.fields                  - filter by annotation info
   ///  - input_level                             - filter only input-level annotations
   ///  - status.code                             - filter by annotation status code
@@ -6630,9 +6625,6 @@ public struct Clarifai_Api_Filter {
   ///  - data.geo.geo_limit.value
   ///  - data.geo.geo_point.latitude
   ///  - data.geo.geo_point.longitude
-  ///  - data.metadata                           - allow search with empty metadata, i.e. `{"data": "metadata": {}}`;
-  ///                                              note that searching by empty metadata will actually not influence the search results;
-  ///                                              however, in order to be user-friendly, we still support searching by empty metadata.
   ///  - data.metadata.fields                    - filter by metadata
   ///                                            - Important to note: metadata key&value fields are OR-ed.
   ///                                            - example with 1 metadata key: searching by
@@ -12032,7 +12024,7 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
     17: .standard(proto: "input_level"),
     18: .standard(proto: "consensus_info"),
     19: .standard(proto: "task_id"),
-    20: .standard(proto: "workflow_version_id"),
+    21: .same(proto: "worker"),
   ]
 
   fileprivate class _StorageClass {
@@ -12050,7 +12042,7 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _inputLevel: Bool = false
     var _consensusInfo: SwiftProtobuf.Google_Protobuf_Struct? = nil
     var _taskID: String = String()
-    var _workflowVersionID: String = String()
+    var _worker: Clarifai_Api_Worker? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -12071,7 +12063,7 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
       _inputLevel = source._inputLevel
       _consensusInfo = source._consensusInfo
       _taskID = source._taskID
-      _workflowVersionID = source._workflowVersionID
+      _worker = source._worker
     }
   }
 
@@ -12104,7 +12096,7 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
         case 17: try { try decoder.decodeSingularBoolField(value: &_storage._inputLevel) }()
         case 18: try { try decoder.decodeSingularMessageField(value: &_storage._consensusInfo) }()
         case 19: try { try decoder.decodeSingularStringField(value: &_storage._taskID) }()
-        case 20: try { try decoder.decodeSingularStringField(value: &_storage._workflowVersionID) }()
+        case 21: try { try decoder.decodeSingularMessageField(value: &_storage._worker) }()
         default: break
         }
       }
@@ -12159,9 +12151,9 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
       if !_storage._taskID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._taskID, fieldNumber: 19)
       }
-      if !_storage._workflowVersionID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._workflowVersionID, fieldNumber: 20)
-      }
+      try { if let v = _storage._worker {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -12185,7 +12177,7 @@ extension Clarifai_Api_Annotation: SwiftProtobuf.Message, SwiftProtobuf._Message
         if _storage._inputLevel != rhs_storage._inputLevel {return false}
         if _storage._consensusInfo != rhs_storage._consensusInfo {return false}
         if _storage._taskID != rhs_storage._taskID {return false}
-        if _storage._workflowVersionID != rhs_storage._workflowVersionID {return false}
+        if _storage._worker != rhs_storage._worker {return false}
         return true
       }
       if !storagesAreEqual {return false}
