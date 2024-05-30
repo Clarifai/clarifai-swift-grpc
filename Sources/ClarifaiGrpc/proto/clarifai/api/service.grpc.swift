@@ -1140,6 +1140,51 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>
+
+  func getComputeCluster(
+    _ request: Clarifai_Api_GetComputeClusterRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetComputeClusterRequest, Clarifai_Api_SingleComputeClusterResponse>
+
+  func listComputeClusters(
+    _ request: Clarifai_Api_ListComputeClustersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>
+
+  func postComputeClusters(
+    _ request: Clarifai_Api_PostComputeClustersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>
+
+  func deleteComputeClusters(
+    _ request: Clarifai_Api_DeleteComputeClustersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>
+
+  func getNodepool(
+    _ request: Clarifai_Api_GetNodepoolRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetNodepoolRequest, Clarifai_Api_SingleNodepoolResponse>
+
+  func listNodepools(
+    _ request: Clarifai_Api_ListNodepoolsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>
+
+  func postNodepools(
+    _ request: Clarifai_Api_PostNodepoolsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>
+
+  func patchNodepools(
+    _ request: Clarifai_Api_PatchNodepoolsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>
+
+  func deleteNodepools(
+    _ request: Clarifai_Api_DeleteNodepoolsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5262,6 +5307,168 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePostModelVersionsTrainingTimeEstimateInterceptors() ?? []
     )
   }
+
+  /// ComputeCluster CRUD
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetComputeCluster.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getComputeCluster(
+    _ request: Clarifai_Api_GetComputeClusterRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetComputeClusterRequest, Clarifai_Api_SingleComputeClusterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetComputeCluster",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetComputeClusterInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListComputeClusters
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListComputeClusters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listComputeClusters(
+    _ request: Clarifai_Api_ListComputeClustersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListComputeClusters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListComputeClustersInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostComputeClusters
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostComputeClusters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postComputeClusters(
+    _ request: Clarifai_Api_PostComputeClustersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostComputeClusters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostComputeClustersInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple compute_clusters in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteComputeClusters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteComputeClusters(
+    _ request: Clarifai_Api_DeleteComputeClustersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteComputeClusters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteComputeClustersInterceptors() ?? []
+    )
+  }
+
+  /// Nodepools CRUD
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetNodepool.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getNodepool(
+    _ request: Clarifai_Api_GetNodepoolRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetNodepoolRequest, Clarifai_Api_SingleNodepoolResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetNodepool",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetNodepoolInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListNodepools
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListNodepools.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listNodepools(
+    _ request: Clarifai_Api_ListNodepoolsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListNodepools",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListNodepoolsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostNodepools
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostNodepools.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postNodepools(
+    _ request: Clarifai_Api_PostNodepoolsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostNodepools",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostNodepoolsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchNodepools
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchNodepools.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchNodepools(
+    _ request: Clarifai_Api_PatchNodepoolsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchNodepools",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchNodepoolsInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple nodepools in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteNodepools.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteNodepools(
+    _ request: Clarifai_Api_DeleteNodepoolsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteNodepools",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteNodepoolsInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -5931,6 +6138,33 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getComputeCluster'.
+  func makeGetComputeClusterInterceptors() -> [ClientInterceptor<Clarifai_Api_GetComputeClusterRequest, Clarifai_Api_SingleComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listComputeClusters'.
+  func makeListComputeClustersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postComputeClusters'.
+  func makePostComputeClustersInterceptors() -> [ClientInterceptor<Clarifai_Api_PostComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteComputeClusters'.
+  func makeDeleteComputeClustersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getNodepool'.
+  func makeGetNodepoolInterceptors() -> [ClientInterceptor<Clarifai_Api_GetNodepoolRequest, Clarifai_Api_SingleNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listNodepools'.
+  func makeListNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postNodepools'.
+  func makePostNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchNodepools'.
+  func makePatchNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteNodepools'.
+  func makeDeleteNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6719,6 +6953,28 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Get the training time estimate based off train request and estimated input count.
   func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
+
+  /// ComputeCluster CRUD
+  func getComputeCluster(request: Clarifai_Api_GetComputeClusterRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleComputeClusterResponse>
+
+  func listComputeClusters(request: Clarifai_Api_ListComputeClustersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiComputeClusterResponse>
+
+  func postComputeClusters(request: Clarifai_Api_PostComputeClustersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiComputeClusterResponse>
+
+  /// Delete multiple compute_clusters in one request.
+  func deleteComputeClusters(request: Clarifai_Api_DeleteComputeClustersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Nodepools CRUD
+  func getNodepool(request: Clarifai_Api_GetNodepoolRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleNodepoolResponse>
+
+  func listNodepools(request: Clarifai_Api_ListNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiNodepoolResponse>
+
+  func postNodepools(request: Clarifai_Api_PostNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiNodepoolResponse>
+
+  func patchNodepools(request: Clarifai_Api_PatchNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiNodepoolResponse>
+
+  /// Delete multiple nodepools in one request.
+  func deleteNodepools(request: Clarifai_Api_DeleteNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -8729,6 +8985,87 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postModelVersionsTrainingTimeEstimate(request:context:)
       )
 
+    case "GetComputeCluster":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetComputeClusterRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleComputeClusterResponse>(),
+        interceptors: self.interceptors?.makeGetComputeClusterInterceptors() ?? [],
+        userFunction: self.getComputeCluster(request:context:)
+      )
+
+    case "ListComputeClusters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListComputeClustersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiComputeClusterResponse>(),
+        interceptors: self.interceptors?.makeListComputeClustersInterceptors() ?? [],
+        userFunction: self.listComputeClusters(request:context:)
+      )
+
+    case "PostComputeClusters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostComputeClustersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiComputeClusterResponse>(),
+        interceptors: self.interceptors?.makePostComputeClustersInterceptors() ?? [],
+        userFunction: self.postComputeClusters(request:context:)
+      )
+
+    case "DeleteComputeClusters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteComputeClustersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteComputeClustersInterceptors() ?? [],
+        userFunction: self.deleteComputeClusters(request:context:)
+      )
+
+    case "GetNodepool":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetNodepoolRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleNodepoolResponse>(),
+        interceptors: self.interceptors?.makeGetNodepoolInterceptors() ?? [],
+        userFunction: self.getNodepool(request:context:)
+      )
+
+    case "ListNodepools":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListNodepoolsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiNodepoolResponse>(),
+        interceptors: self.interceptors?.makeListNodepoolsInterceptors() ?? [],
+        userFunction: self.listNodepools(request:context:)
+      )
+
+    case "PostNodepools":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostNodepoolsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiNodepoolResponse>(),
+        interceptors: self.interceptors?.makePostNodepoolsInterceptors() ?? [],
+        userFunction: self.postNodepools(request:context:)
+      )
+
+    case "PatchNodepools":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchNodepoolsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiNodepoolResponse>(),
+        interceptors: self.interceptors?.makePatchNodepoolsInterceptors() ?? [],
+        userFunction: self.patchNodepools(request:context:)
+      )
+
+    case "DeleteNodepools":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteNodepoolsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteNodepoolsInterceptors() ?? [],
+        userFunction: self.deleteNodepools(request:context:)
+      )
+
     default:
       return nil
     }
@@ -9624,4 +9961,40 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModelVersionsTrainingTimeEstimate'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getComputeCluster'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetComputeClusterInterceptors() -> [ServerInterceptor<Clarifai_Api_GetComputeClusterRequest, Clarifai_Api_SingleComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listComputeClusters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListComputeClustersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postComputeClusters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostComputeClustersInterceptors() -> [ServerInterceptor<Clarifai_Api_PostComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteComputeClusters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteComputeClustersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getNodepool'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetNodepoolInterceptors() -> [ServerInterceptor<Clarifai_Api_GetNodepoolRequest, Clarifai_Api_SingleNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listNodepools'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postNodepools'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchNodepools'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchNodepoolsRequest, Clarifai_Api_MultiNodepoolResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteNodepools'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
 }

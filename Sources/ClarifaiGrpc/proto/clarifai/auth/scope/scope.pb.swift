@@ -296,6 +296,16 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case runnersDelete // = 133
   case runnerItemsGet // = 134
   case runnerItemsAdd // = 135
+
+  /// Pools of compute resources.
+  case nodepoolsGet // = 136
+  case nodepoolsAdd // = 137
+  case nodepoolsDelete // = 138
+
+  /// Cluster of machines in a region of cloud
+  case computeClustersGet // = 139
+  case computeClustersAdd // = 140
+  case computeClustersDelete // = 141
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -392,6 +402,12 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 133: self = .runnersDelete
     case 134: self = .runnerItemsGet
     case 135: self = .runnerItemsAdd
+    case 136: self = .nodepoolsGet
+    case 137: self = .nodepoolsAdd
+    case 138: self = .nodepoolsDelete
+    case 139: self = .computeClustersGet
+    case 140: self = .computeClustersAdd
+    case 141: self = .computeClustersDelete
     case 142: self = .modelExportsGet
     case 143: self = .modelExportsAdd
     default: self = .UNRECOGNIZED(rawValue)
@@ -488,6 +504,12 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .runnersDelete: return 133
     case .runnerItemsGet: return 134
     case .runnerItemsAdd: return 135
+    case .nodepoolsGet: return 136
+    case .nodepoolsAdd: return 137
+    case .nodepoolsDelete: return 138
+    case .computeClustersGet: return 139
+    case .computeClustersAdd: return 140
+    case .computeClustersDelete: return 141
     case .modelExportsGet: return 142
     case .modelExportsAdd: return 143
     case .UNRECOGNIZED(let i): return i
@@ -591,6 +613,12 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .runnersDelete,
     .runnerItemsGet,
     .runnerItemsAdd,
+    .nodepoolsGet,
+    .nodepoolsAdd,
+    .nodepoolsDelete,
+    .computeClustersGet,
+    .computeClustersAdd,
+    .computeClustersDelete,
   ]
 }
 
@@ -782,6 +810,12 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     133: .same(proto: "Runners_Delete"),
     134: .same(proto: "RunnerItems_Get"),
     135: .same(proto: "RunnerItems_Add"),
+    136: .same(proto: "Nodepools_Get"),
+    137: .same(proto: "Nodepools_Add"),
+    138: .same(proto: "Nodepools_Delete"),
+    139: .same(proto: "ComputeClusters_Get"),
+    140: .same(proto: "ComputeClusters_Add"),
+    141: .same(proto: "ComputeClusters_Delete"),
     142: .same(proto: "ModelExports_Get"),
     143: .same(proto: "ModelExports_Add"),
   ]
