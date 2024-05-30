@@ -105,6 +105,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// generic err msg for any type of model training err.
   case modelTrainingFailed // = 21106
 
+  /// For new V3 DockerInternalType models which are built images
+  case modelBuilding // = 21107
+
+  /// Failed to build image for model.
+  case modelBuildingFailed // = 21108
+
+  /// Failed to build image for model.
+  case modelBuildUnexpectedError // = 21109
+
   /// Custom model training had no data.  FIXME(yang): deprecate this. Use the 21106 + errStatusMsg
   case modelTrainingNoData // = 21110
 
@@ -294,6 +303,16 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case runnerStreamEnd // = 25606
   case runnerItemCancelled // = 25607
   case runnerProcessingFailed // = 25608
+
+  /// Nodepool related codes 257xx
+  case nodepoolDoesNotExist // = 25700
+  case nodepoolInvalidArgument // = 25701
+  case nodepoolInvalidRequest // = 25702
+
+  /// ComputeCluster related codes 258xx
+  case computeClusterDoesNotExist // = 25800
+  case computeClusterInvalidArgument // = 25801
+  case computeClusterInvalidRequest // = 25802
 
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
@@ -671,6 +690,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21104: self = .modelUploading
     case 21105: self = .modelUploadingFailed
     case 21106: self = .modelTrainingFailed
+    case 21107: self = .modelBuilding
+    case 21108: self = .modelBuildingFailed
+    case 21109: self = .modelBuildUnexpectedError
     case 21110: self = .modelTrainingNoData
     case 21111: self = .modelTrainingNoPositives
     case 21112: self = .modelTrainingOneVsNSingleClass
@@ -785,6 +807,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25606: self = .runnerStreamEnd
     case 25607: self = .runnerItemCancelled
     case 25608: self = .runnerProcessingFailed
+    case 25700: self = .nodepoolDoesNotExist
+    case 25701: self = .nodepoolInvalidArgument
+    case 25702: self = .nodepoolInvalidRequest
+    case 25800: self = .computeClusterDoesNotExist
+    case 25801: self = .computeClusterInvalidArgument
+    case 25802: self = .computeClusterInvalidRequest
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -1041,6 +1069,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelUploading: return 21104
     case .modelUploadingFailed: return 21105
     case .modelTrainingFailed: return 21106
+    case .modelBuilding: return 21107
+    case .modelBuildingFailed: return 21108
+    case .modelBuildUnexpectedError: return 21109
     case .modelTrainingNoData: return 21110
     case .modelTrainingNoPositives: return 21111
     case .modelTrainingOneVsNSingleClass: return 21112
@@ -1155,6 +1186,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .runnerStreamEnd: return 25606
     case .runnerItemCancelled: return 25607
     case .runnerProcessingFailed: return 25608
+    case .nodepoolDoesNotExist: return 25700
+    case .nodepoolInvalidArgument: return 25701
+    case .nodepoolInvalidRequest: return 25702
+    case .computeClusterDoesNotExist: return 25800
+    case .computeClusterInvalidArgument: return 25801
+    case .computeClusterInvalidRequest: return 25802
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -1416,6 +1453,9 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelUploading,
     .modelUploadingFailed,
     .modelTrainingFailed,
+    .modelBuilding,
+    .modelBuildingFailed,
+    .modelBuildUnexpectedError,
     .modelTrainingNoData,
     .modelTrainingNoPositives,
     .modelTrainingOneVsNSingleClass,
@@ -1530,6 +1570,12 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .runnerStreamEnd,
     .runnerItemCancelled,
     .runnerProcessingFailed,
+    .nodepoolDoesNotExist,
+    .nodepoolInvalidArgument,
+    .nodepoolInvalidRequest,
+    .computeClusterDoesNotExist,
+    .computeClusterInvalidArgument,
+    .computeClusterInvalidRequest,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1789,6 +1835,9 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21104: .same(proto: "MODEL_UPLOADING"),
     21105: .same(proto: "MODEL_UPLOADING_FAILED"),
     21106: .same(proto: "MODEL_TRAINING_FAILED"),
+    21107: .same(proto: "MODEL_BUILDING"),
+    21108: .same(proto: "MODEL_BUILDING_FAILED"),
+    21109: .same(proto: "MODEL_BUILD_UNEXPECTED_ERROR"),
     21110: .same(proto: "MODEL_TRAINING_NO_DATA"),
     21111: .same(proto: "MODEL_TRAINING_NO_POSITIVES"),
     21112: .same(proto: "MODEL_TRAINING_ONE_VS_N_SINGLE_CLASS"),
@@ -1903,6 +1952,12 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25606: .same(proto: "RUNNER_STREAM_END"),
     25607: .same(proto: "RUNNER_ITEM_CANCELLED"),
     25608: .same(proto: "RUNNER_PROCESSING_FAILED"),
+    25700: .same(proto: "NODEPOOL_DOES_NOT_EXIST"),
+    25701: .same(proto: "NODEPOOL_INVALID_ARGUMENT"),
+    25702: .same(proto: "NODEPOOL_INVALID_REQUEST"),
+    25800: .same(proto: "COMPUTE_CLUSTER_DOES_NOT_EXIST"),
+    25801: .same(proto: "COMPUTE_CLUSTER_INVALID_ARGUMENT"),
+    25802: .same(proto: "COMPUTE_CLUSTER_INVALID_REQUEST"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
