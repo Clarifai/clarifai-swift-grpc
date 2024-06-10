@@ -110,11 +110,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>
 
-  func postConceptMappingJobs(
-    _ request: Clarifai_Api_PostConceptMappingJobsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse>
-
   func getAnnotation(
     _ request: Clarifai_Api_GetAnnotationRequest,
     callOptions: CallOptions?
@@ -1185,6 +1180,31 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteNodepoolsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func getDeployment(
+    _ request: Clarifai_Api_GetDeploymentRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse>
+
+  func listDeployments(
+    _ request: Clarifai_Api_ListDeploymentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>
+
+  func postDeployments(
+    _ request: Clarifai_Api_PostDeploymentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>
+
+  func patchDeployments(
+    _ request: Clarifai_Api_PatchDeploymentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>
+
+  func deleteDeployments(
+    _ request: Clarifai_Api_DeleteDeploymentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -1482,24 +1502,6 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostKnowledgeGraphsInterceptors() ?? []
-    )
-  }
-
-  /// Start concept mapping jobs.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostConceptMappingJobs.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postConceptMappingJobs(
-    _ request: Clarifai_Api_PostConceptMappingJobsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostConceptMappingJobs",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostConceptMappingJobsInterceptors() ?? []
     )
   }
 
@@ -5469,6 +5471,96 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makeDeleteNodepoolsInterceptors() ?? []
     )
   }
+
+  /// Deployments CRUD
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDeployment.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDeployment(
+    _ request: Clarifai_Api_GetDeploymentRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetDeployment",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDeploymentInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListDeployments
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListDeployments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listDeployments(
+    _ request: Clarifai_Api_ListDeploymentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListDeployments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListDeploymentsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostDeployments
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostDeployments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postDeployments(
+    _ request: Clarifai_Api_PostDeploymentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostDeployments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostDeploymentsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchDeployments
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchDeployments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchDeployments(
+    _ request: Clarifai_Api_PatchDeploymentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchDeployments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchDeploymentsInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple deployments in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteDeployments.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteDeployments(
+    _ request: Clarifai_Api_DeleteDeploymentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteDeployments",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteDeploymentsInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -5520,9 +5612,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postKnowledgeGraphs'.
   func makePostKnowledgeGraphsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postConceptMappingJobs'.
-  func makePostConceptMappingJobsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getAnnotation'.
   func makeGetAnnotationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAnnotationRequest, Clarifai_Api_SingleAnnotationResponse>]
@@ -6165,6 +6254,21 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deleteNodepools'.
   func makeDeleteNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDeployment'.
+  func makeGetDeploymentInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listDeployments'.
+  func makeListDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postDeployments'.
+  func makePostDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchDeployments'.
+  func makePatchDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteDeployments'.
+  func makeDeleteDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6245,9 +6349,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Post domain graphs.
   func postKnowledgeGraphs(request: Clarifai_Api_PostKnowledgeGraphsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiKnowledgeGraphResponse>
-
-  /// Start concept mapping jobs.
-  func postConceptMappingJobs(request: Clarifai_Api_PostConceptMappingJobsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiConceptMappingJobResponse>
 
   /// Get a specific annotation from an app.
   func getAnnotation(request: Clarifai_Api_GetAnnotationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAnnotationResponse>
@@ -6975,6 +7076,18 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete multiple nodepools in one request.
   func deleteNodepools(request: Clarifai_Api_DeleteNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Deployments CRUD
+  func getDeployment(request: Clarifai_Api_GetDeploymentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDeploymentResponse>
+
+  func listDeployments(request: Clarifai_Api_ListDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDeploymentResponse>
+
+  func postDeployments(request: Clarifai_Api_PostDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDeploymentResponse>
+
+  func patchDeployments(request: Clarifai_Api_PatchDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiDeploymentResponse>
+
+  /// Delete multiple deployments in one request.
+  func deleteDeployments(request: Clarifai_Api_DeleteDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -7129,15 +7242,6 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiKnowledgeGraphResponse>(),
         interceptors: self.interceptors?.makePostKnowledgeGraphsInterceptors() ?? [],
         userFunction: self.postKnowledgeGraphs(request:context:)
-      )
-
-    case "PostConceptMappingJobs":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostConceptMappingJobsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiConceptMappingJobResponse>(),
-        interceptors: self.interceptors?.makePostConceptMappingJobsInterceptors() ?? [],
-        userFunction: self.postConceptMappingJobs(request:context:)
       )
 
     case "GetAnnotation":
@@ -9066,6 +9170,51 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteNodepools(request:context:)
       )
 
+    case "GetDeployment":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetDeploymentRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleDeploymentResponse>(),
+        interceptors: self.interceptors?.makeGetDeploymentInterceptors() ?? [],
+        userFunction: self.getDeployment(request:context:)
+      )
+
+    case "ListDeployments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListDeploymentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDeploymentResponse>(),
+        interceptors: self.interceptors?.makeListDeploymentsInterceptors() ?? [],
+        userFunction: self.listDeployments(request:context:)
+      )
+
+    case "PostDeployments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostDeploymentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDeploymentResponse>(),
+        interceptors: self.interceptors?.makePostDeploymentsInterceptors() ?? [],
+        userFunction: self.postDeployments(request:context:)
+      )
+
+    case "PatchDeployments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchDeploymentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiDeploymentResponse>(),
+        interceptors: self.interceptors?.makePatchDeploymentsInterceptors() ?? [],
+        userFunction: self.patchDeployments(request:context:)
+      )
+
+    case "DeleteDeployments":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteDeploymentsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteDeploymentsInterceptors() ?? [],
+        userFunction: self.deleteDeployments(request:context:)
+      )
+
     default:
       return nil
     }
@@ -9137,10 +9286,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postKnowledgeGraphs'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostKnowledgeGraphsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostKnowledgeGraphsRequest, Clarifai_Api_MultiKnowledgeGraphResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postConceptMappingJobs'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostConceptMappingJobsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostConceptMappingJobsRequest, Clarifai_Api_MultiConceptMappingJobResponse>]
 
   /// - Returns: Interceptors to use when handling 'getAnnotation'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -9997,4 +10142,24 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteNodepools'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDeployment'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDeploymentInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listDeployments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListDeploymentsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postDeployments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostDeploymentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchDeployments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchDeploymentsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchDeploymentsRequest, Clarifai_Api_MultiDeploymentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteDeployments'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteDeploymentsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>]
 }

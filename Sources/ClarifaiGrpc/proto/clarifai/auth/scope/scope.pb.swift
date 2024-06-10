@@ -306,6 +306,11 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case computeClustersGet // = 139
   case computeClustersAdd // = 140
   case computeClustersDelete // = 141
+
+  /// How to autoscale resources within nodepools.
+  case deploymentsGet // = 144
+  case deploymentsAdd // = 145
+  case deploymentsDelete // = 146
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -410,6 +415,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 141: self = .computeClustersDelete
     case 142: self = .modelExportsGet
     case 143: self = .modelExportsAdd
+    case 144: self = .deploymentsGet
+    case 145: self = .deploymentsAdd
+    case 146: self = .deploymentsDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -512,6 +520,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .computeClustersDelete: return 141
     case .modelExportsGet: return 142
     case .modelExportsAdd: return 143
+    case .deploymentsGet: return 144
+    case .deploymentsAdd: return 145
+    case .deploymentsDelete: return 146
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -619,6 +630,9 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .computeClustersGet,
     .computeClustersAdd,
     .computeClustersDelete,
+    .deploymentsGet,
+    .deploymentsAdd,
+    .deploymentsDelete,
   ]
 }
 
@@ -818,6 +832,9 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     141: .same(proto: "ComputeClusters_Delete"),
     142: .same(proto: "ModelExports_Get"),
     143: .same(proto: "ModelExports_Add"),
+    144: .same(proto: "Deployments_Get"),
+    145: .same(proto: "Deployments_Add"),
+    146: .same(proto: "Deployments_Delete"),
   ]
 }
 

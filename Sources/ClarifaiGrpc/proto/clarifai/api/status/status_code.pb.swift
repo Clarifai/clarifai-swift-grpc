@@ -314,6 +314,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case computeClusterInvalidArgument // = 25801
   case computeClusterInvalidRequest // = 25802
 
+  /// Deployment related codes 259xx
+  case deploymentDoesNotExist // = 25900
+  case deploymentInvalidArgument // = 25901
+  case deploymentInvalidRequest // = 25902
+
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
 
@@ -813,6 +818,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25800: self = .computeClusterDoesNotExist
     case 25801: self = .computeClusterInvalidArgument
     case 25802: self = .computeClusterInvalidRequest
+    case 25900: self = .deploymentDoesNotExist
+    case 25901: self = .deploymentInvalidArgument
+    case 25902: self = .deploymentInvalidRequest
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -1192,6 +1200,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .computeClusterDoesNotExist: return 25800
     case .computeClusterInvalidArgument: return 25801
     case .computeClusterInvalidRequest: return 25802
+    case .deploymentDoesNotExist: return 25900
+    case .deploymentInvalidArgument: return 25901
+    case .deploymentInvalidRequest: return 25902
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -1576,6 +1587,9 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .computeClusterDoesNotExist,
     .computeClusterInvalidArgument,
     .computeClusterInvalidRequest,
+    .deploymentDoesNotExist,
+    .deploymentInvalidArgument,
+    .deploymentInvalidRequest,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1958,6 +1972,9 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25800: .same(proto: "COMPUTE_CLUSTER_DOES_NOT_EXIST"),
     25801: .same(proto: "COMPUTE_CLUSTER_INVALID_ARGUMENT"),
     25802: .same(proto: "COMPUTE_CLUSTER_INVALID_REQUEST"),
+    25900: .same(proto: "DEPLOYMENT_DOES_NOT_EXIST"),
+    25901: .same(proto: "DEPLOYMENT_INVALID_ARGUMENT"),
+    25902: .same(proto: "DEPLOYMENT_INVALID_REQUEST"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
