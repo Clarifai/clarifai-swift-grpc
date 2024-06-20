@@ -4444,7 +4444,7 @@ public struct Clarifai_Api_ModelVersionInputExample {
 /// our JSON REST APIs). This allows each ModelType to define the set of fields, their default values
 /// and description of each field so that we can display those in Portal and make the creation of
 /// Model's very extensible. The OutputConfig object will eventually go away in favor of
-/// infer_params struct.
+/// output_info.params struct.
 public struct Clarifai_Api_OutputInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -4460,7 +4460,7 @@ public struct Clarifai_Api_OutputInfo {
   /// Clears the value of `data`. Subsequent reads from it will return its default value.
   public mutating func clearData() {_uniqueStorage()._data = nil}
 
-  /// Model configuration...going away in favor of infer_params and train_params over time.
+  /// Model configuration...going away in favor of output_info.params and train_params over time.
   /// TO BE DEPRECATED
   public var outputConfig: Clarifai_Api_OutputConfig {
     get {return _storage._outputConfig ?? Clarifai_Api_OutputConfig()}
@@ -4648,7 +4648,7 @@ public struct Clarifai_Api_ImportInfo {
 }
 
 /// OutputConfig is a collection of parameters controlling either inference or training settings for
-/// the given Model. This message will be deprecated over time in favor or infer_params and
+/// the given Model. This message will be deprecated over time in favor or output_info.params and
 /// train_params in OutputInfo which are cleaner and more extensible for many ModelTypes.
 public struct Clarifai_Api_OutputConfig {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
