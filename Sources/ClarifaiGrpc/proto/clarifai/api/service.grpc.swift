@@ -661,6 +661,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>
 
+  func patchAppsDetails(
+    _ request: Clarifai_Api_PatchAppsDetailsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAppsDetailsRequest, Clarifai_Api_MultiAppResponse>
+
   func patchAppsIds(
     _ request: Clarifai_Api_PatchAppsIdsRequest,
     callOptions: CallOptions?
@@ -3541,6 +3546,25 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Allows to Patch only the below fields in one or more apps.
+  /// Allowed fields are notes, description and image
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAppsDetails.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAppsDetails(
+    _ request: Clarifai_Api_PatchAppsDetailsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAppsDetailsRequest, Clarifai_Api_MultiAppResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAppsDetails",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAppsDetailsInterceptors() ?? []
+    )
+  }
+
   /// Patch apps ids.
   ///
   /// - Parameters:
@@ -5943,6 +5967,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'patchApps'.
   func makePatchAppsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'patchAppsDetails'.
+  func makePatchAppsDetailsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppsDetailsRequest, Clarifai_Api_MultiAppResponse>]
+
   /// - Returns: Interceptors to use when invoking 'patchAppsIds'.
   func makePatchAppsIdsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAppsIdsRequest, Clarifai_Api_MultiAppResponse>]
 
@@ -6718,6 +6745,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Patch one or more apps.
   func patchApps(request: Clarifai_Api_PatchAppsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
+
+  /// Allows to Patch only the below fields in one or more apps.
+  /// Allowed fields are notes, description and image
+  func patchAppsDetails(request: Clarifai_Api_PatchAppsDetailsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
 
   /// Patch apps ids.
   func patchAppsIds(request: Clarifai_Api_PatchAppsIdsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppResponse>
@@ -8234,6 +8265,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.patchApps(request:context:)
       )
 
+    case "PatchAppsDetails":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAppsDetailsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAppResponse>(),
+        interceptors: self.interceptors?.makePatchAppsDetailsInterceptors() ?? [],
+        userFunction: self.patchAppsDetails(request:context:)
+      )
+
     case "PatchAppsIds":
       return UnaryServerHandler(
         context: context,
@@ -9726,6 +9766,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'patchApps'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePatchAppsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAppsRequest, Clarifai_Api_MultiAppResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAppsDetails'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAppsDetailsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAppsDetailsRequest, Clarifai_Api_MultiAppResponse>]
 
   /// - Returns: Interceptors to use when handling 'patchAppsIds'.
   ///   Defaults to calling `self.makeInterceptors()`.

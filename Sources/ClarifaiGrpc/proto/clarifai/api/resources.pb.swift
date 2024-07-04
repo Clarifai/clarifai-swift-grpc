@@ -11272,84 +11272,69 @@ public struct Clarifai_Api_Runner {
 
   /// A unique ID for this runner.
   /// This is a UUID since runners can be automatically orchestrated.
-  public var id: String {
-    get {return _storage._id}
-    set {_uniqueStorage()._id = newValue}
-  }
+  public var id: String = String()
 
   /// short description about the runner.
-  public var description_p: String {
-    get {return _storage._description_p}
-    set {_uniqueStorage()._description_p = newValue}
-  }
+  public var description_p: String = String()
 
   /// When the runner was created.
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_uniqueStorage()._createdAt = newValue}
+    get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_createdAt = newValue}
   }
   /// Returns true if `createdAt` has been explicitly set.
-  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
+  public var hasCreatedAt: Bool {return self._createdAt != nil}
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
-  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
+  public mutating func clearCreatedAt() {self._createdAt = nil}
 
   /// When the runner was last modified.
   public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_uniqueStorage()._modifiedAt = newValue}
+    get {return _modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_modifiedAt = newValue}
   }
   /// Returns true if `modifiedAt` has been explicitly set.
-  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
+  public var hasModifiedAt: Bool {return self._modifiedAt != nil}
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
-  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
+  public mutating func clearModifiedAt() {self._modifiedAt = nil}
 
   /// To handle arbitrary json metadata you can use a struct field:
   /// https://github.com/google/protobuf/blob/master/src/google/protobuf/struct.proto
   /// This is an optional arg.
   public var metadata: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _storage._metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_uniqueStorage()._metadata = newValue}
+    get {return _metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_metadata = newValue}
   }
   /// Returns true if `metadata` has been explicitly set.
-  public var hasMetadata: Bool {return _storage._metadata != nil}
+  public var hasMetadata: Bool {return self._metadata != nil}
   /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
-  public mutating func clearMetadata() {_uniqueStorage()._metadata = nil}
-
-  /// The owner of the runner. Runners belong to a user/org account.
-  public var userID: String {
-    get {return _storage._userID}
-    set {_uniqueStorage()._userID = newValue}
-  }
+  public mutating func clearMetadata() {self._metadata = nil}
 
   /// Labels to match in order to find work.
-  public var labels: [String] {
-    get {return _storage._labels}
-    set {_uniqueStorage()._labels = newValue}
-  }
+  public var labels: [String] = []
 
   /// Instead of just matching on labels we might want to have more explicit matching of what
   /// work this runner is looking for.
   /// The thing that the autoscaling config applies to for this nodepool.
   public var worker: Clarifai_Api_Worker {
-    get {return _storage._worker ?? Clarifai_Api_Worker()}
-    set {_uniqueStorage()._worker = newValue}
+    get {return _worker ?? Clarifai_Api_Worker()}
+    set {_worker = newValue}
   }
   /// Returns true if `worker` has been explicitly set.
-  public var hasWorker: Bool {return _storage._worker != nil}
+  public var hasWorker: Bool {return self._worker != nil}
   /// Clears the value of `worker`. Subsequent reads from it will return its default value.
-  public mutating func clearWorker() {_uniqueStorage()._worker = nil}
+  public mutating func clearWorker() {self._worker = nil}
 
   /// Runners are defined within nodepools so this field needs the id and user_id of the nodepool
   /// to be provided when creating a Runner.
   /// This nodepool must be accessible to you or an org you are part of.
   public var nodepool: Clarifai_Api_Nodepool {
-    get {return _storage._nodepool ?? Clarifai_Api_Nodepool()}
-    set {_uniqueStorage()._nodepool = newValue}
+    get {return _nodepool ?? Clarifai_Api_Nodepool()}
+    set {_nodepool = newValue}
   }
   /// Returns true if `nodepool` has been explicitly set.
-  public var hasNodepool: Bool {return _storage._nodepool != nil}
+  public var hasNodepool: Bool {return self._nodepool != nil}
   /// Clears the value of `nodepool`. Subsequent reads from it will return its default value.
-  public mutating func clearNodepool() {_uniqueStorage()._nodepool = nil}
+  public mutating func clearNodepool() {self._nodepool = nil}
 
   /////////////////////////////
   /// Need resources on the runner so we can schedule this Runner into the Nodepool.
@@ -11360,26 +11345,28 @@ public struct Clarifai_Api_Runner {
   /// requirements on those object, which may be less than what the Runner allocates (as a safety
   /// margin for the runner to for sure run the resource).
   public var computeInfo: Clarifai_Api_ComputeInfo {
-    get {return _storage._computeInfo ?? Clarifai_Api_ComputeInfo()}
-    set {_uniqueStorage()._computeInfo = newValue}
+    get {return _computeInfo ?? Clarifai_Api_ComputeInfo()}
+    set {_computeInfo = newValue}
   }
   /// Returns true if `computeInfo` has been explicitly set.
-  public var hasComputeInfo: Bool {return _storage._computeInfo != nil}
+  public var hasComputeInfo: Bool {return self._computeInfo != nil}
   /// Clears the value of `computeInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearComputeInfo() {_uniqueStorage()._computeInfo = nil}
+  public mutating func clearComputeInfo() {self._computeInfo = nil}
 
   /// Number of replicas that this runner should have up.
   /// We keep it separate from ComputeInfo which defines how many resources each replica needs.
-  public var numReplicas: UInt32 {
-    get {return _storage._numReplicas}
-    set {_uniqueStorage()._numReplicas = newValue}
-  }
+  public var numReplicas: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _worker: Clarifai_Api_Worker? = nil
+  fileprivate var _nodepool: Clarifai_Api_Nodepool? = nil
+  fileprivate var _computeInfo: Clarifai_Api_ComputeInfo? = nil
 }
 
 /// A nodepool is a set of nodes dedicated for a given user's compute needs.
@@ -11421,12 +11408,6 @@ public struct Clarifai_Api_Nodepool {
   public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
-
-  /// The user/org that this nodepool belongs to.
-  public var userID: String {
-    get {return _storage._userID}
-    set {_uniqueStorage()._userID = newValue}
-  }
 
   /// Which cluster this nodepool is within.
   public var computeCluster: Clarifai_Api_ComputeCluster {
@@ -11652,6 +11633,18 @@ public struct Clarifai_Api_ComputeCluster {
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {self._modifiedAt = nil}
 
+  /// The visibility field represents whether this message is privately/publicly visible.
+  /// To be visible to the public the App that contains it AND the User that contains the App must
+  /// also be publicly visible.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _visibility ?? Clarifai_Api_Visibility()}
+    set {_visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return self._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {self._visibility = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -11659,6 +11652,7 @@ public struct Clarifai_Api_ComputeCluster {
   fileprivate var _cloudProvider: Clarifai_Api_CloudProvider? = nil
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
 /// These are the resource needs of a given API object such as a model.
@@ -11951,41 +11945,39 @@ public struct Clarifai_Api_RunnerSelector {
   /// resource to be run. There should not be more than one deployment in this nodepool for the
   /// particular resource to run. If no deployments then default autoscaling will be used.
   public var nodepool: Clarifai_Api_Nodepool {
-    get {return _nodepool ?? Clarifai_Api_Nodepool()}
-    set {_nodepool = newValue}
+    get {return _storage._nodepool ?? Clarifai_Api_Nodepool()}
+    set {_uniqueStorage()._nodepool = newValue}
   }
   /// Returns true if `nodepool` has been explicitly set.
-  public var hasNodepool: Bool {return self._nodepool != nil}
+  public var hasNodepool: Bool {return _storage._nodepool != nil}
   /// Clears the value of `nodepool`. Subsequent reads from it will return its default value.
-  public mutating func clearNodepool() {self._nodepool = nil}
+  public mutating func clearNodepool() {_uniqueStorage()._nodepool = nil}
 
   /// Optionally a partcular runner within the nodepool.
   public var runner: Clarifai_Api_Runner {
-    get {return _runner ?? Clarifai_Api_Runner()}
-    set {_runner = newValue}
+    get {return _storage._runner ?? Clarifai_Api_Runner()}
+    set {_uniqueStorage()._runner = newValue}
   }
   /// Returns true if `runner` has been explicitly set.
-  public var hasRunner: Bool {return self._runner != nil}
+  public var hasRunner: Bool {return _storage._runner != nil}
   /// Clears the value of `runner`. Subsequent reads from it will return its default value.
-  public mutating func clearRunner() {self._runner = nil}
+  public mutating func clearRunner() {_uniqueStorage()._runner = nil}
 
   /// Optionally a partcular deployment within the nodepool.
   public var deployment: Clarifai_Api_Deployment {
-    get {return _deployment ?? Clarifai_Api_Deployment()}
-    set {_deployment = newValue}
+    get {return _storage._deployment ?? Clarifai_Api_Deployment()}
+    set {_uniqueStorage()._deployment = newValue}
   }
   /// Returns true if `deployment` has been explicitly set.
-  public var hasDeployment: Bool {return self._deployment != nil}
+  public var hasDeployment: Bool {return _storage._deployment != nil}
   /// Clears the value of `deployment`. Subsequent reads from it will return its default value.
-  public mutating func clearDeployment() {self._deployment = nil}
+  public mutating func clearDeployment() {_uniqueStorage()._deployment = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _nodepool: Clarifai_Api_Nodepool? = nil
-  fileprivate var _runner: Clarifai_Api_Runner? = nil
-  fileprivate var _deployment: Clarifai_Api_Deployment? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// Processing info tells the runner how to process a RunnerItem
@@ -26231,7 +26223,6 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     3: .standard(proto: "created_at"),
     4: .standard(proto: "modified_at"),
     5: .same(proto: "metadata"),
-    6: .standard(proto: "user_id"),
     7: .same(proto: "labels"),
     8: .same(proto: "worker"),
     9: .same(proto: "nodepool"),
@@ -26239,133 +26230,76 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     11: .standard(proto: "num_replicas"),
   ]
 
-  fileprivate class _StorageClass {
-    var _id: String = String()
-    var _description_p: String = String()
-    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
-    var _userID: String = String()
-    var _labels: [String] = []
-    var _worker: Clarifai_Api_Worker? = nil
-    var _nodepool: Clarifai_Api_Nodepool? = nil
-    var _computeInfo: Clarifai_Api_ComputeInfo? = nil
-    var _numReplicas: UInt32 = 0
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _id = source._id
-      _description_p = source._description_p
-      _createdAt = source._createdAt
-      _modifiedAt = source._modifiedAt
-      _metadata = source._metadata
-      _userID = source._userID
-      _labels = source._labels
-      _worker = source._worker
-      _nodepool = source._nodepool
-      _computeInfo = source._computeInfo
-      _numReplicas = source._numReplicas
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._description_p) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
-        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
-        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._metadata) }()
-        case 6: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
-        case 7: try { try decoder.decodeRepeatedStringField(value: &_storage._labels) }()
-        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._worker) }()
-        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._nodepool) }()
-        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._computeInfo) }()
-        case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._numReplicas) }()
-        default: break
-        }
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._metadata) }()
+      case 7: try { try decoder.decodeRepeatedStringField(value: &self.labels) }()
+      case 8: try { try decoder.decodeSingularMessageField(value: &self._worker) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._nodepool) }()
+      case 10: try { try decoder.decodeSingularMessageField(value: &self._computeInfo) }()
+      case 11: try { try decoder.decodeSingularUInt32Field(value: &self.numReplicas) }()
+      default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      if !_storage._id.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
-      }
-      if !_storage._description_p.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._description_p, fieldNumber: 2)
-      }
-      try { if let v = _storage._createdAt {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-      try { if let v = _storage._modifiedAt {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-      } }()
-      try { if let v = _storage._metadata {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-      } }()
-      if !_storage._userID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._userID, fieldNumber: 6)
-      }
-      if !_storage._labels.isEmpty {
-        try visitor.visitRepeatedStringField(value: _storage._labels, fieldNumber: 7)
-      }
-      try { if let v = _storage._worker {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
-      } }()
-      try { if let v = _storage._nodepool {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
-      } }()
-      try { if let v = _storage._computeInfo {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
-      } }()
-      if _storage._numReplicas != 0 {
-        try visitor.visitSingularUInt32Field(value: _storage._numReplicas, fieldNumber: 11)
-      }
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 2)
+    }
+    try { if let v = self._createdAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._modifiedAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._metadata {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
+    if !self.labels.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.labels, fieldNumber: 7)
+    }
+    try { if let v = self._worker {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    } }()
+    try { if let v = self._nodepool {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    } }()
+    try { if let v = self._computeInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    } }()
+    if self.numReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.numReplicas, fieldNumber: 11)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_Runner, rhs: Clarifai_Api_Runner) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._id != rhs_storage._id {return false}
-        if _storage._description_p != rhs_storage._description_p {return false}
-        if _storage._createdAt != rhs_storage._createdAt {return false}
-        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
-        if _storage._metadata != rhs_storage._metadata {return false}
-        if _storage._userID != rhs_storage._userID {return false}
-        if _storage._labels != rhs_storage._labels {return false}
-        if _storage._worker != rhs_storage._worker {return false}
-        if _storage._nodepool != rhs_storage._nodepool {return false}
-        if _storage._computeInfo != rhs_storage._computeInfo {return false}
-        if _storage._numReplicas != rhs_storage._numReplicas {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
+    if lhs.id != rhs.id {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs._createdAt != rhs._createdAt {return false}
+    if lhs._modifiedAt != rhs._modifiedAt {return false}
+    if lhs._metadata != rhs._metadata {return false}
+    if lhs.labels != rhs.labels {return false}
+    if lhs._worker != rhs._worker {return false}
+    if lhs._nodepool != rhs._nodepool {return false}
+    if lhs._computeInfo != rhs._computeInfo {return false}
+    if lhs.numReplicas != rhs.numReplicas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -26378,7 +26312,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     2: .same(proto: "description"),
     3: .standard(proto: "created_at"),
     4: .standard(proto: "modified_at"),
-    5: .standard(proto: "user_id"),
     6: .standard(proto: "compute_cluster"),
     7: .standard(proto: "node_capacity_type"),
     8: .standard(proto: "instance_types"),
@@ -26393,7 +26326,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     var _description_p: String = String()
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _userID: String = String()
     var _computeCluster: Clarifai_Api_ComputeCluster? = nil
     var _nodeCapacityType: Clarifai_Api_NodeCapacityType? = nil
     var _instanceTypes: [Clarifai_Api_InstanceType] = []
@@ -26411,7 +26343,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       _description_p = source._description_p
       _createdAt = source._createdAt
       _modifiedAt = source._modifiedAt
-      _userID = source._userID
       _computeCluster = source._computeCluster
       _nodeCapacityType = source._nodeCapacityType
       _instanceTypes = source._instanceTypes
@@ -26441,7 +26372,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         case 2: try { try decoder.decodeSingularStringField(value: &_storage._description_p) }()
         case 3: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
         case 4: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
-        case 5: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._computeCluster) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._nodeCapacityType) }()
         case 8: try { try decoder.decodeRepeatedMessageField(value: &_storage._instanceTypes) }()
@@ -26473,9 +26403,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       try { if let v = _storage._modifiedAt {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
       } }()
-      if !_storage._userID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._userID, fieldNumber: 5)
-      }
       try { if let v = _storage._computeCluster {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
       } }()
@@ -26510,7 +26437,6 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         if _storage._description_p != rhs_storage._description_p {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
-        if _storage._userID != rhs_storage._userID {return false}
         if _storage._computeCluster != rhs_storage._computeCluster {return false}
         if _storage._nodeCapacityType != rhs_storage._nodeCapacityType {return false}
         if _storage._instanceTypes != rhs_storage._instanceTypes {return false}
@@ -26663,6 +26589,7 @@ extension Clarifai_Api_ComputeCluster: SwiftProtobuf.Message, SwiftProtobuf._Mes
     5: .standard(proto: "user_id"),
     6: .standard(proto: "created_at"),
     7: .standard(proto: "modified_at"),
+    8: .same(proto: "visibility"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -26678,6 +26605,7 @@ extension Clarifai_Api_ComputeCluster: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 5: try { try decoder.decodeSingularStringField(value: &self.userID) }()
       case 6: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
       case 7: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
+      case 8: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
       default: break
       }
     }
@@ -26709,6 +26637,9 @@ extension Clarifai_Api_ComputeCluster: SwiftProtobuf.Message, SwiftProtobuf._Mes
     try { if let v = self._modifiedAt {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
     } }()
+    try { if let v = self._visibility {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -26720,6 +26651,7 @@ extension Clarifai_Api_ComputeCluster: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs.userID != rhs.userID {return false}
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._modifiedAt != rhs._modifiedAt {return false}
+    if lhs._visibility != rhs._visibility {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -27013,41 +26945,77 @@ extension Clarifai_Api_RunnerSelector: SwiftProtobuf.Message, SwiftProtobuf._Mes
     3: .same(proto: "deployment"),
   ]
 
+  fileprivate class _StorageClass {
+    var _nodepool: Clarifai_Api_Nodepool? = nil
+    var _runner: Clarifai_Api_Runner? = nil
+    var _deployment: Clarifai_Api_Deployment? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _nodepool = source._nodepool
+      _runner = source._runner
+      _deployment = source._deployment
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._nodepool) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._runner) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._deployment) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._nodepool) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._runner) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._deployment) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._nodepool {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._runner {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._deployment {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._nodepool {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._runner {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._deployment {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_RunnerSelector, rhs: Clarifai_Api_RunnerSelector) -> Bool {
-    if lhs._nodepool != rhs._nodepool {return false}
-    if lhs._runner != rhs._runner {return false}
-    if lhs._deployment != rhs._deployment {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._nodepool != rhs_storage._nodepool {return false}
+        if _storage._runner != rhs_storage._runner {return false}
+        if _storage._deployment != rhs_storage._deployment {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
