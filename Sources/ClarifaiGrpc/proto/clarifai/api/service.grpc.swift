@@ -1141,6 +1141,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>
 
+  func listInstanceTypes(
+    _ request: Clarifai_Api_ListInstanceTypesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse>
+
   func getComputeCluster(
     _ request: Clarifai_Api_GetComputeClusterRequest,
     callOptions: CallOptions?
@@ -5334,6 +5339,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Get InstanceTypes given Cloud Provider and Region
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListInstanceTypes.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listInstanceTypes(
+    _ request: Clarifai_Api_ListInstanceTypesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListInstanceTypes",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListInstanceTypesInterceptors() ?? []
+    )
+  }
+
   /// ComputeCluster CRUD
   ///
   /// - Parameters:
@@ -6255,6 +6278,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listInstanceTypes'.
+  func makeListInstanceTypesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getComputeCluster'.
   func makeGetComputeClusterInterceptors() -> [ClientInterceptor<Clarifai_Api_GetComputeClusterRequest, Clarifai_Api_SingleComputeClusterResponse>]
 
@@ -7085,6 +7111,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Get the training time estimate based off train request and estimated input count.
   func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
+
+  /// Get InstanceTypes given Cloud Provider and Region
+  func listInstanceTypes(request: Clarifai_Api_ListInstanceTypesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstanceTypeResponse>
 
   /// ComputeCluster CRUD
   func getComputeCluster(request: Clarifai_Api_GetComputeClusterRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleComputeClusterResponse>
@@ -9129,6 +9158,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postModelVersionsTrainingTimeEstimate(request:context:)
       )
 
+    case "ListInstanceTypes":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInstanceTypesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInstanceTypeResponse>(),
+        interceptors: self.interceptors?.makeListInstanceTypesInterceptors() ?? [],
+        userFunction: self.listInstanceTypes(request:context:)
+      )
+
     case "GetComputeCluster":
       return UnaryServerHandler(
         context: context,
@@ -10150,6 +10188,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModelVersionsTrainingTimeEstimate'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listInstanceTypes'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListInstanceTypesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse>]
 
   /// - Returns: Interceptors to use when handling 'getComputeCluster'.
   ///   Defaults to calling `self.makeInterceptors()`.

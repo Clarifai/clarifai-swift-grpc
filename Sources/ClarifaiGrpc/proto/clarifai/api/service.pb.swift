@@ -11121,6 +11121,56 @@ public struct Clarifai_Api_MultiTrainingTimeEstimateResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// List InstanceTypes
+public struct Clarifai_Api_ListInstanceTypesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The cloud provider to list compute clusters for.
+  public var cloudProvider: Clarifai_Api_CloudProvider {
+    get {return _cloudProvider ?? Clarifai_Api_CloudProvider()}
+    set {_cloudProvider = newValue}
+  }
+  /// Returns true if `cloudProvider` has been explicitly set.
+  public var hasCloudProvider: Bool {return self._cloudProvider != nil}
+  /// Clears the value of `cloudProvider`. Subsequent reads from it will return its default value.
+  public mutating func clearCloudProvider() {self._cloudProvider = nil}
+
+  /// The region to list for so when there are multiple regions we get only the clusters
+  /// that are supposed to be up in that region.
+  public var region: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _cloudProvider: Clarifai_Api_CloudProvider? = nil
+}
+
+public struct Clarifai_Api_MultiInstanceTypeResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var instanceTypes: [Clarifai_Api_InstanceType] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// ComputeCLuster CRUD requests and responses
 public struct Clarifai_Api_GetComputeClusterRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -29043,6 +29093,90 @@ extension Clarifai_Api_MultiTrainingTimeEstimateResponse: SwiftProtobuf.Message,
   public static func ==(lhs: Clarifai_Api_MultiTrainingTimeEstimateResponse, rhs: Clarifai_Api_MultiTrainingTimeEstimateResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.trainingTimeEstimates != rhs.trainingTimeEstimates {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListInstanceTypesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListInstanceTypesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "cloud_provider"),
+    2: .same(proto: "region"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._cloudProvider) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.region) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._cloudProvider {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.region.isEmpty {
+      try visitor.visitSingularStringField(value: self.region, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListInstanceTypesRequest, rhs: Clarifai_Api_ListInstanceTypesRequest) -> Bool {
+    if lhs._cloudProvider != rhs._cloudProvider {return false}
+    if lhs.region != rhs.region {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiInstanceTypeResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiInstanceTypeResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "instance_types"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.instanceTypes) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.instanceTypes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.instanceTypes, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiInstanceTypeResponse, rhs: Clarifai_Api_MultiInstanceTypeResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.instanceTypes != rhs.instanceTypes {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

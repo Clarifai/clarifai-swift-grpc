@@ -1025,6 +1025,48 @@ extension Clarifai_Api_RunnerMethodType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum Clarifai_Api_AuditOperationType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case notSet // = 0
+
+  /// APPLICATION event types : 100 - 199
+  case applicationCreate // = 100
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .notSet
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .notSet
+    case 100: self = .applicationCreate
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .notSet: return 0
+    case .applicationCreate: return 100
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_AuditOperationType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_AuditOperationType] = [
+    .notSet,
+    .applicationCreate,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 /// Annotation of an asset with metadata
 public struct Clarifai_Api_Annotation {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -2988,7 +3030,7 @@ public struct Clarifai_Api_Image {
   /// Clears the value of `hosted`. Subsequent reads from it will return its default value.
   public mutating func clearHosted() {self._hosted = nil}
 
-  /// image info
+  /// image info for original size. for image info for other sizes, use hosted_image_info
   public var imageInfo: Clarifai_Api_ImageInfo {
     get {return _imageInfo ?? Clarifai_Api_ImageInfo()}
     set {_imageInfo = newValue}
@@ -2997,6 +3039,10 @@ public struct Clarifai_Api_Image {
   public var hasImageInfo: Bool {return self._imageInfo != nil}
   /// Clears the value of `imageInfo`. Subsequent reads from it will return its default value.
   public mutating func clearImageInfo() {self._imageInfo = nil}
+
+  /// The map of hosted image info of different sizes (see hosted.sizes), excluding the original image.
+  /// Note: keys(hosted_image_info) = hosted.sizes - "orig"
+  public var hostedImageInfo: Dictionary<String,Clarifai_Api_ImageInfo> = [:]
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -11708,18 +11754,22 @@ public struct Clarifai_Api_ComputeInfo {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Number of CPUs.
-  public var numCpus: UInt32 = 0
+  /// Amount of CPUs to use. This follows kubernetes notation like: "1", "100m", "4.5", etc.
+  /// See https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/
+  public var cpuLimit: String = String()
 
-  /// Amount of CPU memory to use as a minimum.
+  /// Amount of CPU memory to use as a minimum. This follows kubernetes notation like:
+  /// 1Ki, 1500Mi, 3Gi, 4Ti, etc.
+  /// See https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/
   public var cpuMemory: String = String()
 
-  /// Number of accelerators (typically GPUs, TPUs, etc. not CPUs) for this resource.
+  /// Amount of GPU/TPUs to use.
   public var numAccelerators: UInt32 = 0
 
   /// Amount of accelerator/GPU memory to use as a minimum.
   /// This is defined per accelerator.
   /// This follows the format used by kubernetes like 1Ki, 2Mi, 3Gi, 4Ti.
+  /// See https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/
   public var acceleratorMemory: String = String()
 
   /// Or should it be removed completely and use the nodepool accelerator type itself.
@@ -12230,6 +12280,13 @@ extension Clarifai_Api_RunnerMethodType: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "UNARY_STREAMING"),
     3: .same(proto: "STREAMING_UNARY"),
     4: .same(proto: "STREAMING_STREAMING"),
+  ]
+}
+
+extension Clarifai_Api_AuditOperationType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "AUDIT_OPERATION_TYPE_NOT_SET"),
+    100: .same(proto: "APPLICATION_CREATE"),
   ]
 }
 
@@ -14956,6 +15013,7 @@ extension Clarifai_Api_Image: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     4: .standard(proto: "allow_duplicate_url"),
     5: .same(proto: "hosted"),
     6: .standard(proto: "image_info"),
+    7: .standard(proto: "hosted_image_info"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14969,6 +15027,7 @@ extension Clarifai_Api_Image: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       case 4: try { try decoder.decodeSingularBoolField(value: &self.allowDuplicateURL) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._hosted) }()
       case 6: try { try decoder.decodeSingularMessageField(value: &self._imageInfo) }()
+      case 7: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_ImageInfo>.self, value: &self.hostedImageInfo) }()
       default: break
       }
     }
@@ -14994,6 +15053,9 @@ extension Clarifai_Api_Image: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try { if let v = self._imageInfo {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     } }()
+    if !self.hostedImageInfo.isEmpty {
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_ImageInfo>.self, value: self.hostedImageInfo, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -15003,6 +15065,7 @@ extension Clarifai_Api_Image: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.allowDuplicateURL != rhs.allowDuplicateURL {return false}
     if lhs._hosted != rhs._hosted {return false}
     if lhs._imageInfo != rhs._imageInfo {return false}
+    if lhs.hostedImageInfo != rhs.hostedImageInfo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -26774,7 +26837,7 @@ extension Clarifai_Api_ComputeCluster: SwiftProtobuf.Message, SwiftProtobuf._Mes
 extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ComputeInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "num_cpus"),
+    6: .standard(proto: "cpu_limit"),
     2: .standard(proto: "cpu_memory"),
     3: .standard(proto: "num_accelerators"),
     4: .standard(proto: "accelerator_memory"),
@@ -26787,20 +26850,17 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.numCpus) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.cpuMemory) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.numAccelerators) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.acceleratorMemory) }()
       case 5: try { try decoder.decodeRepeatedStringField(value: &self.acceleratorType) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.cpuLimit) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.numCpus != 0 {
-      try visitor.visitSingularUInt32Field(value: self.numCpus, fieldNumber: 1)
-    }
     if !self.cpuMemory.isEmpty {
       try visitor.visitSingularStringField(value: self.cpuMemory, fieldNumber: 2)
     }
@@ -26813,11 +26873,14 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if !self.acceleratorType.isEmpty {
       try visitor.visitRepeatedStringField(value: self.acceleratorType, fieldNumber: 5)
     }
+    if !self.cpuLimit.isEmpty {
+      try visitor.visitSingularStringField(value: self.cpuLimit, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ComputeInfo, rhs: Clarifai_Api_ComputeInfo) -> Bool {
-    if lhs.numCpus != rhs.numCpus {return false}
+    if lhs.cpuLimit != rhs.cpuLimit {return false}
     if lhs.cpuMemory != rhs.cpuMemory {return false}
     if lhs.numAccelerators != rhs.numAccelerators {return false}
     if lhs.acceleratorMemory != rhs.acceleratorMemory {return false}

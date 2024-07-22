@@ -319,6 +319,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case deploymentInvalidArgument // = 25901
   case deploymentInvalidRequest // = 25902
 
+  /// InstanceType related codes 260xx
+  case instanceTypeDoesNotExist // = 26000
+  case instanceTypeInvalidArgument // = 26001
+  case instanceTypeInvalidRequest // = 26002
+
   /// Input:Image related 30xxx
   case inputDownloadSuccess // = 30000
 
@@ -821,6 +826,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25900: self = .deploymentDoesNotExist
     case 25901: self = .deploymentInvalidArgument
     case 25902: self = .deploymentInvalidRequest
+    case 26000: self = .instanceTypeDoesNotExist
+    case 26001: self = .instanceTypeInvalidArgument
+    case 26002: self = .instanceTypeInvalidRequest
     case 30000: self = .inputDownloadSuccess
     case 30001: self = .inputDownloadPending
     case 30002: self = .inputDownloadFailed
@@ -1203,6 +1211,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .deploymentDoesNotExist: return 25900
     case .deploymentInvalidArgument: return 25901
     case .deploymentInvalidRequest: return 25902
+    case .instanceTypeDoesNotExist: return 26000
+    case .instanceTypeInvalidArgument: return 26001
+    case .instanceTypeInvalidRequest: return 26002
     case .inputDownloadSuccess: return 30000
     case .inputDownloadPending: return 30001
     case .inputDownloadFailed: return 30002
@@ -1590,6 +1601,9 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .deploymentDoesNotExist,
     .deploymentInvalidArgument,
     .deploymentInvalidRequest,
+    .instanceTypeDoesNotExist,
+    .instanceTypeInvalidArgument,
+    .instanceTypeInvalidRequest,
     .inputDownloadSuccess,
     .inputDownloadPending,
     .inputDownloadFailed,
@@ -1975,6 +1989,9 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25900: .same(proto: "DEPLOYMENT_DOES_NOT_EXIST"),
     25901: .same(proto: "DEPLOYMENT_INVALID_ARGUMENT"),
     25902: .same(proto: "DEPLOYMENT_INVALID_REQUEST"),
+    26000: .same(proto: "INSTANCE_TYPE_DOES_NOT_EXIST"),
+    26001: .same(proto: "INSTANCE_TYPE_INVALID_ARGUMENT"),
+    26002: .same(proto: "INSTANCE_TYPE_INVALID_REQUEST"),
     30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
     30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
     30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
