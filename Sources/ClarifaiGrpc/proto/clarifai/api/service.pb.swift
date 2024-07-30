@@ -3951,6 +3951,12 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._filterByUserID = newValue}
   }
 
+  /// Filter by the model version ids. If set, only return the model of these versions.
+  public var modelVersionIds: [String] {
+    get {return _storage._modelVersionIds}
+    set {_uniqueStorage()._modelVersionIds = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -17364,6 +17370,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     14: .same(proto: "query"),
     5: .same(proto: "name"),
     22: .standard(proto: "filter_by_user_id"),
+    28: .standard(proto: "model_version_ids"),
   ]
 
   fileprivate class _StorageClass {
@@ -17389,6 +17396,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _query: String = String()
     var _name: String = String()
     var _filterByUserID: Bool = false
+    var _modelVersionIds: [String] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -17417,6 +17425,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _query = source._query
       _name = source._name
       _filterByUserID = source._filterByUserID
+      _modelVersionIds = source._modelVersionIds
     }
   }
 
@@ -17496,6 +17505,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         }()
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._bookmark) }()
         case 27: try { try decoder.decodeSingularStringField(value: &_storage._search) }()
+        case 28: try { try decoder.decodeRepeatedStringField(value: &_storage._modelVersionIds) }()
         default: break
         }
       }
@@ -17597,6 +17607,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       if !_storage._search.isEmpty {
         try visitor.visitSingularStringField(value: _storage._search, fieldNumber: 27)
       }
+      if !_storage._modelVersionIds.isEmpty {
+        try visitor.visitRepeatedStringField(value: _storage._modelVersionIds, fieldNumber: 28)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17628,6 +17641,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._query != rhs_storage._query {return false}
         if _storage._name != rhs_storage._name {return false}
         if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
+        if _storage._modelVersionIds != rhs_storage._modelVersionIds {return false}
         return true
       }
       if !storagesAreEqual {return false}

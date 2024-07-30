@@ -8445,10 +8445,16 @@ public struct Clarifai_Api_TaskWorker {
 
     /// The inputs will be partitioned in several partitions.
     /// Each worker will label one or more input partitions.
+    /// All inputs are assigned at task creation.
     case partitioned // = 2
 
     /// Each worker will label all inputs from input source.
+    /// All inputs are assigned at task creation.
     case full // = 3
+
+    /// Each worker will dynamically get 10 inputs assigned at a time.
+    /// No inputs are assigned at task creation.
+    case dynamic // = 4
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -8460,6 +8466,7 @@ public struct Clarifai_Api_TaskWorker {
       case 0: self = .workerStrategyNotSet
       case 2: self = .partitioned
       case 3: self = .full
+      case 4: self = .dynamic
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -8469,6 +8476,7 @@ public struct Clarifai_Api_TaskWorker {
       case .workerStrategyNotSet: return 0
       case .partitioned: return 2
       case .full: return 3
+      case .dynamic: return 4
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -8486,6 +8494,7 @@ extension Clarifai_Api_TaskWorker.TaskWorkerStrategy: CaseIterable {
     .workerStrategyNotSet,
     .partitioned,
     .full,
+    .dynamic,
   ]
 }
 
@@ -22447,6 +22456,7 @@ extension Clarifai_Api_TaskWorker.TaskWorkerStrategy: SwiftProtobuf._ProtoNamePr
     0: .same(proto: "WORKER_STRATEGY_NOT_SET"),
     2: .same(proto: "PARTITIONED"),
     3: .same(proto: "FULL"),
+    4: .same(proto: "DYNAMIC"),
   ]
 }
 
