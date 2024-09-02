@@ -381,6 +381,54 @@ extension Clarifai_Api_LicenseScope: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum Clarifai_Api_LicenseType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case unknownLicenseType // = 0
+  case firstParty // = 1
+  case openSource // = 2
+  case closedSource // = 3
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .unknownLicenseType
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .unknownLicenseType
+    case 1: self = .firstParty
+    case 2: self = .openSource
+    case 3: self = .closedSource
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .unknownLicenseType: return 0
+    case .firstParty: return 1
+    case .openSource: return 2
+    case .closedSource: return 3
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_LicenseType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_LicenseType] = [
+    .unknownLicenseType,
+    .firstParty,
+    .openSource,
+    .closedSource,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 public enum Clarifai_Api_DataType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -1025,7 +1073,7 @@ extension Clarifai_Api_RunnerMethodType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public enum Clarifai_Api_AuditOperationType: SwiftProtobuf.Enum {
+public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
 
@@ -1057,9 +1105,9 @@ public enum Clarifai_Api_AuditOperationType: SwiftProtobuf.Enum {
 
 #if swift(>=4.2)
 
-extension Clarifai_Api_AuditOperationType: CaseIterable {
+extension Clarifai_Api_EventType: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_AuditOperationType] = [
+  public static var allCases: [Clarifai_Api_EventType] = [
     .notSet,
     .applicationCreate,
   ]
@@ -4402,12 +4450,74 @@ public struct Clarifai_Api_Model {
   /// Clears the value of `image`. Subsequent reads from it will return its default value.
   public mutating func clearImage() {_uniqueStorage()._image = nil}
 
+  /// License Type
+  public var licenseType: Clarifai_Api_LicenseType {
+    get {return _storage._licenseType}
+    set {_uniqueStorage()._licenseType = newValue}
+  }
+
+  public var source: Clarifai_Api_Model.Source {
+    get {return _storage._source}
+    set {_uniqueStorage()._source = newValue}
+  }
+
+  /// Creator of Model
+  public var creator: String {
+    get {return _storage._creator}
+    set {_uniqueStorage()._creator = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Source of Model
+  public enum Source: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case unknownSource // = 0
+    case hosted // = 1
+    case wrapped // = 2
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknownSource
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknownSource
+      case 1: self = .hosted
+      case 2: self = .wrapped
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknownSource: return 0
+      case .hosted: return 1
+      case .wrapped: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_Model.Source: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_Model.Source] = [
+    .unknownSource,
+    .hosted,
+    .wrapped,
+  ]
+}
+
+#endif  // swift(>=4.2)
 
 /// A link to a html/markdown/text file that stores reference material tied to a model.
 public struct Clarifai_Api_ModelReference {
@@ -8177,6 +8287,13 @@ public struct Clarifai_Api_Task {
   /// Clears the value of `worker`. Subsequent reads from it will return its default value.
   public mutating func clearWorker() {_uniqueStorage()._worker = nil}
 
+  /// Who is doing annotations - human Worker or auto-annotation via Model/Workflow.
+  /// If set, worker must have be set accordingly to either human worker or model/workflow worker
+  public var workerType: Clarifai_Api_Task.WorkerType {
+    get {return _storage._workerType}
+    set {_uniqueStorage()._workerType = newValue}
+  }
+
   /// List of concept ids used in the work of this task.
   /// DEPRECATED: Use task.concepts instead.
   public var conceptIds: [String] {
@@ -8300,6 +8417,43 @@ public struct Clarifai_Api_Task {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
+  public enum WorkerType: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+
+    /// for backward compatibility when task is not setting any type and only sets workers
+    case notSet // = 0
+
+    /// only human workers
+    case workerHuman // = 1
+
+    /// auto-annotation tasks. Task must set worker as model or workflow
+    case workerAuto // = 2
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .notSet
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .notSet
+      case 1: self = .workerHuman
+      case 2: self = .workerAuto
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .notSet: return 0
+      case .workerHuman: return 1
+      case .workerAuto: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
   public enum TaskType: SwiftProtobuf.Enum {
     public typealias RawValue = Int
     case typeNotSet // = 0
@@ -8346,6 +8500,15 @@ public struct Clarifai_Api_Task {
 }
 
 #if swift(>=4.2)
+
+extension Clarifai_Api_Task.WorkerType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_Task.WorkerType] = [
+    .notSet,
+    .workerHuman,
+    .workerAuto,
+  ]
+}
 
 extension Clarifai_Api_Task.TaskType: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
@@ -12112,6 +12275,162 @@ public struct Clarifai_Api_ProcessingInfo {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+/// AuditLogTarget is a resource on which an operation recorded in an
+/// audit log was performed.
+public struct Clarifai_Api_AuditLogTarget {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var target: Clarifai_Api_AuditLogTarget.OneOf_Target? = nil
+
+  /// An organization member, only used in org audit logs.
+  public var member: Clarifai_Api_User {
+    get {
+      if case .member(let v)? = target {return v}
+      return Clarifai_Api_User()
+    }
+    set {target = .member(newValue)}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_Target: Equatable {
+    /// An organization member, only used in org audit logs.
+    case member(Clarifai_Api_User)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_AuditLogTarget.OneOf_Target, rhs: Clarifai_Api_AuditLogTarget.OneOf_Target) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.member, .member): return {
+        guard case .member(let l) = lhs, case .member(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
+/// AuditLogEntry is a single operation recorded in an audit log.
+public struct Clarifai_Api_AuditLogEntry {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Time of the operation.
+  public var timestamp: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _timestamp ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_timestamp = newValue}
+  }
+  /// Returns true if `timestamp` has been explicitly set.
+  public var hasTimestamp: Bool {return self._timestamp != nil}
+  /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
+  public mutating func clearTimestamp() {self._timestamp = nil}
+
+  /// User that performed the operation.
+  public var user: Clarifai_Api_User {
+    get {return _user ?? Clarifai_Api_User()}
+    set {_user = newValue}
+  }
+  /// Returns true if `user` has been explicitly set.
+  public var hasUser: Bool {return self._user != nil}
+  /// Clears the value of `user`. Subsequent reads from it will return its default value.
+  public mutating func clearUser() {self._user = nil}
+
+  /// Type of operation that was performed.
+  public var operation: Clarifai_Api_EventType = .notSet
+
+  /// A human-readable description of the operation.
+  public var description_p: String = String()
+
+  /// Targets of the operation. For example,
+  /// - when creating a new model, the targets would be the application and the model,
+  /// - when adding a team member, the targets would be the team and the member.
+  public var targets: [Clarifai_Api_AuditLogTarget] = []
+
+  /// Additional human-readable details of the operation. For example,
+  /// when patching a resource, these would list what was changed.
+  public var details: [String] = []
+
+  /// Was the operation successful?
+  public var success: Bool = false
+
+  /// Request that triggered the operation.
+  public var reqID: String = String()
+
+  /// IP address where the request originated from.
+  public var sourceIp: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _timestamp: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _user: Clarifai_Api_User? = nil
+}
+
+/// AuditLogQuery is a query for audit log entries.
+public struct Clarifai_Api_AuditLogQuery {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Query operations within this time range.
+  public var timestampFrom: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _timestampFrom ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_timestampFrom = newValue}
+  }
+  /// Returns true if `timestampFrom` has been explicitly set.
+  public var hasTimestampFrom: Bool {return self._timestampFrom != nil}
+  /// Clears the value of `timestampFrom`. Subsequent reads from it will return its default value.
+  public mutating func clearTimestampFrom() {self._timestampFrom = nil}
+
+  public var timestampTo: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _timestampTo ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_timestampTo = newValue}
+  }
+  /// Returns true if `timestampTo` has been explicitly set.
+  public var hasTimestampTo: Bool {return self._timestampTo != nil}
+  /// Clears the value of `timestampTo`. Subsequent reads from it will return its default value.
+  public mutating func clearTimestampTo() {self._timestampTo = nil}
+
+  /// Query operations by these users.
+  public var userIds: [String] = []
+
+  /// Query these types of operations.
+  public var operations: [Clarifai_Api_EventType] = []
+
+  /// Query operations with these targets.
+  public var targets: [Clarifai_Api_AuditLogTarget] = []
+
+  /// Query operations by success.
+  public var success: SwiftProtobuf.Google_Protobuf_BoolValue {
+    get {return _success ?? SwiftProtobuf.Google_Protobuf_BoolValue()}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  public var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  public mutating func clearSuccess() {self._success = nil}
+
+  /// Query operations by source IP address.
+  public var sourceIps: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _timestampFrom: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _timestampTo: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _success: SwiftProtobuf.Google_Protobuf_BoolValue? = nil
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "clarifai.api"
@@ -12172,6 +12491,15 @@ extension Clarifai_Api_LicenseScope: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "PREDICT"),
     2: .same(proto: "TRAIN"),
     3: .same(proto: "SEARCH"),
+  ]
+}
+
+extension Clarifai_Api_LicenseType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "UNKNOWN_LICENSE_TYPE"),
+    1: .same(proto: "FIRST_PARTY"),
+    2: .same(proto: "OPEN_SOURCE"),
+    3: .same(proto: "CLOSED_SOURCE"),
   ]
 }
 
@@ -12292,9 +12620,9 @@ extension Clarifai_Api_RunnerMethodType: SwiftProtobuf._ProtoNameProviding {
   ]
 }
 
-extension Clarifai_Api_AuditOperationType: SwiftProtobuf._ProtoNameProviding {
+extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "AUDIT_OPERATION_TYPE_NOT_SET"),
+    0: .same(proto: "EVENT_TYPE_NOT_SET"),
     100: .same(proto: "APPLICATION_CREATE"),
   ]
 }
@@ -16647,6 +16975,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     29: .standard(proto: "workflow_recommended"),
     33: .standard(proto: "bookmark_origin"),
     34: .same(proto: "image"),
+    35: .standard(proto: "license_type"),
+    36: .same(proto: "source"),
+    37: .same(proto: "creator"),
   ]
 
   fileprivate class _StorageClass {
@@ -16677,6 +17008,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _workflowRecommended: SwiftProtobuf.Google_Protobuf_BoolValue? = nil
     var _bookmarkOrigin: Clarifai_Api_BookmarkOrigin? = nil
     var _image: Clarifai_Api_Image? = nil
+    var _licenseType: Clarifai_Api_LicenseType = .unknownLicenseType
+    var _source: Clarifai_Api_Model.Source = .unknownSource
+    var _creator: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -16710,6 +17044,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _workflowRecommended = source._workflowRecommended
       _bookmarkOrigin = source._bookmarkOrigin
       _image = source._image
+      _licenseType = source._licenseType
+      _source = source._source
+      _creator = source._creator
     }
   }
 
@@ -16755,6 +17092,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 32: try { try decoder.decodeRepeatedStringField(value: &_storage._checkConsents) }()
         case 33: try { try decoder.decodeSingularMessageField(value: &_storage._bookmarkOrigin) }()
         case 34: try { try decoder.decodeSingularMessageField(value: &_storage._image) }()
+        case 35: try { try decoder.decodeSingularEnumField(value: &_storage._licenseType) }()
+        case 36: try { try decoder.decodeSingularEnumField(value: &_storage._source) }()
+        case 37: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
         default: break
         }
       }
@@ -16848,6 +17188,15 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       try { if let v = _storage._image {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 34)
       } }()
+      if _storage._licenseType != .unknownLicenseType {
+        try visitor.visitSingularEnumField(value: _storage._licenseType, fieldNumber: 35)
+      }
+      if _storage._source != .unknownSource {
+        try visitor.visitSingularEnumField(value: _storage._source, fieldNumber: 36)
+      }
+      if !_storage._creator.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._creator, fieldNumber: 37)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -16884,6 +17233,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._workflowRecommended != rhs_storage._workflowRecommended {return false}
         if _storage._bookmarkOrigin != rhs_storage._bookmarkOrigin {return false}
         if _storage._image != rhs_storage._image {return false}
+        if _storage._licenseType != rhs_storage._licenseType {return false}
+        if _storage._source != rhs_storage._source {return false}
+        if _storage._creator != rhs_storage._creator {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -16891,6 +17243,14 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_Model.Source: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "UNKNOWN_SOURCE"),
+    1: .same(proto: "HOSTED"),
+    2: .same(proto: "WRAPPED"),
+  ]
 }
 
 extension Clarifai_Api_ModelReference: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -22107,6 +22467,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     4: .same(proto: "type"),
     5: .same(proto: "description"),
     6: .same(proto: "worker"),
+    22: .standard(proto: "worker_type"),
     7: .standard(proto: "concept_ids"),
     8: .standard(proto: "input_source"),
     9: .standard(proto: "sample_ms"),
@@ -22131,6 +22492,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _type: Clarifai_Api_Task.TaskType = .typeNotSet
     var _description_p: String = String()
     var _worker: Clarifai_Api_TaskWorker? = nil
+    var _workerType: Clarifai_Api_Task.WorkerType = .notSet
     var _conceptIds: [String] = []
     var _inputSource: Clarifai_Api_TaskInputSource? = nil
     var _sampleMs: UInt32 = 0
@@ -22158,6 +22520,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _type = source._type
       _description_p = source._description_p
       _worker = source._worker
+      _workerType = source._workerType
       _conceptIds = source._conceptIds
       _inputSource = source._inputSource
       _sampleMs = source._sampleMs
@@ -22212,6 +22575,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._concepts) }()
         case 20: try { try decoder.decodeSingularBoolField(value: &_storage._deletePreviousAnnotations) }()
         case 21: try { try decoder.decodeSingularMessageField(value: &_storage._metrics) }()
+        case 22: try { try decoder.decodeSingularEnumField(value: &_storage._workerType) }()
         default: break
         }
       }
@@ -22287,6 +22651,9 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._metrics {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
       } }()
+      if _storage._workerType != .notSet {
+        try visitor.visitSingularEnumField(value: _storage._workerType, fieldNumber: 22)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -22302,6 +22669,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._type != rhs_storage._type {return false}
         if _storage._description_p != rhs_storage._description_p {return false}
         if _storage._worker != rhs_storage._worker {return false}
+        if _storage._workerType != rhs_storage._workerType {return false}
         if _storage._conceptIds != rhs_storage._conceptIds {return false}
         if _storage._inputSource != rhs_storage._inputSource {return false}
         if _storage._sampleMs != rhs_storage._sampleMs {return false}
@@ -22324,6 +22692,14 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_Task.WorkerType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "WORKER_TYPE_NOT_SET"),
+    1: .same(proto: "WORKER_HUMAN"),
+    2: .same(proto: "WORKER_AUTO"),
+  ]
 }
 
 extension Clarifai_Api_Task.TaskType: SwiftProtobuf._ProtoNameProviding {
@@ -27209,6 +27585,210 @@ extension Clarifai_Api_ProcessingInfo: SwiftProtobuf.Message, SwiftProtobuf._Mes
   public static func ==(lhs: Clarifai_Api_ProcessingInfo, rhs: Clarifai_Api_ProcessingInfo) -> Bool {
     if lhs.runnerMethodType != rhs.runnerMethodType {return false}
     if lhs._status != rhs._status {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AuditLogTarget"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "member"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Clarifai_Api_User?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .member(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .member(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if case .member(let v)? = self.target {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AuditLogTarget, rhs: Clarifai_Api_AuditLogTarget) -> Bool {
+    if lhs.target != rhs.target {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_AuditLogEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AuditLogEntry"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "timestamp"),
+    2: .same(proto: "user"),
+    3: .same(proto: "operation"),
+    4: .same(proto: "description"),
+    5: .same(proto: "targets"),
+    6: .same(proto: "details"),
+    7: .same(proto: "success"),
+    8: .standard(proto: "req_id"),
+    9: .standard(proto: "source_ip"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._timestamp) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._user) }()
+      case 3: try { try decoder.decodeSingularEnumField(value: &self.operation) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.targets) }()
+      case 6: try { try decoder.decodeRepeatedStringField(value: &self.details) }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.success) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.reqID) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.sourceIp) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._timestamp {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._user {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.operation != .notSet {
+      try visitor.visitSingularEnumField(value: self.operation, fieldNumber: 3)
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 4)
+    }
+    if !self.targets.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.targets, fieldNumber: 5)
+    }
+    if !self.details.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.details, fieldNumber: 6)
+    }
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 7)
+    }
+    if !self.reqID.isEmpty {
+      try visitor.visitSingularStringField(value: self.reqID, fieldNumber: 8)
+    }
+    if !self.sourceIp.isEmpty {
+      try visitor.visitSingularStringField(value: self.sourceIp, fieldNumber: 9)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AuditLogEntry, rhs: Clarifai_Api_AuditLogEntry) -> Bool {
+    if lhs._timestamp != rhs._timestamp {return false}
+    if lhs._user != rhs._user {return false}
+    if lhs.operation != rhs.operation {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs.targets != rhs.targets {return false}
+    if lhs.details != rhs.details {return false}
+    if lhs.success != rhs.success {return false}
+    if lhs.reqID != rhs.reqID {return false}
+    if lhs.sourceIp != rhs.sourceIp {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_AuditLogQuery: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AuditLogQuery"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "timestamp_from"),
+    2: .standard(proto: "timestamp_to"),
+    3: .standard(proto: "user_ids"),
+    4: .same(proto: "operations"),
+    5: .same(proto: "targets"),
+    6: .same(proto: "success"),
+    7: .standard(proto: "source_ips"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._timestampFrom) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._timestampTo) }()
+      case 3: try { try decoder.decodeRepeatedStringField(value: &self.userIds) }()
+      case 4: try { try decoder.decodeRepeatedEnumField(value: &self.operations) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.targets) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._success) }()
+      case 7: try { try decoder.decodeRepeatedStringField(value: &self.sourceIps) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._timestampFrom {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._timestampTo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if !self.userIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.userIds, fieldNumber: 3)
+    }
+    if !self.operations.isEmpty {
+      try visitor.visitPackedEnumField(value: self.operations, fieldNumber: 4)
+    }
+    if !self.targets.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.targets, fieldNumber: 5)
+    }
+    try { if let v = self._success {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
+    if !self.sourceIps.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.sourceIps, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AuditLogQuery, rhs: Clarifai_Api_AuditLogQuery) -> Bool {
+    if lhs._timestampFrom != rhs._timestampFrom {return false}
+    if lhs._timestampTo != rhs._timestampTo {return false}
+    if lhs.userIds != rhs.userIds {return false}
+    if lhs.operations != rhs.operations {return false}
+    if lhs.targets != rhs.targets {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs.sourceIps != rhs.sourceIps {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

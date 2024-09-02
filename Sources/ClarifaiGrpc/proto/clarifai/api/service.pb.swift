@@ -3957,6 +3957,24 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._modelVersionIds = newValue}
   }
 
+  /// Filter by LicenseType
+  public var licenseType: Clarifai_Api_LicenseType {
+    get {return _storage._licenseType}
+    set {_uniqueStorage()._licenseType = newValue}
+  }
+
+  /// Filter by Source
+  public var source: UInt32 {
+    get {return _storage._source}
+    set {_uniqueStorage()._source = newValue}
+  }
+
+  /// Filter by Creator
+  public var creator: String {
+    get {return _storage._creator}
+    set {_uniqueStorage()._creator = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -11637,6 +11655,75 @@ public struct Clarifai_Api_DeleteDeploymentsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+public struct Clarifai_Api_PostAuditLogSearchesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Only the user_id is used from this.
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var auditLogQuery: Clarifai_Api_AuditLogQuery {
+    get {return _auditLogQuery ?? Clarifai_Api_AuditLogQuery()}
+    set {_auditLogQuery = newValue}
+  }
+  /// Returns true if `auditLogQuery` has been explicitly set.
+  public var hasAuditLogQuery: Bool {return self._auditLogQuery != nil}
+  /// Clears the value of `auditLogQuery`. Subsequent reads from it will return its default value.
+  public mutating func clearAuditLogQuery() {self._auditLogQuery = nil}
+
+  /// Sorting options:
+  /// Whether to sort by timestamp in ascending order. If false, will order in descending order.
+  public var sortAscending: Bool = false
+
+  public var pagination: Clarifai_Api_Pagination {
+    get {return _pagination ?? Clarifai_Api_Pagination()}
+    set {_pagination = newValue}
+  }
+  /// Returns true if `pagination` has been explicitly set.
+  public var hasPagination: Bool {return self._pagination != nil}
+  /// Clears the value of `pagination`. Subsequent reads from it will return its default value.
+  public mutating func clearPagination() {self._pagination = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _auditLogQuery: Clarifai_Api_AuditLogQuery? = nil
+  fileprivate var _pagination: Clarifai_Api_Pagination? = nil
+}
+
+public struct Clarifai_Api_MultiAuditLogSearchResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var entries: [Clarifai_Api_AuditLogEntry] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 public struct Clarifai_Api_PatchDeploymentsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -17371,6 +17458,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     5: .same(proto: "name"),
     22: .standard(proto: "filter_by_user_id"),
     28: .standard(proto: "model_version_ids"),
+    29: .standard(proto: "license_type"),
+    30: .same(proto: "source"),
+    31: .same(proto: "creator"),
   ]
 
   fileprivate class _StorageClass {
@@ -17397,6 +17487,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _name: String = String()
     var _filterByUserID: Bool = false
     var _modelVersionIds: [String] = []
+    var _licenseType: Clarifai_Api_LicenseType = .unknownLicenseType
+    var _source: UInt32 = 0
+    var _creator: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -17426,6 +17519,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _name = source._name
       _filterByUserID = source._filterByUserID
       _modelVersionIds = source._modelVersionIds
+      _licenseType = source._licenseType
+      _source = source._source
+      _creator = source._creator
     }
   }
 
@@ -17506,6 +17602,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._bookmark) }()
         case 27: try { try decoder.decodeSingularStringField(value: &_storage._search) }()
         case 28: try { try decoder.decodeRepeatedStringField(value: &_storage._modelVersionIds) }()
+        case 29: try { try decoder.decodeSingularEnumField(value: &_storage._licenseType) }()
+        case 30: try { try decoder.decodeSingularUInt32Field(value: &_storage._source) }()
+        case 31: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
         default: break
         }
       }
@@ -17610,6 +17709,15 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       if !_storage._modelVersionIds.isEmpty {
         try visitor.visitRepeatedStringField(value: _storage._modelVersionIds, fieldNumber: 28)
       }
+      if _storage._licenseType != .unknownLicenseType {
+        try visitor.visitSingularEnumField(value: _storage._licenseType, fieldNumber: 29)
+      }
+      if _storage._source != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._source, fieldNumber: 30)
+      }
+      if !_storage._creator.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._creator, fieldNumber: 31)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17642,6 +17750,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._name != rhs_storage._name {return false}
         if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
         if _storage._modelVersionIds != rhs_storage._modelVersionIds {return false}
+        if _storage._licenseType != rhs_storage._licenseType {return false}
+        if _storage._source != rhs_storage._source {return false}
+        if _storage._creator != rhs_storage._creator {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -29999,6 +30110,102 @@ extension Clarifai_Api_DeleteDeploymentsRequest: SwiftProtobuf.Message, SwiftPro
   public static func ==(lhs: Clarifai_Api_DeleteDeploymentsRequest, rhs: Clarifai_Api_DeleteDeploymentsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.ids != rhs.ids {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostAuditLogSearchesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "audit_log_query"),
+    3: .standard(proto: "sort_ascending"),
+    5: .same(proto: "pagination"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._auditLogQuery) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.sortAscending) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._auditLogQuery {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.sortAscending != false {
+      try visitor.visitSingularBoolField(value: self.sortAscending, fieldNumber: 3)
+    }
+    try { if let v = self._pagination {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostAuditLogSearchesRequest, rhs: Clarifai_Api_PostAuditLogSearchesRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs._auditLogQuery != rhs._auditLogQuery {return false}
+    if lhs.sortAscending != rhs.sortAscending {return false}
+    if lhs._pagination != rhs._pagination {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiAuditLogSearchResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiAuditLogSearchResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "entries"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.entries) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.entries.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.entries, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiAuditLogSearchResponse, rhs: Clarifai_Api_MultiAuditLogSearchResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.entries != rhs.entries {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

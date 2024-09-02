@@ -117,6 +117,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   /// To create model version export
   case modelExportsAdd // = 143
 
+  /// To pull the model version's image
+  case modelsPull // = 150
+
   /// Write to the workflows DB table.
   case workflowsAdd // = 18
 
@@ -312,6 +315,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case deploymentsAdd // = 145
   case deploymentsDelete // = 146
   case instanceTypesGet // = 148
+  case auditLogsGet // = 149
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -420,6 +424,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 145: self = .deploymentsAdd
     case 146: self = .deploymentsDelete
     case 148: self = .instanceTypesGet
+    case 149: self = .auditLogsGet
+    case 150: self = .modelsPull
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -526,6 +532,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .deploymentsAdd: return 145
     case .deploymentsDelete: return 146
     case .instanceTypesGet: return 148
+    case .auditLogsGet: return 149
+    case .modelsPull: return 150
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -557,6 +565,7 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .modelsSync,
     .modelExportsGet,
     .modelExportsAdd,
+    .modelsPull,
     .workflowsAdd,
     .workflowsGet,
     .workflowsPatch,
@@ -637,6 +646,7 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .deploymentsAdd,
     .deploymentsDelete,
     .instanceTypesGet,
+    .auditLogsGet,
   ]
 }
 
@@ -840,6 +850,8 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     145: .same(proto: "Deployments_Add"),
     146: .same(proto: "Deployments_Delete"),
     148: .same(proto: "InstanceTypes_Get"),
+    149: .same(proto: "AuditLogs_Get"),
+    150: .same(proto: "Models_Pull"),
   ]
 }
 

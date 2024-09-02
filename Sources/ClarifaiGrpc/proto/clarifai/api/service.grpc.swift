@@ -1215,6 +1215,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteDeploymentsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postAuditLogSearches(
+    _ request: Clarifai_Api_PostAuditLogSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5622,6 +5627,24 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makeDeleteDeploymentsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostAuditLogSearches
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostAuditLogSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postAuditLogSearches(
+    _ request: Clarifai_Api_PostAuditLogSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostAuditLogSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAuditLogSearchesInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -6336,6 +6359,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deleteDeployments'.
   func makeDeleteDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAuditLogSearches'.
+  func makePostAuditLogSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7177,6 +7203,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete multiple deployments in one request.
   func deleteDeployments(request: Clarifai_Api_DeleteDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func postAuditLogSearches(request: Clarifai_Api_PostAuditLogSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAuditLogSearchResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9322,6 +9350,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteDeployments(request:context:)
       )
 
+    case "PostAuditLogSearches":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAuditLogSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAuditLogSearchResponse>(),
+        interceptors: self.interceptors?.makePostAuditLogSearchesInterceptors() ?? [],
+        userFunction: self.postAuditLogSearches(request:context:)
+      )
+
     default:
       return nil
     }
@@ -10277,4 +10314,8 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteDeployments'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteDeploymentsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAuditLogSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAuditLogSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>]
 }
