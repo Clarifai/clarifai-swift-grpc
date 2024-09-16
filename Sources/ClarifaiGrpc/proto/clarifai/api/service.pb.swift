@@ -7734,70 +7734,6 @@ public struct Clarifai_Api_PostWorkflowResultsResponse {
   fileprivate var _workflowState: Clarifai_Api_WorkflowState? = nil
 }
 
-/// PostWorkflowResultsSimilarityRequest
-public struct Clarifai_Api_PostWorkflowResultsSimilarityRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  public var workflowID: String = String()
-
-  /// Workflow version ID to retrieve
-  /// If no ID is specified, latest workflow version is used
-  public var versionID: String = String()
-
-  /// The specific model version whose outputs we are comparing
-  public var modelVersionID: String = String()
-
-  /// Each probe is compared against every pool input
-  public var probeInputs: [Clarifai_Api_Input] = []
-
-  /// Each pool input is compared against ever probe input
-  public var poolInputs: [Clarifai_Api_Input] = []
-
-  /// Use this flag to look into clarifai published workflows first for a Workflow ID
-  public var favorClarifaiWorkflows: Bool = false
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-/// PostWorkflowResultsSimilarityResponse
-public struct Clarifai_Api_PostWorkflowResultsSimilarityResponse {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
-
-  public var results: [Clarifai_Api_WorkflowResultsSimilarity] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-}
-
 /// ListWorkflowVersionsRequest
 public struct Clarifai_Api_ListWorkflowVersionsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -8247,7 +8183,7 @@ public struct Clarifai_Api_PatchTasksRequest {
   public var tasks: [Clarifai_Api_Task] = []
 
   /// The action to perform on the patched objects
-  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  /// For now, only 'overwrite' action is supported
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -11670,14 +11606,14 @@ public struct Clarifai_Api_PostAuditLogSearchesRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  public var auditLogQuery: Clarifai_Api_AuditLogQuery {
-    get {return _auditLogQuery ?? Clarifai_Api_AuditLogQuery()}
-    set {_auditLogQuery = newValue}
+  public var query: Clarifai_Api_AuditLogQuery {
+    get {return _query ?? Clarifai_Api_AuditLogQuery()}
+    set {_query = newValue}
   }
-  /// Returns true if `auditLogQuery` has been explicitly set.
-  public var hasAuditLogQuery: Bool {return self._auditLogQuery != nil}
-  /// Clears the value of `auditLogQuery`. Subsequent reads from it will return its default value.
-  public mutating func clearAuditLogQuery() {self._auditLogQuery = nil}
+  /// Returns true if `query` has been explicitly set.
+  public var hasQuery: Bool {return self._query != nil}
+  /// Clears the value of `query`. Subsequent reads from it will return its default value.
+  public mutating func clearQuery() {self._query = nil}
 
   /// Sorting options:
   /// Whether to sort by timestamp in ascending order. If false, will order in descending order.
@@ -11697,11 +11633,11 @@ public struct Clarifai_Api_PostAuditLogSearchesRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-  fileprivate var _auditLogQuery: Clarifai_Api_AuditLogQuery? = nil
+  fileprivate var _query: Clarifai_Api_AuditLogQuery? = nil
   fileprivate var _pagination: Clarifai_Api_Pagination? = nil
 }
 
-public struct Clarifai_Api_MultiAuditLogSearchResponse {
+public struct Clarifai_Api_MultiAuditLogEntryResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -23650,120 +23586,6 @@ extension Clarifai_Api_PostWorkflowResultsResponse: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Clarifai_Api_PostWorkflowResultsSimilarityRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PostWorkflowResultsSimilarityRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "workflow_id"),
-    7: .standard(proto: "version_id"),
-    3: .standard(proto: "model_version_id"),
-    4: .standard(proto: "probe_inputs"),
-    5: .standard(proto: "pool_inputs"),
-    6: .standard(proto: "favor_clarifai_workflows"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.workflowID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
-      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.probeInputs) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.poolInputs) }()
-      case 6: try { try decoder.decodeSingularBoolField(value: &self.favorClarifaiWorkflows) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self.versionID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.workflowID.isEmpty {
-      try visitor.visitSingularStringField(value: self.workflowID, fieldNumber: 2)
-    }
-    if !self.modelVersionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 3)
-    }
-    if !self.probeInputs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.probeInputs, fieldNumber: 4)
-    }
-    if !self.poolInputs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.poolInputs, fieldNumber: 5)
-    }
-    if self.favorClarifaiWorkflows != false {
-      try visitor.visitSingularBoolField(value: self.favorClarifaiWorkflows, fieldNumber: 6)
-    }
-    if !self.versionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.versionID, fieldNumber: 7)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_PostWorkflowResultsSimilarityRequest, rhs: Clarifai_Api_PostWorkflowResultsSimilarityRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.workflowID != rhs.workflowID {return false}
-    if lhs.versionID != rhs.versionID {return false}
-    if lhs.modelVersionID != rhs.modelVersionID {return false}
-    if lhs.probeInputs != rhs.probeInputs {return false}
-    if lhs.poolInputs != rhs.poolInputs {return false}
-    if lhs.favorClarifaiWorkflows != rhs.favorClarifaiWorkflows {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_PostWorkflowResultsSimilarityResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PostWorkflowResultsSimilarityResponse"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "results"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.results) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.results.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.results, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_PostWorkflowResultsSimilarityResponse, rhs: Clarifai_Api_PostWorkflowResultsSimilarityResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.results != rhs.results {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Clarifai_Api_ListWorkflowVersionsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ListWorkflowVersionsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -30119,7 +29941,7 @@ extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, Swift
   public static let protoMessageName: String = _protobuf_package + ".PostAuditLogSearchesRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "audit_log_query"),
+    2: .same(proto: "query"),
     3: .standard(proto: "sort_ascending"),
     5: .same(proto: "pagination"),
   ]
@@ -30131,7 +29953,7 @@ extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, Swift
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._auditLogQuery) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._query) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.sortAscending) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
       default: break
@@ -30147,7 +29969,7 @@ extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, Swift
     try { if let v = self._userAppID {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    try { if let v = self._auditLogQuery {
+    try { if let v = self._query {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
     if self.sortAscending != false {
@@ -30161,7 +29983,7 @@ extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, Swift
 
   public static func ==(lhs: Clarifai_Api_PostAuditLogSearchesRequest, rhs: Clarifai_Api_PostAuditLogSearchesRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
-    if lhs._auditLogQuery != rhs._auditLogQuery {return false}
+    if lhs._query != rhs._query {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs._pagination != rhs._pagination {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -30169,8 +29991,8 @@ extension Clarifai_Api_PostAuditLogSearchesRequest: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Clarifai_Api_MultiAuditLogSearchResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".MultiAuditLogSearchResponse"
+extension Clarifai_Api_MultiAuditLogEntryResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiAuditLogEntryResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "entries"),
@@ -30203,7 +30025,7 @@ extension Clarifai_Api_MultiAuditLogSearchResponse: SwiftProtobuf.Message, Swift
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_MultiAuditLogSearchResponse, rhs: Clarifai_Api_MultiAuditLogSearchResponse) -> Bool {
+  public static func ==(lhs: Clarifai_Api_MultiAuditLogEntryResponse, rhs: Clarifai_Api_MultiAuditLogEntryResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.entries != rhs.entries {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

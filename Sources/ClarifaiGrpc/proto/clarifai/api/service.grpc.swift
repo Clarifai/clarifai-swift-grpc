@@ -561,11 +561,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostWorkflowResultsRequest, Clarifai_Api_PostWorkflowResultsResponse>
 
-  func postWorkflowResultsSimilarity(
-    _ request: Clarifai_Api_PostWorkflowResultsSimilarityRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse>
-
   func listWorkflowVersions(
     _ request: Clarifai_Api_ListWorkflowVersionsRequest,
     callOptions: CallOptions?
@@ -1219,7 +1214,7 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
   func postAuditLogSearches(
     _ request: Clarifai_Api_PostAuditLogSearchesRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>
+  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -3194,24 +3189,6 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostWorkflowResultsInterceptors() ?? []
-    )
-  }
-
-  /// Compare embeddings distances using a workflow
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostWorkflowResultsSimilarity.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postWorkflowResultsSimilarity(
-    _ request: Clarifai_Api_PostWorkflowResultsSimilarityRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostWorkflowResultsSimilarity",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostWorkflowResultsSimilarityInterceptors() ?? []
     )
   }
 
@@ -5637,7 +5614,7 @@ extension Clarifai_Api_V2ClientProtocol {
   public func postAuditLogSearches(
     _ request: Clarifai_Api_PostAuditLogSearchesRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse> {
+  ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/PostAuditLogSearches",
       request: request,
@@ -5966,9 +5943,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postWorkflowResults'.
   func makePostWorkflowResultsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowResultsRequest, Clarifai_Api_PostWorkflowResultsResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postWorkflowResultsSimilarity'.
-  func makePostWorkflowResultsSimilarityInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse>]
 
   /// - Returns: Interceptors to use when invoking 'listWorkflowVersions'.
   func makeListWorkflowVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowVersionsRequest, Clarifai_Api_MultiWorkflowVersionResponse>]
@@ -6361,7 +6335,7 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   func makeDeleteDeploymentsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteDeploymentsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postAuditLogSearches'.
-  func makePostAuditLogSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>]
+  func makePostAuditLogSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6754,9 +6728,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Predict using a workflow.
   func postWorkflowResults(request: Clarifai_Api_PostWorkflowResultsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsResponse>
-
-  /// Compare embeddings distances using a workflow
-  func postWorkflowResultsSimilarity(request: Clarifai_Api_PostWorkflowResultsSimilarityRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostWorkflowResultsSimilarityResponse>
 
   /// List workflow versions.
   func listWorkflowVersions(request: Clarifai_Api_ListWorkflowVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionResponse>
@@ -7204,7 +7175,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple deployments in one request.
   func deleteDeployments(request: Clarifai_Api_DeleteDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
-  func postAuditLogSearches(request: Clarifai_Api_PostAuditLogSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAuditLogSearchResponse>
+  func postAuditLogSearches(request: Clarifai_Api_PostAuditLogSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAuditLogEntryResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -8169,15 +8140,6 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_PostWorkflowResultsResponse>(),
         interceptors: self.interceptors?.makePostWorkflowResultsInterceptors() ?? [],
         userFunction: self.postWorkflowResults(request:context:)
-      )
-
-    case "PostWorkflowResultsSimilarity":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowResultsSimilarityRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_PostWorkflowResultsSimilarityResponse>(),
-        interceptors: self.interceptors?.makePostWorkflowResultsSimilarityInterceptors() ?? [],
-        userFunction: self.postWorkflowResultsSimilarity(request:context:)
       )
 
     case "ListWorkflowVersions":
@@ -9354,7 +9316,7 @@ extension Clarifai_Api_V2Provider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAuditLogSearchesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAuditLogSearchResponse>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAuditLogEntryResponse>(),
         interceptors: self.interceptors?.makePostAuditLogSearchesInterceptors() ?? [],
         userFunction: self.postAuditLogSearches(request:context:)
       )
@@ -9790,10 +9752,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postWorkflowResults'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostWorkflowResultsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowResultsRequest, Clarifai_Api_PostWorkflowResultsResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postWorkflowResultsSimilarity'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostWorkflowResultsSimilarityInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowResultsSimilarityRequest, Clarifai_Api_PostWorkflowResultsSimilarityResponse>]
 
   /// - Returns: Interceptors to use when handling 'listWorkflowVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -10317,5 +10275,5 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'postAuditLogSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostAuditLogSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogSearchResponse>]
+  func makePostAuditLogSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>]
 }
