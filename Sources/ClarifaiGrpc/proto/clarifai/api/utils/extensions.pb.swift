@@ -29,6 +29,25 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 // declaration. To avoid naming collisions, the names are prefixed with the name of
 // the scope where the extend directive occurs.
 
+extension SwiftProtobuf.Google_Protobuf_EnumValueOptions {
+
+  /// A description of the enum value.
+  public var Clarifai_Api_Utils_description: String {
+    get {return getExtensionValue(ext: Clarifai_Api_Utils_Extensions_description) ?? String()}
+    set {setExtensionValue(ext: Clarifai_Api_Utils_Extensions_description, value: newValue)}
+  }
+  /// Returns true if extension `Clarifai_Api_Utils_Extensions_description`
+  /// has been explicitly set.
+  public var hasClarifai_Api_Utils_description: Bool {
+    return hasExtensionValue(ext: Clarifai_Api_Utils_Extensions_description)
+  }
+  /// Clears the value of extension `Clarifai_Api_Utils_Extensions_description`.
+  /// Subsequent reads from it will return its default value.
+  public mutating func clearClarifai_Api_Utils_description() {
+    clearExtensionValue(ext: Clarifai_Api_Utils_Extensions_description)
+  }
+}
+
 extension SwiftProtobuf.Google_Protobuf_FieldOptions {
 
   /// If True then we will return this field with it's zero value even if not set.
@@ -94,7 +113,8 @@ extension SwiftProtobuf.Google_Protobuf_FieldOptions {
 public let Clarifai_Api_Utils_Extensions_Extensions: SwiftProtobuf.SimpleExtensionMap = [
   Clarifai_Api_Utils_Extensions_cl_show_if_empty,
   Clarifai_Api_Utils_Extensions_cl_moretags,
-  Clarifai_Api_Utils_Extensions_cl_default_float
+  Clarifai_Api_Utils_Extensions_cl_default_float,
+  Clarifai_Api_Utils_Extensions_description
 ]
 
 // Extension Objects - The only reason these might be needed is when manually
@@ -121,4 +141,10 @@ public let Clarifai_Api_Utils_Extensions_cl_moretags = SwiftProtobuf.MessageExte
 public let Clarifai_Api_Utils_Extensions_cl_default_float = SwiftProtobuf.MessageExtension<SwiftProtobuf.OptionalExtensionField<SwiftProtobuf.ProtobufFloat>, SwiftProtobuf.Google_Protobuf_FieldOptions>(
   _protobuf_fieldNumber: 50010,
   fieldName: "clarifai.api.utils.cl_default_float"
+)
+
+/// A description of the enum value.
+public let Clarifai_Api_Utils_Extensions_description = SwiftProtobuf.MessageExtension<SwiftProtobuf.OptionalExtensionField<SwiftProtobuf.ProtobufString>, SwiftProtobuf.Google_Protobuf_EnumValueOptions>(
+  _protobuf_fieldNumber: 1000,
+  fieldName: "clarifai.api.utils.description"
 )
