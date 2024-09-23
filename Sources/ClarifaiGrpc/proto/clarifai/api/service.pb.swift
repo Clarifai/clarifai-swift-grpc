@@ -3432,7 +3432,7 @@ public struct Clarifai_Api_PostModelOutputsRequest {
   /// Clears the value of `model`. Subsequent reads from it will return its default value.
   public mutating func clearModel() {_uniqueStorage()._model = nil}
 
-  /// Allow filtering of prediction requests down to specific Nodepools, Deploymetns or Runners
+  /// Allow filtering of prediction requests down to specific Nodepools, Deployments or Runners
   public var runnerSelector: Clarifai_Api_RunnerSelector {
     get {return _storage._runnerSelector ?? Clarifai_Api_RunnerSelector()}
     set {_uniqueStorage()._runnerSelector = newValue}
@@ -7674,6 +7674,23 @@ public struct Clarifai_Api_PostWorkflowResultsRequest {
   public var hasWorkflowState: Bool {return _storage._workflowState != nil}
   /// Clears the value of `workflowState`. Subsequent reads from it will return its default value.
   public mutating func clearWorkflowState() {_uniqueStorage()._workflowState = nil}
+
+  /// Specify which compute to use for processing each node of the workflow:
+  /// The key is the node.id from the loaded workflow.
+  /// The value is a RunnerSelector in which you can specify the deployment or specific nodepool
+  /// that you'd like that node to run on.
+  /// This allows for use cases like some light models could run on a CPU-only nodepool
+  /// while other models in the workflow require large GPUs.
+  ///
+  /// If node.id is not in the provided map, it will fall back to searching for
+  /// an adequate deployment the model owner owns or fall back to
+  /// the serverless nodepools provided by Clarifai.
+  /// We recommend you specify these RunnerSelectors so that you have better understanding of where
+  /// processing occurs.
+  public var nodeRunnerSelectors: Dictionary<String,Clarifai_Api_RunnerSelector> {
+    get {return _storage._nodeRunnerSelectors}
+    set {_uniqueStorage()._nodeRunnerSelectors = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -23426,6 +23443,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     4: .standard(proto: "output_config"),
     5: .standard(proto: "favor_clarifai_workflows"),
     6: .standard(proto: "workflow_state"),
+    8: .standard(proto: "node_runner_selectors"),
   ]
 
   fileprivate class _StorageClass {
@@ -23436,6 +23454,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
     var _outputConfig: Clarifai_Api_OutputConfig? = nil
     var _favorClarifaiWorkflows: Bool = false
     var _workflowState: Clarifai_Api_WorkflowState? = nil
+    var _nodeRunnerSelectors: Dictionary<String,Clarifai_Api_RunnerSelector> = [:]
 
     static let defaultInstance = _StorageClass()
 
@@ -23449,6 +23468,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
       _outputConfig = source._outputConfig
       _favorClarifaiWorkflows = source._favorClarifaiWorkflows
       _workflowState = source._workflowState
+      _nodeRunnerSelectors = source._nodeRunnerSelectors
     }
   }
 
@@ -23474,6 +23494,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
         case 5: try { try decoder.decodeSingularBoolField(value: &_storage._favorClarifaiWorkflows) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._workflowState) }()
         case 7: try { try decoder.decodeSingularStringField(value: &_storage._versionID) }()
+        case 8: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_RunnerSelector>.self, value: &_storage._nodeRunnerSelectors) }()
         default: break
         }
       }
@@ -23507,6 +23528,9 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
       if !_storage._versionID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._versionID, fieldNumber: 7)
       }
+      if !_storage._nodeRunnerSelectors.isEmpty {
+        try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_RunnerSelector>.self, value: _storage._nodeRunnerSelectors, fieldNumber: 8)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -23523,6 +23547,7 @@ extension Clarifai_Api_PostWorkflowResultsRequest: SwiftProtobuf.Message, SwiftP
         if _storage._outputConfig != rhs_storage._outputConfig {return false}
         if _storage._favorClarifaiWorkflows != rhs_storage._favorClarifaiWorkflows {return false}
         if _storage._workflowState != rhs_storage._workflowState {return false}
+        if _storage._nodeRunnerSelectors != rhs_storage._nodeRunnerSelectors {return false}
         return true
       }
       if !storagesAreEqual {return false}

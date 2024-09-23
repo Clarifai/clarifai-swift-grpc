@@ -7276,7 +7276,7 @@ public struct Clarifai_Api_User {
   /// Clears the value of `userDetail`. Subsequent reads from it will return its default value.
   public mutating func clearUserDetail() {_uniqueStorage()._userDetail = nil}
 
-  /// Representative image for this User (a.k.a. Profile or cover photo) 
+  /// Representative image for this User (a.k.a. Profile or cover photo)
   public var image: Clarifai_Api_Image {
     get {return _storage._image ?? Clarifai_Api_Image()}
     set {_uniqueStorage()._image = newValue}
