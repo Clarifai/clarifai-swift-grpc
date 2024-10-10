@@ -1,4 +1,4 @@
-![Clarifai logo](docs/logo.png)
+![image](https://github.com/user-attachments/assets/5a488d2f-b935-4327-8d83-30a182d23184)
 
 # Clarifai Swift gRPC Client
 
