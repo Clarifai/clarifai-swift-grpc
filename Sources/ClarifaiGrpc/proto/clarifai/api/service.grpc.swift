@@ -1215,6 +1215,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostAuditLogSearchesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>
+
+  func listWorkflowEvaluationTemplates(
+    _ request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -1735,7 +1740,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a specific input from an app.
+  /// Unary call to GetInputSamples
   ///
   /// - Parameters:
   ///   - request: Request to send to GetInputSamples.
@@ -4904,9 +4909,8 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// PutTaskAssignments performs an action for the task assignments in given task.
-  /// All the actions are theoretically idempotent, but practically, in the current implementation,
-  /// the REVIEW_START action is not idempotent. See PutTaskAssignmentsRequestAction for more details.
+  /// PutTaskAssignments performs an idempotent action for the task assignments in given task.
+  /// See PutTaskAssignmentsRequestAction for more details about possible actions.
   ///
   /// - Parameters:
   ///   - request: Request to send to PutTaskAssignments.
@@ -5620,6 +5624,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostAuditLogSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListWorkflowEvaluationTemplates
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListWorkflowEvaluationTemplates.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listWorkflowEvaluationTemplates(
+    _ request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListWorkflowEvaluationTemplates",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListWorkflowEvaluationTemplatesInterceptors() ?? []
     )
   }
 }
@@ -6336,6 +6358,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postAuditLogSearches'.
   func makePostAuditLogSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listWorkflowEvaluationTemplates'.
+  func makeListWorkflowEvaluationTemplatesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6457,7 +6482,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Streams all the inputs starting from oldest assets.
   func streamInputs(request: Clarifai_Api_StreamInputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
-  /// Get a specific input from an app.
   func getInputSamples(request: Clarifai_Api_GetInputSamplesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputAnnotationResponse>
 
   /// Get a specific input from an app.
@@ -7044,9 +7068,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   ///   this endpoint has been deprecated and replaced by PutTaskAssignments with action=LABEL_START.
   func listNextTaskAssignments(request: Clarifai_Api_ListNextTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputResponse>
 
-  /// PutTaskAssignments performs an action for the task assignments in given task.
-  /// All the actions are theoretically idempotent, but practically, in the current implementation,
-  /// the REVIEW_START action is not idempotent. See PutTaskAssignmentsRequestAction for more details.
+  /// PutTaskAssignments performs an idempotent action for the task assignments in given task.
+  /// See PutTaskAssignmentsRequestAction for more details about possible actions.
   func putTaskAssignments(request: Clarifai_Api_PutTaskAssignmentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTaskAssignmentResponse>
 
   /// List all the inputs add jobs
@@ -7176,6 +7199,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func deleteDeployments(request: Clarifai_Api_DeleteDeploymentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   func postAuditLogSearches(request: Clarifai_Api_PostAuditLogSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAuditLogEntryResponse>
+
+  func listWorkflowEvaluationTemplates(request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9321,6 +9346,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postAuditLogSearches(request:context:)
       )
 
+    case "ListWorkflowEvaluationTemplates":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>(),
+        interceptors: self.interceptors?.makeListWorkflowEvaluationTemplatesInterceptors() ?? [],
+        userFunction: self.listWorkflowEvaluationTemplates(request:context:)
+      )
+
     default:
       return nil
     }
@@ -10276,4 +10310,8 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postAuditLogSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostAuditLogSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAuditLogSearchesRequest, Clarifai_Api_MultiAuditLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listWorkflowEvaluationTemplates'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListWorkflowEvaluationTemplatesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
 }

@@ -529,11 +529,18 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Not allowed to perform a task-related action.
   case taskPermissionDenied // = 54103
+
+  /// Task Assignments 542xx
   case taskAssignmentSuccess // = 54200
   case taskAssignmentPending // = 54201
   case taskAssignmentAwaitingReview // = 54202
   case taskAssignmentAwaitingConsensusReview // = 54203
-  case taskAssignmentReviewDenied // = 54204
+  case taskAssignmentRejected // = 54204
+
+  /// Task Assignment Reviews 543xx
+  case taskAssignmentReviewSuccess // = 54300
+  case taskAssignmentReviewPending // = 54301
+  case taskAssignmentReviewDismissed // = 54302
 
   /// Label Order Related Status Code 55xxx
   case labelOrderPending // = 55001
@@ -976,7 +983,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 54201: self = .taskAssignmentPending
     case 54202: self = .taskAssignmentAwaitingReview
     case 54203: self = .taskAssignmentAwaitingConsensusReview
-    case 54204: self = .taskAssignmentReviewDenied
+    case 54204: self = .taskAssignmentRejected
+    case 54300: self = .taskAssignmentReviewSuccess
+    case 54301: self = .taskAssignmentReviewPending
+    case 54302: self = .taskAssignmentReviewDismissed
     case 55001: self = .labelOrderPending
     case 55002: self = .labelOrderInProgress
     case 55003: self = .labelOrderSuccess
@@ -1361,7 +1371,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .taskAssignmentPending: return 54201
     case .taskAssignmentAwaitingReview: return 54202
     case .taskAssignmentAwaitingConsensusReview: return 54203
-    case .taskAssignmentReviewDenied: return 54204
+    case .taskAssignmentRejected: return 54204
+    case .taskAssignmentReviewSuccess: return 54300
+    case .taskAssignmentReviewPending: return 54301
+    case .taskAssignmentReviewDismissed: return 54302
     case .labelOrderPending: return 55001
     case .labelOrderInProgress: return 55002
     case .labelOrderSuccess: return 55003
@@ -1751,7 +1764,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .taskAssignmentPending,
     .taskAssignmentAwaitingReview,
     .taskAssignmentAwaitingConsensusReview,
-    .taskAssignmentReviewDenied,
+    .taskAssignmentRejected,
+    .taskAssignmentReviewSuccess,
+    .taskAssignmentReviewPending,
+    .taskAssignmentReviewDismissed,
     .labelOrderPending,
     .labelOrderInProgress,
     .labelOrderSuccess,
@@ -2139,7 +2155,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     54201: .same(proto: "TASK_ASSIGNMENT_PENDING"),
     54202: .same(proto: "TASK_ASSIGNMENT_AWAITING_REVIEW"),
     54203: .same(proto: "TASK_ASSIGNMENT_AWAITING_CONSENSUS_REVIEW"),
-    54204: .same(proto: "TASK_ASSIGNMENT_REVIEW_DENIED"),
+    54204: .same(proto: "TASK_ASSIGNMENT_REJECTED"),
+    54300: .same(proto: "TASK_ASSIGNMENT_REVIEW_SUCCESS"),
+    54301: .same(proto: "TASK_ASSIGNMENT_REVIEW_PENDING"),
+    54302: .same(proto: "TASK_ASSIGNMENT_REVIEW_DISMISSED"),
     55001: .same(proto: "LABEL_ORDER_PENDING"),
     55002: .same(proto: "LABEL_ORDER_IN_PROGRESS"),
     55003: .same(proto: "LABEL_ORDER_SUCCESS"),
