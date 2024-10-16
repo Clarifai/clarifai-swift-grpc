@@ -2616,11 +2616,52 @@ public struct Clarifai_Api_Data {
     set {_uniqueStorage()._heatmaps = newValue}
   }
 
+  /// For data messages that have multiple parts such as multi-modal
+  /// requests, we allow you to specify those as a list of Data objects.
+  public var parts: [Clarifai_Api_Part] {
+    get {return _storage._parts}
+    set {_uniqueStorage()._parts = newValue}
+  }
+
+  /// A proto representation for numpy arrays, useful to pass information from python SDK to a
+  /// python based model implementation.
+  public var ndarray: Clarifai_Api_NDArray {
+    get {return _storage._ndarray ?? Clarifai_Api_NDArray()}
+    set {_uniqueStorage()._ndarray = newValue}
+  }
+  /// Returns true if `ndarray` has been explicitly set.
+  public var hasNdarray: Bool {return _storage._ndarray != nil}
+  /// Clears the value of `ndarray`. Subsequent reads from it will return its default value.
+  public mutating func clearNdarray() {_uniqueStorage()._ndarray = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+/// A part of data used for multi-modal processing.
+public struct Clarifai_Api_Part {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The data for this part.
+  public var data: Clarifai_Api_Data {
+    get {return _data ?? Clarifai_Api_Data()}
+    set {_data = newValue}
+  }
+  /// Returns true if `data` has been explicitly set.
+  public var hasData: Bool {return self._data != nil}
+  /// Clears the value of `data`. Subsequent reads from it will return its default value.
+  public mutating func clearData() {self._data = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _data: Clarifai_Api_Data? = nil
 }
 
 /// A region within the data.
@@ -2829,6 +2870,33 @@ public struct Clarifai_Api_Frame {
 
   fileprivate var _frameInfo: Clarifai_Api_FrameInfo? = nil
   fileprivate var _data: Clarifai_Api_Data? = nil
+}
+
+/// A representation of a numpy array as a proto.
+/// To convert a numpy array 'ndarray' to this proto do:
+/// NDArray(buffer=ndarray.tobytes(), shape=ndarray.shape, dtype=str(ndarray.dtype))
+///
+/// To convert this proto 'ndarray_proto' to a numpy array:
+/// array = np.frombuffer(ndarray_proto.buffer, dtype=ndarray_proto.dtype)
+/// array = array.reshape(tuple(ndarray_proto.shape))
+public struct Clarifai_Api_NDArray {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The bytes of data from the array from array.tobytes()
+  public var buffer: Data = Data()
+
+  /// Simply the shape of the numpy array. array.shape.
+  public var shape: [UInt32] = []
+
+  /// Dtype for numpy. You can get it back from this string format using:
+  /// np.dtype('float32') for example.
+  public var dtype: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 /// Segmentation mask.
@@ -14673,6 +14741,8 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     16: .standard(proto: "time_segments"),
     17: .same(proto: "hits"),
     18: .same(proto: "heatmaps"),
+    19: .same(proto: "parts"),
+    20: .same(proto: "ndarray"),
   ]
 
   fileprivate class _StorageClass {
@@ -14692,6 +14762,8 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _timeSegments: [Clarifai_Api_TimeSegment] = []
     var _hits: [Clarifai_Api_Hit] = []
     var _heatmaps: [Clarifai_Api_Image] = []
+    var _parts: [Clarifai_Api_Part] = []
+    var _ndarray: Clarifai_Api_NDArray? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -14714,6 +14786,8 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _timeSegments = source._timeSegments
       _hits = source._hits
       _heatmaps = source._heatmaps
+      _parts = source._parts
+      _ndarray = source._ndarray
     }
   }
 
@@ -14748,6 +14822,8 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 16: try { try decoder.decodeRepeatedMessageField(value: &_storage._timeSegments) }()
         case 17: try { try decoder.decodeRepeatedMessageField(value: &_storage._hits) }()
         case 18: try { try decoder.decodeRepeatedMessageField(value: &_storage._heatmaps) }()
+        case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._parts) }()
+        case 20: try { try decoder.decodeSingularMessageField(value: &_storage._ndarray) }()
         default: break
         }
       }
@@ -14808,6 +14884,12 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       if !_storage._heatmaps.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._heatmaps, fieldNumber: 18)
       }
+      if !_storage._parts.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._parts, fieldNumber: 19)
+      }
+      try { if let v = _storage._ndarray {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -14833,10 +14915,48 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._timeSegments != rhs_storage._timeSegments {return false}
         if _storage._hits != rhs_storage._hits {return false}
         if _storage._heatmaps != rhs_storage._heatmaps {return false}
+        if _storage._parts != rhs_storage._parts {return false}
+        if _storage._ndarray != rhs_storage._ndarray {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Part: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Part"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "data"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._data) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._data {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Part, rhs: Clarifai_Api_Part) -> Bool {
+    if lhs._data != rhs._data {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -15149,6 +15269,50 @@ extension Clarifai_Api_Frame: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if lhs._frameInfo != rhs._frameInfo {return false}
     if lhs._data != rhs._data {return false}
     if lhs.id != rhs.id {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_NDArray: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".NDArray"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "buffer"),
+    2: .same(proto: "shape"),
+    3: .same(proto: "dtype"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBytesField(value: &self.buffer) }()
+      case 2: try { try decoder.decodeRepeatedUInt32Field(value: &self.shape) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.dtype) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.buffer.isEmpty {
+      try visitor.visitSingularBytesField(value: self.buffer, fieldNumber: 1)
+    }
+    if !self.shape.isEmpty {
+      try visitor.visitPackedUInt32Field(value: self.shape, fieldNumber: 2)
+    }
+    if !self.dtype.isEmpty {
+      try visitor.visitSingularStringField(value: self.dtype, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_NDArray, rhs: Clarifai_Api_NDArray) -> Bool {
+    if lhs.buffer != rhs.buffer {return false}
+    if lhs.shape != rhs.shape {return false}
+    if lhs.dtype != rhs.dtype {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

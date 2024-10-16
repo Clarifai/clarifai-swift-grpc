@@ -316,6 +316,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case deploymentsDelete // = 146
   case instanceTypesGet // = 148
   case auditLogsGet // = 149
+  case logEntriesGet // = 151
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -426,6 +427,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 148: self = .instanceTypesGet
     case 149: self = .auditLogsGet
     case 150: self = .modelsPull
+    case 151: self = .logEntriesGet
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -534,6 +536,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .instanceTypesGet: return 148
     case .auditLogsGet: return 149
     case .modelsPull: return 150
+    case .logEntriesGet: return 151
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -647,6 +650,7 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .deploymentsDelete,
     .instanceTypesGet,
     .auditLogsGet,
+    .logEntriesGet,
   ]
 }
 
@@ -852,6 +856,7 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     148: .same(proto: "InstanceTypes_Get"),
     149: .same(proto: "AuditLogs_Get"),
     150: .same(proto: "Models_Pull"),
+    151: .same(proto: "LogEntries_Get"),
   ]
 }
 

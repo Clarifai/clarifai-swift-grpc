@@ -640,6 +640,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Billing related issues: 69xxx
   case billingInvalidInfo // = 69000
 
+  /// Logs related issues: 70000;
+  case logEntriesInvalidRequest // = 70000
+
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
   case internalFetchingIssue // = 98005
@@ -1037,6 +1040,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 68005: self = .uploadCanceled
     case 68006: self = .uploadConflict
     case 69000: self = .billingInvalidInfo
+    case 70000: self = .logEntriesInvalidRequest
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -1425,6 +1429,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .uploadCanceled: return 68005
     case .uploadConflict: return 68006
     case .billingInvalidInfo: return 69000
+    case .logEntriesInvalidRequest: return 70000
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -1818,6 +1823,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .uploadCanceled,
     .uploadConflict,
     .billingInvalidInfo,
+    .logEntriesInvalidRequest,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -2209,6 +2215,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     68005: .same(proto: "UPLOAD_CANCELED"),
     68006: .same(proto: "UPLOAD_CONFLICT"),
     69000: .same(proto: "BILLING_INVALID_INFO"),
+    70000: .same(proto: "LOG_ENTRIES_INVALID_REQUEST"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),
