@@ -9080,11 +9080,7 @@ public struct Clarifai_Api_TaskReviewManualStrategyInfo {
   /// This field represents the percentage of inputs that will be reviewed by reviewers. It is a value between 0 and 1.
   public var samplePercentage: Float = 0
 
-  /// The number of reviewers that need to agree in order to approve an input.
-  /// Currently, the only allowed values are:
-  /// 0  - when not set, it defaults to 1
-  /// 1  - only a single reviewer needs to approve each labeled input
-  /// -1 - an input will be approved when all reviewers approve it
+  /// Deprecated: Use consensus_strategy_info.approval_threshold_reviewers.
   public var approvalThreshold: Int32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -9098,8 +9094,22 @@ public struct Clarifai_Api_TaskReviewConsensusStrategyInfo {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The number of labelers that need to agree in order to automatically approve an annotation.
+  /// Deprecated: Use approval_threshold_labelers.
   public var approvalThreshold: UInt32 = 0
+
+  /// The number of labelers that need to agree in order to automatically approve an annotation.
+  /// When 0, labelers consensus is disabled.
+  /// When 1, the labels are automatically approved once a single labeler labels the input.
+  /// When greater than 1, the labels are automatically approved when the specified number of labelers agree.
+  /// If the number of labelers that agree is less than the specified number, then the input will reviewed by reviewers.
+  public var approvalThresholdLabelers: UInt32 = 0
+
+  /// The number of reviewers that need to agree in order to approve an input.
+  /// Currently, the only allowed values are:
+  /// 0  - when not set, it defaults to 1
+  /// 1  - only a single reviewer needs to approve each labeled input
+  /// -1 - an input will be approved when all reviewers approve it
+  public var approvalThresholdReviewers: Int32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -23400,6 +23410,8 @@ extension Clarifai_Api_TaskReviewConsensusStrategyInfo: SwiftProtobuf.Message, S
   public static let protoMessageName: String = _protobuf_package + ".TaskReviewConsensusStrategyInfo"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     2: .standard(proto: "approval_threshold"),
+    3: .standard(proto: "approval_threshold_labelers"),
+    4: .standard(proto: "approval_threshold_reviewers"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23409,6 +23421,8 @@ extension Clarifai_Api_TaskReviewConsensusStrategyInfo: SwiftProtobuf.Message, S
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.approvalThreshold) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.approvalThresholdLabelers) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self.approvalThresholdReviewers) }()
       default: break
       }
     }
@@ -23418,11 +23432,19 @@ extension Clarifai_Api_TaskReviewConsensusStrategyInfo: SwiftProtobuf.Message, S
     if self.approvalThreshold != 0 {
       try visitor.visitSingularUInt32Field(value: self.approvalThreshold, fieldNumber: 2)
     }
+    if self.approvalThresholdLabelers != 0 {
+      try visitor.visitSingularUInt32Field(value: self.approvalThresholdLabelers, fieldNumber: 3)
+    }
+    if self.approvalThresholdReviewers != 0 {
+      try visitor.visitSingularInt32Field(value: self.approvalThresholdReviewers, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TaskReviewConsensusStrategyInfo, rhs: Clarifai_Api_TaskReviewConsensusStrategyInfo) -> Bool {
     if lhs.approvalThreshold != rhs.approvalThreshold {return false}
+    if lhs.approvalThresholdLabelers != rhs.approvalThresholdLabelers {return false}
+    if lhs.approvalThresholdReviewers != rhs.approvalThresholdReviewers {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

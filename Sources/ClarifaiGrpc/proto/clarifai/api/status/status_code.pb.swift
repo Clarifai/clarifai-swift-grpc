@@ -237,7 +237,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case annotationUnknownStatus // = 24154
   case annotationInvalidArgument // = 24155
   case annotationPermissionDenied // = 24156
+
+  /// Annotation is awaiting review from task REVIEWERS.
   case annotationAwaitingReview // = 24157
+
+  /// Annotation is awaiting consensus review from task LABELERS.
   case annotationAwaitingConsensusReview // = 24159
   case annotationReviewDenied // = 24158
   case annotationModifySuccess // = 24250
