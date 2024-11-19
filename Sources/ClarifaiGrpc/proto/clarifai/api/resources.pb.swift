@@ -1077,8 +1077,21 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
 
-  /// APPLICATION event types : 100 - 199
-  case applicationCreate // = 100
+  /// Event types related to organization memberships and teams: 100 - 199
+  case organizationMemberAdd // = 100
+  case organizationMemberChange // = 101
+  case organizationMemberRemove // = 102
+  case organizationMemberInvitationCreate // = 103
+  case organizationMemberInvitationCancel // = 104
+  case organizationMemberInvitationAccept // = 105
+  case organizationMemberInvitationDecline // = 106
+  case organizationTeamCreate // = 107
+  case organizationTeamUpdate // = 108
+  case organizationTeamDelete // = 109
+  case organizationTeamMemberAdd // = 110
+  case organizationTeamMemberRemove // = 111
+  case organizationTeamAppAdd // = 112
+  case organizationTeamAppRemove // = 113
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1088,7 +1101,20 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   public init?(rawValue: Int) {
     switch rawValue {
     case 0: self = .notSet
-    case 100: self = .applicationCreate
+    case 100: self = .organizationMemberAdd
+    case 101: self = .organizationMemberChange
+    case 102: self = .organizationMemberRemove
+    case 103: self = .organizationMemberInvitationCreate
+    case 104: self = .organizationMemberInvitationCancel
+    case 105: self = .organizationMemberInvitationAccept
+    case 106: self = .organizationMemberInvitationDecline
+    case 107: self = .organizationTeamCreate
+    case 108: self = .organizationTeamUpdate
+    case 109: self = .organizationTeamDelete
+    case 110: self = .organizationTeamMemberAdd
+    case 111: self = .organizationTeamMemberRemove
+    case 112: self = .organizationTeamAppAdd
+    case 113: self = .organizationTeamAppRemove
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1096,7 +1122,20 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   public var rawValue: Int {
     switch self {
     case .notSet: return 0
-    case .applicationCreate: return 100
+    case .organizationMemberAdd: return 100
+    case .organizationMemberChange: return 101
+    case .organizationMemberRemove: return 102
+    case .organizationMemberInvitationCreate: return 103
+    case .organizationMemberInvitationCancel: return 104
+    case .organizationMemberInvitationAccept: return 105
+    case .organizationMemberInvitationDecline: return 106
+    case .organizationTeamCreate: return 107
+    case .organizationTeamUpdate: return 108
+    case .organizationTeamDelete: return 109
+    case .organizationTeamMemberAdd: return 110
+    case .organizationTeamMemberRemove: return 111
+    case .organizationTeamAppAdd: return 112
+    case .organizationTeamAppRemove: return 113
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1109,7 +1148,20 @@ extension Clarifai_Api_EventType: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
   public static var allCases: [Clarifai_Api_EventType] = [
     .notSet,
-    .applicationCreate,
+    .organizationMemberAdd,
+    .organizationMemberChange,
+    .organizationMemberRemove,
+    .organizationMemberInvitationCreate,
+    .organizationMemberInvitationCancel,
+    .organizationMemberInvitationAccept,
+    .organizationMemberInvitationDecline,
+    .organizationTeamCreate,
+    .organizationTeamUpdate,
+    .organizationTeamDelete,
+    .organizationTeamMemberAdd,
+    .organizationTeamMemberRemove,
+    .organizationTeamAppAdd,
+    .organizationTeamAppRemove,
   ]
 }
 
@@ -1497,12 +1549,63 @@ public struct Clarifai_Api_App {
   /// Clears the value of `extraInfo`. Subsequent reads from it will return its default value.
   public mutating func clearExtraInfo() {_uniqueStorage()._extraInfo = nil}
 
+  /// Where app embeddings are stored
+  /// postgres (default), qdrant
+  public var embeddingsStorage: Clarifai_Api_App.EmbeddingsStorage {
+    get {return _storage._embeddingsStorage}
+    set {_uniqueStorage()._embeddingsStorage = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum EmbeddingsStorage: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case embeddingStorageNotSet // = 0
+    case postgres // = 1
+    case qdrant // = 2
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .embeddingStorageNotSet
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .embeddingStorageNotSet
+      case 1: self = .postgres
+      case 2: self = .qdrant
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .embeddingStorageNotSet: return 0
+      case .postgres: return 1
+      case .qdrant: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_App.EmbeddingsStorage: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_App.EmbeddingsStorage] = [
+    .embeddingStorageNotSet,
+    .postgres,
+    .qdrant,
+  ]
+}
+
+#endif  // swift(>=4.2)
 
 public struct Clarifai_Api_AppExtraInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -2288,8 +2391,7 @@ public struct Clarifai_Api_ConceptQuery {
   /// Multiple values are joined using an OR condition.
   public var useCases: [Clarifai_Api_WorkflowModelUseCase] = []
 
-  /// By default, we return app concepts combined with concepts from this source.
-  /// If source is not set, then application default workflow is used as source.
+  /// Search for concepts in a specific model or workflow.
   /// ########## Supported fields ##########
   ///  - model.id                - fetch concepts from this model
   ///  - model.model_version.id  - if set, then use the specified model version. if not set, use latest model version
@@ -2315,10 +2417,16 @@ public struct Clarifai_Api_ConceptQuery {
     set {source = .workflow(newValue)}
   }
 
+  /// By default, we return app concepts combined with source (model or workflow) concepts.
+  /// If source is not set, then we only return app concepts.
+  /// If ignore_app_concepts is true, then we only return source concepts.
+  /// When use_cases are set, then ignore_app_concepts is always true, because
+  /// concept use cases can only be determined in relation to a model or a workflow.
+  public var ignoreAppConcepts: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  /// By default, we return app concepts combined with concepts from this source.
-  /// If source is not set, then application default workflow is used as source.
+  /// Search for concepts in a specific model or workflow.
   /// ########## Supported fields ##########
   ///  - model.id                - fetch concepts from this model
   ///  - model.model_version.id  - if set, then use the specified model version. if not set, use latest model version
@@ -7377,76 +7485,102 @@ public struct Clarifai_Api_UserDetail {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var primaryEmail: String = String()
+  public var primaryEmail: String {
+    get {return _storage._primaryEmail}
+    set {_uniqueStorage()._primaryEmail = newValue}
+  }
 
-  public var billType: String = String()
+  public var billType: String {
+    get {return _storage._billType}
+    set {_uniqueStorage()._billType = newValue}
+  }
 
   public var dateGdprConsent: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _dateGdprConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_dateGdprConsent = newValue}
+    get {return _storage._dateGdprConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._dateGdprConsent = newValue}
   }
   /// Returns true if `dateGdprConsent` has been explicitly set.
-  public var hasDateGdprConsent: Bool {return self._dateGdprConsent != nil}
+  public var hasDateGdprConsent: Bool {return _storage._dateGdprConsent != nil}
   /// Clears the value of `dateGdprConsent`. Subsequent reads from it will return its default value.
-  public mutating func clearDateGdprConsent() {self._dateGdprConsent = nil}
+  public mutating func clearDateGdprConsent() {_uniqueStorage()._dateGdprConsent = nil}
 
   public var dateTosConsent: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _dateTosConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_dateTosConsent = newValue}
+    get {return _storage._dateTosConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._dateTosConsent = newValue}
   }
   /// Returns true if `dateTosConsent` has been explicitly set.
-  public var hasDateTosConsent: Bool {return self._dateTosConsent != nil}
+  public var hasDateTosConsent: Bool {return _storage._dateTosConsent != nil}
   /// Clears the value of `dateTosConsent`. Subsequent reads from it will return its default value.
-  public mutating func clearDateTosConsent() {self._dateTosConsent = nil}
+  public mutating func clearDateTosConsent() {_uniqueStorage()._dateTosConsent = nil}
 
   public var dateMarketingConsent: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _dateMarketingConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_dateMarketingConsent = newValue}
+    get {return _storage._dateMarketingConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._dateMarketingConsent = newValue}
   }
   /// Returns true if `dateMarketingConsent` has been explicitly set.
-  public var hasDateMarketingConsent: Bool {return self._dateMarketingConsent != nil}
+  public var hasDateMarketingConsent: Bool {return _storage._dateMarketingConsent != nil}
   /// Clears the value of `dateMarketingConsent`. Subsequent reads from it will return its default value.
-  public mutating func clearDateMarketingConsent() {self._dateMarketingConsent = nil}
+  public mutating func clearDateMarketingConsent() {_uniqueStorage()._dateMarketingConsent = nil}
 
   public var datePiiConsent: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _datePiiConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_datePiiConsent = newValue}
+    get {return _storage._datePiiConsent ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._datePiiConsent = newValue}
   }
   /// Returns true if `datePiiConsent` has been explicitly set.
-  public var hasDatePiiConsent: Bool {return self._datePiiConsent != nil}
+  public var hasDatePiiConsent: Bool {return _storage._datePiiConsent != nil}
   /// Clears the value of `datePiiConsent`. Subsequent reads from it will return its default value.
-  public mutating func clearDatePiiConsent() {self._datePiiConsent = nil}
+  public mutating func clearDatePiiConsent() {_uniqueStorage()._datePiiConsent = nil}
 
   /// To handle arbitrary json metadata you can use a struct field:
   /// https://github.com/google/protobuf/blob/master/src/google/protobuf/struct.proto
   public var metadata: SwiftProtobuf.Google_Protobuf_Struct {
-    get {return _metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
-    set {_metadata = newValue}
+    get {return _storage._metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_uniqueStorage()._metadata = newValue}
   }
   /// Returns true if `metadata` has been explicitly set.
-  public var hasMetadata: Bool {return self._metadata != nil}
+  public var hasMetadata: Bool {return _storage._metadata != nil}
   /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
-  public mutating func clearMetadata() {self._metadata = nil}
+  public mutating func clearMetadata() {_uniqueStorage()._metadata = nil}
 
-  public var emailAddresses: [Clarifai_Api_EmailAddress] = []
+  public var emailAddresses: [Clarifai_Api_EmailAddress] {
+    get {return _storage._emailAddresses}
+    set {_uniqueStorage()._emailAddresses = newValue}
+  }
 
-  public var twoFactorAuthEnabled: Bool = false
+  public var twoFactorAuthEnabled: Bool {
+    get {return _storage._twoFactorAuthEnabled}
+    set {_uniqueStorage()._twoFactorAuthEnabled = newValue}
+  }
 
-  public var teamsCount: UInt32 = 0
+  public var teamsCount: UInt32 {
+    get {return _storage._teamsCount}
+    set {_uniqueStorage()._teamsCount = newValue}
+  }
 
-  public var country: String = String()
+  public var country: String {
+    get {return _storage._country}
+    set {_uniqueStorage()._country = newValue}
+  }
 
-  public var state: String = String()
+  public var state: String {
+    get {return _storage._state}
+    set {_uniqueStorage()._state = newValue}
+  }
+
+  public var commitmentValue: Clarifai_Api_CommitmentValue {
+    get {return _storage._commitmentValue ?? Clarifai_Api_CommitmentValue()}
+    set {_uniqueStorage()._commitmentValue = newValue}
+  }
+  /// Returns true if `commitmentValue` has been explicitly set.
+  public var hasCommitmentValue: Bool {return _storage._commitmentValue != nil}
+  /// Clears the value of `commitmentValue`. Subsequent reads from it will return its default value.
+  public mutating func clearCommitmentValue() {_uniqueStorage()._commitmentValue = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _dateGdprConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _dateTosConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _dateMarketingConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _datePiiConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 /// EmailAddress
@@ -7532,6 +7666,67 @@ public struct Clarifai_Api_PasswordViolations {
 
   public init() {}
 }
+
+/// Commitment Value - used to track users' commitment amount and type
+public struct Clarifai_Api_CommitmentValue {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The commitment value, in cents
+  public var value: Int32 = 0
+
+  /// The commitment type, can be either 'monthly' or 'annual'
+  public var type: Clarifai_Api_CommitmentValue.CommitmentType = .typeNotSet
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum CommitmentType: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case typeNotSet // = 0
+    case monthly // = 1
+    case annual // = 2
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .typeNotSet
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .typeNotSet
+      case 1: self = .monthly
+      case 2: self = .annual
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .typeNotSet: return 0
+      case .monthly: return 1
+      case .annual: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
+  public init() {}
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_CommitmentValue.CommitmentType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_CommitmentValue.CommitmentType] = [
+    .typeNotSet,
+    .monthly,
+    .annual,
+  ]
+}
+
+#endif  // swift(>=4.2)
 
 /// Video
 public struct Clarifai_Api_Video {
@@ -9414,6 +9609,106 @@ public struct Clarifai_Api_TaskInputSourceMetrics {
   public init() {}
 }
 
+/// Role represents a list of permissions
+public struct Clarifai_Api_Role {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var id: String = String()
+
+  /// When the role was created.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return self._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {self._createdAt = nil}
+
+  /// Most recent time when the role was updated.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return self._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {self._modifiedAt = nil}
+
+  public var name: String = String()
+
+  public var description_p: String = String()
+
+  /// The low-level scopes this role has
+  public var scopes: [String] = []
+
+  /// The endpoint-level scopes this role has
+  public var endpoints: [String] = []
+
+  /// Type of the role 'team' or 'org'
+  public var type: Clarifai_Api_RoleType = .team
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+}
+
+/// Represents a group of users.
+public struct Clarifai_Api_Team {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Identify the team (unique).
+  public var id: String = String()
+
+  /// When the team was created.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return self._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {self._createdAt = nil}
+
+  /// Most recent time when the team was updated.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return self._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {self._modifiedAt = nil}
+
+  /// Name the team.
+  public var name: String = String()
+
+  /// When a new application is assigned to the team without an explicit role, then the default role will be used
+  public var defaultRoleID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+}
+
 /// Collector is a data pathway from a CollectorSource to an app to collect data automatically.
 /// For example, a CollectorSource
 public struct Clarifai_Api_Collector {
@@ -9843,25 +10138,6 @@ extension Clarifai_Api_Visibility.Gettable: CaseIterable {
 }
 
 #endif  // swift(>=4.2)
-
-/// TrendingMetric
-public struct Clarifai_Api_TrendingMetric {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var userID: String = String()
-
-  public var appID: String = String()
-
-  public var objectID: String = String()
-
-  public var viewCount: UInt64 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
 
 public struct Clarifai_Api_FullTag {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -11983,7 +12259,7 @@ public struct Clarifai_Api_ComputeCluster {
   public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
 
   /// We offer different types of compute clusters such as:
-  /// 'serverless' which only Clarifai can create.
+  /// 'shared' which only Clarifai can create.
   /// 'dedicated' where you're in control of defining the nodepools within the cluster
   /// 'local-dev' which means you're responsible for starting runners manually which is great for local
   /// development but not recommended for production use cases.
@@ -12089,7 +12365,7 @@ public struct Clarifai_Api_AutoscaleConfig {
 
   /// Depending on your plan you may be able to enable packing of resources into a single node
   /// for more compute and cost efficiency.
-  public var enablePacking: Bool = false
+  public var disablePacking: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -12392,20 +12668,36 @@ public struct Clarifai_Api_AuditLogTarget {
 
   public var target: Clarifai_Api_AuditLogTarget.OneOf_Target? = nil
 
-  /// An organization member, only used in org audit logs.
-  public var member: Clarifai_Api_User {
+  public var user: Clarifai_Api_User {
     get {
-      if case .member(let v)? = target {return v}
+      if case .user(let v)? = target {return v}
       return Clarifai_Api_User()
     }
-    set {target = .member(newValue)}
+    set {target = .user(newValue)}
+  }
+
+  public var role: Clarifai_Api_Role {
+    get {
+      if case .role(let v)? = target {return v}
+      return Clarifai_Api_Role()
+    }
+    set {target = .role(newValue)}
+  }
+
+  public var team: Clarifai_Api_Team {
+    get {
+      if case .team(let v)? = target {return v}
+      return Clarifai_Api_Team()
+    }
+    set {target = .team(newValue)}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Target: Equatable {
-    /// An organization member, only used in org audit logs.
-    case member(Clarifai_Api_User)
+    case user(Clarifai_Api_User)
+    case role(Clarifai_Api_Role)
+    case team(Clarifai_Api_Team)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_AuditLogTarget.OneOf_Target, rhs: Clarifai_Api_AuditLogTarget.OneOf_Target) -> Bool {
@@ -12413,10 +12705,19 @@ public struct Clarifai_Api_AuditLogTarget {
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch (lhs, rhs) {
-      case (.member, .member): return {
-        guard case .member(let l) = lhs, case .member(let r) = rhs else { preconditionFailure() }
+      case (.user, .user): return {
+        guard case .user(let l) = lhs, case .user(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
+      case (.role, .role): return {
+        guard case .role(let l) = lhs, case .role(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.team, .team): return {
+        guard case .team(let l) = lhs, case .team(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
       }
     }
   #endif
@@ -12898,7 +13199,20 @@ extension Clarifai_Api_RunnerMethodType: SwiftProtobuf._ProtoNameProviding {
 extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "EVENT_TYPE_NOT_SET"),
-    100: .same(proto: "APPLICATION_CREATE"),
+    100: .same(proto: "ORGANIZATION_MEMBER_ADD"),
+    101: .same(proto: "ORGANIZATION_MEMBER_CHANGE"),
+    102: .same(proto: "ORGANIZATION_MEMBER_REMOVE"),
+    103: .same(proto: "ORGANIZATION_MEMBER_INVITATION_CREATE"),
+    104: .same(proto: "ORGANIZATION_MEMBER_INVITATION_CANCEL"),
+    105: .same(proto: "ORGANIZATION_MEMBER_INVITATION_ACCEPT"),
+    106: .same(proto: "ORGANIZATION_MEMBER_INVITATION_DECLINE"),
+    107: .same(proto: "ORGANIZATION_TEAM_CREATE"),
+    108: .same(proto: "ORGANIZATION_TEAM_UPDATE"),
+    109: .same(proto: "ORGANIZATION_TEAM_DELETE"),
+    110: .same(proto: "ORGANIZATION_TEAM_MEMBER_ADD"),
+    111: .same(proto: "ORGANIZATION_TEAM_MEMBER_REMOVE"),
+    112: .same(proto: "ORGANIZATION_TEAM_APP_ADD"),
+    113: .same(proto: "ORGANIZATION_TEAM_APP_REMOVE"),
   ]
 }
 
@@ -13193,6 +13507,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     22: .same(proto: "image"),
     25: .standard(proto: "is_template"),
     24: .standard(proto: "extra_info"),
+    26: .standard(proto: "embeddings_storage"),
   ]
 
   fileprivate class _StorageClass {
@@ -13216,6 +13531,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _image: Clarifai_Api_Image? = nil
     var _isTemplate: SwiftProtobuf.Google_Protobuf_BoolValue? = nil
     var _extraInfo: Clarifai_Api_AppExtraInfo? = nil
+    var _embeddingsStorage: Clarifai_Api_App.EmbeddingsStorage = .embeddingStorageNotSet
 
     static let defaultInstance = _StorageClass()
 
@@ -13242,6 +13558,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _image = source._image
       _isTemplate = source._isTemplate
       _extraInfo = source._extraInfo
+      _embeddingsStorage = source._embeddingsStorage
     }
   }
 
@@ -13280,6 +13597,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 23: try { try decoder.decodeSingularMessageField(value: &_storage._defaultWorkflow) }()
         case 24: try { try decoder.decodeSingularMessageField(value: &_storage._extraInfo) }()
         case 25: try { try decoder.decodeSingularMessageField(value: &_storage._isTemplate) }()
+        case 26: try { try decoder.decodeSingularEnumField(value: &_storage._embeddingsStorage) }()
         default: break
         }
       }
@@ -13352,6 +13670,9 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._isTemplate {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
       } }()
+      if _storage._embeddingsStorage != .embeddingStorageNotSet {
+        try visitor.visitSingularEnumField(value: _storage._embeddingsStorage, fieldNumber: 26)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -13381,6 +13702,7 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._image != rhs_storage._image {return false}
         if _storage._isTemplate != rhs_storage._isTemplate {return false}
         if _storage._extraInfo != rhs_storage._extraInfo {return false}
+        if _storage._embeddingsStorage != rhs_storage._embeddingsStorage {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -13388,6 +13710,14 @@ extension Clarifai_Api_App: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_App.EmbeddingsStorage: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "EMBEDDING_STORAGE_NOT_SET"),
+    1: .same(proto: "POSTGRES"),
+    2: .same(proto: "QDRANT"),
+  ]
 }
 
 extension Clarifai_Api_AppExtraInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -14481,6 +14811,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     4: .standard(proto: "use_cases"),
     5: .same(proto: "model"),
     6: .same(proto: "workflow"),
+    7: .standard(proto: "ignore_app_concepts"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14519,6 +14850,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
           self.source = .workflow(v)
         }
       }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.ignoreAppConcepts) }()
       default: break
       }
     }
@@ -14552,6 +14884,9 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     }()
     case nil: break
     }
+    if self.ignoreAppConcepts != false {
+      try visitor.visitSingularBoolField(value: self.ignoreAppConcepts, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -14561,6 +14896,7 @@ extension Clarifai_Api_ConceptQuery: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs.workflowID != rhs.workflowID {return false}
     if lhs.useCases != rhs.useCases {return false}
     if lhs.source != rhs.source {return false}
+    if lhs.ignoreAppConcepts != rhs.ignoreAppConcepts {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21414,88 +21750,150 @@ extension Clarifai_Api_UserDetail: SwiftProtobuf.Message, SwiftProtobuf._Message
     10: .standard(proto: "teams_count"),
     11: .same(proto: "country"),
     12: .same(proto: "state"),
+    14: .standard(proto: "commitment_value"),
   ]
 
+  fileprivate class _StorageClass {
+    var _primaryEmail: String = String()
+    var _billType: String = String()
+    var _dateGdprConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _dateTosConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _dateMarketingConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _datePiiConsent: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
+    var _emailAddresses: [Clarifai_Api_EmailAddress] = []
+    var _twoFactorAuthEnabled: Bool = false
+    var _teamsCount: UInt32 = 0
+    var _country: String = String()
+    var _state: String = String()
+    var _commitmentValue: Clarifai_Api_CommitmentValue? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _primaryEmail = source._primaryEmail
+      _billType = source._billType
+      _dateGdprConsent = source._dateGdprConsent
+      _dateTosConsent = source._dateTosConsent
+      _dateMarketingConsent = source._dateMarketingConsent
+      _datePiiConsent = source._datePiiConsent
+      _metadata = source._metadata
+      _emailAddresses = source._emailAddresses
+      _twoFactorAuthEnabled = source._twoFactorAuthEnabled
+      _teamsCount = source._teamsCount
+      _country = source._country
+      _state = source._state
+      _commitmentValue = source._commitmentValue
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.primaryEmail) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.billType) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._dateGdprConsent) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._dateTosConsent) }()
-      case 5: try { try decoder.decodeSingularMessageField(value: &self._dateMarketingConsent) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._metadata) }()
-      case 7: try { try decoder.decodeRepeatedMessageField(value: &self.emailAddresses) }()
-      case 9: try { try decoder.decodeSingularBoolField(value: &self.twoFactorAuthEnabled) }()
-      case 10: try { try decoder.decodeSingularUInt32Field(value: &self.teamsCount) }()
-      case 11: try { try decoder.decodeSingularStringField(value: &self.country) }()
-      case 12: try { try decoder.decodeSingularStringField(value: &self.state) }()
-      case 13: try { try decoder.decodeSingularMessageField(value: &self._datePiiConsent) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._primaryEmail) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._billType) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._dateGdprConsent) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._dateTosConsent) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._dateMarketingConsent) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._metadata) }()
+        case 7: try { try decoder.decodeRepeatedMessageField(value: &_storage._emailAddresses) }()
+        case 9: try { try decoder.decodeSingularBoolField(value: &_storage._twoFactorAuthEnabled) }()
+        case 10: try { try decoder.decodeSingularUInt32Field(value: &_storage._teamsCount) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._country) }()
+        case 12: try { try decoder.decodeSingularStringField(value: &_storage._state) }()
+        case 13: try { try decoder.decodeSingularMessageField(value: &_storage._datePiiConsent) }()
+        case 14: try { try decoder.decodeSingularMessageField(value: &_storage._commitmentValue) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.primaryEmail.isEmpty {
-      try visitor.visitSingularStringField(value: self.primaryEmail, fieldNumber: 1)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._primaryEmail.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._primaryEmail, fieldNumber: 1)
+      }
+      if !_storage._billType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._billType, fieldNumber: 2)
+      }
+      try { if let v = _storage._dateGdprConsent {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._dateTosConsent {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._dateMarketingConsent {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._metadata {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      if !_storage._emailAddresses.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._emailAddresses, fieldNumber: 7)
+      }
+      if _storage._twoFactorAuthEnabled != false {
+        try visitor.visitSingularBoolField(value: _storage._twoFactorAuthEnabled, fieldNumber: 9)
+      }
+      if _storage._teamsCount != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._teamsCount, fieldNumber: 10)
+      }
+      if !_storage._country.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._country, fieldNumber: 11)
+      }
+      if !_storage._state.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._state, fieldNumber: 12)
+      }
+      try { if let v = _storage._datePiiConsent {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      } }()
+      try { if let v = _storage._commitmentValue {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+      } }()
     }
-    if !self.billType.isEmpty {
-      try visitor.visitSingularStringField(value: self.billType, fieldNumber: 2)
-    }
-    try { if let v = self._dateGdprConsent {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    try { if let v = self._dateTosConsent {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    try { if let v = self._dateMarketingConsent {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    } }()
-    try { if let v = self._metadata {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    } }()
-    if !self.emailAddresses.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.emailAddresses, fieldNumber: 7)
-    }
-    if self.twoFactorAuthEnabled != false {
-      try visitor.visitSingularBoolField(value: self.twoFactorAuthEnabled, fieldNumber: 9)
-    }
-    if self.teamsCount != 0 {
-      try visitor.visitSingularUInt32Field(value: self.teamsCount, fieldNumber: 10)
-    }
-    if !self.country.isEmpty {
-      try visitor.visitSingularStringField(value: self.country, fieldNumber: 11)
-    }
-    if !self.state.isEmpty {
-      try visitor.visitSingularStringField(value: self.state, fieldNumber: 12)
-    }
-    try { if let v = self._datePiiConsent {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
-    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_UserDetail, rhs: Clarifai_Api_UserDetail) -> Bool {
-    if lhs.primaryEmail != rhs.primaryEmail {return false}
-    if lhs.billType != rhs.billType {return false}
-    if lhs._dateGdprConsent != rhs._dateGdprConsent {return false}
-    if lhs._dateTosConsent != rhs._dateTosConsent {return false}
-    if lhs._dateMarketingConsent != rhs._dateMarketingConsent {return false}
-    if lhs._datePiiConsent != rhs._datePiiConsent {return false}
-    if lhs._metadata != rhs._metadata {return false}
-    if lhs.emailAddresses != rhs.emailAddresses {return false}
-    if lhs.twoFactorAuthEnabled != rhs.twoFactorAuthEnabled {return false}
-    if lhs.teamsCount != rhs.teamsCount {return false}
-    if lhs.country != rhs.country {return false}
-    if lhs.state != rhs.state {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._primaryEmail != rhs_storage._primaryEmail {return false}
+        if _storage._billType != rhs_storage._billType {return false}
+        if _storage._dateGdprConsent != rhs_storage._dateGdprConsent {return false}
+        if _storage._dateTosConsent != rhs_storage._dateTosConsent {return false}
+        if _storage._dateMarketingConsent != rhs_storage._dateMarketingConsent {return false}
+        if _storage._datePiiConsent != rhs_storage._datePiiConsent {return false}
+        if _storage._metadata != rhs_storage._metadata {return false}
+        if _storage._emailAddresses != rhs_storage._emailAddresses {return false}
+        if _storage._twoFactorAuthEnabled != rhs_storage._twoFactorAuthEnabled {return false}
+        if _storage._teamsCount != rhs_storage._teamsCount {return false}
+        if _storage._country != rhs_storage._country {return false}
+        if _storage._state != rhs_storage._state {return false}
+        if _storage._commitmentValue != rhs_storage._commitmentValue {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21685,6 +22083,52 @@ extension Clarifai_Api_PasswordViolations: SwiftProtobuf.Message, SwiftProtobuf.
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_CommitmentValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CommitmentValue"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "value"),
+    2: .same(proto: "type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt32Field(value: &self.value) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.type) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.value != 0 {
+      try visitor.visitSingularInt32Field(value: self.value, fieldNumber: 1)
+    }
+    if self.type != .typeNotSet {
+      try visitor.visitSingularEnumField(value: self.type, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_CommitmentValue, rhs: Clarifai_Api_CommitmentValue) -> Bool {
+    if lhs.value != rhs.value {return false}
+    if lhs.type != rhs.type {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_CommitmentValue.CommitmentType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "TYPE_NOT_SET"),
+    1: .same(proto: "MONTHLY"),
+    2: .same(proto: "ANNUAL"),
+  ]
 }
 
 extension Clarifai_Api_Video: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -23958,6 +24402,144 @@ extension Clarifai_Api_TaskInputSourceMetrics: SwiftProtobuf.Message, SwiftProto
   }
 }
 
+extension Clarifai_Api_Role: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Role"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "created_at"),
+    3: .standard(proto: "modified_at"),
+    4: .same(proto: "name"),
+    5: .same(proto: "description"),
+    6: .same(proto: "scopes"),
+    7: .same(proto: "endpoints"),
+    8: .same(proto: "type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 6: try { try decoder.decodeRepeatedStringField(value: &self.scopes) }()
+      case 7: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
+      case 8: try { try decoder.decodeSingularEnumField(value: &self.type) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    try { if let v = self._createdAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._modifiedAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 4)
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 5)
+    }
+    if !self.scopes.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.scopes, fieldNumber: 6)
+    }
+    if !self.endpoints.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.endpoints, fieldNumber: 7)
+    }
+    if self.type != .team {
+      try visitor.visitSingularEnumField(value: self.type, fieldNumber: 8)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Role, rhs: Clarifai_Api_Role) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs._createdAt != rhs._createdAt {return false}
+    if lhs._modifiedAt != rhs._modifiedAt {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs.scopes != rhs.scopes {return false}
+    if lhs.endpoints != rhs.endpoints {return false}
+    if lhs.type != rhs.type {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Team: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Team"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "created_at"),
+    3: .standard(proto: "modified_at"),
+    4: .same(proto: "name"),
+    5: .standard(proto: "default_role_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.defaultRoleID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    try { if let v = self._createdAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._modifiedAt {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 4)
+    }
+    if !self.defaultRoleID.isEmpty {
+      try visitor.visitSingularStringField(value: self.defaultRoleID, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Team, rhs: Clarifai_Api_Team) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs._createdAt != rhs._createdAt {return false}
+    if lhs._modifiedAt != rhs._modifiedAt {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.defaultRoleID != rhs.defaultRoleID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Collector"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -24513,56 +25095,6 @@ extension Clarifai_Api_Visibility.Gettable: SwiftProtobuf._ProtoNameProviding {
     30: .same(proto: "ORG"),
     50: .same(proto: "PUBLIC"),
   ]
-}
-
-extension Clarifai_Api_TrendingMetric: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".TrendingMetric"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_id"),
-    2: .standard(proto: "app_id"),
-    3: .standard(proto: "object_id"),
-    4: .standard(proto: "view_count"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.userID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.appID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.objectID) }()
-      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.viewCount) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.userID.isEmpty {
-      try visitor.visitSingularStringField(value: self.userID, fieldNumber: 1)
-    }
-    if !self.appID.isEmpty {
-      try visitor.visitSingularStringField(value: self.appID, fieldNumber: 2)
-    }
-    if !self.objectID.isEmpty {
-      try visitor.visitSingularStringField(value: self.objectID, fieldNumber: 3)
-    }
-    if self.viewCount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.viewCount, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_TrendingMetric, rhs: Clarifai_Api_TrendingMetric) -> Bool {
-    if lhs.userID != rhs.userID {return false}
-    if lhs.appID != rhs.appID {return false}
-    if lhs.objectID != rhs.objectID {return false}
-    if lhs.viewCount != rhs.viewCount {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
 }
 
 extension Clarifai_Api_FullTag: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -27558,7 +28090,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     3: .standard(proto: "traffic_history_seconds"),
     4: .standard(proto: "scale_down_delay_seconds"),
     5: .standard(proto: "scale_up_delay_seconds"),
-    6: .standard(proto: "enable_packing"),
+    7: .standard(proto: "disable_packing"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -27572,7 +28104,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.trafficHistorySeconds) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.scaleDownDelaySeconds) }()
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.scaleUpDelaySeconds) }()
-      case 6: try { try decoder.decodeSingularBoolField(value: &self.enablePacking) }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.disablePacking) }()
       default: break
       }
     }
@@ -27594,8 +28126,8 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     if self.scaleUpDelaySeconds != 0 {
       try visitor.visitSingularUInt32Field(value: self.scaleUpDelaySeconds, fieldNumber: 5)
     }
-    if self.enablePacking != false {
-      try visitor.visitSingularBoolField(value: self.enablePacking, fieldNumber: 6)
+    if self.disablePacking != false {
+      try visitor.visitSingularBoolField(value: self.disablePacking, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -27606,7 +28138,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.trafficHistorySeconds != rhs.trafficHistorySeconds {return false}
     if lhs.scaleDownDelaySeconds != rhs.scaleDownDelaySeconds {return false}
     if lhs.scaleUpDelaySeconds != rhs.scaleUpDelaySeconds {return false}
-    if lhs.enablePacking != rhs.enablePacking {return false}
+    if lhs.disablePacking != rhs.disablePacking {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -27867,7 +28399,9 @@ extension Clarifai_Api_ProcessingInfo: SwiftProtobuf.Message, SwiftProtobuf._Mes
 extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".AuditLogTarget"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "member"),
+    1: .same(proto: "user"),
+    2: .same(proto: "role"),
+    3: .same(proto: "team"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -27881,12 +28415,38 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
         var hadOneofValue = false
         if let current = self.target {
           hadOneofValue = true
-          if case .member(let m) = current {v = m}
+          if case .user(let m) = current {v = m}
         }
         try decoder.decodeSingularMessageField(value: &v)
         if let v = v {
           if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.target = .member(v)
+          self.target = .user(v)
+        }
+      }()
+      case 2: try {
+        var v: Clarifai_Api_Role?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .role(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .role(v)
+        }
+      }()
+      case 3: try {
+        var v: Clarifai_Api_Team?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .team(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .team(v)
         }
       }()
       default: break
@@ -27899,9 +28459,21 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
-    try { if case .member(let v)? = self.target {
+    switch self.target {
+    case .user?: try {
+      guard case .user(let v)? = self.target else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
+    }()
+    case .role?: try {
+      guard case .role(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case .team?: try {
+      guard case .team(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case nil: break
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 

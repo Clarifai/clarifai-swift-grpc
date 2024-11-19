@@ -906,16 +906,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>
 
-  func postTrendingMetricsView(
-    _ request: Clarifai_Api_PostTrendingMetricsViewRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>
-
-  func listTrendingMetricsViews(
-    _ request: Clarifai_Api_ListTrendingMetricsViewsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>
-
   func getModule(
     _ request: Clarifai_Api_GetModuleRequest,
     callOptions: CallOptions?
@@ -4468,42 +4458,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Increase the view metric for a detail view
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostTrendingMetricsView.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postTrendingMetricsView(
-    _ request: Clarifai_Api_PostTrendingMetricsViewRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostTrendingMetricsView",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostTrendingMetricsViewInterceptors() ?? []
-    )
-  }
-
-  /// List the view metrics for a detail view
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListTrendingMetricsViews.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listTrendingMetricsViews(
-    _ request: Clarifai_Api_ListTrendingMetricsViewsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListTrendingMetricsViews",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListTrendingMetricsViewsInterceptors() ?? []
-    )
-  }
-
   /// Get a specific module from an app.
   ///
   /// - Parameters:
@@ -6173,12 +6127,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postStatValuesAggregate'.
   func makePostStatValuesAggregateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'postTrendingMetricsView'.
-  func makePostTrendingMetricsViewInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listTrendingMetricsViews'.
-  func makeListTrendingMetricsViewsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>]
-
   /// - Returns: Interceptors to use when invoking 'getModule'.
   func makeGetModuleInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>]
 
@@ -6986,12 +6934,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// PostStatValuesAggregate
   func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
-
-  /// Increase the view metric for a detail view
-  func postTrendingMetricsView(request: Clarifai_Api_PostTrendingMetricsViewRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// List the view metrics for a detail view
-  func listTrendingMetricsViews(request: Clarifai_Api_ListTrendingMetricsViewsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrendingMetricsViewResponse>
 
   /// Get a specific module from an app.
   func getModule(request: Clarifai_Api_GetModuleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleResponse>
@@ -8788,24 +8730,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postStatValuesAggregate(request:context:)
       )
 
-    case "PostTrendingMetricsView":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostTrendingMetricsViewRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makePostTrendingMetricsViewInterceptors() ?? [],
-        userFunction: self.postTrendingMetricsView(request:context:)
-      )
-
-    case "ListTrendingMetricsViews":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListTrendingMetricsViewsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiTrendingMetricsViewResponse>(),
-        interceptors: self.interceptors?.makeListTrendingMetricsViewsInterceptors() ?? [],
-        userFunction: self.listTrendingMetricsViews(request:context:)
-      )
-
     case "GetModule":
       return UnaryServerHandler(
         context: context,
@@ -10062,14 +9986,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postStatValuesAggregate'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostStatValuesAggregateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postTrendingMetricsView'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostTrendingMetricsViewInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTrendingMetricsViewRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listTrendingMetricsViews'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListTrendingMetricsViewsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListTrendingMetricsViewsRequest, Clarifai_Api_MultiTrendingMetricsViewResponse>]
 
   /// - Returns: Interceptors to use when handling 'getModule'.
   ///   Defaults to calling `self.makeInterceptors()`.

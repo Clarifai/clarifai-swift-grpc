@@ -85,6 +85,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// lack GDPR consent
   case connNoGdprConsent // = 11104
 
+  /// when invalid range of a resource is requested
+  case connInvalidRange // = 11105
+
   /// authentication method is disabled
   case connAuthMethodDisabled // = 11200
 
@@ -706,6 +709,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 11102: self = .connInvalidRequest
     case 11103: self = .connMethodNotAllowed
     case 11104: self = .connNoGdprConsent
+    case 11105: self = .connInvalidRange
     case 11200: self = .connAuthMethodDisabled
     case 21100: self = .modelTrained
     case 21101: self = .modelTraining
@@ -1095,6 +1099,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .connInvalidRequest: return 11102
     case .connMethodNotAllowed: return 11103
     case .connNoGdprConsent: return 11104
+    case .connInvalidRange: return 11105
     case .connAuthMethodDisabled: return 11200
     case .modelTrained: return 21100
     case .modelTraining: return 21101
@@ -1489,6 +1494,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .connInvalidRequest,
     .connMethodNotAllowed,
     .connNoGdprConsent,
+    .connInvalidRange,
     .connAuthMethodDisabled,
     .modelTrained,
     .modelTraining,
@@ -1881,6 +1887,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     11102: .same(proto: "CONN_INVALID_REQUEST"),
     11103: .same(proto: "CONN_METHOD_NOT_ALLOWED"),
     11104: .same(proto: "CONN_NO_GDPR_CONSENT"),
+    11105: .same(proto: "CONN_INVALID_RANGE"),
     11200: .same(proto: "CONN_AUTH_METHOD_DISABLED"),
     21100: .same(proto: "MODEL_TRAINED"),
     21101: .same(proto: "MODEL_TRAINING"),

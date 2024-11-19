@@ -651,7 +651,7 @@ public struct Clarifai_Api_ListAppsRequest {
 
   public var sortBy: Clarifai_Api_ListAppsRequest.OneOf_SortBy? = nil
 
-  /// Whether to order by the name
+  /// Whether to order by the name.
   public var sortByName: Bool {
     get {
       if case .sortByName(let v)? = sortBy {return v}
@@ -686,6 +686,15 @@ public struct Clarifai_Api_ListAppsRequest {
       return false
     }
     set {sortBy = .sortByStarCount(newValue)}
+  }
+
+  /// Whether to order by the id
+  public var sortByID: Bool {
+    get {
+      if case .sortByID(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByID(newValue)}
   }
 
   /// Filtering options:
@@ -729,7 +738,7 @@ public struct Clarifai_Api_ListAppsRequest {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
-    /// Whether to order by the name
+    /// Whether to order by the name.
     case sortByName(Bool)
     /// Whether to order by the modified_at time.
     /// If none of the sort options is set to true, will sort by modified_at.
@@ -738,6 +747,8 @@ public struct Clarifai_Api_ListAppsRequest {
     case sortByCreatedAt(Bool)
     /// Whether to order by the number of users stared the app
     case sortByStarCount(Bool)
+    /// Whether to order by the id
+    case sortByID(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy) -> Bool {
@@ -759,6 +770,10 @@ public struct Clarifai_Api_ListAppsRequest {
       }()
       case (.sortByStarCount, .sortByStarCount): return {
         guard case .sortByStarCount(let l) = lhs, case .sortByStarCount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByID, .sortByID): return {
+        guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -7679,7 +7694,7 @@ public struct Clarifai_Api_PostWorkflowResultsRequest {
   ///
   /// If node.id is not in the provided map, it will fall back to searching for
   /// an adequate deployment the model owner owns or fall back to
-  /// the serverless nodepools provided by Clarifai.
+  /// the shared nodepools provided by Clarifai.
   /// We recommend you specify these RunnerSelectors so that you have better understanding of where
   /// processing occurs.
   public var nodeRunnerSelectors: Dictionary<String,Clarifai_Api_RunnerSelector> {
@@ -8828,93 +8843,6 @@ public struct Clarifai_Api_MultiStatValueAggregateResponse {
 
   /// The aggregate results for each query passedin.
   public var statValueAggregateResults: [Clarifai_Api_StatValueAggregateResult] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _status: Clarifai_Api_Status_Status? = nil
-}
-
-/// PostTrendingMetricsViewRequest
-public struct Clarifai_Api_PostTrendingMetricsViewRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The user_id and app_id information.
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  /// For now view types 'apps', 'workflows', and 'models' are supported.
-  public var viewType: String = String()
-
-  /// ID of the views object.
-  public var objectID: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-/// ListTrendingMetricsViewsRequest
-public struct Clarifai_Api_ListTrendingMetricsViewsRequest {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The user_id and app_id information.
-  public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
-  }
-  /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
-  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
-
-  /// For now view types 'apps', 'workflows', and 'models' are supported.
-  public var viewType: String = String()
-
-  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
-  /// Defaults to 1.
-  public var page: UInt32 = 0
-
-  /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 128.
-  public var perPage: UInt32 = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-}
-
-/// MultiTrendingMetricsViewResponse
-public struct Clarifai_Api_MultiTrendingMetricsViewResponse {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var status: Clarifai_Api_Status_Status {
-    get {return _status ?? Clarifai_Api_Status_Status()}
-    set {_status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return self._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {self._status = nil}
-
-  public var metrics: [Clarifai_Api_TrendingMetric] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -10657,6 +10585,9 @@ public struct Clarifai_Api_ListRunnersRequest {
   public var perPage: UInt32 = 0
 
   public var computeClusterID: String = String()
+
+  /// Only return runners whose replicas are >= min_replicas.
+  public var minReplicas: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -12554,6 +12485,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     7: .standard(proto: "sort_by_modified_at"),
     12: .standard(proto: "sort_by_created_at"),
     13: .standard(proto: "sort_by_star_count"),
+    17: .standard(proto: "sort_by_id"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     16: .standard(proto: "template_only"),
@@ -12613,6 +12545,14 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 14: try { try decoder.decodeSingularStringField(value: &self.id) }()
       case 15: try { try decoder.decodeSingularStringField(value: &self.search) }()
       case 16: try { try decoder.decodeSingularBoolField(value: &self.templateOnly) }()
+      case 17: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByID(v)
+        }
+      }()
       default: break
       }
     }
@@ -12681,6 +12621,9 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if self.templateOnly != false {
       try visitor.visitSingularBoolField(value: self.templateOnly, fieldNumber: 16)
     }
+    try { if case .sortByID(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 17)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -25397,150 +25340,6 @@ extension Clarifai_Api_MultiStatValueAggregateResponse: SwiftProtobuf.Message, S
   }
 }
 
-extension Clarifai_Api_PostTrendingMetricsViewRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".PostTrendingMetricsViewRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "view_type"),
-    3: .standard(proto: "object_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.viewType) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.objectID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.viewType.isEmpty {
-      try visitor.visitSingularStringField(value: self.viewType, fieldNumber: 2)
-    }
-    if !self.objectID.isEmpty {
-      try visitor.visitSingularStringField(value: self.objectID, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_PostTrendingMetricsViewRequest, rhs: Clarifai_Api_PostTrendingMetricsViewRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.viewType != rhs.viewType {return false}
-    if lhs.objectID != rhs.objectID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_ListTrendingMetricsViewsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".ListTrendingMetricsViewsRequest"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "view_type"),
-    3: .same(proto: "page"),
-    4: .standard(proto: "per_page"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.viewType) }()
-      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
-      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.viewType.isEmpty {
-      try visitor.visitSingularStringField(value: self.viewType, fieldNumber: 2)
-    }
-    if self.page != 0 {
-      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 3)
-    }
-    if self.perPage != 0 {
-      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_ListTrendingMetricsViewsRequest, rhs: Clarifai_Api_ListTrendingMetricsViewsRequest) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.viewType != rhs.viewType {return false}
-    if lhs.page != rhs.page {return false}
-    if lhs.perPage != rhs.perPage {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_MultiTrendingMetricsViewResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".MultiTrendingMetricsViewResponse"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "metrics"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.metrics) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._status {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.metrics.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.metrics, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_MultiTrendingMetricsViewResponse, rhs: Clarifai_Api_MultiTrendingMetricsViewResponse) -> Bool {
-    if lhs._status != rhs._status {return false}
-    if lhs.metrics != rhs.metrics {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Clarifai_Api_GetModuleRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GetModuleRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -28316,6 +28115,7 @@ extension Clarifai_Api_ListRunnersRequest: SwiftProtobuf.Message, SwiftProtobuf.
     3: .same(proto: "page"),
     4: .standard(proto: "per_page"),
     5: .standard(proto: "compute_cluster_id"),
+    6: .standard(proto: "min_replicas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -28329,6 +28129,7 @@ extension Clarifai_Api_ListRunnersRequest: SwiftProtobuf.Message, SwiftProtobuf.
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
+      case 6: try { try decoder.decodeSingularUInt32Field(value: &self.minReplicas) }()
       default: break
       }
     }
@@ -28354,6 +28155,9 @@ extension Clarifai_Api_ListRunnersRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if !self.computeClusterID.isEmpty {
       try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 5)
     }
+    if self.minReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.minReplicas, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -28363,6 +28167,7 @@ extension Clarifai_Api_ListRunnersRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
     if lhs.computeClusterID != rhs.computeClusterID {return false}
+    if lhs.minReplicas != rhs.minReplicas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
