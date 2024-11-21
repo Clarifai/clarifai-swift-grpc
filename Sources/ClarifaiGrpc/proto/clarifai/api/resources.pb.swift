@@ -8677,6 +8677,17 @@ public struct Clarifai_Api_Task {
     set {_uniqueStorage()._priority = newValue}
   }
 
+  /// To handle arbitrary json metadata you can use a struct field:
+  /// https://github.com/google/protobuf/blob/master/src/google/protobuf/struct.proto
+  public var metadata: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _storage._metadata ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_uniqueStorage()._metadata = newValue}
+  }
+  /// Returns true if `metadata` has been explicitly set.
+  public var hasMetadata: Bool {return _storage._metadata != nil}
+  /// Clears the value of `metadata`. Subsequent reads from it will return its default value.
+  public mutating func clearMetadata() {_uniqueStorage()._metadata = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum TaskType: SwiftProtobuf.Enum {
@@ -23244,6 +23255,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     20: .standard(proto: "delete_previous_annotations"),
     21: .same(proto: "metrics"),
     23: .same(proto: "priority"),
+    24: .same(proto: "metadata"),
   ]
 
   fileprivate class _StorageClass {
@@ -23269,6 +23281,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _deletePreviousAnnotations: Bool = false
     var _metrics: Clarifai_Api_TaskMetrics? = nil
     var _priority: Clarifai_Api_Task.TaskPriority = .notSet
+    var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -23297,6 +23310,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _deletePreviousAnnotations = source._deletePreviousAnnotations
       _metrics = source._metrics
       _priority = source._priority
+      _metadata = source._metadata
     }
   }
 
@@ -23337,6 +23351,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 20: try { try decoder.decodeSingularBoolField(value: &_storage._deletePreviousAnnotations) }()
         case 21: try { try decoder.decodeSingularMessageField(value: &_storage._metrics) }()
         case 23: try { try decoder.decodeSingularEnumField(value: &_storage._priority) }()
+        case 24: try { try decoder.decodeSingularMessageField(value: &_storage._metadata) }()
         default: break
         }
       }
@@ -23415,6 +23430,9 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       if _storage._priority != .notSet {
         try visitor.visitSingularEnumField(value: _storage._priority, fieldNumber: 23)
       }
+      try { if let v = _storage._metadata {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -23446,6 +23464,7 @@ extension Clarifai_Api_Task: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._deletePreviousAnnotations != rhs_storage._deletePreviousAnnotations {return false}
         if _storage._metrics != rhs_storage._metrics {return false}
         if _storage._priority != rhs_storage._priority {return false}
+        if _storage._metadata != rhs_storage._metadata {return false}
         return true
       }
       if !storagesAreEqual {return false}
