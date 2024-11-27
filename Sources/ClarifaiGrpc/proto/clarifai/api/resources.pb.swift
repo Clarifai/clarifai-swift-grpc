@@ -12663,6 +12663,9 @@ public struct Clarifai_Api_ProcessingInfo {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {self._status = nil}
 
+  /// Internal field to track processing. Runners will not have access to this.
+  public var processingID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -28378,6 +28381,7 @@ extension Clarifai_Api_ProcessingInfo: SwiftProtobuf.Message, SwiftProtobuf._Mes
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "runner_method_type"),
     2: .same(proto: "status"),
+    3: .standard(proto: "processing_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -28388,6 +28392,7 @@ extension Clarifai_Api_ProcessingInfo: SwiftProtobuf.Message, SwiftProtobuf._Mes
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularEnumField(value: &self.runnerMethodType) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.processingID) }()
       default: break
       }
     }
@@ -28404,12 +28409,16 @@ extension Clarifai_Api_ProcessingInfo: SwiftProtobuf.Message, SwiftProtobuf._Mes
     try { if let v = self._status {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
+    if !self.processingID.isEmpty {
+      try visitor.visitSingularStringField(value: self.processingID, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ProcessingInfo, rhs: Clarifai_Api_ProcessingInfo) -> Bool {
     if lhs.runnerMethodType != rhs.runnerMethodType {return false}
     if lhs._status != rhs._status {return false}
+    if lhs.processingID != rhs.processingID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
