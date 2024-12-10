@@ -1092,6 +1092,14 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   case organizationTeamMemberRemove // = 111
   case organizationTeamAppAdd // = 112
   case organizationTeamAppRemove // = 113
+
+  /// Event types related to modules: 200 - 299
+  case moduleCreate // = 200
+  case moduleUpdate // = 201
+  case moduleDelete // = 202
+  case moduleVersionCreate // = 203
+  case moduleVersionUpdate // = 204
+  case moduleVersionDelete // = 205
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1115,6 +1123,12 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case 111: self = .organizationTeamMemberRemove
     case 112: self = .organizationTeamAppAdd
     case 113: self = .organizationTeamAppRemove
+    case 200: self = .moduleCreate
+    case 201: self = .moduleUpdate
+    case 202: self = .moduleDelete
+    case 203: self = .moduleVersionCreate
+    case 204: self = .moduleVersionUpdate
+    case 205: self = .moduleVersionDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1136,6 +1150,12 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case .organizationTeamMemberRemove: return 111
     case .organizationTeamAppAdd: return 112
     case .organizationTeamAppRemove: return 113
+    case .moduleCreate: return 200
+    case .moduleUpdate: return 201
+    case .moduleDelete: return 202
+    case .moduleVersionCreate: return 203
+    case .moduleVersionUpdate: return 204
+    case .moduleVersionDelete: return 205
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1162,6 +1182,12 @@ extension Clarifai_Api_EventType: CaseIterable {
     .organizationTeamMemberRemove,
     .organizationTeamAppAdd,
     .organizationTeamAppRemove,
+    .moduleCreate,
+    .moduleUpdate,
+    .moduleDelete,
+    .moduleVersionCreate,
+    .moduleVersionUpdate,
+    .moduleVersionDelete,
   ]
 }
 
@@ -4653,6 +4679,11 @@ public struct Clarifai_Api_Model {
     set {_uniqueStorage()._creator = newValue}
   }
 
+  public var versionCount: Int32 {
+    get {return _storage._versionCount}
+    set {_uniqueStorage()._versionCount = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Source of Model
@@ -5549,6 +5580,9 @@ public struct Clarifai_Api_ModelVersion {
     set {_uniqueStorage()._totalInputCount = newValue}
   }
 
+  /// When a model has already been trained externally, you can upload
+  /// it directly to the platform as a model version directly by
+  /// setting the PretrainedModelConfig
   public var pretrainedModelConfig: Clarifai_Api_PretrainedModelConfig {
     get {return _storage._pretrainedModelConfig ?? Clarifai_Api_PretrainedModelConfig()}
     set {_uniqueStorage()._pretrainedModelConfig = newValue}
@@ -5779,6 +5813,12 @@ public struct Clarifai_Api_PretrainedModelConfig {
   ///  config.pbtxt
   ///  version 1 folder that contains model files (onnx graph, torch script, python BE model, and etc.)
   public var modelZipURL: String = String()
+
+  /// Whether to overwrite the model for the existing internal id
+  /// If this is a local dev model that runs external to the platform, set this to true.
+  /// This helps during development of models before uploading them to the platform.
+  /// These models MUST run in an associated compute cluster with cluster_type = "local-dev"
+  public var localDev: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -12706,12 +12746,39 @@ public struct Clarifai_Api_AuditLogTarget {
     set {target = .team(newValue)}
   }
 
+  public var app: Clarifai_Api_App {
+    get {
+      if case .app(let v)? = target {return v}
+      return Clarifai_Api_App()
+    }
+    set {target = .app(newValue)}
+  }
+
+  public var module: Clarifai_Api_Module {
+    get {
+      if case .module(let v)? = target {return v}
+      return Clarifai_Api_Module()
+    }
+    set {target = .module(newValue)}
+  }
+
+  public var moduleVersion: Clarifai_Api_ModuleVersion {
+    get {
+      if case .moduleVersion(let v)? = target {return v}
+      return Clarifai_Api_ModuleVersion()
+    }
+    set {target = .moduleVersion(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Target: Equatable {
     case user(Clarifai_Api_User)
     case role(Clarifai_Api_Role)
     case team(Clarifai_Api_Team)
+    case app(Clarifai_Api_App)
+    case module(Clarifai_Api_Module)
+    case moduleVersion(Clarifai_Api_ModuleVersion)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_AuditLogTarget.OneOf_Target, rhs: Clarifai_Api_AuditLogTarget.OneOf_Target) -> Bool {
@@ -12729,6 +12796,18 @@ public struct Clarifai_Api_AuditLogTarget {
       }()
       case (.team, .team): return {
         guard case .team(let l) = lhs, case .team(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.app, .app): return {
+        guard case .app(let l) = lhs, case .app(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.module, .module): return {
+        guard case .module(let l) = lhs, case .module(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.moduleVersion, .moduleVersion): return {
+        guard case .moduleVersion(let l) = lhs, case .moduleVersion(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -13021,6 +13100,77 @@ extension Clarifai_Api_WorkflowVersionEvaluationTemplate.TaskType: CaseIterable 
 
 #endif  // swift(>=4.2)
 
+/// LogEntry is a single technical log entry (e.g. service log, stack traces, etc).
+public struct Clarifai_Api_LogEntry {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Text of the log entry.
+  public var message: String = String()
+
+  /// The type of log entry. Examples: model, agent, build, training.
+  public var logType: String = String()
+
+  /// URL to log file or stream.
+  public var url: String = String()
+
+  /// Who and where the metrics are from.
+  public var meta: Clarifai_Api_ComputeSourceMetadata {
+    get {return _meta ?? Clarifai_Api_ComputeSourceMetadata()}
+    set {_meta = newValue}
+  }
+  /// Returns true if `meta` has been explicitly set.
+  public var hasMeta: Bool {return self._meta != nil}
+  /// Clears the value of `meta`. Subsequent reads from it will return its default value.
+  public mutating func clearMeta() {self._meta = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _meta: Clarifai_Api_ComputeSourceMetadata? = nil
+}
+
+/// ComputeSourceMetadata describes the source of something computed. The who and where.
+public struct Clarifai_Api_ComputeSourceMetadata {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The user app id, if any.
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// The Model ID, if any.
+  public var modelID: String = String()
+
+  /// The Version ID, if any.
+  public var modelVersionID: String = String()
+
+  /// Workflow Id, if any.
+  public var workflowID: String = String()
+
+  /// Compute Cluster, Nodepool, Runner.
+  public var computeClusterID: String = String()
+
+  public var nodepoolID: String = String()
+
+  public var runnerID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
 fileprivate let _protobuf_package = "clarifai.api"
@@ -13227,6 +13377,12 @@ extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
     111: .same(proto: "ORGANIZATION_TEAM_MEMBER_REMOVE"),
     112: .same(proto: "ORGANIZATION_TEAM_APP_ADD"),
     113: .same(proto: "ORGANIZATION_TEAM_APP_REMOVE"),
+    200: .same(proto: "MODULE_CREATE"),
+    201: .same(proto: "MODULE_UPDATE"),
+    202: .same(proto: "MODULE_DELETE"),
+    203: .same(proto: "MODULE_VERSION_CREATE"),
+    204: .same(proto: "MODULE_VERSION_UPDATE"),
+    205: .same(proto: "MODULE_VERSION_DELETE"),
   ]
 }
 
@@ -17685,6 +17841,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     35: .standard(proto: "license_type"),
     36: .same(proto: "source"),
     37: .same(proto: "creator"),
+    38: .standard(proto: "version_count"),
   ]
 
   fileprivate class _StorageClass {
@@ -17718,6 +17875,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _licenseType: Clarifai_Api_LicenseType = .unknownLicenseType
     var _source: Clarifai_Api_Model.Source = .unknownSource
     var _creator: String = String()
+    var _versionCount: Int32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -17754,6 +17912,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _licenseType = source._licenseType
       _source = source._source
       _creator = source._creator
+      _versionCount = source._versionCount
     }
   }
 
@@ -17802,6 +17961,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 35: try { try decoder.decodeSingularEnumField(value: &_storage._licenseType) }()
         case 36: try { try decoder.decodeSingularEnumField(value: &_storage._source) }()
         case 37: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
+        case 38: try { try decoder.decodeSingularInt32Field(value: &_storage._versionCount) }()
         default: break
         }
       }
@@ -17904,6 +18064,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if !_storage._creator.isEmpty {
         try visitor.visitSingularStringField(value: _storage._creator, fieldNumber: 37)
       }
+      if _storage._versionCount != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._versionCount, fieldNumber: 38)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17943,6 +18106,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._licenseType != rhs_storage._licenseType {return false}
         if _storage._source != rhs_storage._source {return false}
         if _storage._creator != rhs_storage._creator {return false}
+        if _storage._versionCount != rhs_storage._versionCount {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -19411,6 +19575,7 @@ extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtob
     3: .standard(proto: "input_fields_map"),
     4: .standard(proto: "output_fields_map"),
     6: .standard(proto: "model_zip_url"),
+    8: .standard(proto: "local_dev"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19422,6 +19587,7 @@ extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtob
       case 3: try { try decoder.decodeSingularMessageField(value: &self._inputFieldsMap) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._outputFieldsMap) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.modelZipURL) }()
+      case 8: try { try decoder.decodeSingularBoolField(value: &self.localDev) }()
       default: break
       }
     }
@@ -19441,6 +19607,9 @@ extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtob
     if !self.modelZipURL.isEmpty {
       try visitor.visitSingularStringField(value: self.modelZipURL, fieldNumber: 6)
     }
+    if self.localDev != false {
+      try visitor.visitSingularBoolField(value: self.localDev, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -19448,6 +19617,7 @@ extension Clarifai_Api_PretrainedModelConfig: SwiftProtobuf.Message, SwiftProtob
     if lhs._inputFieldsMap != rhs._inputFieldsMap {return false}
     if lhs._outputFieldsMap != rhs._outputFieldsMap {return false}
     if lhs.modelZipURL != rhs.modelZipURL {return false}
+    if lhs.localDev != rhs.localDev {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -28430,6 +28600,9 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
     1: .same(proto: "user"),
     2: .same(proto: "role"),
     3: .same(proto: "team"),
+    4: .same(proto: "app"),
+    5: .same(proto: "module"),
+    6: .standard(proto: "module_version"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -28477,6 +28650,45 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
           self.target = .team(v)
         }
       }()
+      case 4: try {
+        var v: Clarifai_Api_App?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .app(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .app(v)
+        }
+      }()
+      case 5: try {
+        var v: Clarifai_Api_Module?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .module(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .module(v)
+        }
+      }()
+      case 6: try {
+        var v: Clarifai_Api_ModuleVersion?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .moduleVersion(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .moduleVersion(v)
+        }
+      }()
       default: break
       }
     }
@@ -28499,6 +28711,18 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
     case .team?: try {
       guard case .team(let v)? = self.target else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case .app?: try {
+      guard case .app(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    }()
+    case .module?: try {
+      guard case .module(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }()
+    case .moduleVersion?: try {
+      guard case .moduleVersion(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }()
     case nil: break
     }
@@ -28795,4 +29019,130 @@ extension Clarifai_Api_WorkflowVersionEvaluationTemplate.TaskType: SwiftProtobuf
     0: .same(proto: "TASK_TYPE_NOT_SET"),
     1: .same(proto: "TEXT_CLASSIFICATION"),
   ]
+}
+
+extension Clarifai_Api_LogEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".LogEntry"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "message"),
+    2: .standard(proto: "log_type"),
+    3: .same(proto: "url"),
+    9: .same(proto: "meta"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.logType) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.url) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._meta) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.message.isEmpty {
+      try visitor.visitSingularStringField(value: self.message, fieldNumber: 1)
+    }
+    if !self.logType.isEmpty {
+      try visitor.visitSingularStringField(value: self.logType, fieldNumber: 2)
+    }
+    if !self.url.isEmpty {
+      try visitor.visitSingularStringField(value: self.url, fieldNumber: 3)
+    }
+    try { if let v = self._meta {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_LogEntry, rhs: Clarifai_Api_LogEntry) -> Bool {
+    if lhs.message != rhs.message {return false}
+    if lhs.logType != rhs.logType {return false}
+    if lhs.url != rhs.url {return false}
+    if lhs._meta != rhs._meta {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ComputeSourceMetadata: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ComputeSourceMetadata"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "model_id"),
+    3: .standard(proto: "model_version_id"),
+    4: .standard(proto: "workflow_id"),
+    6: .standard(proto: "compute_cluster_id"),
+    7: .standard(proto: "nodepool_id"),
+    8: .standard(proto: "runner_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.workflowID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.nodepoolID) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.runnerID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.modelVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 3)
+    }
+    if !self.workflowID.isEmpty {
+      try visitor.visitSingularStringField(value: self.workflowID, fieldNumber: 4)
+    }
+    if !self.computeClusterID.isEmpty {
+      try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 6)
+    }
+    if !self.nodepoolID.isEmpty {
+      try visitor.visitSingularStringField(value: self.nodepoolID, fieldNumber: 7)
+    }
+    if !self.runnerID.isEmpty {
+      try visitor.visitSingularStringField(value: self.runnerID, fieldNumber: 8)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ComputeSourceMetadata, rhs: Clarifai_Api_ComputeSourceMetadata) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.modelVersionID != rhs.modelVersionID {return false}
+    if lhs.workflowID != rhs.workflowID {return false}
+    if lhs.computeClusterID != rhs.computeClusterID {return false}
+    if lhs.nodepoolID != rhs.nodepoolID {return false}
+    if lhs.runnerID != rhs.runnerID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }

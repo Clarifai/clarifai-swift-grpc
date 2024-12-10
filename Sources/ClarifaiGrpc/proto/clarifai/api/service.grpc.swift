@@ -1126,6 +1126,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>
 
+  func listCloudProviders(
+    _ request: Clarifai_Api_ListCloudProvidersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListCloudProvidersRequest, Clarifai_Api_MultiCloudProviderResponse>
+
+  func listCloudRegions(
+    _ request: Clarifai_Api_ListCloudRegionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListCloudRegionsRequest, Clarifai_Api_MultiCloudRegionResponse>
+
   func listInstanceTypes(
     _ request: Clarifai_Api_ListInstanceTypesRequest,
     callOptions: CallOptions?
@@ -1210,6 +1220,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
+
+  func listLogEntries(
+    _ request: Clarifai_Api_ListLogEntriesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5293,6 +5308,42 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// List Available Cloud Providers
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListCloudProviders.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listCloudProviders(
+    _ request: Clarifai_Api_ListCloudProvidersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListCloudProvidersRequest, Clarifai_Api_MultiCloudProviderResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListCloudProviders",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListCloudProvidersInterceptors() ?? []
+    )
+  }
+
+  /// List Regions for given Cloud Provider
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListCloudRegions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listCloudRegions(
+    _ request: Clarifai_Api_ListCloudRegionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListCloudRegionsRequest, Clarifai_Api_MultiCloudRegionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListCloudRegions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListCloudRegionsInterceptors() ?? []
+    )
+  }
+
   /// Get InstanceTypes given Cloud Provider and Region
   ///
   /// - Parameters:
@@ -5596,6 +5647,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListWorkflowEvaluationTemplatesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListLogEntries
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListLogEntries.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listLogEntries(
+    _ request: Clarifai_Api_ListLogEntriesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListLogEntries",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListLogEntriesInterceptors() ?? []
     )
   }
 }
@@ -6259,6 +6328,12 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postModelVersionsTrainingTimeEstimate'.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listCloudProviders'.
+  func makeListCloudProvidersInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCloudProvidersRequest, Clarifai_Api_MultiCloudProviderResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listCloudRegions'.
+  func makeListCloudRegionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCloudRegionsRequest, Clarifai_Api_MultiCloudRegionResponse>]
+
   /// - Returns: Interceptors to use when invoking 'listInstanceTypes'.
   func makeListInstanceTypesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse>]
 
@@ -6309,6 +6384,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'listWorkflowEvaluationTemplates'.
   func makeListWorkflowEvaluationTemplatesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listLogEntries'.
+  func makeListLogEntriesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7103,6 +7181,12 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Get the training time estimate based off train request and estimated input count.
   func postModelVersionsTrainingTimeEstimate(request: Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiTrainingTimeEstimateResponse>
 
+  /// List Available Cloud Providers
+  func listCloudProviders(request: Clarifai_Api_ListCloudProvidersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCloudProviderResponse>
+
+  /// List Regions for given Cloud Provider
+  func listCloudRegions(request: Clarifai_Api_ListCloudRegionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCloudRegionResponse>
+
   /// Get InstanceTypes given Cloud Provider and Region
   func listInstanceTypes(request: Clarifai_Api_ListInstanceTypesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstanceTypeResponse>
 
@@ -7143,6 +7227,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postAuditLogSearches(request: Clarifai_Api_PostAuditLogSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAuditLogEntryResponse>
 
   func listWorkflowEvaluationTemplates(request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
+
+  func listLogEntries(request: Clarifai_Api_ListLogEntriesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLogEntryResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9126,6 +9212,24 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postModelVersionsTrainingTimeEstimate(request:context:)
       )
 
+    case "ListCloudProviders":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCloudProvidersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCloudProviderResponse>(),
+        interceptors: self.interceptors?.makeListCloudProvidersInterceptors() ?? [],
+        userFunction: self.listCloudProviders(request:context:)
+      )
+
+    case "ListCloudRegions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCloudRegionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCloudRegionResponse>(),
+        interceptors: self.interceptors?.makeListCloudRegionsInterceptors() ?? [],
+        userFunction: self.listCloudRegions(request:context:)
+      )
+
     case "ListInstanceTypes":
       return UnaryServerHandler(
         context: context,
@@ -9277,6 +9381,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>(),
         interceptors: self.interceptors?.makeListWorkflowEvaluationTemplatesInterceptors() ?? [],
         userFunction: self.listWorkflowEvaluationTemplates(request:context:)
+      )
+
+    case "ListLogEntries":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListLogEntriesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLogEntryResponse>(),
+        interceptors: self.interceptors?.makeListLogEntriesInterceptors() ?? [],
+        userFunction: self.listLogEntries(request:context:)
       )
 
     default:
@@ -10163,6 +10276,14 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelVersionsTrainingTimeEstimateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsTrainingTimeEstimateRequest, Clarifai_Api_MultiTrainingTimeEstimateResponse>]
 
+  /// - Returns: Interceptors to use when handling 'listCloudProviders'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListCloudProvidersInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCloudProvidersRequest, Clarifai_Api_MultiCloudProviderResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listCloudRegions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListCloudRegionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCloudRegionsRequest, Clarifai_Api_MultiCloudRegionResponse>]
+
   /// - Returns: Interceptors to use when handling 'listInstanceTypes'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListInstanceTypesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInstanceTypesRequest, Clarifai_Api_MultiInstanceTypeResponse>]
@@ -10230,4 +10351,8 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'listWorkflowEvaluationTemplates'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListWorkflowEvaluationTemplatesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listLogEntries'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListLogEntriesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
 }
