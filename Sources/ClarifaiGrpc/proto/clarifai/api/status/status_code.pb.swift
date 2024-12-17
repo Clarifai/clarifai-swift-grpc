@@ -664,6 +664,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case internalRedisUncategorized // = 98015
   case internalAwsUncategorized // = 98016
   case internalAzureUncategorized // = 98017
+  case internalVectordbUncategorized // = 98018
 
   /// Uncategorized: 99xxx: move off as soon as known
   case connUncategorized // = 99001
@@ -1064,6 +1065,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 98015: self = .internalRedisUncategorized
     case 98016: self = .internalAwsUncategorized
     case 98017: self = .internalAzureUncategorized
+    case 98018: self = .internalVectordbUncategorized
     case 99001: self = .connUncategorized
     case 99002: self = .modelUncategorized
     case 99003: self = .inputUncategorized
@@ -1454,6 +1456,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .internalRedisUncategorized: return 98015
     case .internalAwsUncategorized: return 98016
     case .internalAzureUncategorized: return 98017
+    case .internalVectordbUncategorized: return 98018
     case .connUncategorized: return 99001
     case .modelUncategorized: return 99002
     case .inputUncategorized: return 99003
@@ -1847,6 +1850,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .internalRedisUncategorized,
     .internalAwsUncategorized,
     .internalAzureUncategorized,
+    .internalVectordbUncategorized,
     .connUncategorized,
     .modelUncategorized,
     .inputUncategorized,
@@ -2242,6 +2246,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     98015: .same(proto: "INTERNAL_REDIS_UNCATEGORIZED"),
     98016: .same(proto: "INTERNAL_AWS_UNCATEGORIZED"),
     98017: .same(proto: "INTERNAL_AZURE_UNCATEGORIZED"),
+    98018: .same(proto: "INTERNAL_VECTORDB_UNCATEGORIZED"),
     99001: .same(proto: "CONN_UNCATEGORIZED"),
     99002: .same(proto: "MODEL_UNCATEGORIZED"),
     99003: .same(proto: "INPUT_UNCATEGORIZED"),

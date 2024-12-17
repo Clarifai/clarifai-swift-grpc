@@ -1100,6 +1100,19 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
   case moduleVersionCreate // = 203
   case moduleVersionUpdate // = 204
   case moduleVersionDelete // = 205
+
+  /// Event types related to workflows: 400 - 499
+  case workflowCreate // = 400
+  case workflowUpdate // = 401
+  case workflowDelete // = 402
+  case workflowVersionCreate // = 403
+  case workflowVersionUpdate // = 404
+  case workflowVersionDelete // = 405
+
+  /// Event types related to collaborators: 700 - 799
+  case collaboratorAdd // = 700
+  case collaboratorUpdate // = 701
+  case collaboratorRemove // = 702
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1129,6 +1142,15 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case 203: self = .moduleVersionCreate
     case 204: self = .moduleVersionUpdate
     case 205: self = .moduleVersionDelete
+    case 400: self = .workflowCreate
+    case 401: self = .workflowUpdate
+    case 402: self = .workflowDelete
+    case 403: self = .workflowVersionCreate
+    case 404: self = .workflowVersionUpdate
+    case 405: self = .workflowVersionDelete
+    case 700: self = .collaboratorAdd
+    case 701: self = .collaboratorUpdate
+    case 702: self = .collaboratorRemove
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1156,6 +1178,15 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case .moduleVersionCreate: return 203
     case .moduleVersionUpdate: return 204
     case .moduleVersionDelete: return 205
+    case .workflowCreate: return 400
+    case .workflowUpdate: return 401
+    case .workflowDelete: return 402
+    case .workflowVersionCreate: return 403
+    case .workflowVersionUpdate: return 404
+    case .workflowVersionDelete: return 405
+    case .collaboratorAdd: return 700
+    case .collaboratorUpdate: return 701
+    case .collaboratorRemove: return 702
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1188,6 +1219,15 @@ extension Clarifai_Api_EventType: CaseIterable {
     .moduleVersionCreate,
     .moduleVersionUpdate,
     .moduleVersionDelete,
+    .workflowCreate,
+    .workflowUpdate,
+    .workflowDelete,
+    .workflowVersionCreate,
+    .workflowVersionUpdate,
+    .workflowVersionDelete,
+    .collaboratorAdd,
+    .collaboratorUpdate,
+    .collaboratorRemove,
   ]
 }
 
@@ -12770,6 +12810,22 @@ public struct Clarifai_Api_AuditLogTarget {
     set {target = .moduleVersion(newValue)}
   }
 
+  public var workflow: Clarifai_Api_Workflow {
+    get {
+      if case .workflow(let v)? = target {return v}
+      return Clarifai_Api_Workflow()
+    }
+    set {target = .workflow(newValue)}
+  }
+
+  public var workflowVersion: Clarifai_Api_WorkflowVersion {
+    get {
+      if case .workflowVersion(let v)? = target {return v}
+      return Clarifai_Api_WorkflowVersion()
+    }
+    set {target = .workflowVersion(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Target: Equatable {
@@ -12779,6 +12835,8 @@ public struct Clarifai_Api_AuditLogTarget {
     case app(Clarifai_Api_App)
     case module(Clarifai_Api_Module)
     case moduleVersion(Clarifai_Api_ModuleVersion)
+    case workflow(Clarifai_Api_Workflow)
+    case workflowVersion(Clarifai_Api_WorkflowVersion)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_AuditLogTarget.OneOf_Target, rhs: Clarifai_Api_AuditLogTarget.OneOf_Target) -> Bool {
@@ -12808,6 +12866,14 @@ public struct Clarifai_Api_AuditLogTarget {
       }()
       case (.moduleVersion, .moduleVersion): return {
         guard case .moduleVersion(let l) = lhs, case .moduleVersion(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.workflow, .workflow): return {
+        guard case .workflow(let l) = lhs, case .workflow(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.workflowVersion, .workflowVersion): return {
+        guard case .workflowVersion(let l) = lhs, case .workflowVersion(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -13383,6 +13449,15 @@ extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
     203: .same(proto: "MODULE_VERSION_CREATE"),
     204: .same(proto: "MODULE_VERSION_UPDATE"),
     205: .same(proto: "MODULE_VERSION_DELETE"),
+    400: .same(proto: "WORKFLOW_CREATE"),
+    401: .same(proto: "WORKFLOW_UPDATE"),
+    402: .same(proto: "WORKFLOW_DELETE"),
+    403: .same(proto: "WORKFLOW_VERSION_CREATE"),
+    404: .same(proto: "WORKFLOW_VERSION_UPDATE"),
+    405: .same(proto: "WORKFLOW_VERSION_DELETE"),
+    700: .same(proto: "COLLABORATOR_ADD"),
+    701: .same(proto: "COLLABORATOR_UPDATE"),
+    702: .same(proto: "COLLABORATOR_REMOVE"),
   ]
 }
 
@@ -28603,6 +28678,8 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
     4: .same(proto: "app"),
     5: .same(proto: "module"),
     6: .standard(proto: "module_version"),
+    7: .same(proto: "workflow"),
+    8: .standard(proto: "workflow_version"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -28689,6 +28766,32 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
           self.target = .moduleVersion(v)
         }
       }()
+      case 7: try {
+        var v: Clarifai_Api_Workflow?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .workflow(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .workflow(v)
+        }
+      }()
+      case 8: try {
+        var v: Clarifai_Api_WorkflowVersion?
+        var hadOneofValue = false
+        if let current = self.target {
+          hadOneofValue = true
+          if case .workflowVersion(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.target = .workflowVersion(v)
+        }
+      }()
       default: break
       }
     }
@@ -28723,6 +28826,14 @@ extension Clarifai_Api_AuditLogTarget: SwiftProtobuf.Message, SwiftProtobuf._Mes
     case .moduleVersion?: try {
       guard case .moduleVersion(let v)? = self.target else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    }()
+    case .workflow?: try {
+      guard case .workflow(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    }()
+    case .workflowVersion?: try {
+      guard case .workflowVersion(let v)? = self.target else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
     }()
     case nil: break
     }
