@@ -191,6 +191,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Used when model spire deployment is manually taken down or due to inactivity
   case modelNotDeployed // = 21353
+  case modelBusyPleaseRetry // = 21354
+
+  /// Used when the model pod is running, but not yet ready to serve requests.
+  case modelLoading // = 21355
 
   /// Used when a model reference field is not set properly
   case modelReferenceInvalidArgument // = 21400
@@ -332,14 +336,21 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case instanceTypeInvalidRequest // = 26002
 
   /// Input:Image related 30xxx
-  case inputDownloadSuccess // = 30000
+  case inputSuccess // = 30000
 
   /// when things are async, this is the default status.
-  case inputDownloadPending // = 30001
+  case inputPending // = 30001
 
   /// any type of error downloading and processing
-  case inputDownloadFailed // = 30002
-  case inputDownloadInProgress // = 30003
+  case inputFailed // = 30002
+  case inputInProgress // = 30003
+
+  /// use INPUT_SUCCESS, INPUT_PENDING, INPUT_FAILED, INPUT_IN_PROGRESS instead
+  /// DOWNLOAD is no longer correct, but keep old statuses for backward compatibility
+  public static let inputDownloadSuccess = inputSuccess
+  public static let inputDownloadPending = inputPending
+  public static let inputDownloadFailed = inputFailed
+  public static let inputDownloadInProgress = inputInProgress
   case inputStatusUpdateFailed // = 30004
   case inputDeleteFailed // = 30005
   case inputDuplicate // = 30100
@@ -755,6 +766,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 21351: self = .modelDeploying
     case 21352: self = .modelQueuedForDeployment
     case 21353: self = .modelNotDeployed
+    case 21354: self = .modelBusyPleaseRetry
+    case 21355: self = .modelLoading
     case 21400: self = .modelReferenceInvalidArgument
     case 21420: self = .modelExampleInputInvalidArgument
     case 21500: self = .modelExported
@@ -848,10 +861,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26000: self = .instanceTypeDoesNotExist
     case 26001: self = .instanceTypeInvalidArgument
     case 26002: self = .instanceTypeInvalidRequest
-    case 30000: self = .inputDownloadSuccess
-    case 30001: self = .inputDownloadPending
-    case 30002: self = .inputDownloadFailed
-    case 30003: self = .inputDownloadInProgress
+    case 30000: self = .inputSuccess
+    case 30001: self = .inputPending
+    case 30002: self = .inputFailed
+    case 30003: self = .inputInProgress
     case 30004: self = .inputStatusUpdateFailed
     case 30005: self = .inputDeleteFailed
     case 30100: self = .inputDuplicate
@@ -1146,6 +1159,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .modelDeploying: return 21351
     case .modelQueuedForDeployment: return 21352
     case .modelNotDeployed: return 21353
+    case .modelBusyPleaseRetry: return 21354
+    case .modelLoading: return 21355
     case .modelReferenceInvalidArgument: return 21400
     case .modelExampleInputInvalidArgument: return 21420
     case .modelExported: return 21500
@@ -1239,10 +1254,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .instanceTypeDoesNotExist: return 26000
     case .instanceTypeInvalidArgument: return 26001
     case .instanceTypeInvalidRequest: return 26002
-    case .inputDownloadSuccess: return 30000
-    case .inputDownloadPending: return 30001
-    case .inputDownloadFailed: return 30002
-    case .inputDownloadInProgress: return 30003
+    case .inputSuccess: return 30000
+    case .inputPending: return 30001
+    case .inputFailed: return 30002
+    case .inputInProgress: return 30003
     case .inputStatusUpdateFailed: return 30004
     case .inputDeleteFailed: return 30005
     case .inputDuplicate: return 30100
@@ -1542,6 +1557,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .modelDeploying,
     .modelQueuedForDeployment,
     .modelNotDeployed,
+    .modelBusyPleaseRetry,
+    .modelLoading,
     .modelReferenceInvalidArgument,
     .modelExampleInputInvalidArgument,
     .modelExported,
@@ -1635,10 +1652,10 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .instanceTypeDoesNotExist,
     .instanceTypeInvalidArgument,
     .instanceTypeInvalidRequest,
-    .inputDownloadSuccess,
-    .inputDownloadPending,
-    .inputDownloadFailed,
-    .inputDownloadInProgress,
+    .inputSuccess,
+    .inputPending,
+    .inputFailed,
+    .inputInProgress,
     .inputStatusUpdateFailed,
     .inputDeleteFailed,
     .inputDuplicate,
@@ -1936,6 +1953,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     21351: .same(proto: "MODEL_DEPLOYING"),
     21352: .same(proto: "MODEL_QUEUED_FOR_DEPLOYMENT"),
     21353: .same(proto: "MODEL_NOT_DEPLOYED"),
+    21354: .same(proto: "MODEL_BUSY_PLEASE_RETRY"),
+    21355: .same(proto: "MODEL_LOADING"),
     21400: .same(proto: "MODEL_REFERENCE_INVALID_ARGUMENT"),
     21420: .same(proto: "MODEL_EXAMPLE_INPUT_INVALID_ARGUMENT"),
     21500: .same(proto: "MODEL_EXPORTED"),
@@ -2029,10 +2048,10 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26000: .same(proto: "INSTANCE_TYPE_DOES_NOT_EXIST"),
     26001: .same(proto: "INSTANCE_TYPE_INVALID_ARGUMENT"),
     26002: .same(proto: "INSTANCE_TYPE_INVALID_REQUEST"),
-    30000: .same(proto: "INPUT_DOWNLOAD_SUCCESS"),
-    30001: .same(proto: "INPUT_DOWNLOAD_PENDING"),
-    30002: .same(proto: "INPUT_DOWNLOAD_FAILED"),
-    30003: .same(proto: "INPUT_DOWNLOAD_IN_PROGRESS"),
+    30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
+    30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
+    30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),
+    30003: .aliased(proto: "INPUT_IN_PROGRESS", aliases: ["INPUT_DOWNLOAD_IN_PROGRESS"]),
     30004: .same(proto: "INPUT_STATUS_UPDATE_FAILED"),
     30005: .same(proto: "INPUT_DELETE_FAILED"),
     30100: .same(proto: "INPUT_DUPLICATE"),

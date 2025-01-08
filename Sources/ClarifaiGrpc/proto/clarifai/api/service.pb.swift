@@ -3499,11 +3499,11 @@ public struct Clarifai_Api_ListLogEntriesRequest {
   // methods supported on all messages.
 
   /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
-  /// Defaults to 1.
+  /// Defaults to last page.
   public var page: UInt32 = 0
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
-  /// to 128.
+  /// to 32.
   public var perPage: UInt32 = 0
 
   /// The type of log entry. Examples: model, agent, build, training.
@@ -6187,6 +6187,12 @@ public struct Clarifai_Api_MultiLogEntryResponse {
   /// Log entries.
   public var logEntries: [Clarifai_Api_LogEntry] = []
 
+  /// The page the log entries are from. If the request's page was omitted or greater than the total pages, then this is set to the last page.
+  public var page: UInt32 = 0
+
+  /// The number of results contained in each page.
+  public var perPage: UInt32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -8198,6 +8204,7 @@ public struct Clarifai_Api_GetTaskRequest {
   /// - metrics.work.inputs_count_estimated
   /// - metrics.work.inputs_percent_estimated
   /// - metrics.review.inputs_count_estimated
+  /// - metrics.review.inputs_count_estimated_per_reviewer
   /// - metrics.review.inputs_percent_estimated
   public var additionalFields: [String] = []
 
@@ -8253,6 +8260,7 @@ public struct Clarifai_Api_ListTasksRequest {
   /// - metrics.work.inputs_count_estimated
   /// - metrics.work.inputs_percent_estimated
   /// - metrics.review.inputs_count_estimated
+  /// - metrics.review.inputs_count_estimated_per_reviewer
   /// - metrics.review.inputs_percent_estimated
   public var additionalFields: [String] = []
 
@@ -21309,6 +21317,8 @@ extension Clarifai_Api_MultiLogEntryResponse: SwiftProtobuf.Message, SwiftProtob
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .standard(proto: "log_entries"),
+    4: .same(proto: "page"),
+    5: .standard(proto: "per_page"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -21319,6 +21329,8 @@ extension Clarifai_Api_MultiLogEntryResponse: SwiftProtobuf.Message, SwiftProtob
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.logEntries) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
+      case 5: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
       default: break
       }
     }
@@ -21335,12 +21347,20 @@ extension Clarifai_Api_MultiLogEntryResponse: SwiftProtobuf.Message, SwiftProtob
     if !self.logEntries.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.logEntries, fieldNumber: 2)
     }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 4)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiLogEntryResponse, rhs: Clarifai_Api_MultiLogEntryResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.logEntries != rhs.logEntries {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
