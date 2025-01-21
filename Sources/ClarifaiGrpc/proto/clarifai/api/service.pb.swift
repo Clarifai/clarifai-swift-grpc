@@ -5042,6 +5042,9 @@ public struct Clarifai_Api_PostModelVersionsUploadConfig {
   /// Whether the uploaded package will be a .tar.gz which contains a Dockerfile or the standard .zip
   public var isV3: Bool = false
 
+  /// Number of bytes requested for the build process.
+  public var storageRequestSize: UInt64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -19396,6 +19399,7 @@ extension Clarifai_Api_PostModelVersionsUploadConfig: SwiftProtobuf.Message, Swi
     3: .standard(proto: "model_version"),
     4: .standard(proto: "total_size"),
     5: .standard(proto: "is_v3"),
+    6: .standard(proto: "storage_request_size"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19409,6 +19413,7 @@ extension Clarifai_Api_PostModelVersionsUploadConfig: SwiftProtobuf.Message, Swi
       case 3: try { try decoder.decodeSingularMessageField(value: &self._modelVersion) }()
       case 4: try { try decoder.decodeSingularUInt64Field(value: &self.totalSize) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self.isV3) }()
+      case 6: try { try decoder.decodeSingularUInt64Field(value: &self.storageRequestSize) }()
       default: break
       }
     }
@@ -19434,6 +19439,9 @@ extension Clarifai_Api_PostModelVersionsUploadConfig: SwiftProtobuf.Message, Swi
     if self.isV3 != false {
       try visitor.visitSingularBoolField(value: self.isV3, fieldNumber: 5)
     }
+    if self.storageRequestSize != 0 {
+      try visitor.visitSingularUInt64Field(value: self.storageRequestSize, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -19443,6 +19451,7 @@ extension Clarifai_Api_PostModelVersionsUploadConfig: SwiftProtobuf.Message, Swi
     if lhs._modelVersion != rhs._modelVersion {return false}
     if lhs.totalSize != rhs.totalSize {return false}
     if lhs.isV3 != rhs.isV3 {return false}
+    if lhs.storageRequestSize != rhs.storageRequestSize {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

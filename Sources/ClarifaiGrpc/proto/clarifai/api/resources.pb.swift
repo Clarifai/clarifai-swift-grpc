@@ -6646,6 +6646,18 @@ public struct Clarifai_Api_Output {
   /// Clears the value of `data`. Subsequent reads from it will return its default value.
   public mutating func clearData() {_uniqueStorage()._data = nil}
 
+  /// Number of prompt tokens as reported by the model or third-party API.
+  public var promptTokens: UInt32 {
+    get {return _storage._promptTokens}
+    set {_uniqueStorage()._promptTokens = newValue}
+  }
+
+  /// Number of completion tokens as reported by the model or third-party API.
+  public var completionTokens: UInt32 {
+    get {return _storage._completionTokens}
+    set {_uniqueStorage()._completionTokens = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -7120,6 +7132,8 @@ public struct Clarifai_Api_Filter {
   ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"polygon":{}}}]}}`
   ///  - data.regions[].region_info.span         - filter only span annotations
   ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"regions": [{"region_info": {"span":{}}}]}}`
+  ///  - data.regions[].track_id                 - filter annotations by track_id
+  ///                                            - in order to enable this, you need to provide "track_id_value" i.e. `{"data": {"regions": [{"track_id" : "track_id_value"}]}}`
   ///  - data.time_segments[].time_info          - filter only time-segment annotations
   ///                                            - in order to enable this, you need to set the field to an empty object, i.e. `{"data": {"time_segments": [{"time_info": {}}]}}`
   ///
@@ -21091,6 +21105,8 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     4: .same(proto: "model"),
     5: .same(proto: "input"),
     6: .same(proto: "data"),
+    7: .standard(proto: "prompt_tokens"),
+    8: .standard(proto: "completion_tokens"),
   ]
 
   fileprivate class _StorageClass {
@@ -21100,6 +21116,8 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _model: Clarifai_Api_Model? = nil
     var _input: Clarifai_Api_Input? = nil
     var _data: Clarifai_Api_Data? = nil
+    var _promptTokens: UInt32 = 0
+    var _completionTokens: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -21112,6 +21130,8 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _model = source._model
       _input = source._input
       _data = source._data
+      _promptTokens = source._promptTokens
+      _completionTokens = source._completionTokens
     }
   }
 
@@ -21136,6 +21156,8 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 4: try { try decoder.decodeSingularMessageField(value: &_storage._model) }()
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._input) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._data) }()
+        case 7: try { try decoder.decodeSingularUInt32Field(value: &_storage._promptTokens) }()
+        case 8: try { try decoder.decodeSingularUInt32Field(value: &_storage._completionTokens) }()
         default: break
         }
       }
@@ -21166,6 +21188,12 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       try { if let v = _storage._data {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
       } }()
+      if _storage._promptTokens != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._promptTokens, fieldNumber: 7)
+      }
+      if _storage._completionTokens != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._completionTokens, fieldNumber: 8)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -21181,6 +21209,8 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._model != rhs_storage._model {return false}
         if _storage._input != rhs_storage._input {return false}
         if _storage._data != rhs_storage._data {return false}
+        if _storage._promptTokens != rhs_storage._promptTokens {return false}
+        if _storage._completionTokens != rhs_storage._completionTokens {return false}
         return true
       }
       if !storagesAreEqual {return false}
