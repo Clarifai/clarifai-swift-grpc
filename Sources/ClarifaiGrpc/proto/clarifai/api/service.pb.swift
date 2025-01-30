@@ -3452,6 +3452,12 @@ public struct Clarifai_Api_PostModelOutputsRequest {
   /// Clears the value of `runnerSelector`. Subsequent reads from it will return its default value.
   public mutating func clearRunnerSelector() {_uniqueStorage()._runnerSelector = nil}
 
+  /// Configure the prediction cache to avoid expensive compute for predict requests
+  public var usePredictCache: Bool {
+    get {return _storage._usePredictCache}
+    set {_uniqueStorage()._usePredictCache = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -16864,6 +16870,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     4: .same(proto: "inputs"),
     5: .same(proto: "model"),
     6: .standard(proto: "runner_selector"),
+    7: .standard(proto: "use_predict_cache"),
   ]
 
   fileprivate class _StorageClass {
@@ -16873,6 +16880,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     var _inputs: [Clarifai_Api_Input] = []
     var _model: Clarifai_Api_Model? = nil
     var _runnerSelector: Clarifai_Api_RunnerSelector? = nil
+    var _usePredictCache: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -16885,6 +16893,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
       _inputs = source._inputs
       _model = source._model
       _runnerSelector = source._runnerSelector
+      _usePredictCache = source._usePredictCache
     }
   }
 
@@ -16909,6 +16918,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
         case 4: try { try decoder.decodeRepeatedMessageField(value: &_storage._inputs) }()
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._model) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._runnerSelector) }()
+        case 7: try { try decoder.decodeSingularBoolField(value: &_storage._usePredictCache) }()
         default: break
         }
       }
@@ -16939,6 +16949,9 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
       try { if let v = _storage._runnerSelector {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
       } }()
+      if _storage._usePredictCache != false {
+        try visitor.visitSingularBoolField(value: _storage._usePredictCache, fieldNumber: 7)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -16954,6 +16967,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
         if _storage._inputs != rhs_storage._inputs {return false}
         if _storage._model != rhs_storage._model {return false}
         if _storage._runnerSelector != rhs_storage._runnerSelector {return false}
+        if _storage._usePredictCache != rhs_storage._usePredictCache {return false}
         return true
       }
       if !storagesAreEqual {return false}

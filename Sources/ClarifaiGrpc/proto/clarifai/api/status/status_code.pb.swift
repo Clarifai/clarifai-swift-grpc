@@ -335,6 +335,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case instanceTypeInvalidArgument // = 26001
   case instanceTypeInvalidRequest // = 26002
 
+  /// Compute plane related codes 261xx
+  case computePlaneMetricsInvalidRequest // = 26100
+
   /// Input:Image related 30xxx
   case inputSuccess // = 30000
 
@@ -861,6 +864,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26000: self = .instanceTypeDoesNotExist
     case 26001: self = .instanceTypeInvalidArgument
     case 26002: self = .instanceTypeInvalidRequest
+    case 26100: self = .computePlaneMetricsInvalidRequest
     case 30000: self = .inputSuccess
     case 30001: self = .inputPending
     case 30002: self = .inputFailed
@@ -1254,6 +1258,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .instanceTypeDoesNotExist: return 26000
     case .instanceTypeInvalidArgument: return 26001
     case .instanceTypeInvalidRequest: return 26002
+    case .computePlaneMetricsInvalidRequest: return 26100
     case .inputSuccess: return 30000
     case .inputPending: return 30001
     case .inputFailed: return 30002
@@ -1652,6 +1657,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .instanceTypeDoesNotExist,
     .instanceTypeInvalidArgument,
     .instanceTypeInvalidRequest,
+    .computePlaneMetricsInvalidRequest,
     .inputSuccess,
     .inputPending,
     .inputFailed,
@@ -2048,6 +2054,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26000: .same(proto: "INSTANCE_TYPE_DOES_NOT_EXIST"),
     26001: .same(proto: "INSTANCE_TYPE_INVALID_ARGUMENT"),
     26002: .same(proto: "INSTANCE_TYPE_INVALID_REQUEST"),
+    26100: .same(proto: "COMPUTE_PLANE_METRICS_INVALID_REQUEST"),
     30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
     30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
     30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),

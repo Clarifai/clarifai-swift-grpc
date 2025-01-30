@@ -12407,6 +12407,8 @@ public struct Clarifai_Api_InstanceType {
   /// Clears the value of `computeInfo`. Subsequent reads from it will return its default value.
   public mutating func clearComputeInfo() {self._computeInfo = nil}
 
+  public var price: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -28352,6 +28354,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     1: .same(proto: "id"),
     2: .same(proto: "description"),
     3: .standard(proto: "compute_info"),
+    4: .same(proto: "price"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -28363,6 +28366,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
       case 3: try { try decoder.decodeSingularMessageField(value: &self._computeInfo) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.price) }()
       default: break
       }
     }
@@ -28382,6 +28386,9 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     try { if let v = self._computeInfo {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     } }()
+    if !self.price.isEmpty {
+      try visitor.visitSingularStringField(value: self.price, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -28389,6 +28396,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs.id != rhs.id {return false}
     if lhs.description_p != rhs.description_p {return false}
     if lhs._computeInfo != rhs._computeInfo {return false}
+    if lhs.price != rhs.price {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
