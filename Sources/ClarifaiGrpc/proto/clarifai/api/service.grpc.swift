@@ -1221,10 +1221,26 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
 
+  func postLogEntries(
+    _ request: Clarifai_Api_PostLogEntriesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostLogEntriesRequest, Clarifai_Api_Status_BaseResponse>
+
   func listLogEntries(
     _ request: Clarifai_Api_ListLogEntriesRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>
+
+  func streamLogEntries(
+    _ request: Clarifai_Api_StreamLogEntriesRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_MultiLogEntryResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>
+
+  func postComputePlaneMetrics(
+    _ request: Clarifai_Api_PostComputePlaneMetricsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5650,6 +5666,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to PostLogEntries
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostLogEntries.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postLogEntries(
+    _ request: Clarifai_Api_PostLogEntriesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostLogEntriesRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostLogEntries",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostLogEntriesInterceptors() ?? []
+    )
+  }
+
   /// Unary call to ListLogEntries
   ///
   /// - Parameters:
@@ -5665,6 +5699,45 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListLogEntriesInterceptors() ?? []
+    )
+  }
+
+  /// Server streaming call to StreamLogEntries
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StreamLogEntries.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func streamLogEntries(
+    _ request: Clarifai_Api_StreamLogEntriesRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_MultiLogEntryResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse> {
+    return self.makeServerStreamingCall(
+      path: "/clarifai.api.V2/StreamLogEntries",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamLogEntriesInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Unary call to PostComputePlaneMetrics
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostComputePlaneMetrics.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postComputePlaneMetrics(
+    _ request: Clarifai_Api_PostComputePlaneMetricsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostComputePlaneMetrics",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostComputePlaneMetricsInterceptors() ?? []
     )
   }
 }
@@ -6385,8 +6458,17 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'listWorkflowEvaluationTemplates'.
   func makeListWorkflowEvaluationTemplatesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'postLogEntries'.
+  func makePostLogEntriesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostLogEntriesRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when invoking 'listLogEntries'.
   func makeListLogEntriesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'streamLogEntries'.
+  func makeStreamLogEntriesInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postComputePlaneMetrics'.
+  func makePostComputePlaneMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7228,7 +7310,13 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   func listWorkflowEvaluationTemplates(request: Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>
 
+  func postLogEntries(request: Clarifai_Api_PostLogEntriesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   func listLogEntries(request: Clarifai_Api_ListLogEntriesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiLogEntryResponse>
+
+  func streamLogEntries(request: Clarifai_Api_StreamLogEntriesRequest, context: StreamingResponseCallContext<Clarifai_Api_MultiLogEntryResponse>) -> EventLoopFuture<GRPCStatus>
+
+  func postComputePlaneMetrics(request: Clarifai_Api_PostComputePlaneMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9383,6 +9471,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.listWorkflowEvaluationTemplates(request:context:)
       )
 
+    case "PostLogEntries":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostLogEntriesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostLogEntriesInterceptors() ?? [],
+        userFunction: self.postLogEntries(request:context:)
+      )
+
     case "ListLogEntries":
       return UnaryServerHandler(
         context: context,
@@ -9390,6 +9487,24 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLogEntryResponse>(),
         interceptors: self.interceptors?.makeListLogEntriesInterceptors() ?? [],
         userFunction: self.listLogEntries(request:context:)
+      )
+
+    case "StreamLogEntries":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamLogEntriesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiLogEntryResponse>(),
+        interceptors: self.interceptors?.makeStreamLogEntriesInterceptors() ?? [],
+        userFunction: self.streamLogEntries(request:context:)
+      )
+
+    case "PostComputePlaneMetrics":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostComputePlaneMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostComputePlaneMetricsInterceptors() ?? [],
+        userFunction: self.postComputePlaneMetrics(request:context:)
       )
 
     default:
@@ -10352,7 +10467,19 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListWorkflowEvaluationTemplatesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowEvaluationTemplatesRequest, Clarifai_Api_MultiWorkflowEvaluationTemplateResponse>]
 
+  /// - Returns: Interceptors to use when handling 'postLogEntries'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostLogEntriesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostLogEntriesRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when handling 'listLogEntries'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListLogEntriesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when handling 'streamLogEntries'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamLogEntriesInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamLogEntriesRequest, Clarifai_Api_MultiLogEntryResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postComputePlaneMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostComputePlaneMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
 }

@@ -13354,6 +13354,119 @@ extension Clarifai_Api_WorkflowVersionEvaluationTemplate.TaskType: CaseIterable 
 
 #endif  // swift(>=4.2)
 
+/// ComputePlaneMetrics captures the compute plane metrics to send back to the control plane.
+/// Each message should have the meta filled and one or more of the other fields.
+public struct Clarifai_Api_ComputePlaneMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Who and where the metrics are from.
+  public var meta: Clarifai_Api_ComputeSourceMetadata {
+    get {return _storage._meta ?? Clarifai_Api_ComputeSourceMetadata()}
+    set {_uniqueStorage()._meta = newValue}
+  }
+  /// Returns true if `meta` has been explicitly set.
+  public var hasMeta: Bool {return _storage._meta != nil}
+  /// Clears the value of `meta`. Subsequent reads from it will return its default value.
+  public mutating func clearMeta() {_uniqueStorage()._meta = nil}
+
+  /// e.g. aws, azure, on-prem.
+  public var cloud: String {
+    get {return _storage._cloud}
+    set {_uniqueStorage()._cloud = newValue}
+  }
+
+  /// e.g. us-east, us-west.
+  public var region: String {
+    get {return _storage._region}
+    set {_uniqueStorage()._region = newValue}
+  }
+
+  /// e.g. t3a.medium, g5.xlarge.
+  public var instanceType: String {
+    get {return _storage._instanceType}
+    set {_uniqueStorage()._instanceType = newValue}
+  }
+
+  /// e.g. spot, on-demand.
+  public var reservationType: String {
+    get {return _storage._reservationType}
+    set {_uniqueStorage()._reservationType = newValue}
+  }
+
+  /// Metrics billing
+  public var reservationPrice: Float {
+    get {return _storage._reservationPrice}
+    set {_uniqueStorage()._reservationPrice = newValue}
+  }
+
+  /// Runtime in seconds.
+  public var runtimeS: Int32 {
+    get {return _storage._runtimeS}
+    set {_uniqueStorage()._runtimeS = newValue}
+  }
+
+  /// Metrics for latency.
+  public var timestamp: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._timestamp ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._timestamp = newValue}
+  }
+  /// Returns true if `timestamp` has been explicitly set.
+  public var hasTimestamp: Bool {return _storage._timestamp != nil}
+  /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
+  public mutating func clearTimestamp() {_uniqueStorage()._timestamp = nil}
+
+  /// e.g. NodeProvisioned, NodeTerminated, ModelDeployed, ModelScheduled, ModelReady.
+  public var eventType: String {
+    get {return _storage._eventType}
+    set {_uniqueStorage()._eventType = newValue}
+  }
+
+  /// GPU metrics.
+  public var gpuMetrics: [Clarifai_Api_GpuMetrics] {
+    get {return _storage._gpuMetrics}
+    set {_uniqueStorage()._gpuMetrics = newValue}
+  }
+
+  /// Hostname of the node.
+  public var hostname: String {
+    get {return _storage._hostname}
+    set {_uniqueStorage()._hostname = newValue}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_GpuMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// GPU UUID.
+  public var uuid: String = String()
+
+  /// GPU model name. e.g. NVIDIA_A10G
+  public var modelName: String = String()
+
+  /// GPU utilization. e.g. DCGM_FI_DEV_GPU_UTIL
+  public var utilizationPct: Float = 0
+
+  /// Tensor utilization. e.g. DCGM_FI_PROF_PIPE_TENSOR_ACTIVE
+  public var tensorUtilizationPct: Float = 0
+
+  /// Memory utilization. e.g. DCGM_FI_PROF_DRAM_ACTIVE
+  public var memoryUtilizationPct: Float = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 /// LogEntry is a single technical log entry (e.g. service log, stack traces, etc).
 public struct Clarifai_Api_LogEntry {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -29461,6 +29574,210 @@ extension Clarifai_Api_WorkflowVersionEvaluationTemplate.TaskType: SwiftProtobuf
     0: .same(proto: "TASK_TYPE_NOT_SET"),
     1: .same(proto: "TEXT_CLASSIFICATION"),
   ]
+}
+
+extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ComputePlaneMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "meta"),
+    2: .same(proto: "cloud"),
+    3: .same(proto: "region"),
+    4: .standard(proto: "instance_type"),
+    5: .standard(proto: "reservation_type"),
+    6: .standard(proto: "reservation_price"),
+    7: .standard(proto: "runtime_s"),
+    8: .same(proto: "timestamp"),
+    9: .standard(proto: "event_type"),
+    10: .standard(proto: "gpu_metrics"),
+    11: .same(proto: "hostname"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _meta: Clarifai_Api_ComputeSourceMetadata? = nil
+    var _cloud: String = String()
+    var _region: String = String()
+    var _instanceType: String = String()
+    var _reservationType: String = String()
+    var _reservationPrice: Float = 0
+    var _runtimeS: Int32 = 0
+    var _timestamp: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _eventType: String = String()
+    var _gpuMetrics: [Clarifai_Api_GpuMetrics] = []
+    var _hostname: String = String()
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _meta = source._meta
+      _cloud = source._cloud
+      _region = source._region
+      _instanceType = source._instanceType
+      _reservationType = source._reservationType
+      _reservationPrice = source._reservationPrice
+      _runtimeS = source._runtimeS
+      _timestamp = source._timestamp
+      _eventType = source._eventType
+      _gpuMetrics = source._gpuMetrics
+      _hostname = source._hostname
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._meta) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._cloud) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._region) }()
+        case 4: try { try decoder.decodeSingularStringField(value: &_storage._instanceType) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._reservationType) }()
+        case 6: try { try decoder.decodeSingularFloatField(value: &_storage._reservationPrice) }()
+        case 7: try { try decoder.decodeSingularInt32Field(value: &_storage._runtimeS) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._timestamp) }()
+        case 9: try { try decoder.decodeSingularStringField(value: &_storage._eventType) }()
+        case 10: try { try decoder.decodeRepeatedMessageField(value: &_storage._gpuMetrics) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._hostname) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._meta {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      if !_storage._cloud.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._cloud, fieldNumber: 2)
+      }
+      if !_storage._region.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._region, fieldNumber: 3)
+      }
+      if !_storage._instanceType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._instanceType, fieldNumber: 4)
+      }
+      if !_storage._reservationType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._reservationType, fieldNumber: 5)
+      }
+      if _storage._reservationPrice != 0 {
+        try visitor.visitSingularFloatField(value: _storage._reservationPrice, fieldNumber: 6)
+      }
+      if _storage._runtimeS != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._runtimeS, fieldNumber: 7)
+      }
+      try { if let v = _storage._timestamp {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      if !_storage._eventType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._eventType, fieldNumber: 9)
+      }
+      if !_storage._gpuMetrics.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._gpuMetrics, fieldNumber: 10)
+      }
+      if !_storage._hostname.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._hostname, fieldNumber: 11)
+      }
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ComputePlaneMetrics, rhs: Clarifai_Api_ComputePlaneMetrics) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._meta != rhs_storage._meta {return false}
+        if _storage._cloud != rhs_storage._cloud {return false}
+        if _storage._region != rhs_storage._region {return false}
+        if _storage._instanceType != rhs_storage._instanceType {return false}
+        if _storage._reservationType != rhs_storage._reservationType {return false}
+        if _storage._reservationPrice != rhs_storage._reservationPrice {return false}
+        if _storage._runtimeS != rhs_storage._runtimeS {return false}
+        if _storage._timestamp != rhs_storage._timestamp {return false}
+        if _storage._eventType != rhs_storage._eventType {return false}
+        if _storage._gpuMetrics != rhs_storage._gpuMetrics {return false}
+        if _storage._hostname != rhs_storage._hostname {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_GpuMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".GpuMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "uuid"),
+    2: .standard(proto: "model_name"),
+    3: .standard(proto: "utilization_pct"),
+    4: .standard(proto: "tensor_utilization_pct"),
+    5: .standard(proto: "memory_utilization_pct"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.uuid) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.modelName) }()
+      case 3: try { try decoder.decodeSingularFloatField(value: &self.utilizationPct) }()
+      case 4: try { try decoder.decodeSingularFloatField(value: &self.tensorUtilizationPct) }()
+      case 5: try { try decoder.decodeSingularFloatField(value: &self.memoryUtilizationPct) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.uuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.uuid, fieldNumber: 1)
+    }
+    if !self.modelName.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelName, fieldNumber: 2)
+    }
+    if self.utilizationPct != 0 {
+      try visitor.visitSingularFloatField(value: self.utilizationPct, fieldNumber: 3)
+    }
+    if self.tensorUtilizationPct != 0 {
+      try visitor.visitSingularFloatField(value: self.tensorUtilizationPct, fieldNumber: 4)
+    }
+    if self.memoryUtilizationPct != 0 {
+      try visitor.visitSingularFloatField(value: self.memoryUtilizationPct, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_GpuMetrics, rhs: Clarifai_Api_GpuMetrics) -> Bool {
+    if lhs.uuid != rhs.uuid {return false}
+    if lhs.modelName != rhs.modelName {return false}
+    if lhs.utilizationPct != rhs.utilizationPct {return false}
+    if lhs.tensorUtilizationPct != rhs.tensorUtilizationPct {return false}
+    if lhs.memoryUtilizationPct != rhs.memoryUtilizationPct {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }
 
 extension Clarifai_Api_LogEntry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
