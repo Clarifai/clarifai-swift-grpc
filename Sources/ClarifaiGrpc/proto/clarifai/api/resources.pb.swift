@@ -2854,6 +2854,36 @@ public struct Clarifai_Api_Data {
   /// Clears the value of `ndarray`. Subsequent reads from it will return its default value.
   public mutating func clearNdarray() {_uniqueStorage()._ndarray = nil}
 
+  /// Input and output integer number 
+  public var intValue: Int64 {
+    get {return _storage._intValue}
+    set {_uniqueStorage()._intValue = newValue}
+  }
+
+  /// Input and output floating number
+  public var floatValue: Double {
+    get {return _storage._floatValue}
+    set {_uniqueStorage()._floatValue = newValue}
+  }
+
+  /// Input and output bytes data
+  public var bytesValue: Data {
+    get {return _storage._bytesValue}
+    set {_uniqueStorage()._bytesValue = newValue}
+  }
+
+  /// Input and output bool data
+  public var boolValue: Bool {
+    get {return _storage._boolValue}
+    set {_uniqueStorage()._boolValue = newValue}
+  }
+
+  /// Input and output string data
+  public var stringValue: String {
+    get {return _storage._stringValue}
+    set {_uniqueStorage()._stringValue = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -2876,6 +2906,9 @@ public struct Clarifai_Api_Part {
   public var hasData: Bool {return self._data != nil}
   /// Clears the value of `data`. Subsequent reads from it will return its default value.
   public mutating func clearData() {self._data = nil}
+
+  /// A unique id for the part.
+  public var id: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4774,6 +4807,11 @@ public struct Clarifai_Api_Model {
   public var versionCount: Int32 {
     get {return _storage._versionCount}
     set {_uniqueStorage()._versionCount = newValue}
+  }
+
+  public var usesTokens: Bool {
+    get {return _storage._usesTokens}
+    set {_uniqueStorage()._usesTokens = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -15645,6 +15683,11 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     18: .same(proto: "heatmaps"),
     19: .same(proto: "parts"),
     20: .same(proto: "ndarray"),
+    21: .standard(proto: "int_value"),
+    22: .standard(proto: "float_value"),
+    23: .standard(proto: "bytes_value"),
+    24: .standard(proto: "bool_value"),
+    25: .standard(proto: "string_value"),
   ]
 
   fileprivate class _StorageClass {
@@ -15666,6 +15709,11 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _heatmaps: [Clarifai_Api_Image] = []
     var _parts: [Clarifai_Api_Part] = []
     var _ndarray: Clarifai_Api_NDArray? = nil
+    var _intValue: Int64 = 0
+    var _floatValue: Double = 0
+    var _bytesValue: Data = Data()
+    var _boolValue: Bool = false
+    var _stringValue: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -15690,6 +15738,11 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _heatmaps = source._heatmaps
       _parts = source._parts
       _ndarray = source._ndarray
+      _intValue = source._intValue
+      _floatValue = source._floatValue
+      _bytesValue = source._bytesValue
+      _boolValue = source._boolValue
+      _stringValue = source._stringValue
     }
   }
 
@@ -15726,6 +15779,11 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 18: try { try decoder.decodeRepeatedMessageField(value: &_storage._heatmaps) }()
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._parts) }()
         case 20: try { try decoder.decodeSingularMessageField(value: &_storage._ndarray) }()
+        case 21: try { try decoder.decodeSingularInt64Field(value: &_storage._intValue) }()
+        case 22: try { try decoder.decodeSingularDoubleField(value: &_storage._floatValue) }()
+        case 23: try { try decoder.decodeSingularBytesField(value: &_storage._bytesValue) }()
+        case 24: try { try decoder.decodeSingularBoolField(value: &_storage._boolValue) }()
+        case 25: try { try decoder.decodeSingularStringField(value: &_storage._stringValue) }()
         default: break
         }
       }
@@ -15792,6 +15850,21 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._ndarray {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
       } }()
+      if _storage._intValue != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._intValue, fieldNumber: 21)
+      }
+      if _storage._floatValue != 0 {
+        try visitor.visitSingularDoubleField(value: _storage._floatValue, fieldNumber: 22)
+      }
+      if !_storage._bytesValue.isEmpty {
+        try visitor.visitSingularBytesField(value: _storage._bytesValue, fieldNumber: 23)
+      }
+      if _storage._boolValue != false {
+        try visitor.visitSingularBoolField(value: _storage._boolValue, fieldNumber: 24)
+      }
+      if !_storage._stringValue.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._stringValue, fieldNumber: 25)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -15819,6 +15892,11 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._heatmaps != rhs_storage._heatmaps {return false}
         if _storage._parts != rhs_storage._parts {return false}
         if _storage._ndarray != rhs_storage._ndarray {return false}
+        if _storage._intValue != rhs_storage._intValue {return false}
+        if _storage._floatValue != rhs_storage._floatValue {return false}
+        if _storage._bytesValue != rhs_storage._bytesValue {return false}
+        if _storage._boolValue != rhs_storage._boolValue {return false}
+        if _storage._stringValue != rhs_storage._stringValue {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -15832,6 +15910,7 @@ extension Clarifai_Api_Part: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   public static let protoMessageName: String = _protobuf_package + ".Part"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "data"),
+    2: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -15841,6 +15920,7 @@ extension Clarifai_Api_Part: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._data) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -15854,11 +15934,15 @@ extension Clarifai_Api_Part: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     try { if let v = self._data {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_Part, rhs: Clarifai_Api_Part) -> Bool {
     if lhs._data != rhs._data {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -18240,6 +18324,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     36: .same(proto: "source"),
     37: .same(proto: "creator"),
     38: .standard(proto: "version_count"),
+    39: .standard(proto: "uses_tokens"),
   ]
 
   fileprivate class _StorageClass {
@@ -18274,6 +18359,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _source: Clarifai_Api_Model.Source = .unknownSource
     var _creator: String = String()
     var _versionCount: Int32 = 0
+    var _usesTokens: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -18311,6 +18397,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _source = source._source
       _creator = source._creator
       _versionCount = source._versionCount
+      _usesTokens = source._usesTokens
     }
   }
 
@@ -18360,6 +18447,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 36: try { try decoder.decodeSingularEnumField(value: &_storage._source) }()
         case 37: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
         case 38: try { try decoder.decodeSingularInt32Field(value: &_storage._versionCount) }()
+        case 39: try { try decoder.decodeSingularBoolField(value: &_storage._usesTokens) }()
         default: break
         }
       }
@@ -18465,6 +18553,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if _storage._versionCount != 0 {
         try visitor.visitSingularInt32Field(value: _storage._versionCount, fieldNumber: 38)
       }
+      if _storage._usesTokens != false {
+        try visitor.visitSingularBoolField(value: _storage._usesTokens, fieldNumber: 39)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -18505,6 +18596,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._source != rhs_storage._source {return false}
         if _storage._creator != rhs_storage._creator {return false}
         if _storage._versionCount != rhs_storage._versionCount {return false}
+        if _storage._usesTokens != rhs_storage._usesTokens {return false}
         return true
       }
       if !storagesAreEqual {return false}
