@@ -456,6 +456,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     handler: @escaping (Clarifai_Api_PostModelVersionsUploadResponse) -> Void
   ) -> BidirectionalStreamingCall<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>
 
+  func postModelMigration(
+    _ request: Clarifai_Api_PostModelMigrationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>
+
   func putModelVersionExports(
     _ request: Clarifai_Api_PutModelVersionExportsRequest,
     callOptions: CallOptions?
@@ -1241,6 +1246,26 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostComputePlaneMetricsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_PostWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func getWorkflowVersionEvaluation(
+    _ request: Clarifai_Api_GetWorkflowVersionEvaluationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetWorkflowVersionEvaluationRequest, Clarifai_Api_SingleWorkflowVersionEvaluationResponse>
+
+  func listWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_ListWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func patchWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -2827,6 +2852,24 @@ extension Clarifai_Api_V2ClientProtocol {
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
       handler: handler
+    )
+  }
+
+  /// Kicks off conversion from the old Triton model format to the new Docker model format.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostModelMigration.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postModelMigration(
+    _ request: Clarifai_Api_PostModelMigrationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostModelMigration",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostModelMigrationInterceptors() ?? []
     )
   }
 
@@ -5740,6 +5783,78 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePostComputePlaneMetricsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostWorkflowVersionEvaluations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostWorkflowVersionEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_PostWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostWorkflowVersionEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowVersionEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetWorkflowVersionEvaluation
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetWorkflowVersionEvaluation.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getWorkflowVersionEvaluation(
+    _ request: Clarifai_Api_GetWorkflowVersionEvaluationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetWorkflowVersionEvaluationRequest, Clarifai_Api_SingleWorkflowVersionEvaluationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetWorkflowVersionEvaluation",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetWorkflowVersionEvaluationInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListWorkflowVersionEvaluations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListWorkflowVersionEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_ListWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListWorkflowVersionEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListWorkflowVersionEvaluationsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchWorkflowVersionEvaluations
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchWorkflowVersionEvaluations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchWorkflowVersionEvaluations(
+    _ request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchWorkflowVersionEvaluations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchWorkflowVersionEvaluationsInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -5998,6 +6113,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postModelVersionsUpload'.
   func makePostModelVersionsUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postModelMigration'.
+  func makePostModelMigrationInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
 
   /// - Returns: Interceptors to use when invoking 'putModelVersionExports'.
   func makePutModelVersionExportsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse>]
@@ -6469,6 +6587,18 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postComputePlaneMetrics'.
   func makePostComputePlaneMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowVersionEvaluations'.
+  func makePostWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getWorkflowVersionEvaluation'.
+  func makeGetWorkflowVersionEvaluationInterceptors() -> [ClientInterceptor<Clarifai_Api_GetWorkflowVersionEvaluationRequest, Clarifai_Api_SingleWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listWorkflowVersionEvaluations'.
+  func makeListWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchWorkflowVersionEvaluations'.
+  func makePatchWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -6790,6 +6920,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the model_version_id specified for your model_version.
   /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the model_bytes.
   func postModelVersionsUpload(context: StreamingResponseCallContext<Clarifai_Api_PostModelVersionsUploadResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostModelVersionsUploadRequest>) -> Void>
+
+  /// Kicks off conversion from the old Triton model format to the new Docker model format.
+  func postModelMigration(request: Clarifai_Api_PostModelMigrationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
 
   /// Export a model
   func putModelVersionExports(request: Clarifai_Api_PutModelVersionExportsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionExportResponse>
@@ -7317,6 +7450,14 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func streamLogEntries(request: Clarifai_Api_StreamLogEntriesRequest, context: StreamingResponseCallContext<Clarifai_Api_MultiLogEntryResponse>) -> EventLoopFuture<GRPCStatus>
 
   func postComputePlaneMetrics(request: Clarifai_Api_PostComputePlaneMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func postWorkflowVersionEvaluations(request: Clarifai_Api_PostWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func getWorkflowVersionEvaluation(request: Clarifai_Api_GetWorkflowVersionEvaluationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleWorkflowVersionEvaluationResponse>
+
+  func listWorkflowVersionEvaluations(request: Clarifai_Api_ListWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func patchWorkflowVersionEvaluations(request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -8092,6 +8233,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_PostModelVersionsUploadResponse>(),
         interceptors: self.interceptors?.makePostModelVersionsUploadInterceptors() ?? [],
         observerFactory: self.postModelVersionsUpload(context:)
+      )
+
+    case "PostModelMigration":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModelMigrationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makePostModelMigrationInterceptors() ?? [],
+        userFunction: self.postModelMigration(request:context:)
       )
 
     case "PutModelVersionExports":
@@ -9507,6 +9657,42 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postComputePlaneMetrics(request:context:)
       )
 
+    case "PostWorkflowVersionEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowVersionEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowVersionEvaluationsInterceptors() ?? [],
+        userFunction: self.postWorkflowVersionEvaluations(request:context:)
+      )
+
+    case "GetWorkflowVersionEvaluation":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetWorkflowVersionEvaluationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleWorkflowVersionEvaluationResponse>(),
+        interceptors: self.interceptors?.makeGetWorkflowVersionEvaluationInterceptors() ?? [],
+        userFunction: self.getWorkflowVersionEvaluation(request:context:)
+      )
+
+    case "ListWorkflowVersionEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListWorkflowVersionEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>(),
+        interceptors: self.interceptors?.makeListWorkflowVersionEvaluationsInterceptors() ?? [],
+        userFunction: self.listWorkflowVersionEvaluations(request:context:)
+      )
+
+    case "PatchWorkflowVersionEvaluations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>(),
+        interceptors: self.interceptors?.makePatchWorkflowVersionEvaluationsInterceptors() ?? [],
+        userFunction: self.patchWorkflowVersionEvaluations(request:context:)
+      )
+
     default:
       return nil
     }
@@ -9854,6 +10040,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModelVersionsUpload'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelVersionsUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelVersionsUploadRequest, Clarifai_Api_PostModelVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postModelMigration'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostModelMigrationInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
 
   /// - Returns: Interceptors to use when handling 'putModelVersionExports'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -10482,4 +10672,20 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postComputePlaneMetrics'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostComputePlaneMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowVersionEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getWorkflowVersionEvaluation'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetWorkflowVersionEvaluationInterceptors() -> [ServerInterceptor<Clarifai_Api_GetWorkflowVersionEvaluationRequest, Clarifai_Api_SingleWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listWorkflowVersionEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchWorkflowVersionEvaluations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
 }

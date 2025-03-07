@@ -229,9 +229,6 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   /// To delete label orders we need read/write
   case labelOrdersDelete // = 69
 
-  /// Read from user_feature_configs table
-  case userFeatureConfigsGet // = 71
-
   /// CRUD on FindDuplicateAnnotationsJobs table
   case findDuplicateAnnotationsJobsAdd // = 102
   case findDuplicateAnnotationsJobsGet // = 103
@@ -317,6 +314,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case instanceTypesGet // = 148
   case auditLogsGet // = 149
   case logEntriesGet // = 151
+  case workflowVersionEvaluationsGet // = 152
+  case workflowVersionEvaluationsAdd // = 153
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -378,7 +377,6 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 68: self = .labelOrdersAdd
     case 69: self = .labelOrdersDelete
     case 70: self = .tasksDelete
-    case 71: self = .userFeatureConfigsGet
     case 96: self = .workflowMetricsGet
     case 97: self = .workflowMetricsAdd
     case 98: self = .workflowMetricsDelete
@@ -428,6 +426,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 149: self = .auditLogsGet
     case 150: self = .modelsPull
     case 151: self = .logEntriesGet
+    case 152: self = .workflowVersionEvaluationsGet
+    case 153: self = .workflowVersionEvaluationsAdd
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -487,7 +487,6 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .labelOrdersAdd: return 68
     case .labelOrdersDelete: return 69
     case .tasksDelete: return 70
-    case .userFeatureConfigsGet: return 71
     case .workflowMetricsGet: return 96
     case .workflowMetricsAdd: return 97
     case .workflowMetricsDelete: return 98
@@ -537,6 +536,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .auditLogsGet: return 149
     case .modelsPull: return 150
     case .logEntriesGet: return 151
+    case .workflowVersionEvaluationsGet: return 152
+    case .workflowVersionEvaluationsAdd: return 153
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -606,7 +607,6 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .labelOrdersGet,
     .labelOrdersAdd,
     .labelOrdersDelete,
-    .userFeatureConfigsGet,
     .findDuplicateAnnotationsJobsAdd,
     .findDuplicateAnnotationsJobsGet,
     .findDuplicateAnnotationsJobsDelete,
@@ -651,6 +651,8 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .instanceTypesGet,
     .auditLogsGet,
     .logEntriesGet,
+    .workflowVersionEvaluationsGet,
+    .workflowVersionEvaluationsAdd,
   ]
 }
 
@@ -807,7 +809,6 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     68: .same(proto: "LabelOrders_Add"),
     69: .same(proto: "LabelOrders_Delete"),
     70: .same(proto: "Tasks_Delete"),
-    71: .same(proto: "UserFeatureConfigs_Get"),
     96: .same(proto: "WorkflowMetrics_Get"),
     97: .same(proto: "WorkflowMetrics_Add"),
     98: .same(proto: "WorkflowMetrics_Delete"),
@@ -857,6 +858,8 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     149: .same(proto: "AuditLogs_Get"),
     150: .same(proto: "Models_Pull"),
     151: .same(proto: "LogEntries_Get"),
+    152: .same(proto: "WorkflowVersionEvaluations_Get"),
+    153: .same(proto: "WorkflowVersionEvaluations_Add"),
   ]
 }
 
