@@ -1106,6 +1106,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>
 
+  func patchRunners(
+    _ request: Clarifai_Api_PatchRunnersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchRunnersRequest, Clarifai_Api_MultiRunnerResponse>
+
   func deleteRunners(
     _ request: Clarifai_Api_DeleteRunnersRequest,
     callOptions: CallOptions?
@@ -5267,6 +5272,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Patch runners of a user.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchRunners.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchRunners(
+    _ request: Clarifai_Api_PatchRunnersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchRunnersRequest, Clarifai_Api_MultiRunnerResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchRunners",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchRunnersInterceptors() ?? []
+    )
+  }
+
   /// Delete multiple runners in one request.
   ///
   /// - Parameters:
@@ -6504,6 +6527,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postRunners'.
   func makePostRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'patchRunners'.
+  func makePatchRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
   /// - Returns: Interceptors to use when invoking 'deleteRunners'.
   func makeDeleteRunnersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteRunnersRequest, Clarifai_Api_Status_BaseResponse>]
 
@@ -7373,6 +7399,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Add a runners to a user.
   func postRunners(request: Clarifai_Api_PostRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
+
+  /// Patch runners of a user.
+  func patchRunners(request: Clarifai_Api_PatchRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiRunnerResponse>
 
   /// Delete multiple runners in one request.
   func deleteRunners(request: Clarifai_Api_DeleteRunnersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
@@ -9405,6 +9434,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postRunners(request:context:)
       )
 
+    case "PatchRunners":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchRunnersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiRunnerResponse>(),
+        interceptors: self.interceptors?.makePatchRunnersInterceptors() ?? [],
+        userFunction: self.patchRunners(request:context:)
+      )
+
     case "DeleteRunners":
       return UnaryServerHandler(
         context: context,
@@ -10560,6 +10598,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postRunners'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostRunnersInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchRunners'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchRunnersInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchRunnersRequest, Clarifai_Api_MultiRunnerResponse>]
 
   /// - Returns: Interceptors to use when handling 'deleteRunners'.
   ///   Defaults to calling `self.makeInterceptors()`.

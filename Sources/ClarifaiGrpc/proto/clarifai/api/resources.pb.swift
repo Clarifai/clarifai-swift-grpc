@@ -9819,26 +9819,46 @@ public struct Clarifai_Api_TaskReviewMetrics {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Estimated number of reviewed inputs by at least one reviewer.
+  /// Estimated number of fully reviewed inputs.
+  /// An input is considered fully reviewed if it has been reviewed by all necessary reviewers.
+  /// Example: if task has no review, then an input is considered fully reviewed right after it's labeled (as review is skipped).
+  /// Example: if task has manual review with single-reviewer per input, then an input is considered fully reviewed when 1 reviewer has approved/rejected it.
+  /// Example: if task has consensus review with 3 reviewers per input, then an input is considered fully reviewed when 3 reviewers have approved it or 1 reviewer has rejected it.
   public var inputsCountEstimated: UInt64 = 0
+
+  /// Estimated percent of review work that was finished.
+  /// This is a value between 0 and 100, where 0 = 0% and 100 = 100%.
+  /// Calculated as inputs_count_estimated/task.metrics.input_source.inputs_count_estimated.
+  /// As the counts are estimated, the percentage is also estimated.
+  /// However, additional checks are made to ensure that 100% percentage is only returned when all inputs are reviewed - giving a guarantee that the 100% percentage is always accurate.
+  public var inputsPercentEstimated: UInt32 = 0
 
   /// Estimated number of reviewed inputs per reviewer index.
   /// The reviewer indexes are based on task.review.users.
   /// An input is considered reviewed by a reviewer if:
   /// * the reviewer approved the input
-  /// * ANY reviewer rejected the input (as rejection is final)
-  /// Note that when a reviewer requests changes for an input, the input is sent to back to work again.
+  /// * the reviewer rejected the input
+  /// Note that when a reviewer requests changes for an input, the input is sent to back to work again, so the whole work & review process is restarted.
   /// The reviewer will have to review the input again after work has been completed.
   /// As such, the review that requests changes for an input is immediately dis-regarded and not counted in this metric.
   public var inputsCountEstimatedPerReviewer: [UInt64] = []
 
-  /// Estimated percent of review work that was finished.
+  /// The number of inputs actually available for review for each reviewer.
+  /// Most times, this equals task.metrics.input_source.inputs_count_estimated.
+  /// Several situations may result in different values:
+  /// * When task has no review, then this is 0 for each reviewer.
+  /// * When task has auto-annotation, then this number equals the inputs that have been auto-annotated with AWAITING_REVIEW status. All other inputs are considered completed by the auto-annotation process.
+  /// * When task has consensus review with approval_threshold_labelers > 0, then it's possible that labelers will approve inputs through consensus, which skips review. In this case, the number of inputs available for review is less than task.metrics.input_source.inputs_count_estimated.
+  /// * When task has consensus review with approval_threshold_reviewers = 1, then all inputs are assigned only to one reviewer, so each reviewer will get only a part of the inputs to review. It's expected that the sum(inputs_reviewable_count_estimated) = task.metrics.input_source.inputs_count_estimated.
+  /// * When task has consensus review with approval_threshold_reviewers = -1, then all inputs are assigned to all reviewers. However, if an input is rejected, then rejection is final and all other reviewers will not review it. In this case, the number of inputs available for review for other reviewers will be less than task.metrics.input_source.inputs_count_estimated.
+  public var inputsReviewableCountEstimatedPerReviewer: [UInt64] = []
+
+  /// Estimated percent of review work that was finished per reviewer.
   /// This is a value between 0 and 100, where 0 = 0% and 100 = 100%.
-  /// Calculated as sum(inputs_count_estimated_per_reviewer) / (total inputs to review * number of reviewers per input).
-  /// The total inputs to review is stored in task.metrics.input_source.inputs_count_estimated.
-  /// The number of reviewers per input is based on task review strategy. For example, for consensus review strategy,
-  /// the number of reviewers per input is stored in task.review.consensus_strategy_info.approval_threshold_reviewers.
-  public var inputsPercentEstimated: UInt32 = 0
+  /// Calculated as inputs_count_estimated_per_reviewer/inputs_reviewable_count_estimated_per_reviewer.
+  /// As the counts are estimated, the percentage is also estimated.
+  /// However, additional checks are made to ensure that 100% percentage is only returned when all inputs are reviewed - giving a guarantee that the 100% percentage is always accurate.
+  public var inputsPercentEstimatedPerReviewer: [UInt32] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -13516,6 +13536,12 @@ public struct Clarifai_Api_ComputePlaneMetrics {
     set {_uniqueStorage()._hostname = newValue}
   }
 
+  /// CPU metrics.
+  public var cpuMetrics: [Clarifai_Api_CpuMetrics] {
+    get {return _storage._cpuMetrics}
+    set {_uniqueStorage()._cpuMetrics = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -13546,6 +13572,40 @@ public struct Clarifai_Api_GpuMetrics {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+}
+
+public struct Clarifai_Api_CpuMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Time of the event.
+  public var timestamp: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _timestamp ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_timestamp = newValue}
+  }
+  /// Returns true if `timestamp` has been explicitly set.
+  public var hasTimestamp: Bool {return self._timestamp != nil}
+  /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
+  public mutating func clearTimestamp() {self._timestamp = nil}
+
+  /// CPU utilization.
+  public var cpuUtilizationPct: Float = 0
+
+  /// Memory utilization.
+  public var memoryUtilizationPct: Float = 0
+
+  /// CPU millicores.
+  public var millicores: Int64 = 0
+
+  /// Memory bytes.
+  public var memoryBytes: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _timestamp: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
 /// LogEntry is a single technical log entry (e.g. service log, stack traces, etc).
@@ -13611,6 +13671,13 @@ public struct Clarifai_Api_ComputeSourceMetadata {
   public var nodepoolID: String = String()
 
   public var runnerID: String = String()
+
+  /// Pipeline related data, if any
+  public var pipelineID: String = String()
+
+  public var pipelineVersionID: String = String()
+
+  public var pipelineVersionRunID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -25579,8 +25646,10 @@ extension Clarifai_Api_TaskReviewMetrics: SwiftProtobuf.Message, SwiftProtobuf._
   public static let protoMessageName: String = _protobuf_package + ".TaskReviewMetrics"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "inputs_count_estimated"),
-    3: .standard(proto: "inputs_count_estimated_per_reviewer"),
     2: .standard(proto: "inputs_percent_estimated"),
+    3: .standard(proto: "inputs_count_estimated_per_reviewer"),
+    4: .standard(proto: "inputs_reviewable_count_estimated_per_reviewer"),
+    5: .standard(proto: "inputs_percent_estimated_per_reviewer"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -25592,6 +25661,8 @@ extension Clarifai_Api_TaskReviewMetrics: SwiftProtobuf.Message, SwiftProtobuf._
       case 1: try { try decoder.decodeSingularUInt64Field(value: &self.inputsCountEstimated) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.inputsPercentEstimated) }()
       case 3: try { try decoder.decodeRepeatedUInt64Field(value: &self.inputsCountEstimatedPerReviewer) }()
+      case 4: try { try decoder.decodeRepeatedUInt64Field(value: &self.inputsReviewableCountEstimatedPerReviewer) }()
+      case 5: try { try decoder.decodeRepeatedUInt32Field(value: &self.inputsPercentEstimatedPerReviewer) }()
       default: break
       }
     }
@@ -25607,13 +25678,21 @@ extension Clarifai_Api_TaskReviewMetrics: SwiftProtobuf.Message, SwiftProtobuf._
     if !self.inputsCountEstimatedPerReviewer.isEmpty {
       try visitor.visitPackedUInt64Field(value: self.inputsCountEstimatedPerReviewer, fieldNumber: 3)
     }
+    if !self.inputsReviewableCountEstimatedPerReviewer.isEmpty {
+      try visitor.visitPackedUInt64Field(value: self.inputsReviewableCountEstimatedPerReviewer, fieldNumber: 4)
+    }
+    if !self.inputsPercentEstimatedPerReviewer.isEmpty {
+      try visitor.visitPackedUInt32Field(value: self.inputsPercentEstimatedPerReviewer, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TaskReviewMetrics, rhs: Clarifai_Api_TaskReviewMetrics) -> Bool {
     if lhs.inputsCountEstimated != rhs.inputsCountEstimated {return false}
-    if lhs.inputsCountEstimatedPerReviewer != rhs.inputsCountEstimatedPerReviewer {return false}
     if lhs.inputsPercentEstimated != rhs.inputsPercentEstimated {return false}
+    if lhs.inputsCountEstimatedPerReviewer != rhs.inputsCountEstimatedPerReviewer {return false}
+    if lhs.inputsReviewableCountEstimatedPerReviewer != rhs.inputsReviewableCountEstimatedPerReviewer {return false}
+    if lhs.inputsPercentEstimatedPerReviewer != rhs.inputsPercentEstimatedPerReviewer {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -30233,6 +30312,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
     9: .standard(proto: "event_type"),
     10: .standard(proto: "gpu_metrics"),
     11: .same(proto: "hostname"),
+    12: .standard(proto: "cpu_metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -30247,6 +30327,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
     var _eventType: String = String()
     var _gpuMetrics: [Clarifai_Api_GpuMetrics] = []
     var _hostname: String = String()
+    var _cpuMetrics: [Clarifai_Api_CpuMetrics] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -30264,6 +30345,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
       _eventType = source._eventType
       _gpuMetrics = source._gpuMetrics
       _hostname = source._hostname
+      _cpuMetrics = source._cpuMetrics
     }
   }
 
@@ -30293,6 +30375,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
         case 9: try { try decoder.decodeSingularStringField(value: &_storage._eventType) }()
         case 10: try { try decoder.decodeRepeatedMessageField(value: &_storage._gpuMetrics) }()
         case 11: try { try decoder.decodeSingularStringField(value: &_storage._hostname) }()
+        case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._cpuMetrics) }()
         default: break
         }
       }
@@ -30338,6 +30421,9 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
       if !_storage._hostname.isEmpty {
         try visitor.visitSingularStringField(value: _storage._hostname, fieldNumber: 11)
       }
+      if !_storage._cpuMetrics.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._cpuMetrics, fieldNumber: 12)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -30358,6 +30444,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
         if _storage._eventType != rhs_storage._eventType {return false}
         if _storage._gpuMetrics != rhs_storage._gpuMetrics {return false}
         if _storage._hostname != rhs_storage._hostname {return false}
+        if _storage._cpuMetrics != rhs_storage._cpuMetrics {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -30418,6 +30505,66 @@ extension Clarifai_Api_GpuMetrics: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.utilizationPct != rhs.utilizationPct {return false}
     if lhs.tensorUtilizationPct != rhs.tensorUtilizationPct {return false}
     if lhs.memoryUtilizationPct != rhs.memoryUtilizationPct {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_CpuMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".CpuMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "timestamp"),
+    2: .standard(proto: "cpu_utilization_pct"),
+    3: .standard(proto: "memory_utilization_pct"),
+    4: .same(proto: "millicores"),
+    5: .standard(proto: "memory_bytes"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._timestamp) }()
+      case 2: try { try decoder.decodeSingularFloatField(value: &self.cpuUtilizationPct) }()
+      case 3: try { try decoder.decodeSingularFloatField(value: &self.memoryUtilizationPct) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.millicores) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.memoryBytes) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._timestamp {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.cpuUtilizationPct != 0 {
+      try visitor.visitSingularFloatField(value: self.cpuUtilizationPct, fieldNumber: 2)
+    }
+    if self.memoryUtilizationPct != 0 {
+      try visitor.visitSingularFloatField(value: self.memoryUtilizationPct, fieldNumber: 3)
+    }
+    if self.millicores != 0 {
+      try visitor.visitSingularInt64Field(value: self.millicores, fieldNumber: 4)
+    }
+    if self.memoryBytes != 0 {
+      try visitor.visitSingularInt64Field(value: self.memoryBytes, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_CpuMetrics, rhs: Clarifai_Api_CpuMetrics) -> Bool {
+    if lhs._timestamp != rhs._timestamp {return false}
+    if lhs.cpuUtilizationPct != rhs.cpuUtilizationPct {return false}
+    if lhs.memoryUtilizationPct != rhs.memoryUtilizationPct {return false}
+    if lhs.millicores != rhs.millicores {return false}
+    if lhs.memoryBytes != rhs.memoryBytes {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -30487,6 +30634,9 @@ extension Clarifai_Api_ComputeSourceMetadata: SwiftProtobuf.Message, SwiftProtob
     6: .standard(proto: "compute_cluster_id"),
     7: .standard(proto: "nodepool_id"),
     8: .standard(proto: "runner_id"),
+    9: .standard(proto: "pipeline_id"),
+    10: .standard(proto: "pipeline_version_id"),
+    11: .standard(proto: "pipeline_version_run_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -30502,6 +30652,9 @@ extension Clarifai_Api_ComputeSourceMetadata: SwiftProtobuf.Message, SwiftProtob
       case 6: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.nodepoolID) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.runnerID) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.pipelineID) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionID) }()
+      case 11: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionRunID) }()
       default: break
       }
     }
@@ -30533,6 +30686,15 @@ extension Clarifai_Api_ComputeSourceMetadata: SwiftProtobuf.Message, SwiftProtob
     if !self.runnerID.isEmpty {
       try visitor.visitSingularStringField(value: self.runnerID, fieldNumber: 8)
     }
+    if !self.pipelineID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineID, fieldNumber: 9)
+    }
+    if !self.pipelineVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineVersionID, fieldNumber: 10)
+    }
+    if !self.pipelineVersionRunID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineVersionRunID, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -30544,6 +30706,9 @@ extension Clarifai_Api_ComputeSourceMetadata: SwiftProtobuf.Message, SwiftProtob
     if lhs.computeClusterID != rhs.computeClusterID {return false}
     if lhs.nodepoolID != rhs.nodepoolID {return false}
     if lhs.runnerID != rhs.runnerID {return false}
+    if lhs.pipelineID != rhs.pipelineID {return false}
+    if lhs.pipelineVersionID != rhs.pipelineVersionID {return false}
+    if lhs.pipelineVersionRunID != rhs.pipelineVersionRunID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
