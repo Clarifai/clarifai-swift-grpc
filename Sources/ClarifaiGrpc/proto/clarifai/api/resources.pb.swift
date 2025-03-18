@@ -5043,6 +5043,9 @@ public struct Clarifai_Api_OutputInfo {
   /// Clears the value of `params`. Subsequent reads from it will return its default value.
   public mutating func clearParams() {_uniqueStorage()._params = nil}
 
+  /// These allow you to specifcy addition fields that a specific model supports beyond those defined
+  /// in it's ModelType. This field is to be deprecated and will be replaced by MethodSignature
+  /// proto.
   public var paramsSpecs: [Clarifai_Api_ModelTypeField] {
     get {return _storage._paramsSpecs}
     set {_uniqueStorage()._paramsSpecs = newValue}
@@ -5321,6 +5324,11 @@ public struct Clarifai_Api_ModelType {
   /// What type of evaluation is supported for this model type.
   public var evaluationType: Clarifai_Api_EvaluationType = .undefined
 
+  /// method signature for this model type
+  /// This will be used in the future to replace input_fields, output_fields, and model_type_fields
+  /// as it can define any python function call.
+  public var methodSignatures: [Clarifai_Api_MethodSignature] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -5401,7 +5409,8 @@ public struct Clarifai_Api_ModelTypeField {
   /// and so on.
   public var path: String = String()
 
-  /// The field for this field.
+  /// The field for this field. This is often used for displaying the field in the UI whereas
+  /// the DataType enum below defines the specific type of datain the Python function.
   public var fieldType: Clarifai_Api_ModelTypeField.ModelTypeFieldType = .invalidModelTypeFieldType
 
   /// A default value. We use the Value field because we want to have structured data (just like
@@ -5441,6 +5450,24 @@ public struct Clarifai_Api_ModelTypeField {
   public var hasModelTypeRangeInfo: Bool {return self._modelTypeRangeInfo != nil}
   /// Clears the value of `modelTypeRangeInfo`. Subsequent reads from it will return its default value.
   public mutating func clearModelTypeRangeInfo() {self._modelTypeRangeInfo = nil}
+
+  /// name of method signature argument
+  public var name: String = String()
+
+  /// The type of the argument.
+  public var type: Clarifai_Api_ModelTypeField.DataType = .notSet
+
+  /// type enum, and recursively set type_args with
+  /// the inner type argumets in complex objects (e.g. List[Tuple[int, str]])
+  public var typeArgs: [Clarifai_Api_ModelTypeField] = []
+
+  /// this will be use to define whether the method argument supports streaming as an iterator.
+  public var iterator: Bool = false
+
+  /// This specify the default value of the method argument. We define this as a string
+  /// because the default value can be a string, int, float, bool, or a complex object like a JSON
+  /// The default_value field above should not also be used.
+  public var `default`: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -5571,6 +5598,120 @@ public struct Clarifai_Api_ModelTypeField {
 
   }
 
+  /// DataType is used in MethodSignature to define all the possible types that a python function
+  /// may have that we want to support. These include built-ins like int, float, str, bool, and
+  /// more complex types like JSON, numpy arrays, List, Tuple, Dict (as Named Fields), as well as Clarifai provided
+  /// unstructured types like Image, Video, Text, etc.
+  public enum DataType: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case notSet // = 0
+
+    /// A string value.
+    case str // = 1
+
+    /// A byte string. This is used for binary data.
+    case bytes // = 2
+
+    /// An integer value.
+    case int // = 3
+
+    /// A float value.
+    case float // = 4
+
+    /// A boolean value.
+    case bool // = 5
+
+    /// A proto representation for numpy arrays.
+    case ndarray // = 6
+
+    /// For arbitrary json object: "{...}"
+    case jsonData // = 7
+
+    /// For text data
+    case text // = 8
+
+    /// A image is a image proto for url or bytes.
+    case image // = 9
+
+    /// A concept is a concept proto that represents a concept in the app.
+    case concept // = 10
+
+    /// A region is a bounding box in an image or video frame.
+    case region // = 11
+
+    /// A frame is a single image in a video stream
+    case frame // = 12
+
+    /// A audio is a audio proto for url or bytes.
+    case audio // = 13
+
+    /// A video is a video proto for url or bytes.
+    case video // = 14
+
+    /// this can be used to store named fields with values similar to Dict
+    case namedFields // = 20
+
+    /// An arg that is a tuple.
+    case tuple // = 21
+
+    /// An arg that is a list.
+    case list // = 22
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .notSet
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .notSet
+      case 1: self = .str
+      case 2: self = .bytes
+      case 3: self = .int
+      case 4: self = .float
+      case 5: self = .bool
+      case 6: self = .ndarray
+      case 7: self = .jsonData
+      case 8: self = .text
+      case 9: self = .image
+      case 10: self = .concept
+      case 11: self = .region
+      case 12: self = .frame
+      case 13: self = .audio
+      case 14: self = .video
+      case 20: self = .namedFields
+      case 21: self = .tuple
+      case 22: self = .list
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .notSet: return 0
+      case .str: return 1
+      case .bytes: return 2
+      case .int: return 3
+      case .float: return 4
+      case .bool: return 5
+      case .ndarray: return 6
+      case .jsonData: return 7
+      case .text: return 8
+      case .image: return 9
+      case .concept: return 10
+      case .region: return 11
+      case .frame: return 12
+      case .audio: return 13
+      case .video: return 14
+      case .namedFields: return 20
+      case .tuple: return 21
+      case .list: return 22
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
   public init() {}
 
   fileprivate var _defaultValue: SwiftProtobuf.Google_Protobuf_Value? = nil
@@ -5604,6 +5745,30 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: CaseIterable {
     .datasetVersion,
     .encryptedString,
     .checkpointModel,
+  ]
+}
+
+extension Clarifai_Api_ModelTypeField.DataType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_ModelTypeField.DataType] = [
+    .notSet,
+    .str,
+    .bytes,
+    .int,
+    .float,
+    .bool,
+    .ndarray,
+    .jsonData,
+    .text,
+    .image,
+    .concept,
+    .region,
+    .frame,
+    .audio,
+    .video,
+    .namedFields,
+    .tuple,
+    .list,
   ]
 }
 
@@ -5897,11 +6062,45 @@ public struct Clarifai_Api_ModelVersion {
   /// Clears the value of `buildInfo`. Subsequent reads from it will return its default value.
   public mutating func clearBuildInfo() {_uniqueStorage()._buildInfo = nil}
 
+  /// Model signature information for the model version
+  public var methodSignature: [Clarifai_Api_MethodSignature] {
+    get {return _storage._methodSignature}
+    set {_uniqueStorage()._methodSignature = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+/// MethodSignature is a definition of a method that a model can have.
+/// This is used to communicate between a python method definition of any arbitrary function
+/// to the client or UI on how to call that function from the client side.
+public struct Clarifai_Api_MethodSignature {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The name of the method on the server.
+  public var name: String = String()
+
+  /// whether the method is for predict(unary-unary), generate(unary-stream), stream(stream-stream)
+  public var methodType: Clarifai_Api_RunnerMethodType = .unknown
+
+  /// description from the docstring of the method on the server.
+  public var description_p: String = String()
+
+  /// input fields and signature of every method arguments
+  public var inputFields: [Clarifai_Api_ModelTypeField] = []
+
+  /// output signature of method
+  public var outputFields: [Clarifai_Api_ModelTypeField] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
 }
 
 public struct Clarifai_Api_BuildInfo {
@@ -19824,6 +20023,7 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     16: .standard(proto: "expected_input_layers"),
     17: .standard(proto: "expected_output_layers"),
     18: .standard(proto: "evaluation_type"),
+    19: .standard(proto: "method_signatures"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19845,6 +20045,7 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 16: try { try decoder.decodeRepeatedMessageField(value: &self.expectedInputLayers) }()
       case 17: try { try decoder.decodeRepeatedMessageField(value: &self.expectedOutputLayers) }()
       case 18: try { try decoder.decodeSingularEnumField(value: &self.evaluationType) }()
+      case 19: try { try decoder.decodeRepeatedMessageField(value: &self.methodSignatures) }()
       default: break
       }
     }
@@ -19890,6 +20091,9 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if self.evaluationType != .undefined {
       try visitor.visitSingularEnumField(value: self.evaluationType, fieldNumber: 18)
     }
+    if !self.methodSignatures.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.methodSignatures, fieldNumber: 19)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -19907,6 +20111,7 @@ extension Clarifai_Api_ModelType: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.expectedInputLayers != rhs.expectedInputLayers {return false}
     if lhs.expectedOutputLayers != rhs.expectedOutputLayers {return false}
     if lhs.evaluationType != rhs.evaluationType {return false}
+    if lhs.methodSignatures != rhs.methodSignatures {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -20062,6 +20267,11 @@ extension Clarifai_Api_ModelTypeField: SwiftProtobuf.Message, SwiftProtobuf._Mes
     7: .standard(proto: "internal_only"),
     8: .same(proto: "required"),
     9: .standard(proto: "model_type_range_info"),
+    10: .same(proto: "name"),
+    11: .same(proto: "type"),
+    12: .standard(proto: "type_args"),
+    13: .same(proto: "iterator"),
+    14: .same(proto: "default"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20079,6 +20289,11 @@ extension Clarifai_Api_ModelTypeField: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 7: try { try decoder.decodeSingularBoolField(value: &self.internalOnly) }()
       case 8: try { try decoder.decodeSingularBoolField(value: &self.required) }()
       case 9: try { try decoder.decodeSingularMessageField(value: &self._modelTypeRangeInfo) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 11: try { try decoder.decodeSingularEnumField(value: &self.type) }()
+      case 12: try { try decoder.decodeRepeatedMessageField(value: &self.typeArgs) }()
+      case 13: try { try decoder.decodeSingularBoolField(value: &self.iterator) }()
+      case 14: try { try decoder.decodeSingularStringField(value: &self.`default`) }()
       default: break
       }
     }
@@ -20116,6 +20331,21 @@ extension Clarifai_Api_ModelTypeField: SwiftProtobuf.Message, SwiftProtobuf._Mes
     try { if let v = self._modelTypeRangeInfo {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
     } }()
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 10)
+    }
+    if self.type != .notSet {
+      try visitor.visitSingularEnumField(value: self.type, fieldNumber: 11)
+    }
+    if !self.typeArgs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.typeArgs, fieldNumber: 12)
+    }
+    if self.iterator != false {
+      try visitor.visitSingularBoolField(value: self.iterator, fieldNumber: 13)
+    }
+    if !self.`default`.isEmpty {
+      try visitor.visitSingularStringField(value: self.`default`, fieldNumber: 14)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20129,6 +20359,11 @@ extension Clarifai_Api_ModelTypeField: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs.internalOnly != rhs.internalOnly {return false}
     if lhs.required != rhs.required {return false}
     if lhs._modelTypeRangeInfo != rhs._modelTypeRangeInfo {return false}
+    if lhs.name != rhs.name {return false}
+    if lhs.type != rhs.type {return false}
+    if lhs.typeArgs != rhs.typeArgs {return false}
+    if lhs.iterator != rhs.iterator {return false}
+    if lhs.`default` != rhs.`default` {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -20158,6 +20393,29 @@ extension Clarifai_Api_ModelTypeField.ModelTypeFieldType: SwiftProtobuf._ProtoNa
     20: .same(proto: "DATASET_VERSION"),
     21: .same(proto: "ENCRYPTED_STRING"),
     22: .same(proto: "CHECKPOINT_MODEL"),
+  ]
+}
+
+extension Clarifai_Api_ModelTypeField.DataType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "NOT_SET"),
+    1: .same(proto: "STR"),
+    2: .same(proto: "BYTES"),
+    3: .same(proto: "INT"),
+    4: .same(proto: "FLOAT"),
+    5: .same(proto: "BOOL"),
+    6: .same(proto: "NDARRAY"),
+    7: .same(proto: "JSON_DATA"),
+    8: .same(proto: "TEXT"),
+    9: .same(proto: "IMAGE"),
+    10: .same(proto: "CONCEPT"),
+    11: .same(proto: "REGION"),
+    12: .same(proto: "FRAME"),
+    13: .same(proto: "AUDIO"),
+    14: .same(proto: "VIDEO"),
+    20: .same(proto: "NAMED_FIELDS"),
+    21: .same(proto: "TUPLE"),
+    22: .same(proto: "LIST"),
   ]
 }
 
@@ -20368,6 +20626,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     23: .standard(proto: "train_log"),
     24: .standard(proto: "inference_compute_info"),
     25: .standard(proto: "build_info"),
+    26: .standard(proto: "method_signature"),
   ]
 
   fileprivate class _StorageClass {
@@ -20393,6 +20652,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     var _trainLog: String = String()
     var _inferenceComputeInfo: Clarifai_Api_ComputeInfo? = nil
     var _buildInfo: Clarifai_Api_BuildInfo? = nil
+    var _methodSignature: [Clarifai_Api_MethodSignature] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -20421,6 +20681,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       _trainLog = source._trainLog
       _inferenceComputeInfo = source._inferenceComputeInfo
       _buildInfo = source._buildInfo
+      _methodSignature = source._methodSignature
     }
   }
 
@@ -20461,6 +20722,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         case 23: try { try decoder.decodeSingularStringField(value: &_storage._trainLog) }()
         case 24: try { try decoder.decodeSingularMessageField(value: &_storage._inferenceComputeInfo) }()
         case 25: try { try decoder.decodeSingularMessageField(value: &_storage._buildInfo) }()
+        case 26: try { try decoder.decodeRepeatedMessageField(value: &_storage._methodSignature) }()
         default: break
         }
       }
@@ -20539,6 +20801,9 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       try { if let v = _storage._buildInfo {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
       } }()
+      if !_storage._methodSignature.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._methodSignature, fieldNumber: 26)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20570,10 +20835,67 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         if _storage._trainLog != rhs_storage._trainLog {return false}
         if _storage._inferenceComputeInfo != rhs_storage._inferenceComputeInfo {return false}
         if _storage._buildInfo != rhs_storage._buildInfo {return false}
+        if _storage._methodSignature != rhs_storage._methodSignature {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MethodSignature: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MethodSignature"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "name"),
+    2: .standard(proto: "method_type"),
+    3: .same(proto: "description"),
+    4: .standard(proto: "input_fields"),
+    5: .standard(proto: "output_fields"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.methodType) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.inputFields) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.outputFields) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
+    }
+    if self.methodType != .unknown {
+      try visitor.visitSingularEnumField(value: self.methodType, fieldNumber: 2)
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 3)
+    }
+    if !self.inputFields.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.inputFields, fieldNumber: 4)
+    }
+    if !self.outputFields.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.outputFields, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MethodSignature, rhs: Clarifai_Api_MethodSignature) -> Bool {
+    if lhs.name != rhs.name {return false}
+    if lhs.methodType != rhs.methodType {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs.inputFields != rhs.inputFields {return false}
+    if lhs.outputFields != rhs.outputFields {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
