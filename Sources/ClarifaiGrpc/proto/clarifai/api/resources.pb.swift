@@ -6063,9 +6063,9 @@ public struct Clarifai_Api_ModelVersion {
   public mutating func clearBuildInfo() {_uniqueStorage()._buildInfo = nil}
 
   /// Model signature information for the model version
-  public var methodSignature: [Clarifai_Api_MethodSignature] {
-    get {return _storage._methodSignature}
-    set {_uniqueStorage()._methodSignature = newValue}
+  public var methodSignatures: [Clarifai_Api_MethodSignature] {
+    get {return _storage._methodSignatures}
+    set {_uniqueStorage()._methodSignatures = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -20626,7 +20626,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     23: .standard(proto: "train_log"),
     24: .standard(proto: "inference_compute_info"),
     25: .standard(proto: "build_info"),
-    26: .standard(proto: "method_signature"),
+    26: .standard(proto: "method_signatures"),
   ]
 
   fileprivate class _StorageClass {
@@ -20652,7 +20652,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     var _trainLog: String = String()
     var _inferenceComputeInfo: Clarifai_Api_ComputeInfo? = nil
     var _buildInfo: Clarifai_Api_BuildInfo? = nil
-    var _methodSignature: [Clarifai_Api_MethodSignature] = []
+    var _methodSignatures: [Clarifai_Api_MethodSignature] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -20681,7 +20681,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       _trainLog = source._trainLog
       _inferenceComputeInfo = source._inferenceComputeInfo
       _buildInfo = source._buildInfo
-      _methodSignature = source._methodSignature
+      _methodSignatures = source._methodSignatures
     }
   }
 
@@ -20722,7 +20722,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         case 23: try { try decoder.decodeSingularStringField(value: &_storage._trainLog) }()
         case 24: try { try decoder.decodeSingularMessageField(value: &_storage._inferenceComputeInfo) }()
         case 25: try { try decoder.decodeSingularMessageField(value: &_storage._buildInfo) }()
-        case 26: try { try decoder.decodeRepeatedMessageField(value: &_storage._methodSignature) }()
+        case 26: try { try decoder.decodeRepeatedMessageField(value: &_storage._methodSignatures) }()
         default: break
         }
       }
@@ -20801,8 +20801,8 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       try { if let v = _storage._buildInfo {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
       } }()
-      if !_storage._methodSignature.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._methodSignature, fieldNumber: 26)
+      if !_storage._methodSignatures.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._methodSignatures, fieldNumber: 26)
       }
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -20835,7 +20835,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         if _storage._trainLog != rhs_storage._trainLog {return false}
         if _storage._inferenceComputeInfo != rhs_storage._inferenceComputeInfo {return false}
         if _storage._buildInfo != rhs_storage._buildInfo {return false}
-        if _storage._methodSignature != rhs_storage._methodSignature {return false}
+        if _storage._methodSignatures != rhs_storage._methodSignatures {return false}
         return true
       }
       if !storagesAreEqual {return false}

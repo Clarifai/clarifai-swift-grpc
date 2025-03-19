@@ -589,6 +589,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case featureflagConfigNotFound // = 62000
   case featureflagInvalidArgument // = 62001
   case featureflagBlocked // = 62002
+  case featureflagNotFound // = 62003
 
   /// Maintenance status code
   case maintenanceSuccess // = 63000
@@ -1033,6 +1034,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 62000: self = .featureflagConfigNotFound
     case 62001: self = .featureflagInvalidArgument
     case 62002: self = .featureflagBlocked
+    case 62003: self = .featureflagNotFound
     case 63000: self = .maintenanceSuccess
     case 63001: self = .maintenanceFailed
     case 64000: self = .jobQueued
@@ -1427,6 +1429,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .featureflagConfigNotFound: return 62000
     case .featureflagInvalidArgument: return 62001
     case .featureflagBlocked: return 62002
+    case .featureflagNotFound: return 62003
     case .maintenanceSuccess: return 63000
     case .maintenanceFailed: return 63001
     case .jobQueued: return 64000
@@ -1826,6 +1829,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .featureflagConfigNotFound,
     .featureflagInvalidArgument,
     .featureflagBlocked,
+    .featureflagNotFound,
     .maintenanceSuccess,
     .maintenanceFailed,
     .datasetVersionPending,
@@ -2223,6 +2227,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     62000: .same(proto: "FEATUREFLAG_CONFIG_NOT_FOUND"),
     62001: .same(proto: "FEATUREFLAG_INVALID_ARGUMENT"),
     62002: .same(proto: "FEATUREFLAG_BLOCKED"),
+    62003: .same(proto: "FEATUREFLAG_NOT_FOUND"),
     63000: .same(proto: "MAINTENANCE_SUCCESS"),
     63001: .same(proto: "MAINTENANCE_FAILED"),
     64000: .same(proto: "JOB_QUEUED"),
