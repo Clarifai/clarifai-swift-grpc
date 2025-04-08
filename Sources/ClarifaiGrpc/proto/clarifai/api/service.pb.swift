@@ -3408,61 +3408,51 @@ public struct Clarifai_Api_PostModelOutputsRequest {
   // methods supported on all messages.
 
   public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _storage._userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_uniqueStorage()._userAppID = newValue}
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
   }
   /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return _storage._userAppID != nil}
+  public var hasUserAppID: Bool {return self._userAppID != nil}
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {_uniqueStorage()._userAppID = nil}
+  public mutating func clearUserAppID() {self._userAppID = nil}
 
-  public var modelID: String {
-    get {return _storage._modelID}
-    set {_uniqueStorage()._modelID = newValue}
-  }
+  public var modelID: String = String()
 
-  public var versionID: String {
-    get {return _storage._versionID}
-    set {_uniqueStorage()._versionID = newValue}
-  }
+  public var versionID: String = String()
 
-  public var inputs: [Clarifai_Api_Input] {
-    get {return _storage._inputs}
-    set {_uniqueStorage()._inputs = newValue}
-  }
+  public var inputs: [Clarifai_Api_Input] = []
 
   /// This allows you to specify config options for the model such as
   /// the language which appear's in the model's output_info.
   public var model: Clarifai_Api_Model {
-    get {return _storage._model ?? Clarifai_Api_Model()}
-    set {_uniqueStorage()._model = newValue}
+    get {return _model ?? Clarifai_Api_Model()}
+    set {_model = newValue}
   }
   /// Returns true if `model` has been explicitly set.
-  public var hasModel: Bool {return _storage._model != nil}
+  public var hasModel: Bool {return self._model != nil}
   /// Clears the value of `model`. Subsequent reads from it will return its default value.
-  public mutating func clearModel() {_uniqueStorage()._model = nil}
+  public mutating func clearModel() {self._model = nil}
 
   /// Allow filtering of prediction requests down to specific Nodepools, Deployments or Runners
   public var runnerSelector: Clarifai_Api_RunnerSelector {
-    get {return _storage._runnerSelector ?? Clarifai_Api_RunnerSelector()}
-    set {_uniqueStorage()._runnerSelector = newValue}
+    get {return _runnerSelector ?? Clarifai_Api_RunnerSelector()}
+    set {_runnerSelector = newValue}
   }
   /// Returns true if `runnerSelector` has been explicitly set.
-  public var hasRunnerSelector: Bool {return _storage._runnerSelector != nil}
+  public var hasRunnerSelector: Bool {return self._runnerSelector != nil}
   /// Clears the value of `runnerSelector`. Subsequent reads from it will return its default value.
-  public mutating func clearRunnerSelector() {_uniqueStorage()._runnerSelector = nil}
+  public mutating func clearRunnerSelector() {self._runnerSelector = nil}
 
   /// Configure the prediction cache to avoid expensive compute for predict requests
-  public var usePredictCache: Bool {
-    get {return _storage._usePredictCache}
-    set {_uniqueStorage()._usePredictCache = newValue}
-  }
+  public var usePredictCache: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _model: Clarifai_Api_Model? = nil
+  fileprivate var _runnerSelector: Clarifai_Api_RunnerSelector? = nil
 }
 
 /// Listing the inputs that went into training this model.
@@ -10549,6 +10539,7 @@ public struct Clarifai_Api_PostInputsDataSourcesRequest {
   public var callBackURL: String = String()
 
   /// Personal Access Token to the application to which inputs are added
+  /// Deprecated: No need to send app_pat, it will be generated internally if not present
   public var appPat: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -12098,7 +12089,10 @@ public struct Clarifai_Api_PostWorkflowVersionEvaluationsRequest {
   /// - ground_truth_dataset_id
   /// - ground_truth_dataset_version_id
   /// - id
+  /// - target_node_id
   public var workflowVersionEvaluations: [Clarifai_Api_WorkflowVersionEvaluation] = []
+
+  public var runnerSelectors: [Clarifai_Api_RunnerSelector] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -17258,105 +17252,61 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     7: .standard(proto: "use_predict_cache"),
   ]
 
-  fileprivate class _StorageClass {
-    var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-    var _modelID: String = String()
-    var _versionID: String = String()
-    var _inputs: [Clarifai_Api_Input] = []
-    var _model: Clarifai_Api_Model? = nil
-    var _runnerSelector: Clarifai_Api_RunnerSelector? = nil
-    var _usePredictCache: Bool = false
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _userAppID = source._userAppID
-      _modelID = source._modelID
-      _versionID = source._versionID
-      _inputs = source._inputs
-      _model = source._model
-      _runnerSelector = source._runnerSelector
-      _usePredictCache = source._usePredictCache
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._userAppID) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._modelID) }()
-        case 3: try { try decoder.decodeSingularStringField(value: &_storage._versionID) }()
-        case 4: try { try decoder.decodeRepeatedMessageField(value: &_storage._inputs) }()
-        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._model) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._runnerSelector) }()
-        case 7: try { try decoder.decodeSingularBoolField(value: &_storage._usePredictCache) }()
-        default: break
-        }
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.versionID) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.inputs) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._model) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._runnerSelector) }()
+      case 7: try { try decoder.decodeSingularBoolField(value: &self.usePredictCache) }()
+      default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._userAppID {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-      } }()
-      if !_storage._modelID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._modelID, fieldNumber: 2)
-      }
-      if !_storage._versionID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._versionID, fieldNumber: 3)
-      }
-      if !_storage._inputs.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._inputs, fieldNumber: 4)
-      }
-      try { if let v = _storage._model {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-      } }()
-      try { if let v = _storage._runnerSelector {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-      } }()
-      if _storage._usePredictCache != false {
-        try visitor.visitSingularBoolField(value: _storage._usePredictCache, fieldNumber: 7)
-      }
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.modelID.isEmpty {
+      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
+    }
+    if !self.versionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.versionID, fieldNumber: 3)
+    }
+    if !self.inputs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.inputs, fieldNumber: 4)
+    }
+    try { if let v = self._model {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
+    try { if let v = self._runnerSelector {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
+    if self.usePredictCache != false {
+      try visitor.visitSingularBoolField(value: self.usePredictCache, fieldNumber: 7)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostModelOutputsRequest, rhs: Clarifai_Api_PostModelOutputsRequest) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._userAppID != rhs_storage._userAppID {return false}
-        if _storage._modelID != rhs_storage._modelID {return false}
-        if _storage._versionID != rhs_storage._versionID {return false}
-        if _storage._inputs != rhs_storage._inputs {return false}
-        if _storage._model != rhs_storage._model {return false}
-        if _storage._runnerSelector != rhs_storage._runnerSelector {return false}
-        if _storage._usePredictCache != rhs_storage._usePredictCache {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.modelID != rhs.modelID {return false}
+    if lhs.versionID != rhs.versionID {return false}
+    if lhs.inputs != rhs.inputs {return false}
+    if lhs._model != rhs._model {return false}
+    if lhs._runnerSelector != rhs._runnerSelector {return false}
+    if lhs.usePredictCache != rhs.usePredictCache {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -31284,6 +31234,7 @@ extension Clarifai_Api_PostWorkflowVersionEvaluationsRequest: SwiftProtobuf.Mess
     2: .standard(proto: "workflow_id"),
     3: .standard(proto: "workflow_version_id"),
     4: .standard(proto: "workflow_version_evaluations"),
+    5: .standard(proto: "runner_selectors"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -31296,6 +31247,7 @@ extension Clarifai_Api_PostWorkflowVersionEvaluationsRequest: SwiftProtobuf.Mess
       case 2: try { try decoder.decodeSingularStringField(value: &self.workflowID) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.workflowVersionID) }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.workflowVersionEvaluations) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.runnerSelectors) }()
       default: break
       }
     }
@@ -31318,6 +31270,9 @@ extension Clarifai_Api_PostWorkflowVersionEvaluationsRequest: SwiftProtobuf.Mess
     if !self.workflowVersionEvaluations.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.workflowVersionEvaluations, fieldNumber: 4)
     }
+    if !self.runnerSelectors.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.runnerSelectors, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -31326,6 +31281,7 @@ extension Clarifai_Api_PostWorkflowVersionEvaluationsRequest: SwiftProtobuf.Mess
     if lhs.workflowID != rhs.workflowID {return false}
     if lhs.workflowVersionID != rhs.workflowVersionID {return false}
     if lhs.workflowVersionEvaluations != rhs.workflowVersionEvaluations {return false}
+    if lhs.runnerSelectors != rhs.runnerSelectors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

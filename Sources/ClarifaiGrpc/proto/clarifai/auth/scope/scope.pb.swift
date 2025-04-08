@@ -316,6 +316,11 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case logEntriesGet // = 151
   case workflowVersionEvaluationsGet // = 152
   case workflowVersionEvaluationsAdd // = 153
+
+  /// Pipelines feature is in development, this shouldn't be exposed yet.
+  /// TODO: Expose this scope when the feature is ready.
+  case pipelineGet // = 154
+  case pipelineAdd // = 155
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -428,6 +433,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 151: self = .logEntriesGet
     case 152: self = .workflowVersionEvaluationsGet
     case 153: self = .workflowVersionEvaluationsAdd
+    case 154: self = .pipelineGet
+    case 155: self = .pipelineAdd
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -538,6 +545,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .logEntriesGet: return 151
     case .workflowVersionEvaluationsGet: return 152
     case .workflowVersionEvaluationsAdd: return 153
+    case .pipelineGet: return 154
+    case .pipelineAdd: return 155
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -653,6 +662,8 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .logEntriesGet,
     .workflowVersionEvaluationsGet,
     .workflowVersionEvaluationsAdd,
+    .pipelineGet,
+    .pipelineAdd,
   ]
 }
 
@@ -860,6 +871,8 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     151: .same(proto: "LogEntries_Get"),
     152: .same(proto: "WorkflowVersionEvaluations_Get"),
     153: .same(proto: "WorkflowVersionEvaluations_Add"),
+    154: .same(proto: "Pipeline_Get"),
+    155: .same(proto: "Pipeline_Add"),
   ]
 }
 
