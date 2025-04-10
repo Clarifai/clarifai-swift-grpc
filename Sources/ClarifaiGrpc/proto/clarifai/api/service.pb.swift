@@ -11626,6 +11626,10 @@ public struct Clarifai_Api_ListNodepoolsRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Only return nodepools that are actively being used (having runners with
+  /// replicas >= threshold and pipeline versions scheduled to run)
+  public var activeUsage: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -30431,6 +30435,7 @@ extension Clarifai_Api_ListNodepoolsRequest: SwiftProtobuf.Message, SwiftProtobu
     2: .standard(proto: "compute_cluster_id"),
     3: .same(proto: "page"),
     4: .standard(proto: "per_page"),
+    5: .standard(proto: "active_usage"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -30443,6 +30448,7 @@ extension Clarifai_Api_ListNodepoolsRequest: SwiftProtobuf.Message, SwiftProtobu
       case 2: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self.activeUsage) }()
       default: break
       }
     }
@@ -30465,6 +30471,9 @@ extension Clarifai_Api_ListNodepoolsRequest: SwiftProtobuf.Message, SwiftProtobu
     if self.perPage != 0 {
       try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 4)
     }
+    if self.activeUsage != false {
+      try visitor.visitSingularBoolField(value: self.activeUsage, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -30473,6 +30482,7 @@ extension Clarifai_Api_ListNodepoolsRequest: SwiftProtobuf.Message, SwiftProtobu
     if lhs.computeClusterID != rhs.computeClusterID {return false}
     if lhs.page != rhs.page {return false}
     if lhs.perPage != rhs.perPage {return false}
+    if lhs.activeUsage != rhs.activeUsage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
