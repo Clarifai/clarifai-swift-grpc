@@ -4814,6 +4814,18 @@ public struct Clarifai_Api_Model {
     set {_uniqueStorage()._billingType = newValue}
   }
 
+  /// Whether the model should be featured, and if so, the order in which it should be featured.
+  /// The order is relative to other models that are also featured.
+  /// Models with a higher order will be featured first.
+  public var featuredOrder: SwiftProtobuf.Google_Protobuf_Int32Value {
+    get {return _storage._featuredOrder ?? SwiftProtobuf.Google_Protobuf_Int32Value()}
+    set {_uniqueStorage()._featuredOrder = newValue}
+  }
+  /// Returns true if `featuredOrder` has been explicitly set.
+  public var hasFeaturedOrder: Bool {return _storage._featuredOrder != nil}
+  /// Clears the value of `featuredOrder`. Subsequent reads from it will return its default value.
+  public mutating func clearFeaturedOrder() {_uniqueStorage()._featuredOrder = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Source of Model
@@ -19139,6 +19151,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     37: .same(proto: "creator"),
     38: .standard(proto: "version_count"),
     40: .standard(proto: "billing_type"),
+    41: .standard(proto: "featured_order"),
   ]
 
   fileprivate class _StorageClass {
@@ -19174,6 +19187,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _creator: String = String()
     var _versionCount: Int32 = 0
     var _billingType: Clarifai_Api_Model.BillingType = .unknown
+    var _featuredOrder: SwiftProtobuf.Google_Protobuf_Int32Value? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -19212,6 +19226,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _creator = source._creator
       _versionCount = source._versionCount
       _billingType = source._billingType
+      _featuredOrder = source._featuredOrder
     }
   }
 
@@ -19262,6 +19277,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 37: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
         case 38: try { try decoder.decodeSingularInt32Field(value: &_storage._versionCount) }()
         case 40: try { try decoder.decodeSingularEnumField(value: &_storage._billingType) }()
+        case 41: try { try decoder.decodeSingularMessageField(value: &_storage._featuredOrder) }()
         default: break
         }
       }
@@ -19370,6 +19386,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if _storage._billingType != .unknown {
         try visitor.visitSingularEnumField(value: _storage._billingType, fieldNumber: 40)
       }
+      try { if let v = _storage._featuredOrder {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 41)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -19411,6 +19430,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._creator != rhs_storage._creator {return false}
         if _storage._versionCount != rhs_storage._versionCount {return false}
         if _storage._billingType != rhs_storage._billingType {return false}
+        if _storage._featuredOrder != rhs_storage._featuredOrder {return false}
         return true
       }
       if !storagesAreEqual {return false}
