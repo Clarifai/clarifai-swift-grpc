@@ -2001,7 +2001,7 @@ extension Clarifai_Api_V2ClientProtocol {
   }
 
   /// TODO(zeiler): will need to
-  /// Single request but streaming resopnses.
+  /// Single request but streaming responses.
   ///
   /// - Parameters:
   ///   - request: Request to send to GenerateModelOutputs.
@@ -6790,7 +6790,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiOutputResponse>
 
   /// TODO(zeiler): will need to
-  /// Single request but streaming resopnses.
+  /// Single request but streaming responses.
   func generateModelOutputs(request: Clarifai_Api_PostModelOutputsRequest, context: StreamingResponseCallContext<Clarifai_Api_MultiOutputResponse>) -> EventLoopFuture<GRPCStatus>
 
   /// Stream of requests and stream of responses

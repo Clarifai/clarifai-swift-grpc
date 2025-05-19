@@ -338,6 +338,17 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// Compute plane related codes 261xx
   case computePlaneMetricsInvalidRequest // = 26100
 
+  /// PipelineStep related codes 262xx
+  case pipelineStepDoesNotExist // = 26200
+  case pipelineStepInvalidArgument // = 26201
+  case pipelineStepInvalidRequest // = 26202
+  case pipelineStepUploading // = 26203
+  case pipelineStepUploadingFailed // = 26204
+  case pipelineStepBuilding // = 26205
+  case pipelineStepBuildingFailed // = 26206
+  case pipelineStepBuildUnexpectedError // = 26207
+  case pipelineStepReady // = 26208
+
   /// Input:Image related 30xxx
   case inputSuccess // = 30000
 
@@ -661,6 +672,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Billing related issues: 69xxx
   case billingInvalidInfo // = 69000
+  case billingMissingTokens // = 69001
 
   /// Logs related issues: 70000;
   case logEntriesInvalidRequest // = 70000
@@ -680,6 +692,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case internalAwsUncategorized // = 98016
   case internalAzureUncategorized // = 98017
   case internalVectordbUncategorized // = 98018
+  case internalOracleUncategorized // = 98019
+  case internalVultrUncategorized // = 98020
 
   /// Uncategorized: 99xxx: move off as soon as known
   case connUncategorized // = 99001
@@ -866,6 +880,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26001: self = .instanceTypeInvalidArgument
     case 26002: self = .instanceTypeInvalidRequest
     case 26100: self = .computePlaneMetricsInvalidRequest
+    case 26200: self = .pipelineStepDoesNotExist
+    case 26201: self = .pipelineStepInvalidArgument
+    case 26202: self = .pipelineStepInvalidRequest
+    case 26203: self = .pipelineStepUploading
+    case 26204: self = .pipelineStepUploadingFailed
+    case 26205: self = .pipelineStepBuilding
+    case 26206: self = .pipelineStepBuildingFailed
+    case 26207: self = .pipelineStepBuildUnexpectedError
+    case 26208: self = .pipelineStepReady
     case 30000: self = .inputSuccess
     case 30001: self = .inputPending
     case 30002: self = .inputFailed
@@ -1068,6 +1091,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 68005: self = .uploadCanceled
     case 68006: self = .uploadConflict
     case 69000: self = .billingInvalidInfo
+    case 69001: self = .billingMissingTokens
     case 70000: self = .logEntriesInvalidRequest
     case 90400: self = .badRequest
     case 90500: self = .serverError
@@ -1085,6 +1109,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 98016: self = .internalAwsUncategorized
     case 98017: self = .internalAzureUncategorized
     case 98018: self = .internalVectordbUncategorized
+    case 98019: self = .internalOracleUncategorized
+    case 98020: self = .internalVultrUncategorized
     case 99001: self = .connUncategorized
     case 99002: self = .modelUncategorized
     case 99003: self = .inputUncategorized
@@ -1261,6 +1287,15 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .instanceTypeInvalidArgument: return 26001
     case .instanceTypeInvalidRequest: return 26002
     case .computePlaneMetricsInvalidRequest: return 26100
+    case .pipelineStepDoesNotExist: return 26200
+    case .pipelineStepInvalidArgument: return 26201
+    case .pipelineStepInvalidRequest: return 26202
+    case .pipelineStepUploading: return 26203
+    case .pipelineStepUploadingFailed: return 26204
+    case .pipelineStepBuilding: return 26205
+    case .pipelineStepBuildingFailed: return 26206
+    case .pipelineStepBuildUnexpectedError: return 26207
+    case .pipelineStepReady: return 26208
     case .inputSuccess: return 30000
     case .inputPending: return 30001
     case .inputFailed: return 30002
@@ -1463,6 +1498,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .uploadCanceled: return 68005
     case .uploadConflict: return 68006
     case .billingInvalidInfo: return 69000
+    case .billingMissingTokens: return 69001
     case .logEntriesInvalidRequest: return 70000
     case .badRequest: return 90400
     case .serverError: return 90500
@@ -1480,6 +1516,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .internalAwsUncategorized: return 98016
     case .internalAzureUncategorized: return 98017
     case .internalVectordbUncategorized: return 98018
+    case .internalOracleUncategorized: return 98019
+    case .internalVultrUncategorized: return 98020
     case .connUncategorized: return 99001
     case .modelUncategorized: return 99002
     case .inputUncategorized: return 99003
@@ -1661,6 +1699,15 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .instanceTypeInvalidArgument,
     .instanceTypeInvalidRequest,
     .computePlaneMetricsInvalidRequest,
+    .pipelineStepDoesNotExist,
+    .pipelineStepInvalidArgument,
+    .pipelineStepInvalidRequest,
+    .pipelineStepUploading,
+    .pipelineStepUploadingFailed,
+    .pipelineStepBuilding,
+    .pipelineStepBuildingFailed,
+    .pipelineStepBuildUnexpectedError,
+    .pipelineStepReady,
     .inputSuccess,
     .inputPending,
     .inputFailed,
@@ -1863,6 +1910,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .uploadCanceled,
     .uploadConflict,
     .billingInvalidInfo,
+    .billingMissingTokens,
     .logEntriesInvalidRequest,
     .internalServerIssue,
     .internalFetchingIssue,
@@ -1878,6 +1926,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .internalAwsUncategorized,
     .internalAzureUncategorized,
     .internalVectordbUncategorized,
+    .internalOracleUncategorized,
+    .internalVultrUncategorized,
     .connUncategorized,
     .modelUncategorized,
     .inputUncategorized,
@@ -2059,6 +2109,15 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26001: .same(proto: "INSTANCE_TYPE_INVALID_ARGUMENT"),
     26002: .same(proto: "INSTANCE_TYPE_INVALID_REQUEST"),
     26100: .same(proto: "COMPUTE_PLANE_METRICS_INVALID_REQUEST"),
+    26200: .same(proto: "PIPELINE_STEP_DOES_NOT_EXIST"),
+    26201: .same(proto: "PIPELINE_STEP_INVALID_ARGUMENT"),
+    26202: .same(proto: "PIPELINE_STEP_INVALID_REQUEST"),
+    26203: .same(proto: "PIPELINE_STEP_UPLOADING"),
+    26204: .same(proto: "PIPELINE_STEP_UPLOADING_FAILED"),
+    26205: .same(proto: "PIPELINE_STEP_BUILDING"),
+    26206: .same(proto: "PIPELINE_STEP_BUILDING_FAILED"),
+    26207: .same(proto: "PIPELINE_STEP_BUILD_UNEXPECTED_ERROR"),
+    26208: .same(proto: "PIPELINE_STEP_READY"),
     30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
     30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
     30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),
@@ -2261,6 +2320,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     68005: .same(proto: "UPLOAD_CANCELED"),
     68006: .same(proto: "UPLOAD_CONFLICT"),
     69000: .same(proto: "BILLING_INVALID_INFO"),
+    69001: .same(proto: "BILLING_MISSING_TOKENS"),
     70000: .same(proto: "LOG_ENTRIES_INVALID_REQUEST"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
@@ -2278,6 +2338,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     98016: .same(proto: "INTERNAL_AWS_UNCATEGORIZED"),
     98017: .same(proto: "INTERNAL_AZURE_UNCATEGORIZED"),
     98018: .same(proto: "INTERNAL_VECTORDB_UNCATEGORIZED"),
+    98019: .same(proto: "INTERNAL_ORACLE_UNCATEGORIZED"),
+    98020: .same(proto: "INTERNAL_VULTR_UNCATEGORIZED"),
     99001: .same(proto: "CONN_UNCATEGORIZED"),
     99002: .same(proto: "MODEL_UNCATEGORIZED"),
     99003: .same(proto: "INPUT_UNCATEGORIZED"),

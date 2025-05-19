@@ -3446,6 +3446,9 @@ public struct Clarifai_Api_PostModelOutputsRequest {
   /// Configure the prediction cache to avoid expensive compute for predict requests
   public var usePredictCache: Bool = false
 
+  /// Configuration to provide logs summarization when request errors out
+  public var enableLogSummaryOnError: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -3668,11 +3671,18 @@ public struct Clarifai_Api_ListKeysRequest {
   /// to 128.
   public var perPage: UInt32 = 0
 
+  /// Filtering options:
+  /// If true, only return keys that have not expired.
   public var notExpired: Bool = false
 
+  /// Only return keys that have the listed scopes.
   public var scopes: [String] = []
 
+  /// Only return keys that have the listed endpoints.
   public var endpoints: [String] = []
+
+  /// Only return keys with the listed type.
+  public var type: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4111,6 +4121,12 @@ public struct Clarifai_Api_ListModelsRequest {
   public var creator: String {
     get {return _storage._creator}
     set {_uniqueStorage()._creator = newValue}
+  }
+
+  /// Filter by model versions runners with replicas >= min_replicas.
+  public var minReplicas: UInt32 {
+    get {return _storage._minReplicas}
+    set {_uniqueStorage()._minReplicas = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -4677,6 +4693,8 @@ public struct Clarifai_Api_SingleModelResponse {
   /// Clears the value of `model`. Subsequent reads from it will return its default value.
   public mutating func clearModel() {self._model = nil}
 
+  public var workflowCount: Int32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4839,6 +4857,9 @@ public struct Clarifai_Api_ListModelVersionsRequest {
     }
     set {sortBy = .sortByCreatedAt(newValue)}
   }
+
+  /// Filter by model versions runners with replicas >= min_replicas.
+  public var minReplicas: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -6012,41 +6033,36 @@ public struct Clarifai_Api_MultiModelTypeResponse {
 
   /// Status of the response.
   public var status: Clarifai_Api_Status_Status {
-    get {return _storage._status ?? Clarifai_Api_Status_Status()}
-    set {_uniqueStorage()._status = newValue}
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return _storage._status != nil}
+  public var hasStatus: Bool {return self._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {_uniqueStorage()._status = nil}
+  public mutating func clearStatus() {self._status = nil}
 
   /// List of ModelType objects.
-  public var modelTypes: [Clarifai_Api_ModelType] {
-    get {return _storage._modelTypes}
-    set {_uniqueStorage()._modelTypes = newValue}
-  }
+  public var modelTypes: [Clarifai_Api_ModelType] = []
 
   /// List of model importers
   public var modelImporters: Clarifai_Api_ModelTypeField {
-    get {return _storage._modelImporters ?? Clarifai_Api_ModelTypeField()}
-    set {_uniqueStorage()._modelImporters = newValue}
+    get {return _modelImporters ?? Clarifai_Api_ModelTypeField()}
+    set {_modelImporters = newValue}
   }
   /// Returns true if `modelImporters` has been explicitly set.
-  public var hasModelImporters: Bool {return _storage._modelImporters != nil}
+  public var hasModelImporters: Bool {return self._modelImporters != nil}
   /// Clears the value of `modelImporters`. Subsequent reads from it will return its default value.
-  public mutating func clearModelImporters() {_uniqueStorage()._modelImporters = nil}
+  public mutating func clearModelImporters() {self._modelImporters = nil}
 
   /// Triton model envs that can be used for model upload
-  public var tritonCondaEnvsInfo: [Clarifai_Api_TritonCondaEnvInfo] {
-    get {return _storage._tritonCondaEnvsInfo}
-    set {_uniqueStorage()._tritonCondaEnvsInfo = newValue}
-  }
+  public var tritonCondaEnvsInfo: [Clarifai_Api_TritonCondaEnvInfo] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _modelImporters: Clarifai_Api_ModelTypeField? = nil
 }
 
 /// GetModelVersionInputExampleRequest
@@ -6247,11 +6263,22 @@ public struct Clarifai_Api_MultiOutputResponse {
   /// For each input processed during model prediction we create one output.
   public var outputs: [Clarifai_Api_Output] = []
 
+  /// Information on where the computation is executed down to specific Deployment, Nodepool and ComputeCluster
+  public var runnerSelector: Clarifai_Api_RunnerSelector {
+    get {return _runnerSelector ?? Clarifai_Api_RunnerSelector()}
+    set {_runnerSelector = newValue}
+  }
+  /// Returns true if `runnerSelector` has been explicitly set.
+  public var hasRunnerSelector: Bool {return self._runnerSelector != nil}
+  /// Clears the value of `runnerSelector`. Subsequent reads from it will return its default value.
+  public mutating func clearRunnerSelector() {self._runnerSelector = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _runnerSelector: Clarifai_Api_RunnerSelector? = nil
 }
 
 public struct Clarifai_Api_MultiLogEntryResponse {
@@ -11829,6 +11856,9 @@ public struct Clarifai_Api_ListDeploymentsRequest {
   /// (optional URL parameter) WorkflowVersion IDs. To list all deployments for the workflow version
   public var workflowVersionIds: [String] = []
 
+  /// (optional URL parameter) ComputeCluster ID. To list all deployed workers in a ComputeCluster
+  public var computeClusterID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -12089,11 +12119,12 @@ public struct Clarifai_Api_PostWorkflowVersionEvaluationsRequest {
   public var workflowVersionID: String = String()
 
   /// ########## Supported fields ##########
-  /// - evaluation_template_id
-  /// - ground_truth_dataset_id
-  /// - ground_truth_dataset_version_id
+  /// - ground_truth_dataset_version.app_id
+  /// - ground_truth_dataset_version.dataset_id
+  /// - ground_truth_dataset_version.id
   /// - id
   /// - target_node_id
+  /// - workflow_version_evaluation_template.id
   public var workflowVersionEvaluations: [Clarifai_Api_WorkflowVersionEvaluation] = []
 
   public var runnerSelectors: [Clarifai_Api_RunnerSelector] = []
@@ -12125,8 +12156,8 @@ public struct Clarifai_Api_PatchWorkflowVersionEvaluationsRequest {
 
   /// ########## Supported fields ##########
   /// - id
-  /// - predictions_dataset_id
-  /// - predictions_dataset_version_id
+  /// - predictions_dataset_version.dataset_id
+  /// - predictions_dataset_version.id
   /// - status.code
   /// - status.details
   /// - workflow_evaluation_result.summary.evaluation_metric_values[].evaluation_metric_id
@@ -17254,6 +17285,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     5: .same(proto: "model"),
     6: .standard(proto: "runner_selector"),
     7: .standard(proto: "use_predict_cache"),
+    8: .standard(proto: "enable_log_summary_on_error"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -17269,6 +17301,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
       case 5: try { try decoder.decodeSingularMessageField(value: &self._model) }()
       case 6: try { try decoder.decodeSingularMessageField(value: &self._runnerSelector) }()
       case 7: try { try decoder.decodeSingularBoolField(value: &self.usePredictCache) }()
+      case 8: try { try decoder.decodeSingularBoolField(value: &self.enableLogSummaryOnError) }()
       default: break
       }
     }
@@ -17300,6 +17333,9 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     if self.usePredictCache != false {
       try visitor.visitSingularBoolField(value: self.usePredictCache, fieldNumber: 7)
     }
+    if self.enableLogSummaryOnError != false {
+      try visitor.visitSingularBoolField(value: self.enableLogSummaryOnError, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -17311,6 +17347,7 @@ extension Clarifai_Api_PostModelOutputsRequest: SwiftProtobuf.Message, SwiftProt
     if lhs._model != rhs._model {return false}
     if lhs._runnerSelector != rhs._runnerSelector {return false}
     if lhs.usePredictCache != rhs.usePredictCache {return false}
+    if lhs.enableLogSummaryOnError != rhs.enableLogSummaryOnError {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -17695,6 +17732,7 @@ extension Clarifai_Api_ListKeysRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     4: .standard(proto: "not_expired"),
     5: .same(proto: "scopes"),
     6: .same(proto: "endpoints"),
+    7: .same(proto: "type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -17709,6 +17747,7 @@ extension Clarifai_Api_ListKeysRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 4: try { try decoder.decodeSingularBoolField(value: &self.notExpired) }()
       case 5: try { try decoder.decodeRepeatedStringField(value: &self.scopes) }()
       case 6: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.type) }()
       default: break
       }
     }
@@ -17737,6 +17776,9 @@ extension Clarifai_Api_ListKeysRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if !self.endpoints.isEmpty {
       try visitor.visitRepeatedStringField(value: self.endpoints, fieldNumber: 6)
     }
+    if !self.type.isEmpty {
+      try visitor.visitSingularStringField(value: self.type, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -17747,6 +17789,7 @@ extension Clarifai_Api_ListKeysRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.notExpired != rhs.notExpired {return false}
     if lhs.scopes != rhs.scopes {return false}
     if lhs.endpoints != rhs.endpoints {return false}
+    if lhs.type != rhs.type {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -18149,6 +18192,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     29: .standard(proto: "license_type"),
     30: .same(proto: "source"),
     31: .same(proto: "creator"),
+    33: .standard(proto: "min_replicas"),
   ]
 
   fileprivate class _StorageClass {
@@ -18178,6 +18222,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _licenseType: Clarifai_Api_LicenseType = .unknownLicenseType
     var _source: UInt32 = 0
     var _creator: String = String()
+    var _minReplicas: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -18210,6 +18255,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _licenseType = source._licenseType
       _source = source._source
       _creator = source._creator
+      _minReplicas = source._minReplicas
     }
   }
 
@@ -18293,6 +18339,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         case 29: try { try decoder.decodeSingularEnumField(value: &_storage._licenseType) }()
         case 30: try { try decoder.decodeSingularUInt32Field(value: &_storage._source) }()
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
+        case 33: try { try decoder.decodeSingularUInt32Field(value: &_storage._minReplicas) }()
         default: break
         }
       }
@@ -18406,6 +18453,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       if !_storage._creator.isEmpty {
         try visitor.visitSingularStringField(value: _storage._creator, fieldNumber: 31)
       }
+      if _storage._minReplicas != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._minReplicas, fieldNumber: 33)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -18441,6 +18491,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._licenseType != rhs_storage._licenseType {return false}
         if _storage._source != rhs_storage._source {return false}
         if _storage._creator != rhs_storage._creator {return false}
+        if _storage._minReplicas != rhs_storage._minReplicas {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -19303,6 +19354,7 @@ extension Clarifai_Api_SingleModelResponse: SwiftProtobuf.Message, SwiftProtobuf
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "model"),
+    4: .standard(proto: "workflow_count"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19313,6 +19365,7 @@ extension Clarifai_Api_SingleModelResponse: SwiftProtobuf.Message, SwiftProtobuf
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._model) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self.workflowCount) }()
       default: break
       }
     }
@@ -19329,12 +19382,16 @@ extension Clarifai_Api_SingleModelResponse: SwiftProtobuf.Message, SwiftProtobuf
     try { if let v = self._model {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
+    if self.workflowCount != 0 {
+      try visitor.visitSingularInt32Field(value: self.workflowCount, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_SingleModelResponse, rhs: Clarifai_Api_SingleModelResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._model != rhs._model {return false}
+    if lhs.workflowCount != rhs.workflowCount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -19498,6 +19555,7 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     9: .standard(proto: "sort_by_num_inputs"),
     10: .standard(proto: "sort_by_description"),
     11: .standard(proto: "sort_by_created_at"),
+    12: .standard(proto: "min_replicas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19545,6 +19603,7 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
           self.sortBy = .sortByCreatedAt(v)
         }
       }()
+      case 12: try { try decoder.decodeSingularUInt32Field(value: &self.minReplicas) }()
       default: break
       }
     }
@@ -19595,6 +19654,9 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     }()
     case nil: break
     }
+    if self.minReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.minReplicas, fieldNumber: 12)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -19607,6 +19669,7 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs.trainedOnly != rhs.trainedOnly {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
+    if lhs.minReplicas != rhs.minReplicas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21405,84 +21468,46 @@ extension Clarifai_Api_MultiModelTypeResponse: SwiftProtobuf.Message, SwiftProto
     4: .standard(proto: "triton_conda_envs_info"),
   ]
 
-  fileprivate class _StorageClass {
-    var _status: Clarifai_Api_Status_Status? = nil
-    var _modelTypes: [Clarifai_Api_ModelType] = []
-    var _modelImporters: Clarifai_Api_ModelTypeField? = nil
-    var _tritonCondaEnvsInfo: [Clarifai_Api_TritonCondaEnvInfo] = []
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _status = source._status
-      _modelTypes = source._modelTypes
-      _modelImporters = source._modelImporters
-      _tritonCondaEnvsInfo = source._tritonCondaEnvsInfo
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
-        case 2: try { try decoder.decodeRepeatedMessageField(value: &_storage._modelTypes) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._modelImporters) }()
-        case 4: try { try decoder.decodeRepeatedMessageField(value: &_storage._tritonCondaEnvsInfo) }()
-        default: break
-        }
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.modelTypes) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._modelImporters) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.tritonCondaEnvsInfo) }()
+      default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._status {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-      } }()
-      if !_storage._modelTypes.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._modelTypes, fieldNumber: 2)
-      }
-      try { if let v = _storage._modelImporters {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-      if !_storage._tritonCondaEnvsInfo.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._tritonCondaEnvsInfo, fieldNumber: 4)
-      }
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.modelTypes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.modelTypes, fieldNumber: 2)
+    }
+    try { if let v = self._modelImporters {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    if !self.tritonCondaEnvsInfo.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.tritonCondaEnvsInfo, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiModelTypeResponse, rhs: Clarifai_Api_MultiModelTypeResponse) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._status != rhs_storage._status {return false}
-        if _storage._modelTypes != rhs_storage._modelTypes {return false}
-        if _storage._modelImporters != rhs_storage._modelImporters {return false}
-        if _storage._tritonCondaEnvsInfo != rhs_storage._tritonCondaEnvsInfo {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
+    if lhs._status != rhs._status {return false}
+    if lhs.modelTypes != rhs.modelTypes {return false}
+    if lhs._modelImporters != rhs._modelImporters {return false}
+    if lhs.tritonCondaEnvsInfo != rhs.tritonCondaEnvsInfo {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21821,6 +21846,7 @@ extension Clarifai_Api_MultiOutputResponse: SwiftProtobuf.Message, SwiftProtobuf
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "outputs"),
+    3: .standard(proto: "runner_selector"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -21831,6 +21857,7 @@ extension Clarifai_Api_MultiOutputResponse: SwiftProtobuf.Message, SwiftProtobuf
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.outputs) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._runnerSelector) }()
       default: break
       }
     }
@@ -21847,12 +21874,16 @@ extension Clarifai_Api_MultiOutputResponse: SwiftProtobuf.Message, SwiftProtobuf
     if !self.outputs.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.outputs, fieldNumber: 2)
     }
+    try { if let v = self._runnerSelector {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiOutputResponse, rhs: Clarifai_Api_MultiOutputResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.outputs != rhs.outputs {return false}
+    if lhs._runnerSelector != rhs._runnerSelector {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -30807,6 +30838,7 @@ extension Clarifai_Api_ListDeploymentsRequest: SwiftProtobuf.Message, SwiftProto
     4: .standard(proto: "per_page"),
     5: .standard(proto: "model_version_ids"),
     6: .standard(proto: "workflow_version_ids"),
+    7: .standard(proto: "compute_cluster_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -30821,6 +30853,7 @@ extension Clarifai_Api_ListDeploymentsRequest: SwiftProtobuf.Message, SwiftProto
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
       case 5: try { try decoder.decodeRepeatedStringField(value: &self.modelVersionIds) }()
       case 6: try { try decoder.decodeRepeatedStringField(value: &self.workflowVersionIds) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
       default: break
       }
     }
@@ -30849,6 +30882,9 @@ extension Clarifai_Api_ListDeploymentsRequest: SwiftProtobuf.Message, SwiftProto
     if !self.workflowVersionIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.workflowVersionIds, fieldNumber: 6)
     }
+    if !self.computeClusterID.isEmpty {
+      try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -30859,6 +30895,7 @@ extension Clarifai_Api_ListDeploymentsRequest: SwiftProtobuf.Message, SwiftProto
     if lhs.perPage != rhs.perPage {return false}
     if lhs.modelVersionIds != rhs.modelVersionIds {return false}
     if lhs.workflowVersionIds != rhs.workflowVersionIds {return false}
+    if lhs.computeClusterID != rhs.computeClusterID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
