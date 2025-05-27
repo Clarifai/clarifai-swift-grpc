@@ -35,10 +35,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Resource moved. Respond with Http status 307 and add new Location header to response
   case moved // = 10050
-
-  ///SUCCESS_WARNING_API_DEPRECATED = 10001;
-  ///SUCCESS_WARNING_CLIENT_DEPRECATED = 10002;
   case teapot // = 10060
+
+  /// Request has been accepted. Respond with Http status 202.
+  case accepted // = 10070
 
   /// Clarifai Connection Codes: 11xxx
   case connAccountIssues // = 11000
@@ -348,6 +348,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case pipelineStepBuildingFailed // = 26206
   case pipelineStepBuildUnexpectedError // = 26207
   case pipelineStepReady // = 26208
+  case pipelineStepNotReady // = 26209
 
   /// Input:Image related 30xxx
   case inputSuccess // = 30000
@@ -724,6 +725,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 10040: self = .notImplemented
     case 10050: self = .moved
     case 10060: self = .teapot
+    case 10070: self = .accepted
     case 11000: self = .connAccountIssues
     case 11001: self = .connTokenInvalid
     case 11002: self = .connCredentialsInvalid
@@ -889,6 +891,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26206: self = .pipelineStepBuildingFailed
     case 26207: self = .pipelineStepBuildUnexpectedError
     case 26208: self = .pipelineStepReady
+    case 26209: self = .pipelineStepNotReady
     case 30000: self = .inputSuccess
     case 30001: self = .inputPending
     case 30002: self = .inputFailed
@@ -1131,6 +1134,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .notImplemented: return 10040
     case .moved: return 10050
     case .teapot: return 10060
+    case .accepted: return 10070
     case .connAccountIssues: return 11000
     case .connTokenInvalid: return 11001
     case .connCredentialsInvalid: return 11002
@@ -1296,6 +1300,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .pipelineStepBuildingFailed: return 26206
     case .pipelineStepBuildUnexpectedError: return 26207
     case .pipelineStepReady: return 26208
+    case .pipelineStepNotReady: return 26209
     case .inputSuccess: return 30000
     case .inputPending: return 30001
     case .inputFailed: return 30002
@@ -1543,6 +1548,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .notImplemented,
     .moved,
     .teapot,
+    .accepted,
     .connAccountIssues,
     .connTokenInvalid,
     .connCredentialsInvalid,
@@ -1708,6 +1714,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .pipelineStepBuildingFailed,
     .pipelineStepBuildUnexpectedError,
     .pipelineStepReady,
+    .pipelineStepNotReady,
     .inputSuccess,
     .inputPending,
     .inputFailed,
@@ -1953,6 +1960,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     10040: .same(proto: "NOT_IMPLEMENTED"),
     10050: .same(proto: "MOVED"),
     10060: .same(proto: "TEAPOT"),
+    10070: .same(proto: "ACCEPTED"),
     11000: .same(proto: "CONN_ACCOUNT_ISSUES"),
     11001: .same(proto: "CONN_TOKEN_INVALID"),
     11002: .same(proto: "CONN_CREDENTIALS_INVALID"),
@@ -2118,6 +2126,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26206: .same(proto: "PIPELINE_STEP_BUILDING_FAILED"),
     26207: .same(proto: "PIPELINE_STEP_BUILD_UNEXPECTED_ERROR"),
     26208: .same(proto: "PIPELINE_STEP_READY"),
+    26209: .same(proto: "PIPELINE_STEP_NOT_READY"),
     30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
     30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
     30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),
