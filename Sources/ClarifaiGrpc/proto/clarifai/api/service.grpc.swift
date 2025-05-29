@@ -1271,16 +1271,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
-
-  func getMCP(
-    _ request: Clarifai_Api_MCPRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>
-
-  func postMCP(
-    _ request: Clarifai_Api_MCPRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5888,44 +5878,6 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePatchWorkflowVersionEvaluationsInterceptors() ?? []
     )
   }
-
-  /// The GET request to start an MCP session.
-  /// Currently not supported in our API.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetMCP.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getMCP(
-    _ request: Clarifai_Api_MCPRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetMCP",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetMCPInterceptors() ?? []
-    )
-  }
-
-  /// The POST request for interacting with MCP tools.
-  /// This is the simplest form of MCP tool calls with stateless execution for now.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostMCP.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postMCP(
-    _ request: Clarifai_Api_MCPRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostMCP",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostMCPInterceptors() ?? []
-    )
-  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -6673,12 +6625,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'patchWorkflowVersionEvaluations'.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getMCP'.
-  func makeGetMCPInterceptors() -> [ClientInterceptor<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postMCP'.
-  func makePostMCPInterceptors() -> [ClientInterceptor<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7541,14 +7487,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func listWorkflowVersionEvaluations(request: Clarifai_Api_ListWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 
   func patchWorkflowVersionEvaluations(request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
-
-  /// The GET request to start an MCP session.
-  /// Currently not supported in our API.
-  func getMCP(request: Clarifai_Api_MCPRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleMCPResponse>
-
-  /// The POST request for interacting with MCP tools.
-  /// This is the simplest form of MCP tool calls with stateless execution for now.
-  func postMCP(request: Clarifai_Api_MCPRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleMCPResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9793,24 +9731,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.patchWorkflowVersionEvaluations(request:context:)
       )
 
-    case "GetMCP":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_MCPRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleMCPResponse>(),
-        interceptors: self.interceptors?.makeGetMCPInterceptors() ?? [],
-        userFunction: self.getMCP(request:context:)
-      )
-
-    case "PostMCP":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_MCPRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleMCPResponse>(),
-        interceptors: self.interceptors?.makePostMCPInterceptors() ?? [],
-        userFunction: self.postMCP(request:context:)
-      )
-
     default:
       return nil
     }
@@ -10810,12 +10730,4 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'patchWorkflowVersionEvaluations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getMCP'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetMCPInterceptors() -> [ServerInterceptor<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postMCP'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostMCPInterceptors() -> [ServerInterceptor<Clarifai_Api_MCPRequest, Clarifai_Api_SingleMCPResponse>]
 }
