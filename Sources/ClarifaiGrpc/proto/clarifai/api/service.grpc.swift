@@ -1271,6 +1271,36 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func postPipelineSteps(
+    _ request: Clarifai_Api_PostPipelineStepsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>
+
+  func getPipelineStep(
+    _ request: Clarifai_Api_GetPipelineStepRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetPipelineStepRequest, Clarifai_Api_SinglePipelineStepResponse>
+
+  func listPipelineSteps(
+    _ request: Clarifai_Api_ListPipelineStepsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>
+
+  func postPipelineStepVersionsUpload(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_PostPipelineStepVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostPipelineStepVersionsUploadRequest, Clarifai_Api_PostPipelineStepVersionsUploadResponse>
+
+  func listPipelineStepVersions(
+    _ request: Clarifai_Api_ListPipelineStepVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineStepVersionsRequest, Clarifai_Api_MultiPipelineStepVersionResponse>
+
+  func getPipelineStepVersion(
+    _ request: Clarifai_Api_GetPipelineStepVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5878,6 +5908,121 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makePatchWorkflowVersionEvaluationsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostPipelineSteps
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostPipelineSteps.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postPipelineSteps(
+    _ request: Clarifai_Api_PostPipelineStepsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostPipelineSteps",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostPipelineStepsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetPipelineStep
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetPipelineStep.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getPipelineStep(
+    _ request: Clarifai_Api_GetPipelineStepRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetPipelineStepRequest, Clarifai_Api_SinglePipelineStepResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetPipelineStep",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetPipelineStepInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListPipelineSteps
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineSteps.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineSteps(
+    _ request: Clarifai_Api_ListPipelineStepsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineSteps",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineStepsInterceptors() ?? []
+    )
+  }
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the pipeline_step_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the pipeline_step_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the pipeline_step_version_id specified for your pipeline_step_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the pipeline_step_bytes.
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func postPipelineStepVersionsUpload(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_PostPipelineStepVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostPipelineStepVersionsUploadRequest, Clarifai_Api_PostPipelineStepVersionsUploadResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/PostPipelineStepVersionsUpload",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostPipelineStepVersionsUploadInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Unary call to ListPipelineStepVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineStepVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineStepVersions(
+    _ request: Clarifai_Api_ListPipelineStepVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineStepVersionsRequest, Clarifai_Api_MultiPipelineStepVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineStepVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineStepVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetPipelineStepVersion
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetPipelineStepVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getPipelineStepVersion(
+    _ request: Clarifai_Api_GetPipelineStepVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetPipelineStepVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetPipelineStepVersionInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -6625,6 +6770,24 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'patchWorkflowVersionEvaluations'.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postPipelineSteps'.
+  func makePostPipelineStepsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getPipelineStep'.
+  func makeGetPipelineStepInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineStepRequest, Clarifai_Api_SinglePipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listPipelineSteps'.
+  func makeListPipelineStepsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postPipelineStepVersionsUpload'.
+  func makePostPipelineStepVersionsUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineStepVersionsUploadRequest, Clarifai_Api_PostPipelineStepVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listPipelineStepVersions'.
+  func makeListPipelineStepVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineStepVersionsRequest, Clarifai_Api_MultiPipelineStepVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getPipelineStepVersion'.
+  func makeGetPipelineStepVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7487,6 +7650,23 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func listWorkflowVersionEvaluations(request: Clarifai_Api_ListWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 
   func patchWorkflowVersionEvaluations(request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
+
+  func postPipelineSteps(request: Clarifai_Api_PostPipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepResponse>
+
+  func getPipelineStep(request: Clarifai_Api_GetPipelineStepRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineStepResponse>
+
+  func listPipelineSteps(request: Clarifai_Api_ListPipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepResponse>
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the pipeline_step_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the pipeline_step_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the pipeline_step_version_id specified for your pipeline_step_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the pipeline_step_bytes.
+  func postPipelineStepVersionsUpload(context: StreamingResponseCallContext<Clarifai_Api_PostPipelineStepVersionsUploadResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostPipelineStepVersionsUploadRequest>) -> Void>
+
+  func listPipelineStepVersions(request: Clarifai_Api_ListPipelineStepVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepVersionResponse>
+
+  func getPipelineStepVersion(request: Clarifai_Api_GetPipelineStepVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineStepVersionResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9731,6 +9911,60 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.patchWorkflowVersionEvaluations(request:context:)
       )
 
+    case "PostPipelineSteps":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostPipelineStepsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineStepResponse>(),
+        interceptors: self.interceptors?.makePostPipelineStepsInterceptors() ?? [],
+        userFunction: self.postPipelineSteps(request:context:)
+      )
+
+    case "GetPipelineStep":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetPipelineStepRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineStepResponse>(),
+        interceptors: self.interceptors?.makeGetPipelineStepInterceptors() ?? [],
+        userFunction: self.getPipelineStep(request:context:)
+      )
+
+    case "ListPipelineSteps":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineStepsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineStepResponse>(),
+        interceptors: self.interceptors?.makeListPipelineStepsInterceptors() ?? [],
+        userFunction: self.listPipelineSteps(request:context:)
+      )
+
+    case "PostPipelineStepVersionsUpload":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostPipelineStepVersionsUploadRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostPipelineStepVersionsUploadResponse>(),
+        interceptors: self.interceptors?.makePostPipelineStepVersionsUploadInterceptors() ?? [],
+        observerFactory: self.postPipelineStepVersionsUpload(context:)
+      )
+
+    case "ListPipelineStepVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineStepVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineStepVersionResponse>(),
+        interceptors: self.interceptors?.makeListPipelineStepVersionsInterceptors() ?? [],
+        userFunction: self.listPipelineStepVersions(request:context:)
+      )
+
+    case "GetPipelineStepVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetPipelineStepVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineStepVersionResponse>(),
+        interceptors: self.interceptors?.makeGetPipelineStepVersionInterceptors() ?? [],
+        userFunction: self.getPipelineStepVersion(request:context:)
+      )
+
     default:
       return nil
     }
@@ -10730,4 +10964,28 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'patchWorkflowVersionEvaluations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postPipelineSteps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostPipelineStepsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getPipelineStep'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetPipelineStepInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineStepRequest, Clarifai_Api_SinglePipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelineSteps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineStepsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postPipelineStepVersionsUpload'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostPipelineStepVersionsUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelineStepVersionsUploadRequest, Clarifai_Api_PostPipelineStepVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelineStepVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineStepVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineStepVersionsRequest, Clarifai_Api_MultiPipelineStepVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getPipelineStepVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetPipelineStepVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
 }

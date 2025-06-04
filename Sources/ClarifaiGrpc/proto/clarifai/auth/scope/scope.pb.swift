@@ -316,13 +316,13 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case logEntriesGet // = 151
   case workflowVersionEvaluationsGet // = 152
   case workflowVersionEvaluationsAdd // = 153
-  case pipelineGet // = 154
-  case pipelineAdd // = 155
-  case pipelineStepGet // = 157
-  case pipelineStepAdd // = 158
+  case pipelinesGet // = 154
+  case pipelinesAdd // = 155
+  case pipelineStepsGet // = 157
+  case pipelineStepsAdd // = 158
 
   /// To pull the pipeline step version's image
-  case pipelineStepPull // = 159
+  case pipelineStepsPull // = 159
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -435,11 +435,11 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 151: self = .logEntriesGet
     case 152: self = .workflowVersionEvaluationsGet
     case 153: self = .workflowVersionEvaluationsAdd
-    case 154: self = .pipelineGet
-    case 155: self = .pipelineAdd
-    case 157: self = .pipelineStepGet
-    case 158: self = .pipelineStepAdd
-    case 159: self = .pipelineStepPull
+    case 154: self = .pipelinesGet
+    case 155: self = .pipelinesAdd
+    case 157: self = .pipelineStepsGet
+    case 158: self = .pipelineStepsAdd
+    case 159: self = .pipelineStepsPull
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -550,11 +550,11 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .logEntriesGet: return 151
     case .workflowVersionEvaluationsGet: return 152
     case .workflowVersionEvaluationsAdd: return 153
-    case .pipelineGet: return 154
-    case .pipelineAdd: return 155
-    case .pipelineStepGet: return 157
-    case .pipelineStepAdd: return 158
-    case .pipelineStepPull: return 159
+    case .pipelinesGet: return 154
+    case .pipelinesAdd: return 155
+    case .pipelineStepsGet: return 157
+    case .pipelineStepsAdd: return 158
+    case .pipelineStepsPull: return 159
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -670,11 +670,11 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .logEntriesGet,
     .workflowVersionEvaluationsGet,
     .workflowVersionEvaluationsAdd,
-    .pipelineGet,
-    .pipelineAdd,
-    .pipelineStepGet,
-    .pipelineStepAdd,
-    .pipelineStepPull,
+    .pipelinesGet,
+    .pipelinesAdd,
+    .pipelineStepsGet,
+    .pipelineStepsAdd,
+    .pipelineStepsPull,
   ]
 }
 
@@ -882,11 +882,11 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     151: .same(proto: "LogEntries_Get"),
     152: .same(proto: "WorkflowVersionEvaluations_Get"),
     153: .same(proto: "WorkflowVersionEvaluations_Add"),
-    154: .same(proto: "Pipeline_Get"),
-    155: .same(proto: "Pipeline_Add"),
-    157: .same(proto: "PipelineStep_Get"),
-    158: .same(proto: "PipelineStep_Add"),
-    159: .same(proto: "PipelineStep_Pull"),
+    154: .same(proto: "Pipelines_Get"),
+    155: .same(proto: "Pipelines_Add"),
+    157: .same(proto: "PipelineSteps_Get"),
+    158: .same(proto: "PipelineSteps_Add"),
+    159: .same(proto: "PipelineSteps_Pull"),
   ]
 }
 
