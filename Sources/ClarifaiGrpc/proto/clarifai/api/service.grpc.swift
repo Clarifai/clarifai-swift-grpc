@@ -1091,6 +1091,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>
 
+  func listPipelineVersionRuns(
+    _ request: Clarifai_Api_ListPipelineVersionRunsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>
+
   func getRunner(
     _ request: Clarifai_Api_GetRunnerRequest,
     callOptions: CallOptions?
@@ -1272,6 +1277,76 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 
+  func listWorkflowVersionEvaluationData(
+    _ request: Clarifai_Api_ListWorkflowVersionEvaluationDataRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>
+
+  func postWorkflowVersionEvaluationData(
+    _ request: Clarifai_Api_PostWorkflowVersionEvaluationDataRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>
+
+  func postPipelines(
+    _ request: Clarifai_Api_PostPipelinesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostPipelinesRequest, Clarifai_Api_MultiPipelineResponse>
+
+  func getPipeline(
+    _ request: Clarifai_Api_GetPipelineRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetPipelineRequest, Clarifai_Api_SinglePipelineResponse>
+
+  func listPipelines(
+    _ request: Clarifai_Api_ListPipelinesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelinesRequest, Clarifai_Api_MultiPipelineResponse>
+
+  func patchPipelines(
+    _ request: Clarifai_Api_PatchPipelinesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchPipelinesRequest, Clarifai_Api_MultiPipelineResponse>
+
+  func deletePipelines(
+    _ request: Clarifai_Api_DeletePipelinesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>
+
+  func getPipelineVersion(
+    _ request: Clarifai_Api_GetPipelineVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetPipelineVersionRequest, Clarifai_Api_SinglePipelineVersionResponse>
+
+  func listPipelineVersions(
+    _ request: Clarifai_Api_ListPipelineVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>
+
+  func patchPipelineVersions(
+    _ request: Clarifai_Api_PatchPipelineVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>
+
+  func deletePipelineVersions(
+    _ request: Clarifai_Api_DeletePipelineVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>
+
+  func getPipelineVersionRun(
+    _ request: Clarifai_Api_GetPipelineVersionRunRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetPipelineVersionRunRequest, Clarifai_Api_SinglePipelineVersionRunResponse>
+
+  func postPipelineVersionRuns(
+    _ request: Clarifai_Api_PostPipelineVersionRunsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>
+
+  func patchPipelineVersionRuns(
+    _ request: Clarifai_Api_PatchPipelineVersionRunsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>
+
   func postPipelineSteps(
     _ request: Clarifai_Api_PostPipelineStepsRequest,
     callOptions: CallOptions?
@@ -1301,6 +1376,31 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_GetPipelineStepVersionRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>
+
+  func getSecret(
+    _ request: Clarifai_Api_GetSecretRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetSecretRequest, Clarifai_Api_SingleSecretResponse>
+
+  func listSecrets(
+    _ request: Clarifai_Api_ListSecretsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListSecretsRequest, Clarifai_Api_MultiSecretResponse>
+
+  func postSecrets(
+    _ request: Clarifai_Api_PostSecretsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostSecretsRequest, Clarifai_Api_MultiSecretResponse>
+
+  func patchSecrets(
+    _ request: Clarifai_Api_PatchSecretsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchSecretsRequest, Clarifai_Api_MultiSecretResponse>
+
+  func deleteSecrets(
+    _ request: Clarifai_Api_DeleteSecretsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -5247,6 +5347,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// putting above the Get Nodepool endpoint to make it appear above the other one
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineVersionRuns.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineVersionRuns(
+    _ request: Clarifai_Api_ListPipelineVersionRunsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineVersionRuns",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineVersionRunsInterceptors() ?? []
+    )
+  }
+
   /// Get a specific runner.
   /// TODO(zeiler): runner_id is a UUID so can list globally as well.
   ///
@@ -5909,6 +6027,258 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to ListWorkflowVersionEvaluationData
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListWorkflowVersionEvaluationData.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listWorkflowVersionEvaluationData(
+    _ request: Clarifai_Api_ListWorkflowVersionEvaluationDataRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListWorkflowVersionEvaluationData",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListWorkflowVersionEvaluationDataInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostWorkflowVersionEvaluationData
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostWorkflowVersionEvaluationData.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postWorkflowVersionEvaluationData(
+    _ request: Clarifai_Api_PostWorkflowVersionEvaluationDataRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostWorkflowVersionEvaluationData",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostWorkflowVersionEvaluationDataInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostPipelines
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostPipelines.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postPipelines(
+    _ request: Clarifai_Api_PostPipelinesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostPipelinesRequest, Clarifai_Api_MultiPipelineResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostPipelines",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostPipelinesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetPipeline
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetPipeline.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getPipeline(
+    _ request: Clarifai_Api_GetPipelineRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetPipelineRequest, Clarifai_Api_SinglePipelineResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetPipeline",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetPipelineInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListPipelines
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelines.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelines(
+    _ request: Clarifai_Api_ListPipelinesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelinesRequest, Clarifai_Api_MultiPipelineResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelines",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelinesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchPipelines
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchPipelines.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchPipelines(
+    _ request: Clarifai_Api_PatchPipelinesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchPipelinesRequest, Clarifai_Api_MultiPipelineResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchPipelines",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchPipelinesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeletePipelines
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeletePipelines.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deletePipelines(
+    _ request: Clarifai_Api_DeletePipelinesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeletePipelines",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeletePipelinesInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetPipelineVersion
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetPipelineVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getPipelineVersion(
+    _ request: Clarifai_Api_GetPipelineVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetPipelineVersionRequest, Clarifai_Api_SinglePipelineVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetPipelineVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetPipelineVersionInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListPipelineVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineVersions(
+    _ request: Clarifai_Api_ListPipelineVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchPipelineVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchPipelineVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchPipelineVersions(
+    _ request: Clarifai_Api_PatchPipelineVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchPipelineVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchPipelineVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeletePipelineVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeletePipelineVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deletePipelineVersions(
+    _ request: Clarifai_Api_DeletePipelineVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeletePipelineVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeletePipelineVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetPipelineVersionRun
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetPipelineVersionRun.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getPipelineVersionRun(
+    _ request: Clarifai_Api_GetPipelineVersionRunRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetPipelineVersionRunRequest, Clarifai_Api_SinglePipelineVersionRunResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetPipelineVersionRun",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetPipelineVersionRunInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostPipelineVersionRuns
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostPipelineVersionRuns.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postPipelineVersionRuns(
+    _ request: Clarifai_Api_PostPipelineVersionRunsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostPipelineVersionRuns",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostPipelineVersionRunsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchPipelineVersionRuns
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchPipelineVersionRuns.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchPipelineVersionRuns(
+    _ request: Clarifai_Api_PatchPipelineVersionRunsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchPipelineVersionRuns",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchPipelineVersionRunsInterceptors() ?? []
+    )
+  }
+
   /// Unary call to PostPipelineSteps
   ///
   /// - Parameters:
@@ -6021,6 +6391,96 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetPipelineStepVersionInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetSecret
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetSecret.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getSecret(
+    _ request: Clarifai_Api_GetSecretRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetSecretRequest, Clarifai_Api_SingleSecretResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetSecret",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetSecretInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListSecrets
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListSecrets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listSecrets(
+    _ request: Clarifai_Api_ListSecretsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListSecretsRequest, Clarifai_Api_MultiSecretResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListSecrets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListSecretsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostSecrets
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostSecrets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postSecrets(
+    _ request: Clarifai_Api_PostSecretsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostSecretsRequest, Clarifai_Api_MultiSecretResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostSecrets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostSecretsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PatchSecrets
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchSecrets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchSecrets(
+    _ request: Clarifai_Api_PatchSecretsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchSecretsRequest, Clarifai_Api_MultiSecretResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchSecrets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchSecretsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeleteSecrets
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteSecrets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteSecrets(
+    _ request: Clarifai_Api_DeleteSecretsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteSecrets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteSecretsInterceptors() ?? []
     )
   }
 }
@@ -6663,6 +7123,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postInputsUploads'.
   func makePostInputsUploadsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listPipelineVersionRuns'.
+  func makeListPipelineVersionRunsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getRunner'.
   func makeGetRunnerInterceptors() -> [ClientInterceptor<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse>]
 
@@ -6771,6 +7234,48 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'patchWorkflowVersionEvaluations'.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listWorkflowVersionEvaluationData'.
+  func makeListWorkflowVersionEvaluationDataInterceptors() -> [ClientInterceptor<Clarifai_Api_ListWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postWorkflowVersionEvaluationData'.
+  func makePostWorkflowVersionEvaluationDataInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postPipelines'.
+  func makePostPipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getPipeline'.
+  func makeGetPipelineInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineRequest, Clarifai_Api_SinglePipelineResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listPipelines'.
+  func makeListPipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchPipelines'.
+  func makePatchPipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deletePipelines'.
+  func makeDeletePipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getPipelineVersion'.
+  func makeGetPipelineVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineVersionRequest, Clarifai_Api_SinglePipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listPipelineVersions'.
+  func makeListPipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchPipelineVersions'.
+  func makePatchPipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deletePipelineVersions'.
+  func makeDeletePipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getPipelineVersionRun'.
+  func makeGetPipelineVersionRunInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineVersionRunRequest, Clarifai_Api_SinglePipelineVersionRunResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postPipelineVersionRuns'.
+  func makePostPipelineVersionRunsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchPipelineVersionRuns'.
+  func makePatchPipelineVersionRunsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
   /// - Returns: Interceptors to use when invoking 'postPipelineSteps'.
   func makePostPipelineStepsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
 
@@ -6788,6 +7293,21 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getPipelineStepVersion'.
   func makeGetPipelineStepVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getSecret'.
+  func makeGetSecretInterceptors() -> [ClientInterceptor<Clarifai_Api_GetSecretRequest, Clarifai_Api_SingleSecretResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listSecrets'.
+  func makeListSecretsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postSecrets'.
+  func makePostSecretsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchSecrets'.
+  func makePatchSecretsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteSecrets'.
+  func makeDeleteSecretsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -7553,6 +8073,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// See also GetInputsAddJob and then GetInputsExtractionJob
   func postInputsUploads(request: Clarifai_Api_PostInputsUploadsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInputsAddJobResponse>
 
+  /// putting above the Get Nodepool endpoint to make it appear above the other one
+  func listPipelineVersionRuns(request: Clarifai_Api_ListPipelineVersionRunsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunResponse>
+
   /// Get a specific runner.
   /// TODO(zeiler): runner_id is a UUID so can list globally as well.
   func getRunner(request: Clarifai_Api_GetRunnerRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleRunnerResponse>
@@ -7651,6 +8174,34 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   func patchWorkflowVersionEvaluations(request: Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 
+  func listWorkflowVersionEvaluationData(request: Clarifai_Api_ListWorkflowVersionEvaluationDataRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>
+
+  func postWorkflowVersionEvaluationData(request: Clarifai_Api_PostWorkflowVersionEvaluationDataRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>
+
+  func postPipelines(request: Clarifai_Api_PostPipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
+
+  func getPipeline(request: Clarifai_Api_GetPipelineRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineResponse>
+
+  func listPipelines(request: Clarifai_Api_ListPipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
+
+  func patchPipelines(request: Clarifai_Api_PatchPipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
+
+  func deletePipelines(request: Clarifai_Api_DeletePipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
+
+  func getPipelineVersion(request: Clarifai_Api_GetPipelineVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineVersionResponse>
+
+  func listPipelineVersions(request: Clarifai_Api_ListPipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionResponse>
+
+  func patchPipelineVersions(request: Clarifai_Api_PatchPipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionResponse>
+
+  func deletePipelineVersions(request: Clarifai_Api_DeletePipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionResponse>
+
+  func getPipelineVersionRun(request: Clarifai_Api_GetPipelineVersionRunRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineVersionRunResponse>
+
+  func postPipelineVersionRuns(request: Clarifai_Api_PostPipelineVersionRunsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunResponse>
+
+  func patchPipelineVersionRuns(request: Clarifai_Api_PatchPipelineVersionRunsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunResponse>
+
   func postPipelineSteps(request: Clarifai_Api_PostPipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepResponse>
 
   func getPipelineStep(request: Clarifai_Api_GetPipelineStepRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineStepResponse>
@@ -7667,6 +8218,16 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func listPipelineStepVersions(request: Clarifai_Api_ListPipelineStepVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepVersionResponse>
 
   func getPipelineStepVersion(request: Clarifai_Api_GetPipelineStepVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineStepVersionResponse>
+
+  func getSecret(request: Clarifai_Api_GetSecretRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleSecretResponse>
+
+  func listSecrets(request: Clarifai_Api_ListSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
+
+  func postSecrets(request: Clarifai_Api_PostSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
+
+  func patchSecrets(request: Clarifai_Api_PatchSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
+
+  func deleteSecrets(request: Clarifai_Api_DeleteSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -9587,6 +10148,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postInputsUploads(request:context:)
       )
 
+    case "ListPipelineVersionRuns":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineVersionRunsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionRunResponse>(),
+        interceptors: self.interceptors?.makeListPipelineVersionRunsInterceptors() ?? [],
+        userFunction: self.listPipelineVersionRuns(request:context:)
+      )
+
     case "GetRunner":
       return UnaryServerHandler(
         context: context,
@@ -9911,6 +10481,132 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.patchWorkflowVersionEvaluations(request:context:)
       )
 
+    case "ListWorkflowVersionEvaluationData":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListWorkflowVersionEvaluationDataRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>(),
+        interceptors: self.interceptors?.makeListWorkflowVersionEvaluationDataInterceptors() ?? [],
+        userFunction: self.listWorkflowVersionEvaluationData(request:context:)
+      )
+
+    case "PostWorkflowVersionEvaluationData":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostWorkflowVersionEvaluationDataRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>(),
+        interceptors: self.interceptors?.makePostWorkflowVersionEvaluationDataInterceptors() ?? [],
+        userFunction: self.postWorkflowVersionEvaluationData(request:context:)
+      )
+
+    case "PostPipelines":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostPipelinesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineResponse>(),
+        interceptors: self.interceptors?.makePostPipelinesInterceptors() ?? [],
+        userFunction: self.postPipelines(request:context:)
+      )
+
+    case "GetPipeline":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetPipelineRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineResponse>(),
+        interceptors: self.interceptors?.makeGetPipelineInterceptors() ?? [],
+        userFunction: self.getPipeline(request:context:)
+      )
+
+    case "ListPipelines":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelinesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineResponse>(),
+        interceptors: self.interceptors?.makeListPipelinesInterceptors() ?? [],
+        userFunction: self.listPipelines(request:context:)
+      )
+
+    case "PatchPipelines":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchPipelinesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineResponse>(),
+        interceptors: self.interceptors?.makePatchPipelinesInterceptors() ?? [],
+        userFunction: self.patchPipelines(request:context:)
+      )
+
+    case "DeletePipelines":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelinesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineResponse>(),
+        interceptors: self.interceptors?.makeDeletePipelinesInterceptors() ?? [],
+        userFunction: self.deletePipelines(request:context:)
+      )
+
+    case "GetPipelineVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetPipelineVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineVersionResponse>(),
+        interceptors: self.interceptors?.makeGetPipelineVersionInterceptors() ?? [],
+        userFunction: self.getPipelineVersion(request:context:)
+      )
+
+    case "ListPipelineVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionResponse>(),
+        interceptors: self.interceptors?.makeListPipelineVersionsInterceptors() ?? [],
+        userFunction: self.listPipelineVersions(request:context:)
+      )
+
+    case "PatchPipelineVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchPipelineVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionResponse>(),
+        interceptors: self.interceptors?.makePatchPipelineVersionsInterceptors() ?? [],
+        userFunction: self.patchPipelineVersions(request:context:)
+      )
+
+    case "DeletePipelineVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelineVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionResponse>(),
+        interceptors: self.interceptors?.makeDeletePipelineVersionsInterceptors() ?? [],
+        userFunction: self.deletePipelineVersions(request:context:)
+      )
+
+    case "GetPipelineVersionRun":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetPipelineVersionRunRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineVersionRunResponse>(),
+        interceptors: self.interceptors?.makeGetPipelineVersionRunInterceptors() ?? [],
+        userFunction: self.getPipelineVersionRun(request:context:)
+      )
+
+    case "PostPipelineVersionRuns":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostPipelineVersionRunsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionRunResponse>(),
+        interceptors: self.interceptors?.makePostPipelineVersionRunsInterceptors() ?? [],
+        userFunction: self.postPipelineVersionRuns(request:context:)
+      )
+
+    case "PatchPipelineVersionRuns":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchPipelineVersionRunsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionRunResponse>(),
+        interceptors: self.interceptors?.makePatchPipelineVersionRunsInterceptors() ?? [],
+        userFunction: self.patchPipelineVersionRuns(request:context:)
+      )
+
     case "PostPipelineSteps":
       return UnaryServerHandler(
         context: context,
@@ -9963,6 +10659,51 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_SinglePipelineStepVersionResponse>(),
         interceptors: self.interceptors?.makeGetPipelineStepVersionInterceptors() ?? [],
         userFunction: self.getPipelineStepVersion(request:context:)
+      )
+
+    case "GetSecret":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetSecretRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleSecretResponse>(),
+        interceptors: self.interceptors?.makeGetSecretInterceptors() ?? [],
+        userFunction: self.getSecret(request:context:)
+      )
+
+    case "ListSecrets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListSecretsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSecretResponse>(),
+        interceptors: self.interceptors?.makeListSecretsInterceptors() ?? [],
+        userFunction: self.listSecrets(request:context:)
+      )
+
+    case "PostSecrets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostSecretsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSecretResponse>(),
+        interceptors: self.interceptors?.makePostSecretsInterceptors() ?? [],
+        userFunction: self.postSecrets(request:context:)
+      )
+
+    case "PatchSecrets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchSecretsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSecretResponse>(),
+        interceptors: self.interceptors?.makePatchSecretsInterceptors() ?? [],
+        userFunction: self.patchSecrets(request:context:)
+      )
+
+    case "DeleteSecrets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteSecretsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSecretResponse>(),
+        interceptors: self.interceptors?.makeDeleteSecretsInterceptors() ?? [],
+        userFunction: self.deleteSecrets(request:context:)
       )
 
     default:
@@ -10821,6 +11562,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostInputsUploadsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInputsUploadsRequest, Clarifai_Api_MultiInputsAddJobResponse>]
 
+  /// - Returns: Interceptors to use when handling 'listPipelineVersionRuns'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineVersionRunsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
   /// - Returns: Interceptors to use when handling 'getRunner'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetRunnerInterceptors() -> [ServerInterceptor<Clarifai_Api_GetRunnerRequest, Clarifai_Api_SingleRunnerResponse>]
@@ -10965,6 +11710,62 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePatchWorkflowVersionEvaluationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
 
+  /// - Returns: Interceptors to use when handling 'listWorkflowVersionEvaluationData'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListWorkflowVersionEvaluationDataInterceptors() -> [ServerInterceptor<Clarifai_Api_ListWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postWorkflowVersionEvaluationData'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostWorkflowVersionEvaluationDataInterceptors() -> [ServerInterceptor<Clarifai_Api_PostWorkflowVersionEvaluationDataRequest, Clarifai_Api_MultiListWorkflowVersionEvaluationDataResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postPipelines'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostPipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getPipeline'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetPipelineInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineRequest, Clarifai_Api_SinglePipelineResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelines'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchPipelines'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchPipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deletePipelines'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeletePipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getPipelineVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetPipelineVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineVersionRequest, Clarifai_Api_SinglePipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelineVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchPipelineVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchPipelineVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deletePipelineVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeletePipelineVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getPipelineVersionRun'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetPipelineVersionRunInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineVersionRunRequest, Clarifai_Api_SinglePipelineVersionRunResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postPipelineVersionRuns'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostPipelineVersionRunsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchPipelineVersionRuns'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchPipelineVersionRunsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
   /// - Returns: Interceptors to use when handling 'postPipelineSteps'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostPipelineStepsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
@@ -10988,4 +11789,24 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getPipelineStepVersion'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetPipelineStepVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getSecret'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetSecretInterceptors() -> [ServerInterceptor<Clarifai_Api_GetSecretRequest, Clarifai_Api_SingleSecretResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listSecrets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListSecretsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postSecrets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostSecretsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchSecrets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchSecretsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteSecrets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteSecretsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>]
 }

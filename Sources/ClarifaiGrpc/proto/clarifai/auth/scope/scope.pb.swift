@@ -318,11 +318,15 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case workflowVersionEvaluationsAdd // = 153
   case pipelinesGet // = 154
   case pipelinesAdd // = 155
+  case pipelinesDelete // = 156
   case pipelineStepsGet // = 157
   case pipelineStepsAdd // = 158
 
   /// To pull the pipeline step version's image
   case pipelineStepsPull // = 159
+  case ecretsGet // = 160
+  case ecretsAdd // = 161
+  case ecretsDelete // = 162
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -437,9 +441,13 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 153: self = .workflowVersionEvaluationsAdd
     case 154: self = .pipelinesGet
     case 155: self = .pipelinesAdd
+    case 156: self = .pipelinesDelete
     case 157: self = .pipelineStepsGet
     case 158: self = .pipelineStepsAdd
     case 159: self = .pipelineStepsPull
+    case 160: self = .ecretsGet
+    case 161: self = .ecretsAdd
+    case 162: self = .ecretsDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -552,9 +560,13 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .workflowVersionEvaluationsAdd: return 153
     case .pipelinesGet: return 154
     case .pipelinesAdd: return 155
+    case .pipelinesDelete: return 156
     case .pipelineStepsGet: return 157
     case .pipelineStepsAdd: return 158
     case .pipelineStepsPull: return 159
+    case .ecretsGet: return 160
+    case .ecretsAdd: return 161
+    case .ecretsDelete: return 162
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -672,9 +684,13 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .workflowVersionEvaluationsAdd,
     .pipelinesGet,
     .pipelinesAdd,
+    .pipelinesDelete,
     .pipelineStepsGet,
     .pipelineStepsAdd,
     .pipelineStepsPull,
+    .ecretsGet,
+    .ecretsAdd,
+    .ecretsDelete,
   ]
 }
 
@@ -884,9 +900,13 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     153: .same(proto: "WorkflowVersionEvaluations_Add"),
     154: .same(proto: "Pipelines_Get"),
     155: .same(proto: "Pipelines_Add"),
+    156: .same(proto: "Pipelines_Delete"),
     157: .same(proto: "PipelineSteps_Get"),
     158: .same(proto: "PipelineSteps_Add"),
     159: .same(proto: "PipelineSteps_Pull"),
+    160: .same(proto: "Secrets_Get"),
+    161: .same(proto: "Secrets_Add"),
+    162: .same(proto: "Secrets_Delete"),
   ]
 }
 
