@@ -707,6 +707,16 @@ public struct Clarifai_Api_ListAppsRequest {
   /// If true, we only return apps that are marked as a template by the app owner.
   public var templateOnly: Bool = false
 
+  /// Filter by visibility of the app. If set, only return apps with the specified visibility.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _visibility ?? Clarifai_Api_Visibility()}
+    set {_visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return self._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {self._visibility = nil}
+
   /// Searching options:
   /// Specify a search parameter in order to perform keyword search on the
   /// following fields of the application:
@@ -785,6 +795,7 @@ public struct Clarifai_Api_ListAppsRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
 /// PostAppsRequest
@@ -4148,6 +4159,16 @@ public struct Clarifai_Api_ListModelsRequest {
     get {return _storage._showReplicas}
     set {_uniqueStorage()._showReplicas = newValue}
   }
+
+  /// Filter by visibility of the model. If set, only return models with the specified visibility.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _storage._visibility ?? Clarifai_Api_Visibility()}
+    set {_uniqueStorage()._visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return _storage._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -7558,6 +7579,16 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   /// Filter workflows by bookmark. If set, only return bookmarked workflows. Otherwise none bookmarked workflows only.
   public var bookmark: Bool = false
 
+  /// Filter by visibility of the workflow. If set, only return workflows with the specified visibility.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _visibility ?? Clarifai_Api_Visibility()}
+    set {_visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return self._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {self._visibility = nil}
+
   /// Searching options:
   /// Specify a search parameter in order to perform keyword search on the
   /// following fields of the workflow:
@@ -7629,6 +7660,7 @@ public struct Clarifai_Api_ListWorkflowsRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
 /// PostWorkflowsRequest
@@ -9189,6 +9221,16 @@ public struct Clarifai_Api_ListModulesRequest {
   /// Deprecated: use search instead of name.
   public var filterByUserID: Bool = false
 
+  /// Filter by visibility of the modules. If set, only return modules with the specified visibility.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _visibility ?? Clarifai_Api_Visibility()}
+    set {_visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return self._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {self._visibility = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -9232,6 +9274,7 @@ public struct Clarifai_Api_ListModulesRequest {
   public init() {}
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
 /// PostModulesRequest
@@ -14301,6 +14344,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     16: .standard(proto: "template_only"),
+    18: .same(proto: "visibility"),
     15: .same(proto: "search"),
     8: .same(proto: "query"),
     4: .same(proto: "name"),
@@ -14365,6 +14409,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
           self.sortBy = .sortByID(v)
         }
       }()
+      case 18: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
       default: break
       }
     }
@@ -14436,6 +14481,9 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     try { if case .sortByID(let v)? = self.sortBy {
       try visitor.visitSingularBoolField(value: v, fieldNumber: 17)
     } }()
+    try { if let v = self._visibility {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -14449,6 +14497,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.featuredOnly != rhs.featuredOnly {return false}
     if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.templateOnly != rhs.templateOnly {return false}
+    if lhs._visibility != rhs._visibility {return false}
     if lhs.search != rhs.search {return false}
     if lhs.query != rhs.query {return false}
     if lhs.name != rhs.name {return false}
@@ -19439,6 +19488,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     31: .same(proto: "creator"),
     33: .standard(proto: "min_replicas"),
     34: .standard(proto: "show_replicas"),
+    35: .same(proto: "visibility"),
   ]
 
   fileprivate class _StorageClass {
@@ -19470,6 +19520,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _creator: String = String()
     var _minReplicas: UInt32 = 0
     var _showReplicas: Bool = false
+    var _visibility: Clarifai_Api_Visibility? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -19504,6 +19555,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _creator = source._creator
       _minReplicas = source._minReplicas
       _showReplicas = source._showReplicas
+      _visibility = source._visibility
     }
   }
 
@@ -19589,6 +19641,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         case 31: try { try decoder.decodeSingularStringField(value: &_storage._creator) }()
         case 33: try { try decoder.decodeSingularUInt32Field(value: &_storage._minReplicas) }()
         case 34: try { try decoder.decodeSingularBoolField(value: &_storage._showReplicas) }()
+        case 35: try { try decoder.decodeSingularMessageField(value: &_storage._visibility) }()
         default: break
         }
       }
@@ -19708,6 +19761,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       if _storage._showReplicas != false {
         try visitor.visitSingularBoolField(value: _storage._showReplicas, fieldNumber: 34)
       }
+      try { if let v = _storage._visibility {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -19745,6 +19801,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._creator != rhs_storage._creator {return false}
         if _storage._minReplicas != rhs_storage._minReplicas {return false}
         if _storage._showReplicas != rhs_storage._showReplicas {return false}
+        if _storage._visibility != rhs_storage._visibility {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -25048,6 +25105,7 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     15: .same(proto: "bookmark"),
+    17: .same(proto: "visibility"),
     16: .same(proto: "search"),
     8: .same(proto: "query"),
     4: .same(proto: "id"),
@@ -25104,6 +25162,7 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
       }()
       case 15: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
       case 16: try { try decoder.decodeSingularStringField(value: &self.search) }()
+      case 17: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
       default: break
       }
     }
@@ -25172,6 +25231,9 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if !self.search.isEmpty {
       try visitor.visitSingularStringField(value: self.search, fieldNumber: 16)
     }
+    try { if let v = self._visibility {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -25185,6 +25247,7 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     if lhs.featuredOnly != rhs.featuredOnly {return false}
     if lhs.starredOnly != rhs.starredOnly {return false}
     if lhs.bookmark != rhs.bookmark {return false}
+    if lhs._visibility != rhs._visibility {return false}
     if lhs.search != rhs.search {return false}
     if lhs.query != rhs.query {return false}
     if lhs.id != rhs.id {return false}
@@ -27547,6 +27610,7 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     14: .same(proto: "search"),
     12: .same(proto: "name"),
     13: .standard(proto: "filter_by_user_id"),
+    15: .same(proto: "visibility"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -27597,6 +27661,7 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
       case 12: try { try decoder.decodeSingularStringField(value: &self.name) }()
       case 13: try { try decoder.decodeSingularBoolField(value: &self.filterByUserID) }()
       case 14: try { try decoder.decodeSingularStringField(value: &self.search) }()
+      case 15: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
       default: break
       }
     }
@@ -27655,6 +27720,9 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if !self.search.isEmpty {
       try visitor.visitSingularStringField(value: self.search, fieldNumber: 14)
     }
+    try { if let v = self._visibility {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -27670,6 +27738,7 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     if lhs.search != rhs.search {return false}
     if lhs.name != rhs.name {return false}
     if lhs.filterByUserID != rhs.filterByUserID {return false}
+    if lhs._visibility != rhs._visibility {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
