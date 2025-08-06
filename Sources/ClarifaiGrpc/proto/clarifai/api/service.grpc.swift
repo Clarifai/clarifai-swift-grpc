@@ -145,6 +145,26 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func listAnnotationTracks(
+    _ request: Clarifai_Api_ListAnnotationTracksRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>
+
+  func postAnnotationTracks(
+    _ request: Clarifai_Api_PostAnnotationTracksRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>
+
+  func patchAnnotationTracks(
+    _ request: Clarifai_Api_PatchAnnotationTracksRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>
+
+  func deleteAnnotationTracks(
+    _ request: Clarifai_Api_DeleteAnnotationTracksRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationTracksRequest, Clarifai_Api_Status_BaseResponse>
+
   func patchAnnotationsSearches(
     _ request: Clarifai_Api_PatchAnnotationsSearchesRequest,
     callOptions: CallOptions?
@@ -1827,6 +1847,78 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeleteAnnotationsInterceptors() ?? []
+    )
+  }
+
+  /// List all the annotation tracks.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListAnnotationTracks.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listAnnotationTracks(
+    _ request: Clarifai_Api_ListAnnotationTracksRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListAnnotationTracks",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListAnnotationTracksInterceptors() ?? []
+    )
+  }
+
+  /// Post annotation tracks.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostAnnotationTracks.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postAnnotationTracks(
+    _ request: Clarifai_Api_PostAnnotationTracksRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostAnnotationTracks",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostAnnotationTracksInterceptors() ?? []
+    )
+  }
+
+  /// Patch one or more annotation tracks.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchAnnotationTracks.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchAnnotationTracks(
+    _ request: Clarifai_Api_PatchAnnotationTracksRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchAnnotationTracks",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchAnnotationTracksInterceptors() ?? []
+    )
+  }
+
+  /// Delete multiple annotation tracks in one request.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteAnnotationTracks.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteAnnotationTracks(
+    _ request: Clarifai_Api_DeleteAnnotationTracksRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationTracksRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteAnnotationTracks",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteAnnotationTracksInterceptors() ?? []
     )
   }
 
@@ -6556,6 +6648,18 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteAnnotations'.
   func makeDeleteAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listAnnotationTracks'.
+  func makeListAnnotationTracksInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postAnnotationTracks'.
+  func makePostAnnotationTracksInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'patchAnnotationTracks'.
+  func makePatchAnnotationTracksInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteAnnotationTracks'.
+  func makeDeleteAnnotationTracksInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationTracksRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when invoking 'patchAnnotationsSearches'.
   func makePatchAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchAnnotationsSearchesRequest, Clarifai_Api_MultiSearchResponse>]
 
@@ -7412,6 +7516,18 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete multiple annotations in one request.
   func deleteAnnotations(request: Clarifai_Api_DeleteAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// List all the annotation tracks.
+  func listAnnotationTracks(request: Clarifai_Api_ListAnnotationTracksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationTrackResponse>
+
+  /// Post annotation tracks.
+  func postAnnotationTracks(request: Clarifai_Api_PostAnnotationTracksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationTrackResponse>
+
+  /// Patch one or more annotation tracks.
+  func patchAnnotationTracks(request: Clarifai_Api_PatchAnnotationTracksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationTrackResponse>
+
+  /// Delete multiple annotation tracks in one request.
+  func deleteAnnotationTracks(request: Clarifai_Api_DeleteAnnotationTracksRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   /// Patch saved annotations searches by ids.
   func patchAnnotationsSearches(request: Clarifai_Api_PatchAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
@@ -8445,6 +8561,42 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeleteAnnotationsInterceptors() ?? [],
         userFunction: self.deleteAnnotations(request:context:)
+      )
+
+    case "ListAnnotationTracks":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationTracksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationTrackResponse>(),
+        interceptors: self.interceptors?.makeListAnnotationTracksInterceptors() ?? [],
+        userFunction: self.listAnnotationTracks(request:context:)
+      )
+
+    case "PostAnnotationTracks":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationTracksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationTrackResponse>(),
+        interceptors: self.interceptors?.makePostAnnotationTracksInterceptors() ?? [],
+        userFunction: self.postAnnotationTracks(request:context:)
+      )
+
+    case "PatchAnnotationTracks":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchAnnotationTracksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationTrackResponse>(),
+        interceptors: self.interceptors?.makePatchAnnotationTracksInterceptors() ?? [],
+        userFunction: self.patchAnnotationTracks(request:context:)
+      )
+
+    case "DeleteAnnotationTracks":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationTracksRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteAnnotationTracksInterceptors() ?? [],
+        userFunction: self.deleteAnnotationTracks(request:context:)
       )
 
     case "PatchAnnotationsSearches":
@@ -10805,6 +10957,22 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listAnnotationTracks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListAnnotationTracksInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postAnnotationTracks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostAnnotationTracksInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchAnnotationTracks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchAnnotationTracksInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchAnnotationTracksRequest, Clarifai_Api_MultiAnnotationTrackResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteAnnotationTracks'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteAnnotationTracksInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationTracksRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'patchAnnotationsSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.

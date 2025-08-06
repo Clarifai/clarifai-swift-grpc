@@ -477,6 +477,141 @@ public struct Clarifai_Api_DeleteAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListAnnotationTracksRequest
+public struct Clarifai_Api_ListAnnotationTracksRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var ids: [String] = []
+
+  public var inputID: String = String()
+
+  public var page: UInt32 = 0
+
+  public var perPage: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// PostAnnotationTracksRequest
+public struct Clarifai_Api_PostAnnotationTracksRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var annotationTracks: [Clarifai_Api_AnnotationTrack] = []
+
+  public var inputID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// PatchAnnotationTracksRequest
+public struct Clarifai_Api_PatchAnnotationTracksRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var annotationTracks: [Clarifai_Api_AnnotationTrack] = []
+
+  public var inputID: String = String()
+
+  /// Use always 'overwrite'
+  public var action: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// DeleteAnnotationTracksRequest
+public struct Clarifai_Api_DeleteAnnotationTracksRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var ids: [String] = []
+
+  public var inputID: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+/// MultiAnnotationTrackResponse
+public struct Clarifai_Api_MultiAnnotationTrackResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var annotationTracks: [Clarifai_Api_AnnotationTrack] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 /// SingleAnnotationResponse
 public struct Clarifai_Api_SingleAnnotationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -3536,60 +3671,107 @@ public struct Clarifai_Api_ListLogEntriesRequest {
 
   /// (optional URL parameter) The page number. Pagination is used to split the results into chunks.
   /// Defaults to last page.
-  public var page: UInt32 = 0
+  public var page: UInt32 {
+    get {return _storage._page}
+    set {_uniqueStorage()._page = newValue}
+  }
 
   /// (optional URL parameter) The number of results that will be contained in each page. Defaults
   /// to 32.
-  public var perPage: UInt32 = 0
+  public var perPage: UInt32 {
+    get {return _storage._perPage}
+    set {_uniqueStorage()._perPage = newValue}
+  }
 
   /// The type of log entry. Examples: model, agent, build, training.
-  public var logType: String = String()
+  public var logType: String {
+    get {return _storage._logType}
+    set {_uniqueStorage()._logType = newValue}
+  }
 
   /// Who the logs are for.
   /// The user app id, if a user produced the logs.
   public var userAppID: Clarifai_Api_UserAppIDSet {
-    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-    set {_userAppID = newValue}
+    get {return _storage._userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_uniqueStorage()._userAppID = newValue}
   }
   /// Returns true if `userAppID` has been explicitly set.
-  public var hasUserAppID: Bool {return self._userAppID != nil}
+  public var hasUserAppID: Bool {return _storage._userAppID != nil}
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-  public mutating func clearUserAppID() {self._userAppID = nil}
+  public mutating func clearUserAppID() {_uniqueStorage()._userAppID = nil}
 
   /// The Model ID, if a model produced the logs.
-  public var modelID: String = String()
+  public var modelID: String {
+    get {return _storage._modelID}
+    set {_uniqueStorage()._modelID = newValue}
+  }
 
   /// The Version ID, if a model version produced the logs.
-  public var modelVersionID: String = String()
+  public var modelVersionID: String {
+    get {return _storage._modelVersionID}
+    set {_uniqueStorage()._modelVersionID = newValue}
+  }
 
   /// Workflow Id, if a workflow produced the logs.
-  public var workflowID: String = String()
+  public var workflowID: String {
+    get {return _storage._workflowID}
+    set {_uniqueStorage()._workflowID = newValue}
+  }
 
   /// Where the logs came from.
-  public var computeClusterID: String = String()
+  public var computeClusterUserID: String {
+    get {return _storage._computeClusterUserID}
+    set {_uniqueStorage()._computeClusterUserID = newValue}
+  }
 
-  public var nodepoolID: String = String()
+  public var computeClusterID: String {
+    get {return _storage._computeClusterID}
+    set {_uniqueStorage()._computeClusterID = newValue}
+  }
 
-  public var runnerID: String = String()
+  public var nodepoolID: String {
+    get {return _storage._nodepoolID}
+    set {_uniqueStorage()._nodepoolID = newValue}
+  }
+
+  public var runnerID: String {
+    get {return _storage._runnerID}
+    set {_uniqueStorage()._runnerID = newValue}
+  }
 
   /// Pipelines that produced the logs for a given pipeline run with log_type: pipeline.version.run
   /// Must include user_app_id with user_id and app_id as well.
-  public var pipelineID: String = String()
+  public var pipelineID: String {
+    get {return _storage._pipelineID}
+    set {_uniqueStorage()._pipelineID = newValue}
+  }
 
-  public var pipelineVersionID: String = String()
+  public var pipelineVersionID: String {
+    get {return _storage._pipelineVersionID}
+    set {_uniqueStorage()._pipelineVersionID = newValue}
+  }
 
-  public var pipelineVersionRunID: String = String()
+  public var pipelineVersionRunID: String {
+    get {return _storage._pipelineVersionRunID}
+    set {_uniqueStorage()._pipelineVersionRunID = newValue}
+  }
 
   /// During pipeline step build provide these IDs.
-  public var pipelineStepID: String = String()
+  public var pipelineStepID: String {
+    get {return _storage._pipelineStepID}
+    set {_uniqueStorage()._pipelineStepID = newValue}
+  }
 
-  public var pipelineStepVersionID: String = String()
+  public var pipelineStepVersionID: String {
+    get {return _storage._pipelineStepVersionID}
+    set {_uniqueStorage()._pipelineStepVersionID = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct Clarifai_Api_StreamLogEntriesRequest {
@@ -3622,6 +3804,8 @@ public struct Clarifai_Api_StreamLogEntriesRequest {
   public var workflowID: String = String()
 
   /// Where the logs came from.
+  public var computeClusterUserID: String = String()
+
   public var computeClusterID: String = String()
 
   public var nodepoolID: String = String()
@@ -11140,6 +11324,8 @@ public struct Clarifai_Api_SyncStateRequest {
 
   public var pipelineVersionRuns: [Clarifai_Api_PipelineVersionRun] = []
 
+  public var secrets: [Clarifai_Api_Secret] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -13413,7 +13599,7 @@ public struct Clarifai_Api_GetSecretRequest {
   public mutating func clearUserAppID() {self._userAppID = nil}
 
   /// The id of the secret to get
-  public var secretID: String = String()
+  public var id: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -13489,10 +13675,8 @@ public struct Clarifai_Api_PatchSecretsRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  /// The secrets to patch
-  public var secrets: [Clarifai_Api_Secret] = []
+  public var secret: [Clarifai_Api_Secret] = []
 
-  /// For now actions 'merge', 'overwrite', and 'remove' are supported
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -14095,6 +14279,258 @@ extension Clarifai_Api_DeleteAnnotationsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.ids != rhs.ids {return false}
     if lhs.inputIds != rhs.inputIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListAnnotationTracksRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListAnnotationTracksRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "ids"),
+    3: .standard(proto: "input_id"),
+    4: .same(proto: "page"),
+    5: .standard(proto: "per_page"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeRepeatedStringField(value: &self.ids) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
+      case 5: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.ids.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 2)
+    }
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 3)
+    }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 4)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListAnnotationTracksRequest, rhs: Clarifai_Api_ListAnnotationTracksRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.ids != rhs.ids {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostAnnotationTracksRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostAnnotationTracksRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "annotation_tracks"),
+    3: .standard(proto: "input_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.annotationTracks) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.annotationTracks.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.annotationTracks, fieldNumber: 2)
+    }
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostAnnotationTracksRequest, rhs: Clarifai_Api_PostAnnotationTracksRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.annotationTracks != rhs.annotationTracks {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PatchAnnotationTracksRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PatchAnnotationTracksRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "annotation_tracks"),
+    3: .standard(proto: "input_id"),
+    4: .same(proto: "action"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.annotationTracks) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.action) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.annotationTracks.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.annotationTracks, fieldNumber: 2)
+    }
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 3)
+    }
+    if !self.action.isEmpty {
+      try visitor.visitSingularStringField(value: self.action, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PatchAnnotationTracksRequest, rhs: Clarifai_Api_PatchAnnotationTracksRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.annotationTracks != rhs.annotationTracks {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.action != rhs.action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_DeleteAnnotationTracksRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeleteAnnotationTracksRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .same(proto: "ids"),
+    3: .standard(proto: "input_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeRepeatedStringField(value: &self.ids) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.ids.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 2)
+    }
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_DeleteAnnotationTracksRequest, rhs: Clarifai_Api_DeleteAnnotationTracksRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.ids != rhs.ids {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiAnnotationTrackResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiAnnotationTrackResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "annotation_tracks"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.annotationTracks) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.annotationTracks.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.annotationTracks, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiAnnotationTrackResponse, rhs: Clarifai_Api_MultiAnnotationTrackResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.annotationTracks != rhs.annotationTracks {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -18757,6 +19193,7 @@ extension Clarifai_Api_ListLogEntriesRequest: SwiftProtobuf.Message, SwiftProtob
     5: .standard(proto: "model_id"),
     6: .standard(proto: "model_version_id"),
     7: .standard(proto: "workflow_id"),
+    17: .standard(proto: "compute_cluster_user_id"),
     9: .standard(proto: "compute_cluster_id"),
     10: .standard(proto: "nodepool_id"),
     11: .standard(proto: "runner_id"),
@@ -18767,101 +19204,168 @@ extension Clarifai_Api_ListLogEntriesRequest: SwiftProtobuf.Message, SwiftProtob
     16: .standard(proto: "pipeline_step_version_id"),
   ]
 
+  fileprivate class _StorageClass {
+    var _page: UInt32 = 0
+    var _perPage: UInt32 = 0
+    var _logType: String = String()
+    var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+    var _modelID: String = String()
+    var _modelVersionID: String = String()
+    var _workflowID: String = String()
+    var _computeClusterUserID: String = String()
+    var _computeClusterID: String = String()
+    var _nodepoolID: String = String()
+    var _runnerID: String = String()
+    var _pipelineID: String = String()
+    var _pipelineVersionID: String = String()
+    var _pipelineVersionRunID: String = String()
+    var _pipelineStepID: String = String()
+    var _pipelineStepVersionID: String = String()
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _page = source._page
+      _perPage = source._perPage
+      _logType = source._logType
+      _userAppID = source._userAppID
+      _modelID = source._modelID
+      _modelVersionID = source._modelVersionID
+      _workflowID = source._workflowID
+      _computeClusterUserID = source._computeClusterUserID
+      _computeClusterID = source._computeClusterID
+      _nodepoolID = source._nodepoolID
+      _runnerID = source._runnerID
+      _pipelineID = source._pipelineID
+      _pipelineVersionID = source._pipelineVersionID
+      _pipelineVersionRunID = source._pipelineVersionRunID
+      _pipelineStepID = source._pipelineStepID
+      _pipelineStepVersionID = source._pipelineStepVersionID
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
-      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.logType) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self.workflowID) }()
-      case 9: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
-      case 10: try { try decoder.decodeSingularStringField(value: &self.nodepoolID) }()
-      case 11: try { try decoder.decodeSingularStringField(value: &self.runnerID) }()
-      case 12: try { try decoder.decodeSingularStringField(value: &self.pipelineID) }()
-      case 13: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionID) }()
-      case 14: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionRunID) }()
-      case 15: try { try decoder.decodeSingularStringField(value: &self.pipelineStepID) }()
-      case 16: try { try decoder.decodeSingularStringField(value: &self.pipelineStepVersionID) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._page) }()
+        case 2: try { try decoder.decodeSingularUInt32Field(value: &_storage._perPage) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._logType) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._userAppID) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._modelID) }()
+        case 6: try { try decoder.decodeSingularStringField(value: &_storage._modelVersionID) }()
+        case 7: try { try decoder.decodeSingularStringField(value: &_storage._workflowID) }()
+        case 9: try { try decoder.decodeSingularStringField(value: &_storage._computeClusterID) }()
+        case 10: try { try decoder.decodeSingularStringField(value: &_storage._nodepoolID) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._runnerID) }()
+        case 12: try { try decoder.decodeSingularStringField(value: &_storage._pipelineID) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._pipelineVersionID) }()
+        case 14: try { try decoder.decodeSingularStringField(value: &_storage._pipelineVersionRunID) }()
+        case 15: try { try decoder.decodeSingularStringField(value: &_storage._pipelineStepID) }()
+        case 16: try { try decoder.decodeSingularStringField(value: &_storage._pipelineStepVersionID) }()
+        case 17: try { try decoder.decodeSingularStringField(value: &_storage._computeClusterUserID) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if self.page != 0 {
-      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 1)
-    }
-    if self.perPage != 0 {
-      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 2)
-    }
-    if !self.logType.isEmpty {
-      try visitor.visitSingularStringField(value: self.logType, fieldNumber: 3)
-    }
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    if !self.modelID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 5)
-    }
-    if !self.modelVersionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 6)
-    }
-    if !self.workflowID.isEmpty {
-      try visitor.visitSingularStringField(value: self.workflowID, fieldNumber: 7)
-    }
-    if !self.computeClusterID.isEmpty {
-      try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 9)
-    }
-    if !self.nodepoolID.isEmpty {
-      try visitor.visitSingularStringField(value: self.nodepoolID, fieldNumber: 10)
-    }
-    if !self.runnerID.isEmpty {
-      try visitor.visitSingularStringField(value: self.runnerID, fieldNumber: 11)
-    }
-    if !self.pipelineID.isEmpty {
-      try visitor.visitSingularStringField(value: self.pipelineID, fieldNumber: 12)
-    }
-    if !self.pipelineVersionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.pipelineVersionID, fieldNumber: 13)
-    }
-    if !self.pipelineVersionRunID.isEmpty {
-      try visitor.visitSingularStringField(value: self.pipelineVersionRunID, fieldNumber: 14)
-    }
-    if !self.pipelineStepID.isEmpty {
-      try visitor.visitSingularStringField(value: self.pipelineStepID, fieldNumber: 15)
-    }
-    if !self.pipelineStepVersionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.pipelineStepVersionID, fieldNumber: 16)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if _storage._page != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._page, fieldNumber: 1)
+      }
+      if _storage._perPage != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._perPage, fieldNumber: 2)
+      }
+      if !_storage._logType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._logType, fieldNumber: 3)
+      }
+      try { if let v = _storage._userAppID {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      if !_storage._modelID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._modelID, fieldNumber: 5)
+      }
+      if !_storage._modelVersionID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._modelVersionID, fieldNumber: 6)
+      }
+      if !_storage._workflowID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._workflowID, fieldNumber: 7)
+      }
+      if !_storage._computeClusterID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._computeClusterID, fieldNumber: 9)
+      }
+      if !_storage._nodepoolID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._nodepoolID, fieldNumber: 10)
+      }
+      if !_storage._runnerID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._runnerID, fieldNumber: 11)
+      }
+      if !_storage._pipelineID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineID, fieldNumber: 12)
+      }
+      if !_storage._pipelineVersionID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineVersionID, fieldNumber: 13)
+      }
+      if !_storage._pipelineVersionRunID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineVersionRunID, fieldNumber: 14)
+      }
+      if !_storage._pipelineStepID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineStepID, fieldNumber: 15)
+      }
+      if !_storage._pipelineStepVersionID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineStepVersionID, fieldNumber: 16)
+      }
+      if !_storage._computeClusterUserID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._computeClusterUserID, fieldNumber: 17)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_ListLogEntriesRequest, rhs: Clarifai_Api_ListLogEntriesRequest) -> Bool {
-    if lhs.page != rhs.page {return false}
-    if lhs.perPage != rhs.perPage {return false}
-    if lhs.logType != rhs.logType {return false}
-    if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.modelID != rhs.modelID {return false}
-    if lhs.modelVersionID != rhs.modelVersionID {return false}
-    if lhs.workflowID != rhs.workflowID {return false}
-    if lhs.computeClusterID != rhs.computeClusterID {return false}
-    if lhs.nodepoolID != rhs.nodepoolID {return false}
-    if lhs.runnerID != rhs.runnerID {return false}
-    if lhs.pipelineID != rhs.pipelineID {return false}
-    if lhs.pipelineVersionID != rhs.pipelineVersionID {return false}
-    if lhs.pipelineVersionRunID != rhs.pipelineVersionRunID {return false}
-    if lhs.pipelineStepID != rhs.pipelineStepID {return false}
-    if lhs.pipelineStepVersionID != rhs.pipelineStepVersionID {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._page != rhs_storage._page {return false}
+        if _storage._perPage != rhs_storage._perPage {return false}
+        if _storage._logType != rhs_storage._logType {return false}
+        if _storage._userAppID != rhs_storage._userAppID {return false}
+        if _storage._modelID != rhs_storage._modelID {return false}
+        if _storage._modelVersionID != rhs_storage._modelVersionID {return false}
+        if _storage._workflowID != rhs_storage._workflowID {return false}
+        if _storage._computeClusterUserID != rhs_storage._computeClusterUserID {return false}
+        if _storage._computeClusterID != rhs_storage._computeClusterID {return false}
+        if _storage._nodepoolID != rhs_storage._nodepoolID {return false}
+        if _storage._runnerID != rhs_storage._runnerID {return false}
+        if _storage._pipelineID != rhs_storage._pipelineID {return false}
+        if _storage._pipelineVersionID != rhs_storage._pipelineVersionID {return false}
+        if _storage._pipelineVersionRunID != rhs_storage._pipelineVersionRunID {return false}
+        if _storage._pipelineStepID != rhs_storage._pipelineStepID {return false}
+        if _storage._pipelineStepVersionID != rhs_storage._pipelineStepVersionID {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -18875,6 +19379,7 @@ extension Clarifai_Api_StreamLogEntriesRequest: SwiftProtobuf.Message, SwiftProt
     3: .standard(proto: "model_id"),
     4: .standard(proto: "model_version_id"),
     5: .standard(proto: "workflow_id"),
+    17: .standard(proto: "compute_cluster_user_id"),
     6: .standard(proto: "compute_cluster_id"),
     7: .standard(proto: "nodepool_id"),
     8: .standard(proto: "runner_id"),
@@ -18904,6 +19409,7 @@ extension Clarifai_Api_StreamLogEntriesRequest: SwiftProtobuf.Message, SwiftProt
       case 14: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionRunID) }()
       case 15: try { try decoder.decodeSingularStringField(value: &self.pipelineStepID) }()
       case 16: try { try decoder.decodeSingularStringField(value: &self.pipelineStepVersionID) }()
+      case 17: try { try decoder.decodeSingularStringField(value: &self.computeClusterUserID) }()
       default: break
       }
     }
@@ -18953,6 +19459,9 @@ extension Clarifai_Api_StreamLogEntriesRequest: SwiftProtobuf.Message, SwiftProt
     if !self.pipelineStepVersionID.isEmpty {
       try visitor.visitSingularStringField(value: self.pipelineStepVersionID, fieldNumber: 16)
     }
+    if !self.computeClusterUserID.isEmpty {
+      try visitor.visitSingularStringField(value: self.computeClusterUserID, fieldNumber: 17)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -18962,6 +19471,7 @@ extension Clarifai_Api_StreamLogEntriesRequest: SwiftProtobuf.Message, SwiftProt
     if lhs.modelID != rhs.modelID {return false}
     if lhs.modelVersionID != rhs.modelVersionID {return false}
     if lhs.workflowID != rhs.workflowID {return false}
+    if lhs.computeClusterUserID != rhs.computeClusterUserID {return false}
     if lhs.computeClusterID != rhs.computeClusterID {return false}
     if lhs.nodepoolID != rhs.nodepoolID {return false}
     if lhs.runnerID != rhs.runnerID {return false}
@@ -30844,6 +31354,7 @@ extension Clarifai_Api_SyncStateRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     3: .same(proto: "nodepools"),
     4: .same(proto: "runners"),
     5: .standard(proto: "pipeline_version_runs"),
+    6: .same(proto: "secrets"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -30857,6 +31368,7 @@ extension Clarifai_Api_SyncStateRequest: SwiftProtobuf.Message, SwiftProtobuf._M
       case 3: try { try decoder.decodeRepeatedMessageField(value: &self.nodepools) }()
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.runners) }()
       case 5: try { try decoder.decodeRepeatedMessageField(value: &self.pipelineVersionRuns) }()
+      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.secrets) }()
       default: break
       }
     }
@@ -30878,6 +31390,9 @@ extension Clarifai_Api_SyncStateRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if !self.pipelineVersionRuns.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.pipelineVersionRuns, fieldNumber: 5)
     }
+    if !self.secrets.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.secrets, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -30887,6 +31402,7 @@ extension Clarifai_Api_SyncStateRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.nodepools != rhs.nodepools {return false}
     if lhs.runners != rhs.runners {return false}
     if lhs.pipelineVersionRuns != rhs.pipelineVersionRuns {return false}
+    if lhs.secrets != rhs.secrets {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -34672,7 +35188,7 @@ extension Clarifai_Api_GetSecretRequest: SwiftProtobuf.Message, SwiftProtobuf._M
   public static let protoMessageName: String = _protobuf_package + ".GetSecretRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "secret_id"),
+    2: .same(proto: "id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -34682,7 +35198,7 @@ extension Clarifai_Api_GetSecretRequest: SwiftProtobuf.Message, SwiftProtobuf._M
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.secretID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.id) }()
       default: break
       }
     }
@@ -34696,15 +35212,15 @@ extension Clarifai_Api_GetSecretRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     try { if let v = self._userAppID {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    if !self.secretID.isEmpty {
-      try visitor.visitSingularStringField(value: self.secretID, fieldNumber: 2)
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_GetSecretRequest, rhs: Clarifai_Api_GetSecretRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.secretID != rhs.secretID {return false}
+    if lhs.id != rhs.id {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -34804,8 +35320,8 @@ extension Clarifai_Api_PatchSecretsRequest: SwiftProtobuf.Message, SwiftProtobuf
   public static let protoMessageName: String = _protobuf_package + ".PatchSecretsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
-    2: .same(proto: "secrets"),
-    3: .same(proto: "action"),
+    5: .same(proto: "secret"),
+    8: .same(proto: "action"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -34815,8 +35331,8 @@ extension Clarifai_Api_PatchSecretsRequest: SwiftProtobuf.Message, SwiftProtobuf
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.secrets) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.action) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.secret) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.action) }()
       default: break
       }
     }
@@ -34830,18 +35346,18 @@ extension Clarifai_Api_PatchSecretsRequest: SwiftProtobuf.Message, SwiftProtobuf
     try { if let v = self._userAppID {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    if !self.secrets.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.secrets, fieldNumber: 2)
+    if !self.secret.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.secret, fieldNumber: 5)
     }
     if !self.action.isEmpty {
-      try visitor.visitSingularStringField(value: self.action, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: self.action, fieldNumber: 8)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PatchSecretsRequest, rhs: Clarifai_Api_PatchSecretsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.secrets != rhs.secrets {return false}
+    if lhs.secret != rhs.secret {return false}
     if lhs.action != rhs.action {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

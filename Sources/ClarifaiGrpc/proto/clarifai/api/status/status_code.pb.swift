@@ -255,6 +255,16 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case annotationModifyPending // = 24251
   case annotationModifyFailed // = 24252
 
+  /// Annotation (video) tracks are groups of annotations per frame
+  /// IDLE -> PROCESSING --> PENDING --> APPROVED --> (DELETED)
+  /// PROCESSING --> FAILED --> (DELETED)
+  /// PROCESSING --> (DELETED)
+  case annotationTrackIdle // = 24300
+  case annotationTrackInProgress // = 24301
+  case annotationTrackPending // = 24302
+  case annotationTrackApproved // = 24303
+  case annotationTrackFailed // = 24304
+
   /// Metadata related 249xx
   case metadataInvalidPatchArguments // = 24900
   case metadataParsingIssue // = 24901
@@ -349,6 +359,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case pipelineStepBuildUnexpectedError // = 26207
   case pipelineStepReady // = 26208
   case pipelineStepNotReady // = 26209
+
+  /// Pipeline related codes 263xx
+  case pipelineDoesNotExist // = 26300
+  case pipelineInvalidArgument // = 26301
+  case pipelineInvalidRequest // = 26302
 
   /// Input:Image related 30xxx
   case inputSuccess // = 30000
@@ -826,6 +841,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 24250: self = .annotationModifySuccess
     case 24251: self = .annotationModifyPending
     case 24252: self = .annotationModifyFailed
+    case 24300: self = .annotationTrackIdle
+    case 24301: self = .annotationTrackInProgress
+    case 24302: self = .annotationTrackPending
+    case 24303: self = .annotationTrackApproved
+    case 24304: self = .annotationTrackFailed
     case 24900: self = .metadataInvalidPatchArguments
     case 24901: self = .metadataParsingIssue
     case 24902: self = .metadataManipulationIssue
@@ -893,6 +913,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26207: self = .pipelineStepBuildUnexpectedError
     case 26208: self = .pipelineStepReady
     case 26209: self = .pipelineStepNotReady
+    case 26300: self = .pipelineDoesNotExist
+    case 26301: self = .pipelineInvalidArgument
+    case 26302: self = .pipelineInvalidRequest
     case 30000: self = .inputSuccess
     case 30001: self = .inputPending
     case 30002: self = .inputFailed
@@ -1236,6 +1259,11 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .annotationModifySuccess: return 24250
     case .annotationModifyPending: return 24251
     case .annotationModifyFailed: return 24252
+    case .annotationTrackIdle: return 24300
+    case .annotationTrackInProgress: return 24301
+    case .annotationTrackPending: return 24302
+    case .annotationTrackApproved: return 24303
+    case .annotationTrackFailed: return 24304
     case .metadataInvalidPatchArguments: return 24900
     case .metadataParsingIssue: return 24901
     case .metadataManipulationIssue: return 24902
@@ -1303,6 +1331,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .pipelineStepBuildUnexpectedError: return 26207
     case .pipelineStepReady: return 26208
     case .pipelineStepNotReady: return 26209
+    case .pipelineDoesNotExist: return 26300
+    case .pipelineInvalidArgument: return 26301
+    case .pipelineInvalidRequest: return 26302
     case .inputSuccess: return 30000
     case .inputPending: return 30001
     case .inputFailed: return 30002
@@ -1651,6 +1682,11 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .annotationModifySuccess,
     .annotationModifyPending,
     .annotationModifyFailed,
+    .annotationTrackIdle,
+    .annotationTrackInProgress,
+    .annotationTrackPending,
+    .annotationTrackApproved,
+    .annotationTrackFailed,
     .metadataInvalidPatchArguments,
     .metadataParsingIssue,
     .metadataManipulationIssue,
@@ -1718,6 +1754,9 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .pipelineStepBuildUnexpectedError,
     .pipelineStepReady,
     .pipelineStepNotReady,
+    .pipelineDoesNotExist,
+    .pipelineInvalidArgument,
+    .pipelineInvalidRequest,
     .inputSuccess,
     .inputPending,
     .inputFailed,
@@ -2064,6 +2103,11 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     24250: .same(proto: "ANNOTATION_MODIFY_SUCCESS"),
     24251: .same(proto: "ANNOTATION_MODIFY_PENDING"),
     24252: .same(proto: "ANNOTATION_MODIFY_FAILED"),
+    24300: .same(proto: "ANNOTATION_TRACK_IDLE"),
+    24301: .same(proto: "ANNOTATION_TRACK_IN_PROGRESS"),
+    24302: .same(proto: "ANNOTATION_TRACK_PENDING"),
+    24303: .same(proto: "ANNOTATION_TRACK_APPROVED"),
+    24304: .same(proto: "ANNOTATION_TRACK_FAILED"),
     24900: .same(proto: "METADATA_INVALID_PATCH_ARGUMENTS"),
     24901: .same(proto: "METADATA_PARSING_ISSUE"),
     24902: .same(proto: "METADATA_MANIPULATION_ISSUE"),
@@ -2131,6 +2175,9 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26207: .same(proto: "PIPELINE_STEP_BUILD_UNEXPECTED_ERROR"),
     26208: .same(proto: "PIPELINE_STEP_READY"),
     26209: .same(proto: "PIPELINE_STEP_NOT_READY"),
+    26300: .same(proto: "PIPELINE_DOES_NOT_EXIST"),
+    26301: .same(proto: "PIPELINE_INVALID_ARGUMENT"),
+    26302: .same(proto: "PIPELINE_INVALID_REQUEST"),
     30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
     30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
     30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),
