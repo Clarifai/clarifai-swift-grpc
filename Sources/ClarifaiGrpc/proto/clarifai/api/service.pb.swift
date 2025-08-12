@@ -12767,7 +12767,7 @@ public struct Clarifai_Api_DeletePipelinesRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  public var pipelineIds: [String] = []
+  public var ids: [String] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -33818,7 +33818,7 @@ extension Clarifai_Api_DeletePipelinesRequest: SwiftProtobuf.Message, SwiftProto
   public static let protoMessageName: String = _protobuf_package + ".DeletePipelinesRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "pipeline_ids"),
+    2: .same(proto: "ids"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -33828,7 +33828,7 @@ extension Clarifai_Api_DeletePipelinesRequest: SwiftProtobuf.Message, SwiftProto
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeRepeatedStringField(value: &self.pipelineIds) }()
+      case 2: try { try decoder.decodeRepeatedStringField(value: &self.ids) }()
       default: break
       }
     }
@@ -33842,15 +33842,15 @@ extension Clarifai_Api_DeletePipelinesRequest: SwiftProtobuf.Message, SwiftProto
     try { if let v = self._userAppID {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    if !self.pipelineIds.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.pipelineIds, fieldNumber: 2)
+    if !self.ids.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.ids, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_DeletePipelinesRequest, rhs: Clarifai_Api_DeletePipelinesRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
-    if lhs.pipelineIds != rhs.pipelineIds {return false}
+    if lhs.ids != rhs.ids {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

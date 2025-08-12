@@ -5131,6 +5131,16 @@ public struct Clarifai_Api_Model {
     set {_uniqueStorage()._replicaCount = newValue}
   }
 
+  /// OpenRouter Info for the model
+  public var openRouterInfo: Clarifai_Api_OpenRouterInfo {
+    get {return _storage._openRouterInfo ?? Clarifai_Api_OpenRouterInfo()}
+    set {_uniqueStorage()._openRouterInfo = newValue}
+  }
+  /// Returns true if `openRouterInfo` has been explicitly set.
+  public var hasOpenRouterInfo: Bool {return _storage._openRouterInfo != nil}
+  /// Clears the value of `openRouterInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenRouterInfo() {_uniqueStorage()._openRouterInfo = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Source of Model
@@ -5222,6 +5232,27 @@ extension Clarifai_Api_Model.BillingType: CaseIterable {
 }
 
 #endif  // swift(>=4.2)
+
+public struct Clarifai_Api_OpenRouterInfo {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var params: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _params ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_params = newValue}
+  }
+  /// Returns true if `params` has been explicitly set.
+  public var hasParams: Bool {return self._params != nil}
+  /// Clears the value of `params`. Subsequent reads from it will return its default value.
+  public mutating func clearParams() {self._params = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
+}
 
 /// A link to a html/markdown/text file that stores reference material tied to a model.
 public struct Clarifai_Api_ModelReference {
@@ -20654,6 +20685,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     41: .standard(proto: "featured_order"),
     42: .standard(proto: "deploy_restriction"),
     43: .standard(proto: "replica_count"),
+    44: .standard(proto: "open_router_info"),
   ]
 
   fileprivate class _StorageClass {
@@ -20692,6 +20724,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _featuredOrder: SwiftProtobuf.Google_Protobuf_Int32Value? = nil
     var _deployRestriction: Clarifai_Api_DeployRestriction = .usageRestrictionNotSet
     var _replicaCount: UInt32 = 0
+    var _openRouterInfo: Clarifai_Api_OpenRouterInfo? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -20733,6 +20766,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _featuredOrder = source._featuredOrder
       _deployRestriction = source._deployRestriction
       _replicaCount = source._replicaCount
+      _openRouterInfo = source._openRouterInfo
     }
   }
 
@@ -20786,6 +20820,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 41: try { try decoder.decodeSingularMessageField(value: &_storage._featuredOrder) }()
         case 42: try { try decoder.decodeSingularEnumField(value: &_storage._deployRestriction) }()
         case 43: try { try decoder.decodeSingularUInt32Field(value: &_storage._replicaCount) }()
+        case 44: try { try decoder.decodeSingularMessageField(value: &_storage._openRouterInfo) }()
         default: break
         }
       }
@@ -20903,6 +20938,9 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if _storage._replicaCount != 0 {
         try visitor.visitSingularUInt32Field(value: _storage._replicaCount, fieldNumber: 43)
       }
+      try { if let v = _storage._openRouterInfo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 44)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20947,6 +20985,7 @@ extension Clarifai_Api_Model: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._featuredOrder != rhs_storage._featuredOrder {return false}
         if _storage._deployRestriction != rhs_storage._deployRestriction {return false}
         if _storage._replicaCount != rhs_storage._replicaCount {return false}
+        if _storage._openRouterInfo != rhs_storage._openRouterInfo {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -20970,6 +21009,42 @@ extension Clarifai_Api_Model.BillingType: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "Tokens"),
     2: .same(proto: "Ops"),
   ]
+}
+
+extension Clarifai_Api_OpenRouterInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OpenRouterInfo"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "params"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._params) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._params {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_OpenRouterInfo, rhs: Clarifai_Api_OpenRouterInfo) -> Bool {
+    if lhs._params != rhs._params {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }
 
 extension Clarifai_Api_ModelReference: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {

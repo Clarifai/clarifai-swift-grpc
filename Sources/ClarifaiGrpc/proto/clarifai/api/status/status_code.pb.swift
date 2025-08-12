@@ -503,6 +503,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
 
   /// Stripe 44xxx
   case stripeEventError // = 44001
+  case stripeUnexpectedError // = 44002
 
   /// Redis/Cache 45xxx
   case cacheMiss // = 45001
@@ -515,6 +516,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case signupEventError // = 46001
   case signupFlagged // = 46002
   case filetypeUnsupported // = 46003
+  case loginEventError // = 46004
+  case siftUncategorizedError // = 46005
 
   /// Application counts related errors 470xx
   case appCountInvalidMessage // = 47001
@@ -1022,6 +1025,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 43108: self = .evaluationUnexpectedError
     case 43109: self = .evaluationMixed
     case 44001: self = .stripeEventError
+    case 44002: self = .stripeUnexpectedError
     case 45001: self = .cacheMiss
     case 45002: self = .redisScriptExitedWithFailure
     case 45003: self = .redisStreamErr
@@ -1030,6 +1034,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 46001: self = .signupEventError
     case 46002: self = .signupFlagged
     case 46003: self = .filetypeUnsupported
+    case 46004: self = .loginEventError
+    case 46005: self = .siftUncategorizedError
     case 47001: self = .appCountInvalidMessage
     case 47002: self = .appCountUpdateIncrementFailed
     case 47003: self = .appCountRebuildFailed
@@ -1440,6 +1446,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .evaluationUnexpectedError: return 43108
     case .evaluationMixed: return 43109
     case .stripeEventError: return 44001
+    case .stripeUnexpectedError: return 44002
     case .cacheMiss: return 45001
     case .redisScriptExitedWithFailure: return 45002
     case .redisStreamErr: return 45003
@@ -1448,6 +1455,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .signupEventError: return 46001
     case .signupFlagged: return 46002
     case .filetypeUnsupported: return 46003
+    case .loginEventError: return 46004
+    case .siftUncategorizedError: return 46005
     case .appCountInvalidMessage: return 47001
     case .appCountUpdateIncrementFailed: return 47002
     case .appCountRebuildFailed: return 47003
@@ -1863,6 +1872,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .evaluationUnexpectedError,
     .evaluationMixed,
     .stripeEventError,
+    .stripeUnexpectedError,
     .cacheMiss,
     .redisScriptExitedWithFailure,
     .redisStreamErr,
@@ -1871,6 +1881,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .signupEventError,
     .signupFlagged,
     .filetypeUnsupported,
+    .loginEventError,
+    .siftUncategorizedError,
     .appCountInvalidMessage,
     .appCountUpdateIncrementFailed,
     .appCountRebuildFailed,
@@ -2284,6 +2296,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     43108: .same(proto: "EVALUATION_UNEXPECTED_ERROR"),
     43109: .same(proto: "EVALUATION_MIXED"),
     44001: .same(proto: "STRIPE_EVENT_ERROR"),
+    44002: .same(proto: "STRIPE_UNEXPECTED_ERROR"),
     45001: .same(proto: "CACHE_MISS"),
     45002: .same(proto: "REDIS_SCRIPT_EXITED_WITH_FAILURE"),
     45003: .same(proto: "REDIS_STREAM_ERR"),
@@ -2292,6 +2305,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     46001: .same(proto: "SIGNUP_EVENT_ERROR"),
     46002: .same(proto: "SIGNUP_FLAGGED"),
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
+    46004: .same(proto: "LOGIN_EVENT_ERROR"),
+    46005: .same(proto: "SIFT_UNCATEGORIZED_ERROR"),
     47001: .same(proto: "APP_COUNT_INVALID_MESSAGE"),
     47002: .same(proto: "APP_COUNT_UPDATE_INCREMENT_FAILED"),
     47003: .same(proto: "APP_COUNT_REBUILD_FAILED"),

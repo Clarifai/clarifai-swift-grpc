@@ -1330,7 +1330,7 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
   func deletePipelines(
     _ request: Clarifai_Api_DeletePipelinesRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>
+  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_Status_BaseResponse>
 
   func getPipelineVersion(
     _ request: Clarifai_Api_GetPipelineVersionRequest,
@@ -1350,7 +1350,7 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
   func deletePipelineVersions(
     _ request: Clarifai_Api_DeletePipelineVersionsRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_Status_BaseResponse>
 
   func getPipelineVersionRun(
     _ request: Clarifai_Api_GetPipelineVersionRunRequest,
@@ -6236,7 +6236,7 @@ extension Clarifai_Api_V2ClientProtocol {
   public func deletePipelines(
     _ request: Clarifai_Api_DeletePipelinesRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse> {
+  ) -> UnaryCall<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_Status_BaseResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeletePipelines",
       request: request,
@@ -6308,7 +6308,7 @@ extension Clarifai_Api_V2ClientProtocol {
   public func deletePipelineVersions(
     _ request: Clarifai_Api_DeletePipelineVersionsRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse> {
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_Status_BaseResponse> {
     return self.makeUnaryCall(
       path: "/clarifai.api.V2/DeletePipelineVersions",
       request: request,
@@ -7357,7 +7357,7 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   func makePatchPipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
 
   /// - Returns: Interceptors to use when invoking 'deletePipelines'.
-  func makeDeletePipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+  func makeDeletePipelinesInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getPipelineVersion'.
   func makeGetPipelineVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineVersionRequest, Clarifai_Api_SinglePipelineVersionResponse>]
@@ -7369,7 +7369,7 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   func makePatchPipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
 
   /// - Returns: Interceptors to use when invoking 'deletePipelineVersions'.
-  func makeDeletePipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+  func makeDeletePipelineVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getPipelineVersionRun'.
   func makeGetPipelineVersionRunInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineVersionRunRequest, Clarifai_Api_SinglePipelineVersionRunResponse>]
@@ -8302,7 +8302,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   func patchPipelines(request: Clarifai_Api_PatchPipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
 
-  func deletePipelines(request: Clarifai_Api_DeletePipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineResponse>
+  func deletePipelines(request: Clarifai_Api_DeletePipelinesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   func getPipelineVersion(request: Clarifai_Api_GetPipelineVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineVersionResponse>
 
@@ -8310,7 +8310,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   func patchPipelineVersions(request: Clarifai_Api_PatchPipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionResponse>
 
-  func deletePipelineVersions(request: Clarifai_Api_DeletePipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionResponse>
+  func deletePipelineVersions(request: Clarifai_Api_DeletePipelineVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   func getPipelineVersionRun(request: Clarifai_Api_GetPipelineVersionRunRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineVersionRunResponse>
 
@@ -10691,7 +10691,7 @@ extension Clarifai_Api_V2Provider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelinesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineResponse>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeletePipelinesInterceptors() ?? [],
         userFunction: self.deletePipelines(request:context:)
       )
@@ -10727,7 +10727,7 @@ extension Clarifai_Api_V2Provider {
       return UnaryServerHandler(
         context: context,
         requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelineVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionResponse>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeletePipelineVersionsInterceptors() ?? [],
         userFunction: self.deletePipelineVersions(request:context:)
       )
@@ -11904,7 +11904,7 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'deletePipelines'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeletePipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_MultiPipelineResponse>]
+  func makeDeletePipelinesInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelinesRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'getPipelineVersion'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -11920,7 +11920,7 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'deletePipelineVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeletePipelineVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_MultiPipelineVersionResponse>]
+  func makeDeletePipelineVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineVersionsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'getPipelineVersionRun'.
   ///   Defaults to calling `self.makeInterceptors()`.
