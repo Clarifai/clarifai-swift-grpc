@@ -3683,7 +3683,7 @@ public struct Clarifai_Api_ListLogEntriesRequest {
     set {_uniqueStorage()._perPage = newValue}
   }
 
-  /// The type of log entry. Examples: model, agent, build, training.
+  /// The type of log entry. Choose from [agent, builder, builder.events, runner, runner.events, pipeline.version.run]
   public var logType: String {
     get {return _storage._logType}
     set {_uniqueStorage()._logType = newValue}

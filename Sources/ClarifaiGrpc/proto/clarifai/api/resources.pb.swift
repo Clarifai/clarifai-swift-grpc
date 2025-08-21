@@ -1623,12 +1623,6 @@ public struct Clarifai_Api_AnnotationTrack {
     set {_uniqueStorage()._id = newValue}
   }
 
-  /// ID of the application this annotation track is tied to
-  public var appID: String {
-    get {return _storage._appID}
-    set {_uniqueStorage()._appID = newValue}
-  }
-
   /// ID of the asset this annotation track is tied to
   public var inputID: String {
     get {return _storage._inputID}
@@ -1645,12 +1639,6 @@ public struct Clarifai_Api_AnnotationTrack {
   /// Clears the value of `concept`. Subsequent reads from it will return its default value.
   public mutating func clearConcept() {_uniqueStorage()._concept = nil}
 
-  /// The user the track belongs to (app owner)
-  public var userID: String {
-    get {return _storage._userID}
-    set {_uniqueStorage()._userID = newValue}
-  }
-
   /// AnnotationTrack Status
   public var status: Clarifai_Api_Status_Status {
     get {return _storage._status ?? Clarifai_Api_Status_Status()}
@@ -1661,16 +1649,28 @@ public struct Clarifai_Api_AnnotationTrack {
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   public mutating func clearStatus() {_uniqueStorage()._status = nil}
 
-  /// Start frame of the annotation track
-  public var startFrame: UInt32 {
-    get {return _storage._startFrame}
-    set {_uniqueStorage()._startFrame = newValue}
+  /// Start frame number (in original video) of the annotation track, inclusive.
+  public var startFrameNr: UInt32 {
+    get {return _storage._startFrameNr}
+    set {_uniqueStorage()._startFrameNr = newValue}
   }
 
-  /// End frame of the annotation track
-  public var endFrame: UInt32 {
-    get {return _storage._endFrame}
-    set {_uniqueStorage()._endFrame = newValue}
+  /// End frame number (in original video) of the annotation track, inclusive.
+  public var endFrameNr: UInt32 {
+    get {return _storage._endFrameNr}
+    set {_uniqueStorage()._endFrameNr = newValue}
+  }
+
+  /// Start time (in milliseconds of original video) of the annotation track, inclusive.
+  public var startFrameMs: UInt32 {
+    get {return _storage._startFrameMs}
+    set {_uniqueStorage()._startFrameMs = newValue}
+  }
+
+  /// End time (in milliseconds of original video) of the annotation track, inclusive.
+  public var endFrameMs: UInt32 {
+    get {return _storage._endFrameMs}
+    set {_uniqueStorage()._endFrameMs = newValue}
   }
 
   /// When the annotation track was created.
@@ -1693,13 +1693,21 @@ public struct Clarifai_Api_AnnotationTrack {
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
 
-  /// Frame rate of the video track.
-  /// 1 means it matches the original video FPS.
-  /// 2 means every second frame, etc.
+  /// Sampling rate of the annotation track in milliseconds.
+  public var sampleRateMs: UInt32 {
+    get {return _storage._sampleRateMs}
+    set {_uniqueStorage()._sampleRateMs = newValue}
+  }
+
+  /// Sampling frame rate of the video track in frame number increments
+  /// increment of 1 means it matches the original video FPS
+  /// increment of 2 means every second frame is sampled, etc.
   /// So if you have 30fps original video and frame_rate=3, your annotations in a track are stored at 30fps/3frame_rate=10 frames per second
-  public var frameRate: UInt32 {
-    get {return _storage._frameRate}
-    set {_uniqueStorage()._frameRate = newValue}
+  /// Useful if client relies on simple frame access.
+  /// Useful if video has variable frame rate (VFR), then annotations are also sampled with VFR in mind
+  public var sampleRateFrame: UInt32 {
+    get {return _storage._sampleRateFrame}
+    set {_uniqueStorage()._sampleRateFrame = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -16203,30 +16211,32 @@ extension Clarifai_Api_AnnotationTrack: SwiftProtobuf.Message, SwiftProtobuf._Me
   public static let protoMessageName: String = _protobuf_package + ".AnnotationTrack"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
-    2: .standard(proto: "app_id"),
     3: .standard(proto: "input_id"),
     4: .same(proto: "concept"),
-    5: .standard(proto: "user_id"),
     6: .same(proto: "status"),
-    7: .standard(proto: "start_frame"),
-    8: .standard(proto: "end_frame"),
+    16: .standard(proto: "start_frame_nr"),
+    17: .standard(proto: "end_frame_nr"),
+    14: .standard(proto: "start_frame_ms"),
+    15: .standard(proto: "end_frame_ms"),
     9: .standard(proto: "created_at"),
     10: .standard(proto: "modified_at"),
-    11: .standard(proto: "frame_rate"),
+    12: .standard(proto: "sample_rate_ms"),
+    13: .standard(proto: "sample_rate_frame"),
   ]
 
   fileprivate class _StorageClass {
     var _id: String = String()
-    var _appID: String = String()
     var _inputID: String = String()
     var _concept: Clarifai_Api_Concept? = nil
-    var _userID: String = String()
     var _status: Clarifai_Api_Status_Status? = nil
-    var _startFrame: UInt32 = 0
-    var _endFrame: UInt32 = 0
+    var _startFrameNr: UInt32 = 0
+    var _endFrameNr: UInt32 = 0
+    var _startFrameMs: UInt32 = 0
+    var _endFrameMs: UInt32 = 0
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _frameRate: UInt32 = 0
+    var _sampleRateMs: UInt32 = 0
+    var _sampleRateFrame: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -16234,16 +16244,17 @@ extension Clarifai_Api_AnnotationTrack: SwiftProtobuf.Message, SwiftProtobuf._Me
 
     init(copying source: _StorageClass) {
       _id = source._id
-      _appID = source._appID
       _inputID = source._inputID
       _concept = source._concept
-      _userID = source._userID
       _status = source._status
-      _startFrame = source._startFrame
-      _endFrame = source._endFrame
+      _startFrameNr = source._startFrameNr
+      _endFrameNr = source._endFrameNr
+      _startFrameMs = source._startFrameMs
+      _endFrameMs = source._endFrameMs
       _createdAt = source._createdAt
       _modifiedAt = source._modifiedAt
-      _frameRate = source._frameRate
+      _sampleRateMs = source._sampleRateMs
+      _sampleRateFrame = source._sampleRateFrame
     }
   }
 
@@ -16263,16 +16274,17 @@ extension Clarifai_Api_AnnotationTrack: SwiftProtobuf.Message, SwiftProtobuf._Me
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
         case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._appID) }()
         case 3: try { try decoder.decodeSingularStringField(value: &_storage._inputID) }()
         case 4: try { try decoder.decodeSingularMessageField(value: &_storage._concept) }()
-        case 5: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
-        case 7: try { try decoder.decodeSingularUInt32Field(value: &_storage._startFrame) }()
-        case 8: try { try decoder.decodeSingularUInt32Field(value: &_storage._endFrame) }()
         case 9: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
         case 10: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
-        case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._frameRate) }()
+        case 12: try { try decoder.decodeSingularUInt32Field(value: &_storage._sampleRateMs) }()
+        case 13: try { try decoder.decodeSingularUInt32Field(value: &_storage._sampleRateFrame) }()
+        case 14: try { try decoder.decodeSingularUInt32Field(value: &_storage._startFrameMs) }()
+        case 15: try { try decoder.decodeSingularUInt32Field(value: &_storage._endFrameMs) }()
+        case 16: try { try decoder.decodeSingularUInt32Field(value: &_storage._startFrameNr) }()
+        case 17: try { try decoder.decodeSingularUInt32Field(value: &_storage._endFrameNr) }()
         default: break
         }
       }
@@ -16288,35 +16300,38 @@ extension Clarifai_Api_AnnotationTrack: SwiftProtobuf.Message, SwiftProtobuf._Me
       if !_storage._id.isEmpty {
         try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
       }
-      if !_storage._appID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._appID, fieldNumber: 2)
-      }
       if !_storage._inputID.isEmpty {
         try visitor.visitSingularStringField(value: _storage._inputID, fieldNumber: 3)
       }
       try { if let v = _storage._concept {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
       } }()
-      if !_storage._userID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._userID, fieldNumber: 5)
-      }
       try { if let v = _storage._status {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
       } }()
-      if _storage._startFrame != 0 {
-        try visitor.visitSingularUInt32Field(value: _storage._startFrame, fieldNumber: 7)
-      }
-      if _storage._endFrame != 0 {
-        try visitor.visitSingularUInt32Field(value: _storage._endFrame, fieldNumber: 8)
-      }
       try { if let v = _storage._createdAt {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
       } }()
       try { if let v = _storage._modifiedAt {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
       } }()
-      if _storage._frameRate != 0 {
-        try visitor.visitSingularUInt32Field(value: _storage._frameRate, fieldNumber: 11)
+      if _storage._sampleRateMs != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._sampleRateMs, fieldNumber: 12)
+      }
+      if _storage._sampleRateFrame != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._sampleRateFrame, fieldNumber: 13)
+      }
+      if _storage._startFrameMs != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._startFrameMs, fieldNumber: 14)
+      }
+      if _storage._endFrameMs != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._endFrameMs, fieldNumber: 15)
+      }
+      if _storage._startFrameNr != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._startFrameNr, fieldNumber: 16)
+      }
+      if _storage._endFrameNr != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._endFrameNr, fieldNumber: 17)
       }
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -16328,16 +16343,17 @@ extension Clarifai_Api_AnnotationTrack: SwiftProtobuf.Message, SwiftProtobuf._Me
         let _storage = _args.0
         let rhs_storage = _args.1
         if _storage._id != rhs_storage._id {return false}
-        if _storage._appID != rhs_storage._appID {return false}
         if _storage._inputID != rhs_storage._inputID {return false}
         if _storage._concept != rhs_storage._concept {return false}
-        if _storage._userID != rhs_storage._userID {return false}
         if _storage._status != rhs_storage._status {return false}
-        if _storage._startFrame != rhs_storage._startFrame {return false}
-        if _storage._endFrame != rhs_storage._endFrame {return false}
+        if _storage._startFrameNr != rhs_storage._startFrameNr {return false}
+        if _storage._endFrameNr != rhs_storage._endFrameNr {return false}
+        if _storage._startFrameMs != rhs_storage._startFrameMs {return false}
+        if _storage._endFrameMs != rhs_storage._endFrameMs {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
-        if _storage._frameRate != rhs_storage._frameRate {return false}
+        if _storage._sampleRateMs != rhs_storage._sampleRateMs {return false}
+        if _storage._sampleRateFrame != rhs_storage._sampleRateFrame {return false}
         return true
       }
       if !storagesAreEqual {return false}
