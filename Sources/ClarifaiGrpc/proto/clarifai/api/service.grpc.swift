@@ -1421,6 +1421,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeleteSecretsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>
+
+  func postMetricsQuery(
+    _ request: Clarifai_Api_PostMetricsQueryRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostMetricsQueryRequest, Clarifai_Api_MetricsQueryResponse>
+
+  func listMetricLabels(
+    _ request: Clarifai_Api_ListMetricLabelsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListMetricLabelsRequest, Clarifai_Api_MultiMetricLabelsResponse>
 }
 
 extension Clarifai_Api_V2ClientProtocol {
@@ -6575,6 +6585,42 @@ extension Clarifai_Api_V2ClientProtocol {
       interceptors: self.interceptors?.makeDeleteSecretsInterceptors() ?? []
     )
   }
+
+  /// Unary call to PostMetricsQuery
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostMetricsQuery.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postMetricsQuery(
+    _ request: Clarifai_Api_PostMetricsQueryRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostMetricsQueryRequest, Clarifai_Api_MetricsQueryResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostMetricsQuery",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostMetricsQueryInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListMetricLabels
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListMetricLabels.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listMetricLabels(
+    _ request: Clarifai_Api_ListMetricLabelsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListMetricLabelsRequest, Clarifai_Api_MultiMetricLabelsResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListMetricLabels",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListMetricLabelsInterceptors() ?? []
+    )
+  }
 }
 
 public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
@@ -7412,6 +7458,12 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deleteSecrets'.
   func makeDeleteSecretsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postMetricsQuery'.
+  func makePostMetricsQueryInterceptors() -> [ClientInterceptor<Clarifai_Api_PostMetricsQueryRequest, Clarifai_Api_MetricsQueryResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listMetricLabels'.
+  func makeListMetricLabelsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListMetricLabelsRequest, Clarifai_Api_MultiMetricLabelsResponse>]
 }
 
 public final class Clarifai_Api_V2Client: Clarifai_Api_V2ClientProtocol {
@@ -8344,6 +8396,10 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func patchSecrets(request: Clarifai_Api_PatchSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
 
   func deleteSecrets(request: Clarifai_Api_DeleteSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
+
+  func postMetricsQuery(request: Clarifai_Api_PostMetricsQueryRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MetricsQueryResponse>
+
+  func listMetricLabels(request: Clarifai_Api_ListMetricLabelsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiMetricLabelsResponse>
 }
 
 extension Clarifai_Api_V2Provider {
@@ -10858,6 +10914,24 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteSecrets(request:context:)
       )
 
+    case "PostMetricsQuery":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostMetricsQueryRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MetricsQueryResponse>(),
+        interceptors: self.interceptors?.makePostMetricsQueryInterceptors() ?? [],
+        userFunction: self.postMetricsQuery(request:context:)
+      )
+
+    case "ListMetricLabels":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListMetricLabelsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiMetricLabelsResponse>(),
+        interceptors: self.interceptors?.makeListMetricLabelsInterceptors() ?? [],
+        userFunction: self.listMetricLabels(request:context:)
+      )
+
     default:
       return nil
     }
@@ -11977,4 +12051,12 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteSecrets'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteSecretsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteSecretsRequest, Clarifai_Api_MultiSecretResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postMetricsQuery'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostMetricsQueryInterceptors() -> [ServerInterceptor<Clarifai_Api_PostMetricsQueryRequest, Clarifai_Api_MetricsQueryResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listMetricLabels'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListMetricLabelsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListMetricLabelsRequest, Clarifai_Api_MultiMetricLabelsResponse>]
 }

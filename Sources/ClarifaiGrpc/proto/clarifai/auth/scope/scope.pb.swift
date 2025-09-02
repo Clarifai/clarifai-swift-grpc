@@ -327,6 +327,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case ecretsGet // = 160
   case ecretsAdd // = 161
   case ecretsDelete // = 162
+  case userMetricsGet // = 163
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -448,6 +449,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 160: self = .ecretsGet
     case 161: self = .ecretsAdd
     case 162: self = .ecretsDelete
+    case 163: self = .userMetricsGet
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -567,6 +569,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .ecretsGet: return 160
     case .ecretsAdd: return 161
     case .ecretsDelete: return 162
+    case .userMetricsGet: return 163
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -691,6 +694,7 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .ecretsGet,
     .ecretsAdd,
     .ecretsDelete,
+    .userMetricsGet,
   ]
 }
 
@@ -907,6 +911,7 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     160: .same(proto: "Secrets_Get"),
     161: .same(proto: "Secrets_Add"),
     162: .same(proto: "Secrets_Delete"),
+    163: .same(proto: "UserMetrics_Get"),
   ]
 }
 

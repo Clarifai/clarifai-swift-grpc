@@ -13159,6 +13159,9 @@ public struct Clarifai_Api_InstanceType {
   /// Clears the value of `allowedCapacityTypes`. Subsequent reads from it will return its default value.
   public mutating func clearAllowedCapacityTypes() {self._allowedCapacityTypes = nil}
 
+  /// The feature flag group associated with this instance type.
+  public var featureFlagGroup: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -13352,6 +13355,12 @@ public struct Clarifai_Api_ComputeInfo {
   /// Or should it be removed completely and use the nodepool accelerator type itself.
   /// These are the supported accelerators that the model can run on.
   public var acceleratorType: [String] = []
+
+  /// For multi-host accelerators (i.e., TPU Slices), this defines the slice topology.
+  /// Corresponds to the tpu.googleapis.com/topology annotation.
+  /// Example: "2x2x1" for a 16-chip slice using v4 TPUs.
+  /// Leave empty for single-host accelerators like GPUs or non-slice TPUs.
+  public var acceleratorTopology: [String] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -15755,6 +15764,35 @@ public struct Clarifai_Api_MetricSearchQuery {
   fileprivate var _startTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _aggregate: Clarifai_Api_MetricAggregate? = nil
+}
+
+public struct Clarifai_Api_MetricTypeLabels {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var metricType: Clarifai_Api_MetricType = .notSet
+
+  public var labels: [Clarifai_Api_MetricTypeLabels.LabelWithValues] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public struct LabelWithValues {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var label: Clarifai_Api_MetricLabel = .notSet
+
+    /// sample values for this label
+    public var values: [String] = []
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+  }
+
+  public init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -31242,6 +31280,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     5: .standard(proto: "cloud_provider"),
     6: .same(proto: "region"),
     7: .standard(proto: "allowed_capacity_types"),
+    8: .standard(proto: "feature_flag_group"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -31257,6 +31296,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
       case 5: try { try decoder.decodeSingularMessageField(value: &self._cloudProvider) }()
       case 6: try { try decoder.decodeSingularStringField(value: &self.region) }()
       case 7: try { try decoder.decodeSingularMessageField(value: &self._allowedCapacityTypes) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.featureFlagGroup) }()
       default: break
       }
     }
@@ -31288,6 +31328,9 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     try { if let v = self._allowedCapacityTypes {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
     } }()
+    if !self.featureFlagGroup.isEmpty {
+      try visitor.visitSingularStringField(value: self.featureFlagGroup, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -31299,6 +31342,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if lhs._cloudProvider != rhs._cloudProvider {return false}
     if lhs.region != rhs.region {return false}
     if lhs._allowedCapacityTypes != rhs._allowedCapacityTypes {return false}
+    if lhs.featureFlagGroup != rhs.featureFlagGroup {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -31500,6 +31544,7 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
     3: .standard(proto: "num_accelerators"),
     4: .standard(proto: "accelerator_memory"),
     5: .standard(proto: "accelerator_type"),
+    10: .standard(proto: "accelerator_topology"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -31515,6 +31560,7 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
       case 6: try { try decoder.decodeSingularStringField(value: &self.cpuLimit) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.cpuRequests) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.cpuMemoryRequests) }()
+      case 10: try { try decoder.decodeRepeatedStringField(value: &self.acceleratorTopology) }()
       default: break
       }
     }
@@ -31542,6 +31588,9 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if !self.cpuMemoryRequests.isEmpty {
       try visitor.visitSingularStringField(value: self.cpuMemoryRequests, fieldNumber: 8)
     }
+    if !self.acceleratorTopology.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.acceleratorTopology, fieldNumber: 10)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -31553,6 +31602,7 @@ extension Clarifai_Api_ComputeInfo: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if lhs.numAccelerators != rhs.numAccelerators {return false}
     if lhs.acceleratorMemory != rhs.acceleratorMemory {return false}
     if lhs.acceleratorType != rhs.acceleratorType {return false}
+    if lhs.acceleratorTopology != rhs.acceleratorTopology {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -34884,6 +34934,82 @@ extension Clarifai_Api_MetricSearchQuery: SwiftProtobuf.Message, SwiftProtobuf._
     if lhs.resolution != rhs.resolution {return false}
     if lhs.filters != rhs.filters {return false}
     if lhs._aggregate != rhs._aggregate {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MetricTypeLabels: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MetricTypeLabels"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "metric_type"),
+    2: .same(proto: "labels"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.metricType) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.labels) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.metricType != .notSet {
+      try visitor.visitSingularEnumField(value: self.metricType, fieldNumber: 1)
+    }
+    if !self.labels.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.labels, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MetricTypeLabels, rhs: Clarifai_Api_MetricTypeLabels) -> Bool {
+    if lhs.metricType != rhs.metricType {return false}
+    if lhs.labels != rhs.labels {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MetricTypeLabels.LabelWithValues: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_MetricTypeLabels.protoMessageName + ".LabelWithValues"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "label"),
+    2: .same(proto: "values"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.label) }()
+      case 2: try { try decoder.decodeRepeatedStringField(value: &self.values) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.label != .notSet {
+      try visitor.visitSingularEnumField(value: self.label, fieldNumber: 1)
+    }
+    if !self.values.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.values, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MetricTypeLabels.LabelWithValues, rhs: Clarifai_Api_MetricTypeLabels.LabelWithValues) -> Bool {
+    if lhs.label != rhs.label {return false}
+    if lhs.values != rhs.values {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
