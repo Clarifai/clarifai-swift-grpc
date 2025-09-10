@@ -4845,6 +4845,9 @@ public struct Clarifai_Api_Key {
   /// list of idp ids at which key is currently authorized
   public var authorizedIdpIds: [String] = []
 
+  /// The organization associated with the key, if any. This is applicable only for PAT keys.
+  public var organizationID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -20629,6 +20632,7 @@ extension Clarifai_Api_Key: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     5: .standard(proto: "created_at"),
     6: .standard(proto: "expires_at"),
     9: .standard(proto: "authorized_idp_ids"),
+    10: .standard(proto: "organization_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -20646,6 +20650,7 @@ extension Clarifai_Api_Key: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 7: try { try decoder.decodeRepeatedStringField(value: &self.endpoints) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.type) }()
       case 9: try { try decoder.decodeRepeatedStringField(value: &self.authorizedIdpIds) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self.organizationID) }()
       default: break
       }
     }
@@ -20683,6 +20688,9 @@ extension Clarifai_Api_Key: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.authorizedIdpIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.authorizedIdpIds, fieldNumber: 9)
     }
+    if !self.organizationID.isEmpty {
+      try visitor.visitSingularStringField(value: self.organizationID, fieldNumber: 10)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20696,6 +20704,7 @@ extension Clarifai_Api_Key: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._expiresAt != rhs._expiresAt {return false}
     if lhs.authorizedIdpIds != rhs.authorizedIdpIds {return false}
+    if lhs.organizationID != rhs.organizationID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
