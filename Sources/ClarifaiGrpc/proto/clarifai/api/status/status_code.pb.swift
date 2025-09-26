@@ -324,6 +324,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case runnerStreamEnd // = 25606
   case runnerItemCancelled // = 25607
   case runnerProcessingFailed // = 25608
+  case runnerSpecialHandlingNotComplete // = 25609
 
   /// Nodepool related codes 257xx
   case nodepoolDoesNotExist // = 25700
@@ -893,6 +894,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25606: self = .runnerStreamEnd
     case 25607: self = .runnerItemCancelled
     case 25608: self = .runnerProcessingFailed
+    case 25609: self = .runnerSpecialHandlingNotComplete
     case 25700: self = .nodepoolDoesNotExist
     case 25701: self = .nodepoolInvalidArgument
     case 25702: self = .nodepoolInvalidRequest
@@ -1314,6 +1316,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .runnerStreamEnd: return 25606
     case .runnerItemCancelled: return 25607
     case .runnerProcessingFailed: return 25608
+    case .runnerSpecialHandlingNotComplete: return 25609
     case .nodepoolDoesNotExist: return 25700
     case .nodepoolInvalidArgument: return 25701
     case .nodepoolInvalidRequest: return 25702
@@ -1740,6 +1743,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .runnerStreamEnd,
     .runnerItemCancelled,
     .runnerProcessingFailed,
+    .runnerSpecialHandlingNotComplete,
     .nodepoolDoesNotExist,
     .nodepoolInvalidArgument,
     .nodepoolInvalidRequest,
@@ -2164,6 +2168,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25606: .same(proto: "RUNNER_STREAM_END"),
     25607: .same(proto: "RUNNER_ITEM_CANCELLED"),
     25608: .same(proto: "RUNNER_PROCESSING_FAILED"),
+    25609: .same(proto: "RUNNER_SPECIAL_HANDLING_NOT_COMPLETE"),
     25700: .same(proto: "NODEPOOL_DOES_NOT_EXIST"),
     25701: .same(proto: "NODEPOOL_INVALID_ARGUMENT"),
     25702: .same(proto: "NODEPOOL_INVALID_REQUEST"),
