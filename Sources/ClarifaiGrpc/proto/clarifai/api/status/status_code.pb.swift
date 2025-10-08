@@ -519,6 +519,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case filetypeUnsupported // = 46003
   case loginEventError // = 46004
   case siftUncategorizedError // = 46005
+  case userFlagged // = 46006
 
   /// Application counts related errors 470xx
   case appCountInvalidMessage // = 47001
@@ -1038,6 +1039,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 46003: self = .filetypeUnsupported
     case 46004: self = .loginEventError
     case 46005: self = .siftUncategorizedError
+    case 46006: self = .userFlagged
     case 47001: self = .appCountInvalidMessage
     case 47002: self = .appCountUpdateIncrementFailed
     case 47003: self = .appCountRebuildFailed
@@ -1460,6 +1462,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .filetypeUnsupported: return 46003
     case .loginEventError: return 46004
     case .siftUncategorizedError: return 46005
+    case .userFlagged: return 46006
     case .appCountInvalidMessage: return 47001
     case .appCountUpdateIncrementFailed: return 47002
     case .appCountRebuildFailed: return 47003
@@ -1887,6 +1890,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .filetypeUnsupported,
     .loginEventError,
     .siftUncategorizedError,
+    .userFlagged,
     .appCountInvalidMessage,
     .appCountUpdateIncrementFailed,
     .appCountRebuildFailed,
@@ -2312,6 +2316,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
     46004: .same(proto: "LOGIN_EVENT_ERROR"),
     46005: .same(proto: "SIFT_UNCATEGORIZED_ERROR"),
+    46006: .same(proto: "USER_FLAGGED"),
     47001: .same(proto: "APP_COUNT_INVALID_MESSAGE"),
     47002: .same(proto: "APP_COUNT_UPDATE_INCREMENT_FAILED"),
     47003: .same(proto: "APP_COUNT_REBUILD_FAILED"),

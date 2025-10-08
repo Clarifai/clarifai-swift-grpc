@@ -120,6 +120,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_ListAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>
 
+  func postTrackAnnotationsSearches(
+    _ request: Clarifai_Api_PostTrackAnnotationsSearchesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>
+
   func postAnnotations(
     _ request: Clarifai_Api_PostAnnotationsRequest,
     callOptions: CallOptions?
@@ -1764,6 +1769,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeListAnnotationsInterceptors() ?? []
+    )
+  }
+
+  /// List video track annotations for a specific input.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostTrackAnnotationsSearches.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postTrackAnnotationsSearches(
+    _ request: Clarifai_Api_PostTrackAnnotationsSearchesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostTrackAnnotationsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostTrackAnnotationsSearchesInterceptors() ?? []
     )
   }
 
@@ -6679,6 +6702,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'listAnnotations'.
   func makeListAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'postTrackAnnotationsSearches'.
+  func makePostTrackAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
+
   /// - Returns: Interceptors to use when invoking 'postAnnotations'.
   func makePostAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
 
@@ -7550,6 +7576,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// List all the annotation.
   func listAnnotations(request: Clarifai_Api_ListAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+
+  /// List video track annotations for a specific input.
+  func postTrackAnnotationsSearches(request: Clarifai_Api_PostTrackAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
 
   /// Post annotations.
   func postAnnotations(request: Clarifai_Api_PostAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
@@ -8572,6 +8601,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
         interceptors: self.interceptors?.makeListAnnotationsInterceptors() ?? [],
         userFunction: self.listAnnotations(request:context:)
+      )
+
+    case "PostTrackAnnotationsSearches":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostTrackAnnotationsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
+        interceptors: self.interceptors?.makePostTrackAnnotationsSearchesInterceptors() ?? [],
+        userFunction: self.postTrackAnnotationsSearches(request:context:)
       )
 
     case "PostAnnotations":
@@ -11011,6 +11049,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'listAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeListAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postTrackAnnotationsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostTrackAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
 
   /// - Returns: Interceptors to use when handling 'postAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.

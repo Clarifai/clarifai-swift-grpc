@@ -3380,6 +3380,10 @@ public struct Clarifai_Api_FrameInfo {
   /// processing.
   public var time: UInt32 = 0
 
+  /// The absolute number of the frame in the (original) video
+  /// Different from index. Index is just the order in which frames were processed for search (and can be 0 for manual annotations)
+  public var number: UInt32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -12904,6 +12908,22 @@ extension Clarifai_Api_BookmarkOrigin.BookmarkType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+/// RunnerMetrics captures metrics and status for a Runner's underlying k8s deployment.
+/// This allows tracking of deployment health, replica counts, and other relevant metrics.
+public struct Clarifai_Api_RunnerMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var podsTotal: UInt32 = 0
+
+  public var podsRunning: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 /// A worker for compute within a nodepool of instances.
 /// This asks the API for work
 public struct Clarifai_Api_Runner {
@@ -13015,6 +13035,17 @@ public struct Clarifai_Api_Runner {
     get {return _storage._specialHandling}
     set {_uniqueStorage()._specialHandling = newValue}
   }
+
+  /// Metrics and status for the underlying k8s deployment.
+  /// Each Runner is 1:1 with a k8s deployment, so this field tracks deployment health and metrics.
+  public var runnerMetrics: Clarifai_Api_RunnerMetrics {
+    get {return _storage._runnerMetrics ?? Clarifai_Api_RunnerMetrics()}
+    set {_uniqueStorage()._runnerMetrics = newValue}
+  }
+  /// Returns true if `runnerMetrics` has been explicitly set.
+  public var hasRunnerMetrics: Bool {return _storage._runnerMetrics != nil}
+  /// Clears the value of `runnerMetrics`. Subsequent reads from it will return its default value.
+  public mutating func clearRunnerMetrics() {_uniqueStorage()._runnerMetrics = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -18691,6 +18722,7 @@ extension Clarifai_Api_FrameInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "index"),
     2: .same(proto: "time"),
+    3: .same(proto: "number"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -18701,6 +18733,7 @@ extension Clarifai_Api_FrameInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self.index) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.time) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.number) }()
       default: break
       }
     }
@@ -18713,12 +18746,16 @@ extension Clarifai_Api_FrameInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if self.time != 0 {
       try visitor.visitSingularUInt32Field(value: self.time, fieldNumber: 2)
     }
+    if self.number != 0 {
+      try visitor.visitSingularUInt32Field(value: self.number, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_FrameInfo, rhs: Clarifai_Api_FrameInfo) -> Bool {
     if lhs.index != rhs.index {return false}
     if lhs.time != rhs.time {return false}
+    if lhs.number != rhs.number {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -31148,6 +31185,44 @@ extension Clarifai_Api_BookmarkOrigin.BookmarkType: SwiftProtobuf._ProtoNameProv
   ]
 }
 
+extension Clarifai_Api_RunnerMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".RunnerMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "pods_total"),
+    2: .standard(proto: "pods_running"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.podsTotal) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.podsRunning) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.podsTotal != 0 {
+      try visitor.visitSingularUInt32Field(value: self.podsTotal, fieldNumber: 1)
+    }
+    if self.podsRunning != 0 {
+      try visitor.visitSingularUInt32Field(value: self.podsRunning, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_RunnerMetrics, rhs: Clarifai_Api_RunnerMetrics) -> Bool {
+    if lhs.podsTotal != rhs.podsTotal {return false}
+    if lhs.podsRunning != rhs.podsRunning {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Runner"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -31162,6 +31237,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     10: .standard(proto: "compute_info"),
     11: .standard(proto: "num_replicas"),
     12: .standard(proto: "special_handling"),
+    13: .standard(proto: "runner_metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -31176,6 +31252,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _computeInfo: Clarifai_Api_ComputeInfo? = nil
     var _numReplicas: UInt32 = 0
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
+    var _runnerMetrics: Clarifai_Api_RunnerMetrics? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -31193,6 +31270,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _computeInfo = source._computeInfo
       _numReplicas = source._numReplicas
       _specialHandling = source._specialHandling
+      _runnerMetrics = source._runnerMetrics
     }
   }
 
@@ -31222,6 +31300,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 10: try { try decoder.decodeSingularMessageField(value: &_storage._computeInfo) }()
         case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._numReplicas) }()
         case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
+        case 13: try { try decoder.decodeSingularMessageField(value: &_storage._runnerMetrics) }()
         default: break
         }
       }
@@ -31267,6 +31346,9 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       if !_storage._specialHandling.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._specialHandling, fieldNumber: 12)
       }
+      try { if let v = _storage._runnerMetrics {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31287,6 +31369,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._computeInfo != rhs_storage._computeInfo {return false}
         if _storage._numReplicas != rhs_storage._numReplicas {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
+        if _storage._runnerMetrics != rhs_storage._runnerMetrics {return false}
         return true
       }
       if !storagesAreEqual {return false}

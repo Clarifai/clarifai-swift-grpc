@@ -298,6 +298,62 @@ public struct Clarifai_Api_ListAnnotationsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+/// ListVideoTrackAnnotationsRequest
+public struct Clarifai_Api_PostTrackAnnotationsSearchesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// The input ID containing the video track annotations to list
+  public var inputID: String = String()
+
+  /// Filter annotations by track_id
+  public var trackID: String = String()
+
+  /// Filter annotations starting from this frame number (inclusive)
+  public var frameNumberStart: UInt32 = 0
+
+  /// Filter annotations starting from this time in milliseconds (inclusive)
+  public var frameTimeStart: UInt32 = 0
+
+  /// Filter by annotation type (e.g., "bounding_box", "point", "mask")
+  public var annotationType: Clarifai_Api_AnnotationDataType = .notSet
+
+  /// Maximum number of frames to return (default and max: 60)
+  public var maxFrames: UInt32 = 0
+
+  /// Maximum duration in milliseconds to return (default and max: 3000)
+  public var maxDuration: UInt32 = 0
+
+  /// Filtering by model version ID within a worker (optional).
+  /// Point annotations don't need filtering by worker.
+  /// For non-point types, a model version ID must be provided.
+  public var worker: Clarifai_Api_Worker {
+    get {return _worker ?? Clarifai_Api_Worker()}
+    set {_worker = newValue}
+  }
+  /// Returns true if `worker` has been explicitly set.
+  public var hasWorker: Bool {return self._worker != nil}
+  /// Clears the value of `worker`. Subsequent reads from it will return its default value.
+  public mutating func clearWorker() {self._worker = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _worker: Clarifai_Api_Worker? = nil
+}
+
 /// PostAnnotationsRequest
 public struct Clarifai_Api_PostAnnotationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -832,6 +888,15 @@ public struct Clarifai_Api_ListAppsRequest {
     set {sortBy = .sortByID(newValue)}
   }
 
+  /// Whether to order by search query relevance. Can only be used if search is not empty.
+  public var sortByRelevance: Bool {
+    get {
+      if case .sortByRelevance(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByRelevance(newValue)}
+  }
+
   /// Filtering options:
   /// If true, we only return apps that are handpicked by clarifai staff
   public var featuredOnly: Bool = false
@@ -894,6 +959,8 @@ public struct Clarifai_Api_ListAppsRequest {
     case sortByStarCount(Bool)
     /// Whether to order by the id
     case sortByID(Bool)
+    /// Whether to order by search query relevance. Can only be used if search is not empty.
+    case sortByRelevance(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListAppsRequest.OneOf_SortBy) -> Bool {
@@ -919,6 +986,10 @@ public struct Clarifai_Api_ListAppsRequest {
       }()
       case (.sortByID, .sortByID): return {
         guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByRelevance, .sortByRelevance): return {
+        guard case .sortByRelevance(let l) = lhs, case .sortByRelevance(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -2787,6 +2858,15 @@ public struct Clarifai_Api_ListDatasetsRequest {
     set {sortBy = .sortByID(newValue)}
   }
 
+  /// Whether to order by search query relevance. Can only be used if search is not empty.
+  public var sortByRelevance: Bool {
+    get {
+      if case .sortByRelevance(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByRelevance(newValue)}
+  }
+
   /// Filtering options:
   public var starredOnly: Bool = false
 
@@ -2823,6 +2903,8 @@ public struct Clarifai_Api_ListDatasetsRequest {
     case sortByModifiedAt(Bool)
     /// Whether to order by the external id
     case sortByID(Bool)
+    /// Whether to order by search query relevance. Can only be used if search is not empty.
+    case sortByRelevance(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListDatasetsRequest.OneOf_SortBy) -> Bool {
@@ -2844,6 +2926,10 @@ public struct Clarifai_Api_ListDatasetsRequest {
       }()
       case (.sortByID, .sortByID): return {
         guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByRelevance, .sortByRelevance): return {
+        guard case .sortByRelevance(let l) = lhs, case .sortByRelevance(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -4131,6 +4217,12 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._additionalFields = newValue}
   }
 
+  /// If true, show replica counts for models.
+  public var showReplicas: Bool {
+    get {return _storage._showReplicas}
+    set {_uniqueStorage()._showReplicas = newValue}
+  }
+
   /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool {
@@ -4187,6 +4279,15 @@ public struct Clarifai_Api_ListModelsRequest {
       return false
     }
     set {_uniqueStorage()._sortBy = .sortByStarCount(newValue)}
+  }
+
+  /// Whether to order by search query relevance. Can only be used if search is not empty.
+  public var sortByRelevance: Bool {
+    get {
+      if case .sortByRelevance(let v)? = _storage._sortBy {return v}
+      return false
+    }
+    set {_uniqueStorage()._sortBy = .sortByRelevance(newValue)}
   }
 
   /// Filtering options:
@@ -4268,6 +4369,46 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._bookmark = newValue}
   }
 
+  /// Filter by the model version ids. If set, only return the model of these versions.
+  public var modelVersionIds: [String] {
+    get {return _storage._modelVersionIds}
+    set {_uniqueStorage()._modelVersionIds = newValue}
+  }
+
+  /// Filter by LicenseType
+  public var licenseType: Clarifai_Api_LicenseType {
+    get {return _storage._licenseType}
+    set {_uniqueStorage()._licenseType = newValue}
+  }
+
+  /// Filter by Source
+  public var source: UInt32 {
+    get {return _storage._source}
+    set {_uniqueStorage()._source = newValue}
+  }
+
+  /// Filter by Creator
+  public var creator: String {
+    get {return _storage._creator}
+    set {_uniqueStorage()._creator = newValue}
+  }
+
+  /// Filter by model versions runners with replicas >= min_replicas.
+  public var minReplicas: UInt32 {
+    get {return _storage._minReplicas}
+    set {_uniqueStorage()._minReplicas = newValue}
+  }
+
+  /// Filter by visibility of the model. If set, only return models with the specified visibility.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _storage._visibility ?? Clarifai_Api_Visibility()}
+    set {_uniqueStorage()._visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return _storage._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
+
   /// Searching options:
   /// Specify a search parameter in order to perform keyword search on the
   /// following fields of the model:
@@ -4308,52 +4449,6 @@ public struct Clarifai_Api_ListModelsRequest {
     set {_uniqueStorage()._filterByUserID = newValue}
   }
 
-  /// Filter by the model version ids. If set, only return the model of these versions.
-  public var modelVersionIds: [String] {
-    get {return _storage._modelVersionIds}
-    set {_uniqueStorage()._modelVersionIds = newValue}
-  }
-
-  /// Filter by LicenseType
-  public var licenseType: Clarifai_Api_LicenseType {
-    get {return _storage._licenseType}
-    set {_uniqueStorage()._licenseType = newValue}
-  }
-
-  /// Filter by Source
-  public var source: UInt32 {
-    get {return _storage._source}
-    set {_uniqueStorage()._source = newValue}
-  }
-
-  /// Filter by Creator
-  public var creator: String {
-    get {return _storage._creator}
-    set {_uniqueStorage()._creator = newValue}
-  }
-
-  /// Filter by model versions runners with replicas >= min_replicas.
-  public var minReplicas: UInt32 {
-    get {return _storage._minReplicas}
-    set {_uniqueStorage()._minReplicas = newValue}
-  }
-
-  /// If true, show replica counts for models.
-  public var showReplicas: Bool {
-    get {return _storage._showReplicas}
-    set {_uniqueStorage()._showReplicas = newValue}
-  }
-
-  /// Filter by visibility of the model. If set, only return models with the specified visibility.
-  public var visibility: Clarifai_Api_Visibility {
-    get {return _storage._visibility ?? Clarifai_Api_Visibility()}
-    set {_uniqueStorage()._visibility = newValue}
-  }
-  /// Returns true if `visibility` has been explicitly set.
-  public var hasVisibility: Bool {return _storage._visibility != nil}
-  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
-  public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_SortBy: Equatable {
@@ -4368,6 +4463,8 @@ public struct Clarifai_Api_ListModelsRequest {
     case sortByCreatedAt(Bool)
     /// Whether to order by count of stars
     case sortByStarCount(Bool)
+    /// Whether to order by search query relevance. Can only be used if search is not empty.
+    case sortByRelevance(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListModelsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListModelsRequest.OneOf_SortBy) -> Bool {
@@ -4393,6 +4490,10 @@ public struct Clarifai_Api_ListModelsRequest {
       }()
       case (.sortByStarCount, .sortByStarCount): return {
         guard case .sortByStarCount(let l) = lhs, case .sortByStarCount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByRelevance, .sortByRelevance): return {
+        guard case .sortByRelevance(let l) = lhs, case .sortByRelevance(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -5040,6 +5141,9 @@ public struct Clarifai_Api_ListModelVersionsRequest {
   /// To list only the model versions that have been trained.
   public var trainedOnly: Bool = false
 
+  /// Filter by model versions runners with replicas >= min_replicas.
+  public var minReplicas: UInt32 = 0
+
   /// Sorting options:
   /// Whether to sort in ascending order. If false, will order in descending order.
   public var sortAscending: Bool = false
@@ -5082,9 +5186,6 @@ public struct Clarifai_Api_ListModelVersionsRequest {
     }
     set {sortBy = .sortByCreatedAt(newValue)}
   }
-
-  /// Filter by model versions runners with replicas >= min_replicas.
-  public var minReplicas: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -7753,6 +7854,15 @@ public struct Clarifai_Api_ListWorkflowsRequest {
     set {sortBy = .sortByStarCount(newValue)}
   }
 
+  /// Whether to order by search query relevance. Can only be used if search is not empty.
+  public var sortByRelevance: Bool {
+    get {
+      if case .sortByRelevance(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByRelevance(newValue)}
+  }
+
   /// Filtering options:
   /// If true, we only return workflows that are handpicked by clarifai staff
   public var featuredOnly: Bool = false
@@ -7812,6 +7922,8 @@ public struct Clarifai_Api_ListWorkflowsRequest {
     case sortByCreatedAt(Bool)
     /// Whether to order by the number of users stared the workflow
     case sortByStarCount(Bool)
+    /// Whether to order by search query relevance. Can only be used if search is not empty.
+    case sortByRelevance(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListWorkflowsRequest.OneOf_SortBy, rhs: Clarifai_Api_ListWorkflowsRequest.OneOf_SortBy) -> Bool {
@@ -7833,6 +7945,10 @@ public struct Clarifai_Api_ListWorkflowsRequest {
       }()
       case (.sortByStarCount, .sortByStarCount): return {
         guard case .sortByStarCount(let l) = lhs, case .sortByStarCount(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByRelevance, .sortByRelevance): return {
+        guard case .sortByRelevance(let l) = lhs, case .sortByRelevance(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -9377,6 +9493,15 @@ public struct Clarifai_Api_ListModulesRequest {
     set {sortBy = .sortByID(newValue)}
   }
 
+  /// Whether to order by search query relevance. Can only be used if search is not empty.
+  public var sortByRelevance: Bool {
+    get {
+      if case .sortByRelevance(let v)? = sortBy {return v}
+      return false
+    }
+    set {sortBy = .sortByRelevance(newValue)}
+  }
+
   /// Filtering options:
   public var starredOnly: Bool = false
 
@@ -9426,6 +9551,8 @@ public struct Clarifai_Api_ListModulesRequest {
     case sortByModifiedAt(Bool)
     /// Whether to order by the external id
     case sortByID(Bool)
+    /// Whether to order by search query relevance. Can only be used if search is not empty.
+    case sortByRelevance(Bool)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy, rhs: Clarifai_Api_ListModulesRequest.OneOf_SortBy) -> Bool {
@@ -9447,6 +9574,10 @@ public struct Clarifai_Api_ListModulesRequest {
       }()
       case (.sortByID, .sortByID): return {
         guard case .sortByID(let l) = lhs, case .sortByID(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.sortByRelevance, .sortByRelevance): return {
+        guard case .sortByRelevance(let l) = lhs, case .sortByRelevance(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -14088,6 +14219,90 @@ extension Clarifai_Api_ListAnnotationsRequest: SwiftProtobuf.Message, SwiftProto
   }
 }
 
+extension Clarifai_Api_PostTrackAnnotationsSearchesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostTrackAnnotationsSearchesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "input_id"),
+    3: .standard(proto: "track_id"),
+    4: .standard(proto: "frame_number_start"),
+    5: .standard(proto: "frame_time_start"),
+    6: .standard(proto: "annotation_type"),
+    7: .standard(proto: "max_frames"),
+    8: .standard(proto: "max_duration"),
+    9: .same(proto: "worker"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.trackID) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.frameNumberStart) }()
+      case 5: try { try decoder.decodeSingularUInt32Field(value: &self.frameTimeStart) }()
+      case 6: try { try decoder.decodeSingularEnumField(value: &self.annotationType) }()
+      case 7: try { try decoder.decodeSingularUInt32Field(value: &self.maxFrames) }()
+      case 8: try { try decoder.decodeSingularUInt32Field(value: &self.maxDuration) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._worker) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 2)
+    }
+    if !self.trackID.isEmpty {
+      try visitor.visitSingularStringField(value: self.trackID, fieldNumber: 3)
+    }
+    if self.frameNumberStart != 0 {
+      try visitor.visitSingularUInt32Field(value: self.frameNumberStart, fieldNumber: 4)
+    }
+    if self.frameTimeStart != 0 {
+      try visitor.visitSingularUInt32Field(value: self.frameTimeStart, fieldNumber: 5)
+    }
+    if self.annotationType != .notSet {
+      try visitor.visitSingularEnumField(value: self.annotationType, fieldNumber: 6)
+    }
+    if self.maxFrames != 0 {
+      try visitor.visitSingularUInt32Field(value: self.maxFrames, fieldNumber: 7)
+    }
+    if self.maxDuration != 0 {
+      try visitor.visitSingularUInt32Field(value: self.maxDuration, fieldNumber: 8)
+    }
+    try { if let v = self._worker {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostTrackAnnotationsSearchesRequest, rhs: Clarifai_Api_PostTrackAnnotationsSearchesRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.trackID != rhs.trackID {return false}
+    if lhs.frameNumberStart != rhs.frameNumberStart {return false}
+    if lhs.frameTimeStart != rhs.frameTimeStart {return false}
+    if lhs.annotationType != rhs.annotationType {return false}
+    if lhs.maxFrames != rhs.maxFrames {return false}
+    if lhs.maxDuration != rhs.maxDuration {return false}
+    if lhs._worker != rhs._worker {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_PostAnnotationsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PostAnnotationsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -14887,6 +15102,7 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     12: .standard(proto: "sort_by_created_at"),
     13: .standard(proto: "sort_by_star_count"),
     17: .standard(proto: "sort_by_id"),
+    19: .standard(proto: "sort_by_relevance"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     16: .standard(proto: "template_only"),
@@ -14956,6 +15172,14 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
         }
       }()
       case 18: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
+      case 19: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByRelevance(v)
+        }
+      }()
       default: break
       }
     }
@@ -15029,6 +15253,9 @@ extension Clarifai_Api_ListAppsRequest: SwiftProtobuf.Message, SwiftProtobuf._Me
     } }()
     try { if let v = self._visibility {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    } }()
+    try { if case .sortByRelevance(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 19)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -17848,6 +18075,7 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
     11: .standard(proto: "sort_by_id"),
+    14: .standard(proto: "sort_by_relevance"),
     4: .standard(proto: "starred_only"),
     10: .same(proto: "bookmark"),
     13: .same(proto: "search"),
@@ -17901,6 +18129,14 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
       }()
       case 12: try { try decoder.decodeSingularStringField(value: &self.id) }()
       case 13: try { try decoder.decodeSingularStringField(value: &self.search) }()
+      case 14: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByRelevance(v)
+        }
+      }()
       default: break
       }
     }
@@ -17956,6 +18192,9 @@ extension Clarifai_Api_ListDatasetsRequest: SwiftProtobuf.Message, SwiftProtobuf
     if !self.search.isEmpty {
       try visitor.visitSingularStringField(value: self.search, fieldNumber: 13)
     }
+    try { if case .sortByRelevance(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 14)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -20080,12 +20319,14 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     2: .same(proto: "page"),
     3: .standard(proto: "per_page"),
     19: .standard(proto: "additional_fields"),
+    34: .standard(proto: "show_replicas"),
     10: .standard(proto: "sort_ascending"),
     11: .standard(proto: "sort_by_name"),
     12: .standard(proto: "sort_by_num_inputs"),
     13: .standard(proto: "sort_by_modified_at"),
     24: .standard(proto: "sort_by_created_at"),
     25: .standard(proto: "sort_by_star_count"),
+    36: .standard(proto: "sort_by_relevance"),
     6: .standard(proto: "model_type_id"),
     7: .standard(proto: "trained_only"),
     8: .standard(proto: "input_fields"),
@@ -20098,17 +20339,16 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     21: .same(proto: "languages"),
     23: .standard(proto: "dont_fetch_from_main"),
     26: .same(proto: "bookmark"),
-    27: .same(proto: "search"),
-    14: .same(proto: "query"),
-    5: .same(proto: "name"),
-    22: .standard(proto: "filter_by_user_id"),
     28: .standard(proto: "model_version_ids"),
     29: .standard(proto: "license_type"),
     30: .same(proto: "source"),
     31: .same(proto: "creator"),
     33: .standard(proto: "min_replicas"),
-    34: .standard(proto: "show_replicas"),
     35: .same(proto: "visibility"),
+    27: .same(proto: "search"),
+    14: .same(proto: "query"),
+    5: .same(proto: "name"),
+    22: .standard(proto: "filter_by_user_id"),
   ]
 
   fileprivate class _StorageClass {
@@ -20116,6 +20356,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _page: UInt32 = 0
     var _perPage: UInt32 = 0
     var _additionalFields: [String] = []
+    var _showReplicas: Bool = false
     var _sortAscending: Bool = false
     var _sortBy: Clarifai_Api_ListModelsRequest.OneOf_SortBy?
     var _modelTypeID: String = String()
@@ -20130,17 +20371,16 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
     var _languages: [String] = []
     var _dontFetchFromMain: Bool = false
     var _bookmark: Bool = false
-    var _search: String = String()
-    var _query: String = String()
-    var _name: String = String()
-    var _filterByUserID: Bool = false
     var _modelVersionIds: [String] = []
     var _licenseType: Clarifai_Api_LicenseType = .unknownLicenseType
     var _source: UInt32 = 0
     var _creator: String = String()
     var _minReplicas: UInt32 = 0
-    var _showReplicas: Bool = false
     var _visibility: Clarifai_Api_Visibility? = nil
+    var _search: String = String()
+    var _query: String = String()
+    var _name: String = String()
+    var _filterByUserID: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -20151,6 +20391,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _page = source._page
       _perPage = source._perPage
       _additionalFields = source._additionalFields
+      _showReplicas = source._showReplicas
       _sortAscending = source._sortAscending
       _sortBy = source._sortBy
       _modelTypeID = source._modelTypeID
@@ -20165,17 +20406,16 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       _languages = source._languages
       _dontFetchFromMain = source._dontFetchFromMain
       _bookmark = source._bookmark
-      _search = source._search
-      _query = source._query
-      _name = source._name
-      _filterByUserID = source._filterByUserID
       _modelVersionIds = source._modelVersionIds
       _licenseType = source._licenseType
       _source = source._source
       _creator = source._creator
       _minReplicas = source._minReplicas
-      _showReplicas = source._showReplicas
       _visibility = source._visibility
+      _search = source._search
+      _query = source._query
+      _name = source._name
+      _filterByUserID = source._filterByUserID
     }
   }
 
@@ -20262,6 +20502,14 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         case 33: try { try decoder.decodeSingularUInt32Field(value: &_storage._minReplicas) }()
         case 34: try { try decoder.decodeSingularBoolField(value: &_storage._showReplicas) }()
         case 35: try { try decoder.decodeSingularMessageField(value: &_storage._visibility) }()
+        case 36: try {
+          var v: Bool?
+          try decoder.decodeSingularBoolField(value: &v)
+          if let v = v {
+            if _storage._sortBy != nil {try decoder.handleConflictingOneOf()}
+            _storage._sortBy = .sortByRelevance(v)
+          }
+        }()
         default: break
         }
       }
@@ -20384,6 +20632,9 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
       try { if let v = _storage._visibility {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 35)
       } }()
+      try { if case .sortByRelevance(let v)? = _storage._sortBy {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 36)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -20397,6 +20648,7 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._page != rhs_storage._page {return false}
         if _storage._perPage != rhs_storage._perPage {return false}
         if _storage._additionalFields != rhs_storage._additionalFields {return false}
+        if _storage._showReplicas != rhs_storage._showReplicas {return false}
         if _storage._sortAscending != rhs_storage._sortAscending {return false}
         if _storage._sortBy != rhs_storage._sortBy {return false}
         if _storage._modelTypeID != rhs_storage._modelTypeID {return false}
@@ -20411,17 +20663,16 @@ extension Clarifai_Api_ListModelsRequest: SwiftProtobuf.Message, SwiftProtobuf._
         if _storage._languages != rhs_storage._languages {return false}
         if _storage._dontFetchFromMain != rhs_storage._dontFetchFromMain {return false}
         if _storage._bookmark != rhs_storage._bookmark {return false}
-        if _storage._search != rhs_storage._search {return false}
-        if _storage._query != rhs_storage._query {return false}
-        if _storage._name != rhs_storage._name {return false}
-        if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
         if _storage._modelVersionIds != rhs_storage._modelVersionIds {return false}
         if _storage._licenseType != rhs_storage._licenseType {return false}
         if _storage._source != rhs_storage._source {return false}
         if _storage._creator != rhs_storage._creator {return false}
         if _storage._minReplicas != rhs_storage._minReplicas {return false}
-        if _storage._showReplicas != rhs_storage._showReplicas {return false}
         if _storage._visibility != rhs_storage._visibility {return false}
+        if _storage._search != rhs_storage._search {return false}
+        if _storage._query != rhs_storage._query {return false}
+        if _storage._name != rhs_storage._name {return false}
+        if _storage._filterByUserID != rhs_storage._filterByUserID {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -21480,12 +21731,12 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     4: .standard(proto: "per_page"),
     5: .standard(proto: "concept_ids"),
     6: .standard(proto: "trained_only"),
+    12: .standard(proto: "min_replicas"),
     7: .standard(proto: "sort_ascending"),
     8: .standard(proto: "sort_by_status_code"),
     9: .standard(proto: "sort_by_num_inputs"),
     10: .standard(proto: "sort_by_description"),
     11: .standard(proto: "sort_by_created_at"),
-    12: .standard(proto: "min_replicas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -21597,9 +21848,9 @@ extension Clarifai_Api_ListModelVersionsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs.perPage != rhs.perPage {return false}
     if lhs.conceptIds != rhs.conceptIds {return false}
     if lhs.trainedOnly != rhs.trainedOnly {return false}
+    if lhs.minReplicas != rhs.minReplicas {return false}
     if lhs.sortAscending != rhs.sortAscending {return false}
     if lhs.sortBy != rhs.sortBy {return false}
-    if lhs.minReplicas != rhs.minReplicas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -25722,6 +25973,7 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     7: .standard(proto: "sort_by_modified_at"),
     13: .standard(proto: "sort_by_created_at"),
     14: .standard(proto: "sort_by_star_count"),
+    18: .standard(proto: "sort_by_relevance"),
     9: .standard(proto: "featured_only"),
     11: .standard(proto: "starred_only"),
     15: .same(proto: "bookmark"),
@@ -25783,6 +26035,14 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
       case 15: try { try decoder.decodeSingularBoolField(value: &self.bookmark) }()
       case 16: try { try decoder.decodeSingularStringField(value: &self.search) }()
       case 17: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
+      case 18: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByRelevance(v)
+        }
+      }()
       default: break
       }
     }
@@ -25853,6 +26113,9 @@ extension Clarifai_Api_ListWorkflowsRequest: SwiftProtobuf.Message, SwiftProtobu
     }
     try { if let v = self._visibility {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+    } }()
+    try { if case .sortByRelevance(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 18)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -28225,6 +28488,7 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     8: .standard(proto: "sort_by_star_count"),
     9: .standard(proto: "sort_by_modified_at"),
     11: .standard(proto: "sort_by_id"),
+    16: .standard(proto: "sort_by_relevance"),
     4: .standard(proto: "starred_only"),
     10: .same(proto: "bookmark"),
     14: .same(proto: "search"),
@@ -28282,6 +28546,14 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
       case 13: try { try decoder.decodeSingularBoolField(value: &self.filterByUserID) }()
       case 14: try { try decoder.decodeSingularStringField(value: &self.search) }()
       case 15: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
+      case 16: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.sortBy != nil {try decoder.handleConflictingOneOf()}
+          self.sortBy = .sortByRelevance(v)
+        }
+      }()
       default: break
       }
     }
@@ -28342,6 +28614,9 @@ extension Clarifai_Api_ListModulesRequest: SwiftProtobuf.Message, SwiftProtobuf.
     }
     try { if let v = self._visibility {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    } }()
+    try { if case .sortByRelevance(let v)? = self.sortBy {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 16)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
