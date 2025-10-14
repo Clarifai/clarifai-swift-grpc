@@ -3880,11 +3880,53 @@ public struct Clarifai_Api_Input {
     set {_uniqueStorage()._datasetIds = newValue}
   }
 
+  /// Global settings for annotation tracks.
+  public var settings: Clarifai_Api_InputSettings {
+    get {return _storage._settings ?? Clarifai_Api_InputSettings()}
+    set {_uniqueStorage()._settings = newValue}
+  }
+  /// Returns true if `settings` has been explicitly set.
+  public var hasSettings: Bool {return _storage._settings != nil}
+  /// Clears the value of `settings`. Subsequent reads from it will return its default value.
+  public mutating func clearSettings() {_uniqueStorage()._settings = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_InputSettings {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Default model used for annotation generation (SAM2, etc.)
+  /// Make sure to set correct model version id, app id and user id etc.
+  /// Workflow is not supported here yet
+  public var worker: Clarifai_Api_Worker {
+    get {return _worker ?? Clarifai_Api_Worker()}
+    set {_worker = newValue}
+  }
+  /// Returns true if `worker` has been explicitly set.
+  public var hasWorker: Bool {return self._worker != nil}
+  /// Clears the value of `worker`. Subsequent reads from it will return its default value.
+  public mutating func clearWorker() {self._worker = nil}
+
+  /// Sampling settings used
+  public var sampleRateMs: UInt32 = 0
+
+  public var sampleRateFrame: UInt32 = 0
+
+  /// Pinned concept ids
+  public var pinnedConceptIds: [String] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _worker: Clarifai_Api_Worker? = nil
 }
 
 /// InputBatch is a batch of Input resources. Large amounts of inputs are usually
@@ -19453,6 +19495,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     5: .standard(proto: "modified_at"),
     6: .same(proto: "status"),
     7: .standard(proto: "dataset_ids"),
+    8: .same(proto: "settings"),
   ]
 
   fileprivate class _StorageClass {
@@ -19462,6 +19505,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _status: Clarifai_Api_Status_Status? = nil
     var _datasetIds: [String] = []
+    var _settings: Clarifai_Api_InputSettings? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -19474,6 +19518,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       _modifiedAt = source._modifiedAt
       _status = source._status
       _datasetIds = source._datasetIds
+      _settings = source._settings
     }
   }
 
@@ -19498,6 +19543,7 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
         case 7: try { try decoder.decodeRepeatedStringField(value: &_storage._datasetIds) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._settings) }()
         default: break
         }
       }
@@ -19528,6 +19574,9 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
       if !_storage._datasetIds.isEmpty {
         try visitor.visitRepeatedStringField(value: _storage._datasetIds, fieldNumber: 7)
       }
+      try { if let v = _storage._settings {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -19543,10 +19592,65 @@ extension Clarifai_Api_Input: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
         if _storage._status != rhs_storage._status {return false}
         if _storage._datasetIds != rhs_storage._datasetIds {return false}
+        if _storage._settings != rhs_storage._settings {return false}
         return true
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_InputSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".InputSettings"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "worker"),
+    2: .standard(proto: "sample_rate_ms"),
+    3: .standard(proto: "sample_rate_frame"),
+    4: .standard(proto: "pinned_concept_ids"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._worker) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.sampleRateMs) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.sampleRateFrame) }()
+      case 4: try { try decoder.decodeRepeatedStringField(value: &self.pinnedConceptIds) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._worker {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if self.sampleRateMs != 0 {
+      try visitor.visitSingularUInt32Field(value: self.sampleRateMs, fieldNumber: 2)
+    }
+    if self.sampleRateFrame != 0 {
+      try visitor.visitSingularUInt32Field(value: self.sampleRateFrame, fieldNumber: 3)
+    }
+    if !self.pinnedConceptIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.pinnedConceptIds, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_InputSettings, rhs: Clarifai_Api_InputSettings) -> Bool {
+    if lhs._worker != rhs._worker {return false}
+    if lhs.sampleRateMs != rhs.sampleRateMs {return false}
+    if lhs.sampleRateFrame != rhs.sampleRateFrame {return false}
+    if lhs.pinnedConceptIds != rhs.pinnedConceptIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
