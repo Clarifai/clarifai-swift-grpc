@@ -3920,7 +3920,7 @@ public struct Clarifai_Api_InputSettings {
   public var sampleRateFrame: UInt32 = 0
 
   /// Pinned concept ids
-  public var pinnedConceptIds: [String] = []
+  public var pinnedConcepts: [Clarifai_Api_Concept] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -5634,7 +5634,7 @@ public struct Clarifai_Api_EvalInfo {
   fileprivate var _params: SwiftProtobuf.Google_Protobuf_Struct? = nil
 }
 
-/// DEPRECATED: no longer support importing models from third party toolkits
+/// DEPRECATED: no longer support importing models from third-party toolkits
 public struct Clarifai_Api_ImportInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -15353,6 +15353,36 @@ public struct Clarifai_Api_Pipeline {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
+public struct Clarifai_Api_PipelineVersionConfig {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// StepVersionSecrets maps step version references to their secret configurations
+  /// The outer map key is the step version reference (e.g. "step1" or the step version ID)
+  /// The inner map key is the secret name (e.g. "EMAIL_PROVIDER_API_KEY")
+  /// The inner map value is the secret reference (e.g. "users/1/secrets/secret-1")
+  public var stepVersionSecrets: Dictionary<String,Clarifai_Api_StepSecretConfig> = [:]
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+/// StepSecretConfig defines secrets for a specific step version
+public struct Clarifai_Api_StepSecretConfig {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Map of secret name to secret reference
+  public var secrets: Dictionary<String,String> = [:]
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct Clarifai_Api_PipelineVersion {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -15425,6 +15455,16 @@ public struct Clarifai_Api_PipelineVersion {
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {self._modifiedAt = nil}
 
+  /// Pipeline version configuration including step secrets
+  public var config: Clarifai_Api_PipelineVersionConfig {
+    get {return _config ?? Clarifai_Api_PipelineVersionConfig()}
+    set {_config = newValue}
+  }
+  /// Returns true if `config` has been explicitly set.
+  public var hasConfig: Bool {return self._config != nil}
+  /// Clears the value of `config`. Subsequent reads from it will return its default value.
+  public mutating func clearConfig() {self._config = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -15434,6 +15474,7 @@ public struct Clarifai_Api_PipelineVersion {
   fileprivate var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _config: Clarifai_Api_PipelineVersionConfig? = nil
 }
 
 public struct Clarifai_Api_OrchestrationStatus {
@@ -19608,7 +19649,7 @@ extension Clarifai_Api_InputSettings: SwiftProtobuf.Message, SwiftProtobuf._Mess
     1: .same(proto: "worker"),
     2: .standard(proto: "sample_rate_ms"),
     3: .standard(proto: "sample_rate_frame"),
-    4: .standard(proto: "pinned_concept_ids"),
+    4: .standard(proto: "pinned_concepts"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -19620,7 +19661,7 @@ extension Clarifai_Api_InputSettings: SwiftProtobuf.Message, SwiftProtobuf._Mess
       case 1: try { try decoder.decodeSingularMessageField(value: &self._worker) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.sampleRateMs) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.sampleRateFrame) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.pinnedConceptIds) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.pinnedConcepts) }()
       default: break
       }
     }
@@ -19640,8 +19681,8 @@ extension Clarifai_Api_InputSettings: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if self.sampleRateFrame != 0 {
       try visitor.visitSingularUInt32Field(value: self.sampleRateFrame, fieldNumber: 3)
     }
-    if !self.pinnedConceptIds.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.pinnedConceptIds, fieldNumber: 4)
+    if !self.pinnedConcepts.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.pinnedConcepts, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -19650,7 +19691,7 @@ extension Clarifai_Api_InputSettings: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if lhs._worker != rhs._worker {return false}
     if lhs.sampleRateMs != rhs.sampleRateMs {return false}
     if lhs.sampleRateFrame != rhs.sampleRateFrame {return false}
-    if lhs.pinnedConceptIds != rhs.pinnedConceptIds {return false}
+    if lhs.pinnedConcepts != rhs.pinnedConcepts {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -34571,6 +34612,70 @@ extension Clarifai_Api_Pipeline: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
+extension Clarifai_Api_PipelineVersionConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PipelineVersionConfig"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "step_version_secrets"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_StepSecretConfig>.self, value: &self.stepVersionSecrets) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.stepVersionSecrets.isEmpty {
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_StepSecretConfig>.self, value: self.stepVersionSecrets, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineVersionConfig, rhs: Clarifai_Api_PipelineVersionConfig) -> Bool {
+    if lhs.stepVersionSecrets != rhs.stepVersionSecrets {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_StepSecretConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".StepSecretConfig"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "secrets"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: &self.secrets) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.secrets.isEmpty {
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: self.secrets, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_StepSecretConfig, rhs: Clarifai_Api_StepSecretConfig) -> Bool {
+    if lhs.secrets != rhs.secrets {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_PipelineVersion: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PipelineVersion"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -34584,6 +34689,7 @@ extension Clarifai_Api_PipelineVersion: SwiftProtobuf.Message, SwiftProtobuf._Me
     8: .same(proto: "metadata"),
     9: .standard(proto: "created_at"),
     10: .standard(proto: "modified_at"),
+    11: .same(proto: "config"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -34602,6 +34708,7 @@ extension Clarifai_Api_PipelineVersion: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 8: try { try decoder.decodeSingularMessageField(value: &self._metadata) }()
       case 9: try { try decoder.decodeSingularMessageField(value: &self._createdAt) }()
       case 10: try { try decoder.decodeSingularMessageField(value: &self._modifiedAt) }()
+      case 11: try { try decoder.decodeSingularMessageField(value: &self._config) }()
       default: break
       }
     }
@@ -34642,6 +34749,9 @@ extension Clarifai_Api_PipelineVersion: SwiftProtobuf.Message, SwiftProtobuf._Me
     try { if let v = self._modifiedAt {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
     } }()
+    try { if let v = self._config {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -34656,6 +34766,7 @@ extension Clarifai_Api_PipelineVersion: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs._metadata != rhs._metadata {return false}
     if lhs._createdAt != rhs._createdAt {return false}
     if lhs._modifiedAt != rhs._modifiedAt {return false}
+    if lhs._config != rhs._config {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

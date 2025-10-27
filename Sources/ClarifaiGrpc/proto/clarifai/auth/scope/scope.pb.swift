@@ -328,6 +328,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case ecretsAdd // = 161
   case ecretsDelete // = 162
   case userMetricsGet // = 163
+  case annotationTracksGet // = 166
+  case annotationTracksAdd // = 167
+  case annotationTracksDelete // = 168
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -450,6 +453,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 161: self = .ecretsAdd
     case 162: self = .ecretsDelete
     case 163: self = .userMetricsGet
+    case 166: self = .annotationTracksGet
+    case 167: self = .annotationTracksAdd
+    case 168: self = .annotationTracksDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -570,6 +576,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .ecretsAdd: return 161
     case .ecretsDelete: return 162
     case .userMetricsGet: return 163
+    case .annotationTracksGet: return 166
+    case .annotationTracksAdd: return 167
+    case .annotationTracksDelete: return 168
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -695,6 +704,9 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .ecretsAdd,
     .ecretsDelete,
     .userMetricsGet,
+    .annotationTracksGet,
+    .annotationTracksAdd,
+    .annotationTracksDelete,
   ]
 }
 
@@ -912,6 +924,9 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     161: .same(proto: "Secrets_Add"),
     162: .same(proto: "Secrets_Delete"),
     163: .same(proto: "UserMetrics_Get"),
+    166: .same(proto: "AnnotationTracks_Get"),
+    167: .same(proto: "AnnotationTracks_Add"),
+    168: .same(proto: "AnnotationTracks_Delete"),
   ]
 }
 
