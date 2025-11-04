@@ -14927,6 +14927,73 @@ public struct Clarifai_Api_WorkflowVersionEvaluationData {
   fileprivate var _workflowEvaluationSampleResult: Clarifai_Api_WorkflowEvaluationInputResult? = nil
 }
 
+public struct Clarifai_Api_ArgoParameterOverride {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var name: String = String()
+
+  /// Argo parameters are always strings
+  public var value: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_ArgoArgsOverride {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var parameters: [Clarifai_Api_ArgoParameterOverride] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_OrchestrationArgsOverride {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var override: Clarifai_Api_OrchestrationArgsOverride.OneOf_Override? = nil
+
+  /// Future: KubeFlowArgsOverride, AirflowArgsOverride, etc.
+  public var argoArgsOverride: Clarifai_Api_ArgoArgsOverride {
+    get {
+      if case .argoArgsOverride(let v)? = override {return v}
+      return Clarifai_Api_ArgoArgsOverride()
+    }
+    set {override = .argoArgsOverride(newValue)}
+  }
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_Override: Equatable {
+    /// Future: KubeFlowArgsOverride, AirflowArgsOverride, etc.
+    case argoArgsOverride(Clarifai_Api_ArgoArgsOverride)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_OrchestrationArgsOverride.OneOf_Override, rhs: Clarifai_Api_OrchestrationArgsOverride.OneOf_Override) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.argoArgsOverride, .argoArgsOverride): return {
+        guard case .argoArgsOverride(let l) = lhs, case .argoArgsOverride(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      }
+    }
+  #endif
+  }
+
+  public init() {}
+}
+
 public struct Clarifai_Api_ArgoOrchestrationSpec {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -15612,6 +15679,26 @@ public struct Clarifai_Api_PipelineVersionRun {
   public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
   /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
   public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
+
+  /// Optional: Overrides to input arguments for the orchestration system.
+  public var inputArgsOverride: Clarifai_Api_OrchestrationArgsOverride {
+    get {return _storage._inputArgsOverride ?? Clarifai_Api_OrchestrationArgsOverride()}
+    set {_uniqueStorage()._inputArgsOverride = newValue}
+  }
+  /// Returns true if `inputArgsOverride` has been explicitly set.
+  public var hasInputArgsOverride: Bool {return _storage._inputArgsOverride != nil}
+  /// Clears the value of `inputArgsOverride`. Subsequent reads from it will return its default value.
+  public mutating func clearInputArgsOverride() {_uniqueStorage()._inputArgsOverride = nil}
+
+  /// Final merged orchestration spec snapshot submitted to backend.
+  public var orchestrationSpec: Clarifai_Api_OrchestrationSpec {
+    get {return _storage._orchestrationSpec ?? Clarifai_Api_OrchestrationSpec()}
+    set {_uniqueStorage()._orchestrationSpec = newValue}
+  }
+  /// Returns true if `orchestrationSpec` has been explicitly set.
+  public var hasOrchestrationSpec: Bool {return _storage._orchestrationSpec != nil}
+  /// Clears the value of `orchestrationSpec`. Subsequent reads from it will return its default value.
+  public mutating func clearOrchestrationSpec() {_uniqueStorage()._orchestrationSpec = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -33970,6 +34057,124 @@ extension Clarifai_Api_WorkflowVersionEvaluationData: SwiftProtobuf.Message, Swi
   }
 }
 
+extension Clarifai_Api_ArgoParameterOverride: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ArgoParameterOverride"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "name"),
+    2: .same(proto: "value"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.value) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
+    }
+    if !self.value.isEmpty {
+      try visitor.visitSingularStringField(value: self.value, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ArgoParameterOverride, rhs: Clarifai_Api_ArgoParameterOverride) -> Bool {
+    if lhs.name != rhs.name {return false}
+    if lhs.value != rhs.value {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ArgoArgsOverride: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ArgoArgsOverride"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "parameters"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.parameters) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.parameters.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.parameters, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ArgoArgsOverride, rhs: Clarifai_Api_ArgoArgsOverride) -> Bool {
+    if lhs.parameters != rhs.parameters {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_OrchestrationArgsOverride: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".OrchestrationArgsOverride"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "argo_args_override"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Clarifai_Api_ArgoArgsOverride?
+        var hadOneofValue = false
+        if let current = self.override {
+          hadOneofValue = true
+          if case .argoArgsOverride(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.override = .argoArgsOverride(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if case .argoArgsOverride(let v)? = self.override {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_OrchestrationArgsOverride, rhs: Clarifai_Api_OrchestrationArgsOverride) -> Bool {
+    if lhs.override != rhs.override {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_ArgoOrchestrationSpec: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ArgoOrchestrationSpec"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -34869,6 +35074,8 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
     6: .standard(proto: "app_id"),
     7: .standard(proto: "created_at"),
     8: .standard(proto: "modified_at"),
+    9: .standard(proto: "input_args_override"),
+    10: .standard(proto: "orchestration_spec"),
   ]
 
   fileprivate class _StorageClass {
@@ -34880,6 +35087,8 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
     var _appID: String = String()
     var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _inputArgsOverride: Clarifai_Api_OrchestrationArgsOverride? = nil
+    var _orchestrationSpec: Clarifai_Api_OrchestrationSpec? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -34894,6 +35103,8 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
       _appID = source._appID
       _createdAt = source._createdAt
       _modifiedAt = source._modifiedAt
+      _inputArgsOverride = source._inputArgsOverride
+      _orchestrationSpec = source._orchestrationSpec
     }
   }
 
@@ -34920,6 +35131,8 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._appID) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
         case 8: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._inputArgsOverride) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._orchestrationSpec) }()
         default: break
         }
       }
@@ -34956,6 +35169,12 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
       try { if let v = _storage._modifiedAt {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
       } }()
+      try { if let v = _storage._inputArgsOverride {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._orchestrationSpec {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -34973,6 +35192,8 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
         if _storage._appID != rhs_storage._appID {return false}
         if _storage._createdAt != rhs_storage._createdAt {return false}
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
+        if _storage._inputArgsOverride != rhs_storage._inputArgsOverride {return false}
+        if _storage._orchestrationSpec != rhs_storage._orchestrationSpec {return false}
         return true
       }
       if !storagesAreEqual {return false}
