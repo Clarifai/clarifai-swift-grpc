@@ -1201,6 +1201,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>
 
+  func patchComputeClusters(
+    _ request: Clarifai_Api_PatchComputeClustersRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PatchComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>
+
   func getNodepool(
     _ request: Clarifai_Api_GetNodepoolRequest,
     callOptions: CallOptions?
@@ -5789,6 +5794,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to PatchComputeClusters
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PatchComputeClusters.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func patchComputeClusters(
+    _ request: Clarifai_Api_PatchComputeClustersRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PatchComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PatchComputeClusters",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePatchComputeClustersInterceptors() ?? []
+    )
+  }
+
   /// Nodepools CRUD
   ///
   /// - Parameters:
@@ -7350,6 +7373,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteComputeClusters'.
   func makeDeleteComputeClustersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'patchComputeClusters'.
+  func makePatchComputeClustersInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getNodepool'.
   func makeGetNodepoolInterceptors() -> [ClientInterceptor<Clarifai_Api_GetNodepoolRequest, Clarifai_Api_SingleNodepoolResponse>]
 
@@ -8326,6 +8352,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Delete multiple compute_clusters in one request.
   func deleteComputeClusters(request: Clarifai_Api_DeleteComputeClustersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func patchComputeClusters(request: Clarifai_Api_PatchComputeClustersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiComputeClusterResponse>
 
   /// Nodepools CRUD
   func getNodepool(request: Clarifai_Api_GetNodepoolRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleNodepoolResponse>
@@ -10547,6 +10575,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteComputeClusters(request:context:)
       )
 
+    case "PatchComputeClusters":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchComputeClustersRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiComputeClusterResponse>(),
+        interceptors: self.interceptors?.makePatchComputeClustersInterceptors() ?? [],
+        userFunction: self.patchComputeClusters(request:context:)
+      )
+
     case "GetNodepool":
       return UnaryServerHandler(
         context: context,
@@ -11913,6 +11950,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteComputeClusters'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteComputeClustersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteComputeClustersRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'patchComputeClusters'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePatchComputeClustersInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchComputeClustersRequest, Clarifai_Api_MultiComputeClusterResponse>]
 
   /// - Returns: Interceptors to use when handling 'getNodepool'.
   ///   Defaults to calling `self.makeInterceptors()`.

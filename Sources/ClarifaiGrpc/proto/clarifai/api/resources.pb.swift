@@ -15425,25 +15425,11 @@ public struct Clarifai_Api_PipelineVersionConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// StepVersionSecrets maps step version references to their secret configurations
-  /// The outer map key is the step version reference (e.g. "step1" or the step version ID)
-  /// The inner map key is the secret name (e.g. "EMAIL_PROVIDER_API_KEY")
-  /// The inner map value is the secret reference (e.g. "users/1/secrets/secret-1")
-  public var stepVersionSecrets: Dictionary<String,Clarifai_Api_StepSecretConfig> = [:]
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
-/// StepSecretConfig defines secrets for a specific step version
-public struct Clarifai_Api_StepSecretConfig {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Map of secret name to secret reference
-  public var secrets: Dictionary<String,String> = [:]
+  /// StepVersionSecrets maps step names to their secret configurations
+  /// Using google.protobuf.Struct to create the desired flat JSON structure
+  /// This produces: {stepName: {secretName: "users/user-name/secrets/key"}} 
+  /// example: {"step-0": {"API_KEY": "users/user-name/secrets/key"}} 
+  public var stepVersionSecrets: Dictionary<String,SwiftProtobuf.Google_Protobuf_Struct> = [:]
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -15691,6 +15677,7 @@ public struct Clarifai_Api_PipelineVersionRun {
   public mutating func clearInputArgsOverride() {_uniqueStorage()._inputArgsOverride = nil}
 
   /// Final merged orchestration spec snapshot submitted to backend.
+  /// This field is read-only and cannot be set during creation.
   public var orchestrationSpec: Clarifai_Api_OrchestrationSpec {
     get {return _storage._orchestrationSpec ?? Clarifai_Api_OrchestrationSpec()}
     set {_uniqueStorage()._orchestrationSpec = newValue}
@@ -34829,7 +34816,7 @@ extension Clarifai_Api_PipelineVersionConfig: SwiftProtobuf.Message, SwiftProtob
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_StepSecretConfig>.self, value: &self.stepVersionSecrets) }()
+      case 1: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.Google_Protobuf_Struct>.self, value: &self.stepVersionSecrets) }()
       default: break
       }
     }
@@ -34837,45 +34824,13 @@ extension Clarifai_Api_PipelineVersionConfig: SwiftProtobuf.Message, SwiftProtob
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.stepVersionSecrets.isEmpty {
-      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,Clarifai_Api_StepSecretConfig>.self, value: self.stepVersionSecrets, fieldNumber: 1)
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMessageMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.Google_Protobuf_Struct>.self, value: self.stepVersionSecrets, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PipelineVersionConfig, rhs: Clarifai_Api_PipelineVersionConfig) -> Bool {
     if lhs.stepVersionSecrets != rhs.stepVersionSecrets {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_StepSecretConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StepSecretConfig"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "secrets"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: &self.secrets) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.secrets.isEmpty {
-      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: self.secrets, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_StepSecretConfig, rhs: Clarifai_Api_StepSecretConfig) -> Bool {
-    if lhs.secrets != rhs.secrets {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
