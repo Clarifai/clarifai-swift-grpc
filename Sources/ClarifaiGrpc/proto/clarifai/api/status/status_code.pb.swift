@@ -602,6 +602,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case labelOrderCanceled // = 55004
 
   /// License Related Status Code 600xx
+  /// DEPRECATED: License feature is fully deprecated now.
   case licenseActive // = 60000
   case licenseDoesNotExist // = 60001
   case licenseNeedUpdate // = 60002

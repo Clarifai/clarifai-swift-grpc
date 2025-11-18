@@ -285,102 +285,6 @@ extension Clarifai_Api_DatasetVersionExportFormat: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public enum Clarifai_Api_ExpirationAction: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-  case notSet // = 0
-
-  /// Progressively delay the execution of operations
-  case delay // = 1
-
-  /// Cease functioning
-  case expiry // = 2
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .notSet
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .notSet
-    case 1: self = .delay
-    case 2: self = .expiry
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .notSet: return 0
-    case .delay: return 1
-    case .expiry: return 2
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension Clarifai_Api_ExpirationAction: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_ExpirationAction] = [
-    .notSet,
-    .delay,
-    .expiry,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
-public enum Clarifai_Api_LicenseScope: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-  case notSet // = 0
-  case predict // = 1
-  case train // = 2
-  case search // = 3
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .notSet
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .notSet
-    case 1: self = .predict
-    case 2: self = .train
-    case 3: self = .search
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .notSet: return 0
-    case .predict: return 1
-    case .train: return 2
-    case .search: return 3
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension Clarifai_Api_LicenseScope: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_LicenseScope] = [
-    .notSet,
-    .predict,
-    .train,
-    .search,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
 public enum Clarifai_Api_LicenseType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case unknownLicenseType // = 0
@@ -3183,6 +3087,16 @@ public struct Clarifai_Api_Data {
     get {return _storage._stringValue}
     set {_uniqueStorage()._stringValue = newValue}
   }
+
+  /// To handle Input and output json
+  public var structValue: SwiftProtobuf.Google_Protobuf_Struct {
+    get {return _storage._structValue ?? SwiftProtobuf.Google_Protobuf_Struct()}
+    set {_uniqueStorage()._structValue = newValue}
+  }
+  /// Returns true if `structValue` has been explicitly set.
+  public var hasStructValue: Bool {return _storage._structValue != nil}
+  /// Clears the value of `structValue`. Subsequent reads from it will return its default value.
+  public mutating func clearStructValue() {_uniqueStorage()._structValue = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -15427,8 +15341,8 @@ public struct Clarifai_Api_PipelineVersionConfig {
 
   /// StepVersionSecrets maps step names to their secret configurations
   /// Using google.protobuf.Struct to create the desired flat JSON structure
-  /// This produces: {stepName: {secretName: "users/user-name/secrets/key"}} 
-  /// example: {"step-0": {"API_KEY": "users/user-name/secrets/key"}} 
+  /// This produces: {stepName: {secretName: "users/user-name/secrets/key"}}
+  /// example: {"step-0": {"API_KEY": "users/user-name/secrets/key"}}
   public var stepVersionSecrets: Dictionary<String,SwiftProtobuf.Google_Protobuf_Struct> = [:]
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -16127,23 +16041,6 @@ extension Clarifai_Api_DatasetVersionExportFormat: SwiftProtobuf._ProtoNameProvi
     1: .same(proto: "CLARIFAI_DATA_PROTOBUF"),
     2: .same(proto: "COCO"),
     3: .same(proto: "CLARIFAI_DATA_JSON"),
-  ]
-}
-
-extension Clarifai_Api_ExpirationAction: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "EXPIRATION_ACTION_NOT_SET"),
-    1: .same(proto: "DELAY"),
-    2: .same(proto: "EXPIRY"),
-  ]
-}
-
-extension Clarifai_Api_LicenseScope: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "LICENSE_SCOPE_NOT_SET"),
-    1: .same(proto: "PREDICT"),
-    2: .same(proto: "TRAIN"),
-    3: .same(proto: "SEARCH"),
   ]
 }
 
@@ -18388,6 +18285,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     23: .standard(proto: "bytes_value"),
     24: .standard(proto: "bool_value"),
     25: .standard(proto: "string_value"),
+    26: .standard(proto: "struct_value"),
   ]
 
   fileprivate class _StorageClass {
@@ -18414,6 +18312,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _bytesValue: Data = Data()
     var _boolValue: Bool = false
     var _stringValue: String = String()
+    var _structValue: SwiftProtobuf.Google_Protobuf_Struct? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -18443,6 +18342,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _bytesValue = source._bytesValue
       _boolValue = source._boolValue
       _stringValue = source._stringValue
+      _structValue = source._structValue
     }
   }
 
@@ -18484,6 +18384,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 23: try { try decoder.decodeSingularBytesField(value: &_storage._bytesValue) }()
         case 24: try { try decoder.decodeSingularBoolField(value: &_storage._boolValue) }()
         case 25: try { try decoder.decodeSingularStringField(value: &_storage._stringValue) }()
+        case 26: try { try decoder.decodeSingularMessageField(value: &_storage._structValue) }()
         default: break
         }
       }
@@ -18565,6 +18466,9 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       if !_storage._stringValue.isEmpty {
         try visitor.visitSingularStringField(value: _storage._stringValue, fieldNumber: 25)
       }
+      try { if let v = _storage._structValue {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 26)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -18597,6 +18501,7 @@ extension Clarifai_Api_Data: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._bytesValue != rhs_storage._bytesValue {return false}
         if _storage._boolValue != rhs_storage._boolValue {return false}
         if _storage._stringValue != rhs_storage._stringValue {return false}
+        if _storage._structValue != rhs_storage._structValue {return false}
         return true
       }
       if !storagesAreEqual {return false}
