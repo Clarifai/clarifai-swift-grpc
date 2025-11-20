@@ -7013,54 +7013,6 @@ public struct Clarifai_Api_EvalTestSetEntry {
   fileprivate var _groundTruthAnnotation: Clarifai_Api_Annotation? = nil
 }
 
-/// LOPQEvalResult
-public struct Clarifai_Api_LOPQEvalResult {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Rank k for which all metrics are reported.
-  public var k: Int32 = 0
-
-  /// Recall @ k assuming the brute force search is the ground truth.
-  public var recallVsBruteForce: Float = 0
-
-  /// Kendall's tau correlation @ k assuming the brute force search is the ground truth.
-  public var kendallTauVsBruteForce: Float = 0
-
-  /// The percentage of the most frequent code in the indexed part of evaluation data.
-  public var mostFrequentCodePercent: Float = 0
-
-  /// Normalized Discounted Cumulative Gain (NDCG) @ k with a ground truth inferred from annotations
-  /// and/or prediction for this evaluation LOPQ model.
-  /// NDCG uses individual relevance scores of each returned image to evaluate the usefulness, or
-  /// gain, of a document based on its position in the result list. The premise of DCG is that
-  /// highly relevant documents appearing lower in a search result list should be penalized as the
-  /// graded relevance value is reduced logarithmically proportional to the position of the result.
-  /// See: https://en.wikipedia.org/wiki/Information_retrieval#Discounted_cumulative_gain
-  ///
-  /// To compute the relevance score between two images we consider two cases:
-  /// 1) Only one label for each image
-  /// An image is relevant to an image query iff they are labeled the same (score 1), and
-  /// not relevant otherwise (score 0)
-  /// 2) Multiple labels for each image
-  /// Here an image relevancy with respect to a single image query is measured by f-beta score
-  /// assuming the query image list of labels as ground truth and comparing them with that of
-  /// the search result. These labels can come from image annotations or if substitute_annotation_misses
-  /// is set, predictions of base classifier where any prediction with prob < prob_threshold are
-  /// discarded. To quantify the relevancy score of a single search result we opt to compute precision
-  /// and recall @ k for simplicity, and combine them with f-beta score to obtain a single number.
-  public var lopqNdcg: Float = 0
-
-  /// Brute force NDCG which gives a baseline to compare to and is a measure of how good
-  /// the embeddings are.
-  public var bruteForceNdcg: Float = 0
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-}
-
 /// MetricsSummary
 public struct Clarifai_Api_MetricsSummary {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -7086,8 +7038,6 @@ public struct Clarifai_Api_MetricsSummary {
   public var meanAvgPrecisionIou50: Float = 0
 
   public var meanAvgPrecisionIouRange: Float = 0
-
-  public var lopqMetrics: [Clarifai_Api_LOPQEvalResult] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -8014,78 +7964,6 @@ public struct Clarifai_Api_Rank {
   public init() {}
 
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
-}
-
-/// AnnotationSearchMetrics
-public struct Clarifai_Api_AnnotationSearchMetrics {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The ground truth we are evaluating against
-  public var groundTruth: Clarifai_Api_Search {
-    get {return _groundTruth ?? Clarifai_Api_Search()}
-    set {_groundTruth = newValue}
-  }
-  /// Returns true if `groundTruth` has been explicitly set.
-  public var hasGroundTruth: Bool {return self._groundTruth != nil}
-  /// Clears the value of `groundTruth`. Subsequent reads from it will return its default value.
-  public mutating func clearGroundTruth() {self._groundTruth = nil}
-
-  /// The set we are evaluating
-  public var searchToEval: Clarifai_Api_Search {
-    get {return _searchToEval ?? Clarifai_Api_Search()}
-    set {_searchToEval = newValue}
-  }
-  /// Returns true if `searchToEval` has been explicitly set.
-  public var hasSearchToEval: Bool {return self._searchToEval != nil}
-  /// Clears the value of `searchToEval`. Subsequent reads from it will return its default value.
-  public mutating func clearSearchToEval() {self._searchToEval = nil}
-
-  /// The metric result
-  public var metrics: Clarifai_Api_EvalMetrics {
-    get {return _metrics ?? Clarifai_Api_EvalMetrics()}
-    set {_metrics = newValue}
-  }
-  /// Returns true if `metrics` has been explicitly set.
-  public var hasMetrics: Bool {return self._metrics != nil}
-  /// Clears the value of `metrics`. Subsequent reads from it will return its default value.
-  public mutating func clearMetrics() {self._metrics = nil}
-
-  /// data is filled out with the concepts used for this evaluation
-  public var data: Clarifai_Api_Data {
-    get {return _data ?? Clarifai_Api_Data()}
-    set {_data = newValue}
-  }
-  /// Returns true if `data` has been explicitly set.
-  public var hasData: Bool {return self._data != nil}
-  /// Clears the value of `data`. Subsequent reads from it will return its default value.
-  public mutating func clearData() {self._data = nil}
-
-  /// active_concept_count is the number of concepts for this evaluation
-  public var activeConceptCount: UInt32 = 0
-
-  /// The visibility field represents whether this message is privately/publicly visible.
-  /// To be visible to the public the App that contains it AND the User that contains the App must
-  /// also be publicly visible.
-  public var visibility: Clarifai_Api_Visibility {
-    get {return _visibility ?? Clarifai_Api_Visibility()}
-    set {_visibility = newValue}
-  }
-  /// Returns true if `visibility` has been explicitly set.
-  public var hasVisibility: Bool {return self._visibility != nil}
-  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
-  public mutating func clearVisibility() {self._visibility = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _groundTruth: Clarifai_Api_Search? = nil
-  fileprivate var _searchToEval: Clarifai_Api_Search? = nil
-  fileprivate var _metrics: Clarifai_Api_EvalMetrics? = nil
-  fileprivate var _data: Clarifai_Api_Data? = nil
-  fileprivate var _visibility: Clarifai_Api_Visibility? = nil
 }
 
 /// Text
@@ -23845,68 +23723,6 @@ extension Clarifai_Api_EvalTestSetEntry: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Clarifai_Api_LOPQEvalResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".LOPQEvalResult"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "k"),
-    2: .standard(proto: "recall_vs_brute_force"),
-    3: .standard(proto: "kendall_tau_vs_brute_force"),
-    4: .standard(proto: "most_frequent_code_percent"),
-    5: .standard(proto: "lopq_ndcg"),
-    6: .standard(proto: "brute_force_ndcg"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt32Field(value: &self.k) }()
-      case 2: try { try decoder.decodeSingularFloatField(value: &self.recallVsBruteForce) }()
-      case 3: try { try decoder.decodeSingularFloatField(value: &self.kendallTauVsBruteForce) }()
-      case 4: try { try decoder.decodeSingularFloatField(value: &self.mostFrequentCodePercent) }()
-      case 5: try { try decoder.decodeSingularFloatField(value: &self.lopqNdcg) }()
-      case 6: try { try decoder.decodeSingularFloatField(value: &self.bruteForceNdcg) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.k != 0 {
-      try visitor.visitSingularInt32Field(value: self.k, fieldNumber: 1)
-    }
-    if self.recallVsBruteForce != 0 {
-      try visitor.visitSingularFloatField(value: self.recallVsBruteForce, fieldNumber: 2)
-    }
-    if self.kendallTauVsBruteForce != 0 {
-      try visitor.visitSingularFloatField(value: self.kendallTauVsBruteForce, fieldNumber: 3)
-    }
-    if self.mostFrequentCodePercent != 0 {
-      try visitor.visitSingularFloatField(value: self.mostFrequentCodePercent, fieldNumber: 4)
-    }
-    if self.lopqNdcg != 0 {
-      try visitor.visitSingularFloatField(value: self.lopqNdcg, fieldNumber: 5)
-    }
-    if self.bruteForceNdcg != 0 {
-      try visitor.visitSingularFloatField(value: self.bruteForceNdcg, fieldNumber: 6)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_LOPQEvalResult, rhs: Clarifai_Api_LOPQEvalResult) -> Bool {
-    if lhs.k != rhs.k {return false}
-    if lhs.recallVsBruteForce != rhs.recallVsBruteForce {return false}
-    if lhs.kendallTauVsBruteForce != rhs.kendallTauVsBruteForce {return false}
-    if lhs.mostFrequentCodePercent != rhs.mostFrequentCodePercent {return false}
-    if lhs.lopqNdcg != rhs.lopqNdcg {return false}
-    if lhs.bruteForceNdcg != rhs.bruteForceNdcg {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Clarifai_Api_MetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MetricsSummary"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -23920,7 +23736,6 @@ extension Clarifai_Api_MetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._Mes
     8: .standard(proto: "macro_avg_recall"),
     10: .standard(proto: "mean_avg_precision_iou_50"),
     11: .standard(proto: "mean_avg_precision_iou_range"),
-    9: .standard(proto: "lopq_metrics"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -23937,7 +23752,6 @@ extension Clarifai_Api_MetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 6: try { try decoder.decodeSingularFloatField(value: &self.macroStdF1Score) }()
       case 7: try { try decoder.decodeSingularFloatField(value: &self.macroAvgPrecision) }()
       case 8: try { try decoder.decodeSingularFloatField(value: &self.macroAvgRecall) }()
-      case 9: try { try decoder.decodeRepeatedMessageField(value: &self.lopqMetrics) }()
       case 10: try { try decoder.decodeSingularFloatField(value: &self.meanAvgPrecisionIou50) }()
       case 11: try { try decoder.decodeSingularFloatField(value: &self.meanAvgPrecisionIouRange) }()
       default: break
@@ -23970,9 +23784,6 @@ extension Clarifai_Api_MetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if self.macroAvgRecall != 0 {
       try visitor.visitSingularFloatField(value: self.macroAvgRecall, fieldNumber: 8)
     }
-    if !self.lopqMetrics.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.lopqMetrics, fieldNumber: 9)
-    }
     if self.meanAvgPrecisionIou50 != 0 {
       try visitor.visitSingularFloatField(value: self.meanAvgPrecisionIou50, fieldNumber: 10)
     }
@@ -23993,7 +23804,6 @@ extension Clarifai_Api_MetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs.macroAvgRecall != rhs.macroAvgRecall {return false}
     if lhs.meanAvgPrecisionIou50 != rhs.meanAvgPrecisionIou50 {return false}
     if lhs.meanAvgPrecisionIouRange != rhs.meanAvgPrecisionIouRange {return false}
-    if lhs.lopqMetrics != rhs.lopqMetrics {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -25008,72 +24818,6 @@ extension Clarifai_Api_Rank: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   public static func ==(lhs: Clarifai_Api_Rank, rhs: Clarifai_Api_Rank) -> Bool {
     if lhs.negate != rhs.negate {return false}
     if lhs._annotation != rhs._annotation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_AnnotationSearchMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".AnnotationSearchMetrics"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "ground_truth"),
-    2: .standard(proto: "search_to_eval"),
-    3: .same(proto: "metrics"),
-    4: .same(proto: "data"),
-    5: .standard(proto: "active_concept_count"),
-    6: .same(proto: "visibility"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._groundTruth) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._searchToEval) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._metrics) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._data) }()
-      case 5: try { try decoder.decodeSingularUInt32Field(value: &self.activeConceptCount) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._visibility) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._groundTruth {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._searchToEval {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._metrics {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    try { if let v = self._data {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    if self.activeConceptCount != 0 {
-      try visitor.visitSingularUInt32Field(value: self.activeConceptCount, fieldNumber: 5)
-    }
-    try { if let v = self._visibility {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_AnnotationSearchMetrics, rhs: Clarifai_Api_AnnotationSearchMetrics) -> Bool {
-    if lhs._groundTruth != rhs._groundTruth {return false}
-    if lhs._searchToEval != rhs._searchToEval {return false}
-    if lhs._metrics != rhs._metrics {return false}
-    if lhs._data != rhs._data {return false}
-    if lhs.activeConceptCount != rhs.activeConceptCount {return false}
-    if lhs._visibility != rhs._visibility {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

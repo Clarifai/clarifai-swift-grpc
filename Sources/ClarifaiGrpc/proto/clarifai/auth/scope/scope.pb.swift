@@ -132,6 +132,8 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
 
   /// To delete we need read/write.
   case workflowsDelete // = 21
+
+  /// DEPRECATED
   case workflowMetricsGet // = 96
   case workflowMetricsAdd // = 97
   case workflowMetricsDelete // = 98
@@ -230,6 +232,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case labelOrdersDelete // = 69
 
   /// CRUD on FindDuplicateAnnotationsJobs table
+  /// DEPRECATED
   case findDuplicateAnnotationsJobsAdd // = 102
   case findDuplicateAnnotationsJobsGet // = 103
   case findDuplicateAnnotationsJobsDelete // = 104

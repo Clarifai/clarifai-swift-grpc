@@ -741,26 +741,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostSearchesByIDRequest, Clarifai_Api_MultiSearchResponse>
 
-  func postAnnotationSearchMetrics(
-    _ request: Clarifai_Api_PostAnnotationSearchMetricsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  func getAnnotationSearchMetrics(
-    _ request: Clarifai_Api_GetAnnotationSearchMetricsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  func listAnnotationSearchMetrics(
-    _ request: Clarifai_Api_ListAnnotationSearchMetricsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  func deleteAnnotationSearchMetrics(
-    _ request: Clarifai_Api_DeleteAnnotationSearchMetricsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse>
-
   func deleteSearch(
     _ request: Clarifai_Api_DeleteSearchRequest,
     callOptions: CallOptions?
@@ -4078,78 +4058,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Evaluate the results of two search requests
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostAnnotationSearchMetrics.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postAnnotationSearchMetrics(
-    _ request: Clarifai_Api_PostAnnotationSearchMetricsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostAnnotationSearchMetrics",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostAnnotationSearchMetricsInterceptors() ?? []
-    )
-  }
-
-  /// Get the evaluation results between two search requests
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetAnnotationSearchMetrics.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getAnnotationSearchMetrics(
-    _ request: Clarifai_Api_GetAnnotationSearchMetricsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetAnnotationSearchMetrics",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetAnnotationSearchMetricsInterceptors() ?? []
-    )
-  }
-
-  /// List the evaluation results between two search requests
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListAnnotationSearchMetrics.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listAnnotationSearchMetrics(
-    _ request: Clarifai_Api_ListAnnotationSearchMetricsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListAnnotationSearchMetrics",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListAnnotationSearchMetricsInterceptors() ?? []
-    )
-  }
-
-  /// DeleteAnnotationSearchMetrics
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteAnnotationSearchMetrics.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteAnnotationSearchMetrics(
-    _ request: Clarifai_Api_DeleteAnnotationSearchMetricsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteAnnotationSearchMetrics",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteAnnotationSearchMetricsInterceptors() ?? []
-    )
-  }
-
   /// Delete a saved search.
   ///
   /// - Parameters:
@@ -7097,18 +7005,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postSearchesByID'.
   func makePostSearchesByIDInterceptors() -> [ClientInterceptor<Clarifai_Api_PostSearchesByIDRequest, Clarifai_Api_MultiSearchResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'postAnnotationSearchMetrics'.
-  func makePostAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getAnnotationSearchMetrics'.
-  func makeGetAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listAnnotationSearchMetrics'.
-  func makeListAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'deleteAnnotationSearchMetrics'.
-  func makeDeleteAnnotationSearchMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse>]
-
   /// - Returns: Interceptors to use when invoking 'deleteSearch'.
   func makeDeleteSearchInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteSearchRequest, Clarifai_Api_Status_BaseResponse>]
 
@@ -8025,18 +7921,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Execute a previously saved legacy search.
   func postSearchesByID(request: Clarifai_Api_PostSearchesByIDRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSearchResponse>
-
-  /// Evaluate the results of two search requests
-  func postAnnotationSearchMetrics(request: Clarifai_Api_PostAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  /// Get the evaluation results between two search requests
-  func getAnnotationSearchMetrics(request: Clarifai_Api_GetAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  /// List the evaluation results between two search requests
-  func listAnnotationSearchMetrics(request: Clarifai_Api_ListAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationSearchMetricsResponse>
-
-  /// DeleteAnnotationSearchMetrics
-  func deleteAnnotationSearchMetrics(request: Clarifai_Api_DeleteAnnotationSearchMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   /// Delete a saved search.
   func deleteSearch(request: Clarifai_Api_DeleteSearchRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
@@ -9745,42 +9629,6 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiSearchResponse>(),
         interceptors: self.interceptors?.makePostSearchesByIDInterceptors() ?? [],
         userFunction: self.postSearchesByID(request:context:)
-      )
-
-    case "PostAnnotationSearchMetrics":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostAnnotationSearchMetricsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
-        interceptors: self.interceptors?.makePostAnnotationSearchMetricsInterceptors() ?? [],
-        userFunction: self.postAnnotationSearchMetrics(request:context:)
-      )
-
-    case "GetAnnotationSearchMetrics":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetAnnotationSearchMetricsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
-        interceptors: self.interceptors?.makeGetAnnotationSearchMetricsInterceptors() ?? [],
-        userFunction: self.getAnnotationSearchMetrics(request:context:)
-      )
-
-    case "ListAnnotationSearchMetrics":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListAnnotationSearchMetricsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationSearchMetricsResponse>(),
-        interceptors: self.interceptors?.makeListAnnotationSearchMetricsInterceptors() ?? [],
-        userFunction: self.listAnnotationSearchMetrics(request:context:)
-      )
-
-    case "DeleteAnnotationSearchMetrics":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteAnnotationSearchMetricsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makeDeleteAnnotationSearchMetricsInterceptors() ?? [],
-        userFunction: self.deleteAnnotationSearchMetrics(request:context:)
       )
 
     case "DeleteSearch":
@@ -11582,22 +11430,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postSearchesByID'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostSearchesByIDInterceptors() -> [ServerInterceptor<Clarifai_Api_PostSearchesByIDRequest, Clarifai_Api_MultiSearchResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postAnnotationSearchMetrics'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getAnnotationSearchMetrics'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_GetAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listAnnotationSearchMetrics'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListAnnotationSearchMetricsRequest, Clarifai_Api_MultiAnnotationSearchMetricsResponse>]
-
-  /// - Returns: Interceptors to use when handling 'deleteAnnotationSearchMetrics'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteAnnotationSearchMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteAnnotationSearchMetricsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'deleteSearch'.
   ///   Defaults to calling `self.makeInterceptors()`.
