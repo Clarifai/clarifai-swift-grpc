@@ -334,6 +334,10 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case annotationTracksGet // = 166
   case annotationTracksAdd // = 167
   case annotationTracksDelete // = 168
+  case pipelineStepsDelete // = 169
+  case artifactsGet // = 170
+  case artifactsAdd // = 171
+  case artifactsDelete // = 172
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -459,6 +463,10 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 166: self = .annotationTracksGet
     case 167: self = .annotationTracksAdd
     case 168: self = .annotationTracksDelete
+    case 169: self = .pipelineStepsDelete
+    case 170: self = .artifactsGet
+    case 171: self = .artifactsAdd
+    case 172: self = .artifactsDelete
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -582,6 +590,10 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .annotationTracksGet: return 166
     case .annotationTracksAdd: return 167
     case .annotationTracksDelete: return 168
+    case .pipelineStepsDelete: return 169
+    case .artifactsGet: return 170
+    case .artifactsAdd: return 171
+    case .artifactsDelete: return 172
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -710,6 +722,10 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .annotationTracksGet,
     .annotationTracksAdd,
     .annotationTracksDelete,
+    .pipelineStepsDelete,
+    .artifactsGet,
+    .artifactsAdd,
+    .artifactsDelete,
   ]
 }
 
@@ -930,6 +946,10 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     166: .same(proto: "AnnotationTracks_Get"),
     167: .same(proto: "AnnotationTracks_Add"),
     168: .same(proto: "AnnotationTracks_Delete"),
+    169: .same(proto: "PipelineSteps_Delete"),
+    170: .same(proto: "Artifacts_Get"),
+    171: .same(proto: "Artifacts_Add"),
+    172: .same(proto: "Artifacts_Delete"),
   ]
 }
 

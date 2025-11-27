@@ -125,6 +125,12 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>
 
+  func streamTrackAnnotationsSearches(
+    _ request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_SingleAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleAnnotationResponse>
+
   func postAnnotations(
     _ request: Clarifai_Api_PostAnnotationsRequest,
     callOptions: CallOptions?
@@ -1387,6 +1393,56 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>
 
+  func deletePipelineSteps(
+    _ request: Clarifai_Api_DeletePipelineStepsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineStepsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func deletePipelineStepVersions(
+    _ request: Clarifai_Api_DeletePipelineStepVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postArtifacts(
+    _ request: Clarifai_Api_PostArtifactsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostArtifactsRequest, Clarifai_Api_MultiArtifactResponse>
+
+  func getArtifact(
+    _ request: Clarifai_Api_GetArtifactRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetArtifactRequest, Clarifai_Api_SingleArtifactResponse>
+
+  func listArtifacts(
+    _ request: Clarifai_Api_ListArtifactsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListArtifactsRequest, Clarifai_Api_MultiArtifactResponse>
+
+  func deleteArtifact(
+    _ request: Clarifai_Api_DeleteArtifactRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteArtifactRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postArtifactVersionsUpload(
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_PostArtifactVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostArtifactVersionsUploadRequest, Clarifai_Api_PostArtifactVersionsUploadResponse>
+
+  func listArtifactVersions(
+    _ request: Clarifai_Api_ListArtifactVersionsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListArtifactVersionsRequest, Clarifai_Api_MultiArtifactVersionResponse>
+
+  func getArtifactVersion(
+    _ request: Clarifai_Api_GetArtifactVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_GetArtifactVersionRequest, Clarifai_Api_SingleArtifactVersionResponse>
+
+  func deleteArtifactVersion(
+    _ request: Clarifai_Api_DeleteArtifactVersionRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteArtifactVersionRequest, Clarifai_Api_Status_BaseResponse>
+
   func getSecret(
     _ request: Clarifai_Api_GetSecretRequest,
     callOptions: CallOptions?
@@ -1772,6 +1828,27 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostTrackAnnotationsSearchesInterceptors() ?? []
+    )
+  }
+
+  /// Stream video track annotations for a specific input one-by-one.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StreamTrackAnnotationsSearches.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func streamTrackAnnotationsSearches(
+    _ request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_SingleAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleAnnotationResponse> {
+    return self.makeServerStreamingCall(
+      path: "/clarifai.api.V2/StreamTrackAnnotationsSearches",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamTrackAnnotationsSearchesInterceptors() ?? [],
+      handler: handler
     )
   }
 
@@ -6450,6 +6527,193 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to DeletePipelineSteps
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeletePipelineSteps.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deletePipelineSteps(
+    _ request: Clarifai_Api_DeletePipelineStepsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineStepsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeletePipelineSteps",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeletePipelineStepsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeletePipelineStepVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeletePipelineStepVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deletePipelineStepVersions(
+    _ request: Clarifai_Api_DeletePipelineStepVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeletePipelineStepVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeletePipelineStepVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to PostArtifacts
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostArtifacts.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postArtifacts(
+    _ request: Clarifai_Api_PostArtifactsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostArtifactsRequest, Clarifai_Api_MultiArtifactResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostArtifacts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostArtifactsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetArtifact
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetArtifact.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getArtifact(
+    _ request: Clarifai_Api_GetArtifactRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetArtifactRequest, Clarifai_Api_SingleArtifactResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetArtifact",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetArtifactInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to ListArtifacts
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListArtifacts.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listArtifacts(
+    _ request: Clarifai_Api_ListArtifactsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListArtifactsRequest, Clarifai_Api_MultiArtifactResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListArtifacts",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListArtifactsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeleteArtifact
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteArtifact.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteArtifact(
+    _ request: Clarifai_Api_DeleteArtifactRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteArtifactRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteArtifact",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteArtifactInterceptors() ?? []
+    )
+  }
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the artifact_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the artifact_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the artifact_version_id specified for your artifact_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the artifact_bytes.
+  ///
+  /// Callers should use the `send` method on the returned object to send messages
+  /// to the server. The caller should send an `.end` after the final message has been sent.
+  ///
+  /// - Parameters:
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
+  public func postArtifactVersionsUpload(
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_PostArtifactVersionsUploadResponse) -> Void
+  ) -> BidirectionalStreamingCall<Clarifai_Api_PostArtifactVersionsUploadRequest, Clarifai_Api_PostArtifactVersionsUploadResponse> {
+    return self.makeBidirectionalStreamingCall(
+      path: "/clarifai.api.V2/PostArtifactVersionsUpload",
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostArtifactVersionsUploadInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Unary call to ListArtifactVersions
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListArtifactVersions.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listArtifactVersions(
+    _ request: Clarifai_Api_ListArtifactVersionsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListArtifactVersionsRequest, Clarifai_Api_MultiArtifactVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListArtifactVersions",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListArtifactVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to GetArtifactVersion
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetArtifactVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getArtifactVersion(
+    _ request: Clarifai_Api_GetArtifactVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_GetArtifactVersionRequest, Clarifai_Api_SingleArtifactVersionResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/GetArtifactVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetArtifactVersionInterceptors() ?? []
+    )
+  }
+
+  /// Unary call to DeleteArtifactVersion
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteArtifactVersion.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteArtifactVersion(
+    _ request: Clarifai_Api_DeleteArtifactVersionRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteArtifactVersionRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteArtifactVersion",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteArtifactVersionInterceptors() ?? []
+    )
+  }
+
   /// Unary call to GetSecret
   ///
   /// - Parameters:
@@ -6635,6 +6899,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postTrackAnnotationsSearches'.
   func makePostTrackAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'streamTrackAnnotationsSearches'.
+  func makeStreamTrackAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleAnnotationResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postAnnotations'.
   func makePostAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
@@ -7392,6 +7659,36 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'getPipelineStepVersion'.
   func makeGetPipelineStepVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'deletePipelineSteps'.
+  func makeDeletePipelineStepsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineStepsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deletePipelineStepVersions'.
+  func makeDeletePipelineStepVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postArtifacts'.
+  func makePostArtifactsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostArtifactsRequest, Clarifai_Api_MultiArtifactResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getArtifact'.
+  func makeGetArtifactInterceptors() -> [ClientInterceptor<Clarifai_Api_GetArtifactRequest, Clarifai_Api_SingleArtifactResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listArtifacts'.
+  func makeListArtifactsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListArtifactsRequest, Clarifai_Api_MultiArtifactResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteArtifact'.
+  func makeDeleteArtifactInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteArtifactRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postArtifactVersionsUpload'.
+  func makePostArtifactVersionsUploadInterceptors() -> [ClientInterceptor<Clarifai_Api_PostArtifactVersionsUploadRequest, Clarifai_Api_PostArtifactVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listArtifactVersions'.
+  func makeListArtifactVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListArtifactVersionsRequest, Clarifai_Api_MultiArtifactVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getArtifactVersion'.
+  func makeGetArtifactVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetArtifactVersionRequest, Clarifai_Api_SingleArtifactVersionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'deleteArtifactVersion'.
+  func makeDeleteArtifactVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteArtifactVersionRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getSecret'.
   func makeGetSecretInterceptors() -> [ClientInterceptor<Clarifai_Api_GetSecretRequest, Clarifai_Api_SingleSecretResponse>]
 
@@ -7501,6 +7798,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// List video track annotations for a specific input.
   func postTrackAnnotationsSearches(request: Clarifai_Api_PostTrackAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
+
+  /// Stream video track annotations for a specific input one-by-one.
+  func streamTrackAnnotationsSearches(request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
 
   /// Post annotations.
   func postAnnotations(request: Clarifai_Api_PostAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
@@ -8328,6 +8628,31 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   func getPipelineStepVersion(request: Clarifai_Api_GetPipelineStepVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SinglePipelineStepVersionResponse>
 
+  func deletePipelineSteps(request: Clarifai_Api_DeletePipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func deletePipelineStepVersions(request: Clarifai_Api_DeletePipelineStepVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  func postArtifacts(request: Clarifai_Api_PostArtifactsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiArtifactResponse>
+
+  func getArtifact(request: Clarifai_Api_GetArtifactRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleArtifactResponse>
+
+  func listArtifacts(request: Clarifai_Api_ListArtifactsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiArtifactResponse>
+
+  func deleteArtifact(request: Clarifai_Api_DeleteArtifactRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// This is a streaming endpoint, the request has a field, upload_data, which can either be the config for the upload or the actual data to upload.
+  /// The config must be sent first before the artifact_bytes can be uploaded.
+  /// Once the config has been sent, the server will respond with a confirmation containing the artifact_version_id.
+  /// This is so that if your upload is interrupted, you can resume the upload by sending the config again with the artifact_version_id specified for your artifact_version.
+  /// The actual upload will be done via a multipart upload, the latest successful part_id will be sent from the server in the response to the artifact_bytes.
+  func postArtifactVersionsUpload(context: StreamingResponseCallContext<Clarifai_Api_PostArtifactVersionsUploadResponse>) -> EventLoopFuture<(StreamEvent<Clarifai_Api_PostArtifactVersionsUploadRequest>) -> Void>
+
+  func listArtifactVersions(request: Clarifai_Api_ListArtifactVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiArtifactVersionResponse>
+
+  func getArtifactVersion(request: Clarifai_Api_GetArtifactVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleArtifactVersionResponse>
+
+  func deleteArtifactVersion(request: Clarifai_Api_DeleteArtifactVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   func getSecret(request: Clarifai_Api_GetSecretRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleSecretResponse>
 
   func listSecrets(request: Clarifai_Api_ListSecretsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiSecretResponse>
@@ -8522,6 +8847,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_MultiAnnotationResponse>(),
         interceptors: self.interceptors?.makePostTrackAnnotationsSearchesInterceptors() ?? [],
         userFunction: self.postTrackAnnotationsSearches(request:context:)
+      )
+
+    case "StreamTrackAnnotationsSearches":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamTrackAnnotationsSearchesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleAnnotationResponse>(),
+        interceptors: self.interceptors?.makeStreamTrackAnnotationsSearchesInterceptors() ?? [],
+        userFunction: self.streamTrackAnnotationsSearches(request:context:)
       )
 
     case "PostAnnotations":
@@ -10792,6 +11126,96 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.getPipelineStepVersion(request:context:)
       )
 
+    case "DeletePipelineSteps":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelineStepsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeletePipelineStepsInterceptors() ?? [],
+        userFunction: self.deletePipelineSteps(request:context:)
+      )
+
+    case "DeletePipelineStepVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeletePipelineStepVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeletePipelineStepVersionsInterceptors() ?? [],
+        userFunction: self.deletePipelineStepVersions(request:context:)
+      )
+
+    case "PostArtifacts":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostArtifactsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiArtifactResponse>(),
+        interceptors: self.interceptors?.makePostArtifactsInterceptors() ?? [],
+        userFunction: self.postArtifacts(request:context:)
+      )
+
+    case "GetArtifact":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetArtifactRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleArtifactResponse>(),
+        interceptors: self.interceptors?.makeGetArtifactInterceptors() ?? [],
+        userFunction: self.getArtifact(request:context:)
+      )
+
+    case "ListArtifacts":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListArtifactsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiArtifactResponse>(),
+        interceptors: self.interceptors?.makeListArtifactsInterceptors() ?? [],
+        userFunction: self.listArtifacts(request:context:)
+      )
+
+    case "DeleteArtifact":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteArtifactRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteArtifactInterceptors() ?? [],
+        userFunction: self.deleteArtifact(request:context:)
+      )
+
+    case "PostArtifactVersionsUpload":
+      return BidirectionalStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostArtifactVersionsUploadRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostArtifactVersionsUploadResponse>(),
+        interceptors: self.interceptors?.makePostArtifactVersionsUploadInterceptors() ?? [],
+        observerFactory: self.postArtifactVersionsUpload(context:)
+      )
+
+    case "ListArtifactVersions":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListArtifactVersionsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiArtifactVersionResponse>(),
+        interceptors: self.interceptors?.makeListArtifactVersionsInterceptors() ?? [],
+        userFunction: self.listArtifactVersions(request:context:)
+      )
+
+    case "GetArtifactVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetArtifactVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleArtifactVersionResponse>(),
+        interceptors: self.interceptors?.makeGetArtifactVersionInterceptors() ?? [],
+        userFunction: self.getArtifactVersion(request:context:)
+      )
+
+    case "DeleteArtifactVersion":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteArtifactVersionRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makeDeleteArtifactVersionInterceptors() ?? [],
+        userFunction: self.deleteArtifactVersion(request:context:)
+      )
+
     case "GetSecret":
       return UnaryServerHandler(
         context: context,
@@ -10938,6 +11362,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postTrackAnnotationsSearches'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostTrackAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'streamTrackAnnotationsSearches'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamTrackAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleAnnotationResponse>]
 
   /// - Returns: Interceptors to use when handling 'postAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -11946,6 +12374,46 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getPipelineStepVersion'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetPipelineStepVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetPipelineStepVersionRequest, Clarifai_Api_SinglePipelineStepVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deletePipelineSteps'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeletePipelineStepsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineStepsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deletePipelineStepVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeletePipelineStepVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postArtifacts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostArtifactsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostArtifactsRequest, Clarifai_Api_MultiArtifactResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getArtifact'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetArtifactInterceptors() -> [ServerInterceptor<Clarifai_Api_GetArtifactRequest, Clarifai_Api_SingleArtifactResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listArtifacts'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListArtifactsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListArtifactsRequest, Clarifai_Api_MultiArtifactResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteArtifact'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteArtifactInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteArtifactRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postArtifactVersionsUpload'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostArtifactVersionsUploadInterceptors() -> [ServerInterceptor<Clarifai_Api_PostArtifactVersionsUploadRequest, Clarifai_Api_PostArtifactVersionsUploadResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listArtifactVersions'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListArtifactVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListArtifactVersionsRequest, Clarifai_Api_MultiArtifactVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getArtifactVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetArtifactVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetArtifactVersionRequest, Clarifai_Api_SingleArtifactVersionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteArtifactVersion'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteArtifactVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteArtifactVersionRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'getSecret'.
   ///   Defaults to calling `self.makeInterceptors()`.

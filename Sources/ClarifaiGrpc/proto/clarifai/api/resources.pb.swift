@@ -6552,6 +6552,9 @@ public struct Clarifai_Api_BuildInfo {
   /// Docker image digest
   public var dockerImageDigest: String = String()
 
+  /// Platform(s) the model was built for (e.g., "linux/amd64,linux/arm64")
+  public var platform: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -13124,6 +13127,12 @@ public struct Clarifai_Api_InstanceType {
     set {_uniqueStorage()._specialHandling = newValue}
   }
 
+  /// Hardware architecture of the instance type (e.g., "linux/amd64", "linux/arm64").
+  public var architecture: String {
+    get {return _storage._architecture}
+    set {_uniqueStorage()._architecture = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -15874,6 +15883,179 @@ public struct Clarifai_Api_MetricTypeLabels {
   }
 
   public init() {}
+}
+
+/// Artifact is a resource that represents a file stored in Clarifai's storage system.
+/// It should have a reference to upload resource which contains the actual file location and metadata.
+public struct Clarifai_Api_Artifact {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// ID of artifact
+  public var id: String {
+    get {return _storage._id}
+    set {_uniqueStorage()._id = newValue}
+  }
+
+  /// User ID that this Artifact belongs to
+  public var userID: String {
+    get {return _storage._userID}
+    set {_uniqueStorage()._userID = newValue}
+  }
+
+  /// Application ID that this Artifact belongs to
+  public var appID: String {
+    get {return _storage._appID}
+    set {_uniqueStorage()._appID = newValue}
+  }
+
+  /// Reference to the artifact version resource that represents a specific version of the artifact
+  public var artifactVersion: Clarifai_Api_ArtifactVersion {
+    get {return _storage._artifactVersion ?? Clarifai_Api_ArtifactVersion()}
+    set {_uniqueStorage()._artifactVersion = newValue}
+  }
+  /// Returns true if `artifactVersion` has been explicitly set.
+  public var hasArtifactVersion: Bool {return _storage._artifactVersion != nil}
+  /// Clears the value of `artifactVersion`. Subsequent reads from it will return its default value.
+  public mutating func clearArtifactVersion() {_uniqueStorage()._artifactVersion = nil}
+
+  /// When the artifact was created.
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
+
+  /// Most recent time when the artifact was updated.
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
+
+  /// When the artifact was deleted.
+  public var deletedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._deletedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._deletedAt = newValue}
+  }
+  /// Returns true if `deletedAt` has been explicitly set.
+  public var hasDeletedAt: Bool {return _storage._deletedAt != nil}
+  /// Clears the value of `deletedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearDeletedAt() {_uniqueStorage()._deletedAt = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+/// ArtifactVersion represents a specific version of the artifact.
+public struct Clarifai_Api_ArtifactVersion {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// ID of artifact version
+  public var id: String {
+    get {return _storage._id}
+    set {_uniqueStorage()._id = newValue}
+  }
+
+  /// Description of the artifact version
+  public var description_p: String {
+    get {return _storage._description_p}
+    set {_uniqueStorage()._description_p = newValue}
+  }
+
+  /// Reference to the artifact resource
+  public var artifact: Clarifai_Api_Artifact {
+    get {return _storage._artifact ?? Clarifai_Api_Artifact()}
+    set {_uniqueStorage()._artifact = newValue}
+  }
+  /// Returns true if `artifact` has been explicitly set.
+  public var hasArtifact: Bool {return _storage._artifact != nil}
+  /// Clears the value of `artifact`. Subsequent reads from it will return its default value.
+  public mutating func clearArtifact() {_uniqueStorage()._artifact = nil}
+
+  /// Reference to the upload resource which contains the actual file location and metadata
+  public var upload: Clarifai_Api_Upload {
+    get {return _storage._upload ?? Clarifai_Api_Upload()}
+    set {_uniqueStorage()._upload = newValue}
+  }
+  /// Returns true if `upload` has been explicitly set.
+  public var hasUpload: Bool {return _storage._upload != nil}
+  /// Clears the value of `upload`. Subsequent reads from it will return its default value.
+  public mutating func clearUpload() {_uniqueStorage()._upload = nil}
+
+  /// The visibility field represents whether this is privately/publicly visible.
+  /// To be visible to the public the App that contains it AND the User that contains the App must
+  /// also be publicly visible.
+  public var visibility: Clarifai_Api_Visibility {
+    get {return _storage._visibility ?? Clarifai_Api_Visibility()}
+    set {_uniqueStorage()._visibility = newValue}
+  }
+  /// Returns true if `visibility` has been explicitly set.
+  public var hasVisibility: Bool {return _storage._visibility != nil}
+  /// Clears the value of `visibility`. Subsequent reads from it will return its default value.
+  public mutating func clearVisibility() {_uniqueStorage()._visibility = nil}
+
+  /// When the artifact version will expire and be deleted.
+  /// The format is https://www.ietf.org/rfc/rfc3339.txt.
+  /// Example: "2006-01-02T15:04:05.999999Z".
+  /// If not set, the artifact version will be retained indefinitely
+  /// and will not be automatically deleted by lifecycle policies.
+  public var expiresAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._expiresAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._expiresAt = newValue}
+  }
+  /// Returns true if `expiresAt` has been explicitly set.
+  public var hasExpiresAt: Bool {return _storage._expiresAt != nil}
+  /// Clears the value of `expiresAt`. Subsequent reads from it will return its default value.
+  public mutating func clearExpiresAt() {_uniqueStorage()._expiresAt = nil}
+
+  /// When the artifact version was created.
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
+
+  /// Most recent time when the artifact version was updated.
+  public var modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._modifiedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._modifiedAt = newValue}
+  }
+  /// Returns true if `modifiedAt` has been explicitly set.
+  public var hasModifiedAt: Bool {return _storage._modifiedAt != nil}
+  /// Clears the value of `modifiedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearModifiedAt() {_uniqueStorage()._modifiedAt = nil}
+
+  /// When the artifact version was deleted.
+  public var deletedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._deletedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._deletedAt = newValue}
+  }
+  /// Returns true if `deletedAt` has been explicitly set.
+  public var hasDeletedAt: Bool {return _storage._deletedAt != nil}
+  /// Clears the value of `deletedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearDeletedAt() {_uniqueStorage()._deletedAt = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -22855,6 +23037,7 @@ extension Clarifai_Api_BuildInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     1: .standard(proto: "docker_image_name"),
     2: .standard(proto: "docker_image_tag"),
     3: .standard(proto: "docker_image_digest"),
+    4: .same(proto: "platform"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -22866,6 +23049,7 @@ extension Clarifai_Api_BuildInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       case 1: try { try decoder.decodeSingularStringField(value: &self.dockerImageName) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.dockerImageTag) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.dockerImageDigest) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.platform) }()
       default: break
       }
     }
@@ -22881,6 +23065,9 @@ extension Clarifai_Api_BuildInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if !self.dockerImageDigest.isEmpty {
       try visitor.visitSingularStringField(value: self.dockerImageDigest, fieldNumber: 3)
     }
+    if !self.platform.isEmpty {
+      try visitor.visitSingularStringField(value: self.platform, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -22888,6 +23075,7 @@ extension Clarifai_Api_BuildInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     if lhs.dockerImageName != rhs.dockerImageName {return false}
     if lhs.dockerImageTag != rhs.dockerImageTag {return false}
     if lhs.dockerImageDigest != rhs.dockerImageDigest {return false}
+    if lhs.platform != rhs.platform {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -31413,6 +31601,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     7: .standard(proto: "allowed_capacity_types"),
     8: .standard(proto: "feature_flag_group"),
     9: .standard(proto: "special_handling"),
+    10: .same(proto: "architecture"),
   ]
 
   fileprivate class _StorageClass {
@@ -31425,6 +31614,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
     var _allowedCapacityTypes: Clarifai_Api_NodeCapacityType? = nil
     var _featureFlagGroup: String = String()
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
+    var _architecture: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -31440,6 +31630,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
       _allowedCapacityTypes = source._allowedCapacityTypes
       _featureFlagGroup = source._featureFlagGroup
       _specialHandling = source._specialHandling
+      _architecture = source._architecture
     }
   }
 
@@ -31467,6 +31658,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._allowedCapacityTypes) }()
         case 8: try { try decoder.decodeSingularStringField(value: &_storage._featureFlagGroup) }()
         case 9: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
+        case 10: try { try decoder.decodeSingularStringField(value: &_storage._architecture) }()
         default: break
         }
       }
@@ -31506,6 +31698,9 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
       if !_storage._specialHandling.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._specialHandling, fieldNumber: 9)
       }
+      if !_storage._architecture.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._architecture, fieldNumber: 10)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31524,6 +31719,7 @@ extension Clarifai_Api_InstanceType: SwiftProtobuf.Message, SwiftProtobuf._Messa
         if _storage._allowedCapacityTypes != rhs_storage._allowedCapacityTypes {return false}
         if _storage._featureFlagGroup != rhs_storage._featureFlagGroup {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
+        if _storage._architecture != rhs_storage._architecture {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -35375,6 +35571,254 @@ extension Clarifai_Api_MetricTypeLabels.LabelWithValues: SwiftProtobuf.Message, 
   public static func ==(lhs: Clarifai_Api_MetricTypeLabels.LabelWithValues, rhs: Clarifai_Api_MetricTypeLabels.LabelWithValues) -> Bool {
     if lhs.label != rhs.label {return false}
     if lhs.values != rhs.values {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_Artifact: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Artifact"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "user_id"),
+    3: .standard(proto: "app_id"),
+    5: .standard(proto: "artifact_version"),
+    6: .standard(proto: "created_at"),
+    7: .standard(proto: "modified_at"),
+    8: .standard(proto: "deleted_at"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _id: String = String()
+    var _userID: String = String()
+    var _appID: String = String()
+    var _artifactVersion: Clarifai_Api_ArtifactVersion? = nil
+    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _deletedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _id = source._id
+      _userID = source._userID
+      _appID = source._appID
+      _artifactVersion = source._artifactVersion
+      _createdAt = source._createdAt
+      _modifiedAt = source._modifiedAt
+      _deletedAt = source._deletedAt
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._userID) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._appID) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._artifactVersion) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._deletedAt) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._id.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
+      }
+      if !_storage._userID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._userID, fieldNumber: 2)
+      }
+      if !_storage._appID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._appID, fieldNumber: 3)
+      }
+      try { if let v = _storage._artifactVersion {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._createdAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._modifiedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._deletedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_Artifact, rhs: Clarifai_Api_Artifact) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._id != rhs_storage._id {return false}
+        if _storage._userID != rhs_storage._userID {return false}
+        if _storage._appID != rhs_storage._appID {return false}
+        if _storage._artifactVersion != rhs_storage._artifactVersion {return false}
+        if _storage._createdAt != rhs_storage._createdAt {return false}
+        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
+        if _storage._deletedAt != rhs_storage._deletedAt {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ArtifactVersion: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ArtifactVersion"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .same(proto: "description"),
+    3: .same(proto: "artifact"),
+    4: .same(proto: "upload"),
+    5: .same(proto: "visibility"),
+    6: .standard(proto: "expires_at"),
+    7: .standard(proto: "created_at"),
+    8: .standard(proto: "modified_at"),
+    9: .standard(proto: "deleted_at"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _id: String = String()
+    var _description_p: String = String()
+    var _artifact: Clarifai_Api_Artifact? = nil
+    var _upload: Clarifai_Api_Upload? = nil
+    var _visibility: Clarifai_Api_Visibility? = nil
+    var _expiresAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _deletedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _id = source._id
+      _description_p = source._description_p
+      _artifact = source._artifact
+      _upload = source._upload
+      _visibility = source._visibility
+      _expiresAt = source._expiresAt
+      _createdAt = source._createdAt
+      _modifiedAt = source._modifiedAt
+      _deletedAt = source._deletedAt
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._description_p) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._artifact) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._upload) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._visibility) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._expiresAt) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._deletedAt) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._id.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
+      }
+      if !_storage._description_p.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._description_p, fieldNumber: 2)
+      }
+      try { if let v = _storage._artifact {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._upload {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._visibility {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._expiresAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._createdAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._modifiedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._deletedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ArtifactVersion, rhs: Clarifai_Api_ArtifactVersion) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._id != rhs_storage._id {return false}
+        if _storage._description_p != rhs_storage._description_p {return false}
+        if _storage._artifact != rhs_storage._artifact {return false}
+        if _storage._upload != rhs_storage._upload {return false}
+        if _storage._visibility != rhs_storage._visibility {return false}
+        if _storage._expiresAt != rhs_storage._expiresAt {return false}
+        if _storage._createdAt != rhs_storage._createdAt {return false}
+        if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
+        if _storage._deletedAt != rhs_storage._deletedAt {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

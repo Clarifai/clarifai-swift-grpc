@@ -366,6 +366,14 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case pipelineInvalidArgument // = 26301
   case pipelineInvalidRequest // = 26302
 
+  /// Artifact related codes 264xx
+  case artifactDoesNotExist // = 26400
+  case artifactInvalidArgument // = 26401
+  case artifactInvalidRequest // = 26402
+  case artifactVersionDoesNotExist // = 26403
+  case artifactVersionInvalidArgument // = 26404
+  case artifactVersionInvalidRequest // = 26405
+
   /// Input:Image related 30xxx
   case inputSuccess // = 30000
 
@@ -923,6 +931,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 26300: self = .pipelineDoesNotExist
     case 26301: self = .pipelineInvalidArgument
     case 26302: self = .pipelineInvalidRequest
+    case 26400: self = .artifactDoesNotExist
+    case 26401: self = .artifactInvalidArgument
+    case 26402: self = .artifactInvalidRequest
+    case 26403: self = .artifactVersionDoesNotExist
+    case 26404: self = .artifactVersionInvalidArgument
+    case 26405: self = .artifactVersionInvalidRequest
     case 30000: self = .inputSuccess
     case 30001: self = .inputPending
     case 30002: self = .inputFailed
@@ -1346,6 +1360,12 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .pipelineDoesNotExist: return 26300
     case .pipelineInvalidArgument: return 26301
     case .pipelineInvalidRequest: return 26302
+    case .artifactDoesNotExist: return 26400
+    case .artifactInvalidArgument: return 26401
+    case .artifactInvalidRequest: return 26402
+    case .artifactVersionDoesNotExist: return 26403
+    case .artifactVersionInvalidArgument: return 26404
+    case .artifactVersionInvalidRequest: return 26405
     case .inputSuccess: return 30000
     case .inputPending: return 30001
     case .inputFailed: return 30002
@@ -1774,6 +1794,12 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .pipelineDoesNotExist,
     .pipelineInvalidArgument,
     .pipelineInvalidRequest,
+    .artifactDoesNotExist,
+    .artifactInvalidArgument,
+    .artifactInvalidRequest,
+    .artifactVersionDoesNotExist,
+    .artifactVersionInvalidArgument,
+    .artifactVersionInvalidRequest,
     .inputSuccess,
     .inputPending,
     .inputFailed,
@@ -2200,6 +2226,12 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     26300: .same(proto: "PIPELINE_DOES_NOT_EXIST"),
     26301: .same(proto: "PIPELINE_INVALID_ARGUMENT"),
     26302: .same(proto: "PIPELINE_INVALID_REQUEST"),
+    26400: .same(proto: "ARTIFACT_DOES_NOT_EXIST"),
+    26401: .same(proto: "ARTIFACT_INVALID_ARGUMENT"),
+    26402: .same(proto: "ARTIFACT_INVALID_REQUEST"),
+    26403: .same(proto: "ARTIFACT_VERSION_DOES_NOT_EXIST"),
+    26404: .same(proto: "ARTIFACT_VERSION_INVALID_ARGUMENT"),
+    26405: .same(proto: "ARTIFACT_VERSION_INVALID_REQUEST"),
     30000: .aliased(proto: "INPUT_SUCCESS", aliases: ["INPUT_DOWNLOAD_SUCCESS"]),
     30001: .aliased(proto: "INPUT_PENDING", aliases: ["INPUT_DOWNLOAD_PENDING"]),
     30002: .aliased(proto: "INPUT_FAILED", aliases: ["INPUT_DOWNLOAD_FAILED"]),
