@@ -186,10 +186,8 @@ public struct Clarifai_Api_Pagination {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks. Defaults to 1.
   public var page: UInt32 = 0
 
-  /// (optional URL parameter) The number of results that will be contained in each page. Defaults to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()

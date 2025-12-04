@@ -347,6 +347,9 @@ public enum Clarifai_Api_DeployRestriction: SwiftProtobuf.Enum {
 
   /// Model can only be used on dedicated compute resources.
   case dedicatedComputeOnly // = 3
+
+  /// Model can only be used on dedicated compute resources owned by the model owner.
+  case modelOwnerDedicatedComputeOnly // = 4
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -359,6 +362,7 @@ public enum Clarifai_Api_DeployRestriction: SwiftProtobuf.Enum {
     case 1: self = .noLimits
     case 2: self = .sharedComputeOnly
     case 3: self = .dedicatedComputeOnly
+    case 4: self = .modelOwnerDedicatedComputeOnly
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -369,6 +373,7 @@ public enum Clarifai_Api_DeployRestriction: SwiftProtobuf.Enum {
     case .noLimits: return 1
     case .sharedComputeOnly: return 2
     case .dedicatedComputeOnly: return 3
+    case .modelOwnerDedicatedComputeOnly: return 4
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -384,6 +389,7 @@ extension Clarifai_Api_DeployRestriction: CaseIterable {
     .noLimits,
     .sharedComputeOnly,
     .dedicatedComputeOnly,
+    .modelOwnerDedicatedComputeOnly,
   ]
 }
 
@@ -16119,6 +16125,7 @@ extension Clarifai_Api_DeployRestriction: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "NO_LIMITS"),
     2: .same(proto: "SHARED_COMPUTE_ONLY"),
     3: .same(proto: "DEDICATED_COMPUTE_ONLY"),
+    4: .same(proto: "MODEL_OWNER_DEDICATED_COMPUTE_ONLY"),
   ]
 }
 
