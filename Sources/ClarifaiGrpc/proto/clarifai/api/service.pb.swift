@@ -186,8 +186,10 @@ public struct Clarifai_Api_Pagination {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  /// (optional URL parameter) The page number. Pagination is used to split the results into chunks. Defaults to 1.
   public var page: UInt32 = 0
 
+  /// (optional URL parameter) The number of results that will be contained in each page. Defaults to 128.
   public var perPage: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -11656,6 +11658,8 @@ public struct Clarifai_Api_MultiCloudRegionResponse {
   public mutating func clearStatus() {self._status = nil}
 
   public var regions: [String] = []
+
+  public var cloudRegions: [Clarifai_Api_CloudRegion] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -32503,6 +32507,7 @@ extension Clarifai_Api_MultiCloudRegionResponse: SwiftProtobuf.Message, SwiftPro
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "regions"),
+    3: .standard(proto: "cloud_regions"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -32513,6 +32518,7 @@ extension Clarifai_Api_MultiCloudRegionResponse: SwiftProtobuf.Message, SwiftPro
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
       case 2: try { try decoder.decodeRepeatedStringField(value: &self.regions) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.cloudRegions) }()
       default: break
       }
     }
@@ -32529,12 +32535,16 @@ extension Clarifai_Api_MultiCloudRegionResponse: SwiftProtobuf.Message, SwiftPro
     if !self.regions.isEmpty {
       try visitor.visitRepeatedStringField(value: self.regions, fieldNumber: 2)
     }
+    if !self.cloudRegions.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.cloudRegions, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_MultiCloudRegionResponse, rhs: Clarifai_Api_MultiCloudRegionResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.regions != rhs.regions {return false}
+    if lhs.cloudRegions != rhs.cloudRegions {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
