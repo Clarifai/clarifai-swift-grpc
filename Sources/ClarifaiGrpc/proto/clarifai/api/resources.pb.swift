@@ -1988,6 +1988,8 @@ public struct Clarifai_Api_AppResourceCounts {
 
   public var inputs: Int64 = 0
 
+  public var pipelines: Int64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -9868,6 +9870,9 @@ public struct Clarifai_Api_TaskInputSource {
 
     /// Inputs from a dataset.
     case dataset // = 3
+
+    /// Single input (e.g. video livestream input)
+    case input // = 4
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -9880,6 +9885,7 @@ public struct Clarifai_Api_TaskInputSource {
       case 1: self = .allInputs
       case 2: self = .savedSearch
       case 3: self = .dataset
+      case 4: self = .input
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -9890,6 +9896,7 @@ public struct Clarifai_Api_TaskInputSource {
       case .allInputs: return 1
       case .savedSearch: return 2
       case .dataset: return 3
+      case .input: return 4
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -9908,6 +9915,7 @@ extension Clarifai_Api_TaskInputSource.TaskInputSourceType: CaseIterable {
     .allInputs,
     .savedSearch,
     .dataset,
+    .input,
   ]
 }
 
@@ -10043,6 +10051,7 @@ public struct Clarifai_Api_TaskReviewManualStrategyInfo {
   // methods supported on all messages.
 
   /// This field represents the percentage of inputs that will be reviewed by reviewers. It is a value between 0 and 1.
+  /// Deprecated: Not used.
   public var samplePercentage: Float = 0
 
   /// Deprecated: Use consensus_strategy_info.approval_threshold_reviewers.
@@ -17110,6 +17119,7 @@ extension Clarifai_Api_AppResourceCounts: SwiftProtobuf.Message, SwiftProtobuf._
     3: .same(proto: "workflows"),
     4: .same(proto: "modules"),
     5: .same(proto: "inputs"),
+    6: .same(proto: "pipelines"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -17123,6 +17133,7 @@ extension Clarifai_Api_AppResourceCounts: SwiftProtobuf.Message, SwiftProtobuf._
       case 3: try { try decoder.decodeSingularInt64Field(value: &self.workflows) }()
       case 4: try { try decoder.decodeSingularInt64Field(value: &self.modules) }()
       case 5: try { try decoder.decodeSingularInt64Field(value: &self.inputs) }()
+      case 6: try { try decoder.decodeSingularInt64Field(value: &self.pipelines) }()
       default: break
       }
     }
@@ -17144,6 +17155,9 @@ extension Clarifai_Api_AppResourceCounts: SwiftProtobuf.Message, SwiftProtobuf._
     if self.inputs != 0 {
       try visitor.visitSingularInt64Field(value: self.inputs, fieldNumber: 5)
     }
+    if self.pipelines != 0 {
+      try visitor.visitSingularInt64Field(value: self.pipelines, fieldNumber: 6)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -17153,6 +17167,7 @@ extension Clarifai_Api_AppResourceCounts: SwiftProtobuf.Message, SwiftProtobuf._
     if lhs.workflows != rhs.workflows {return false}
     if lhs.modules != rhs.modules {return false}
     if lhs.inputs != rhs.inputs {return false}
+    if lhs.pipelines != rhs.pipelines {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -27418,6 +27433,7 @@ extension Clarifai_Api_TaskInputSource.TaskInputSourceType: SwiftProtobuf._Proto
     1: .same(proto: "ALL_INPUTS"),
     2: .same(proto: "SAVED_SEARCH"),
     3: .same(proto: "DATASET"),
+    4: .same(proto: "INPUT"),
   ]
 }
 

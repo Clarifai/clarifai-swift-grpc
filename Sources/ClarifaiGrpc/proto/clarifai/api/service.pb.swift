@@ -372,8 +372,8 @@ public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
   /// The input ID containing the video track annotations to stream
   public var inputID: String = String()
 
-  /// Filter annotations by track_id
-  public var trackID: String = String()
+  /// Filter annotations by track_ids
+  public var trackIds: [String] = []
 
   /// Filter annotations starting from this frame number (inclusive)
   public var frameNumberStart: UInt32 = 0
@@ -384,8 +384,13 @@ public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
   /// Filter by annotation type (e.g., "bounding_box", "point", "mask")
   public var annotationType: Clarifai_Api_AnnotationDataType = .notSet
 
+  /// Maximum number of frames to return. Returns annotations from frames in range [frame_number_start, frame_number_start + max_frames - 1] (inclusive on both ends).
+  /// For example: frame_number_start=5, max_frames=3 returns frames 5, 6, and 7.
+  /// Default and max: 10800 frames (3 minutes at 60 FPS)
   public var maxFrames: UInt32 = 0
 
+  /// Maximum duration in milliseconds to return. Returns annotations from time range [frame_time_start, frame_time_start + max_duration - 1] (inclusive on both ends).
+  /// Default and max: 180000 ms (3 minutes)
   public var maxDuration: UInt32 = 0
 
   /// Filtering by model version ID within a worker (optional).
@@ -745,6 +750,42 @@ public struct Clarifai_Api_SingleAnnotationResponse {
   public var hasAnnotation: Bool {return self._annotation != nil}
   /// Clears the value of `annotation`. Subsequent reads from it will return its default value.
   public mutating func clearAnnotation() {self._annotation = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _annotation: Clarifai_Api_Annotation? = nil
+}
+
+/// SingleStreamTrackAnnotationResponse similar to SingleAnnotationResponse but with an extra field
+public struct Clarifai_Api_SingleStreamTrackAnnotationResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var annotation: Clarifai_Api_Annotation {
+    get {return _annotation ?? Clarifai_Api_Annotation()}
+    set {_annotation = newValue}
+  }
+  /// Returns true if `annotation` has been explicitly set.
+  public var hasAnnotation: Bool {return self._annotation != nil}
+  /// Clears the value of `annotation`. Subsequent reads from it will return its default value.
+  public mutating func clearAnnotation() {self._annotation = nil}
+
+  /// Indicates if this frame has been fully processed
+  /// Needed in case client needs to decide whether to stop and wait for more data or continue playback
+  public var frameFullyProcessed: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4621,6 +4662,11 @@ public struct Clarifai_Api_GetResourceCountsResponse {
   public var inputs: Int64 {
     get {return _storage._inputs}
     set {_uniqueStorage()._inputs = newValue}
+  }
+
+  public var pipelines: Int64 {
+    get {return _storage._pipelines}
+    set {_uniqueStorage()._pipelines = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -14710,7 +14756,7 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "input_id"),
-    3: .standard(proto: "track_id"),
+    3: .standard(proto: "track_ids"),
     4: .standard(proto: "frame_number_start"),
     5: .standard(proto: "frame_time_start"),
     6: .standard(proto: "annotation_type"),
@@ -14727,7 +14773,7 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.trackID) }()
+      case 3: try { try decoder.decodeRepeatedStringField(value: &self.trackIds) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self.frameNumberStart) }()
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.frameTimeStart) }()
       case 6: try { try decoder.decodeSingularEnumField(value: &self.annotationType) }()
@@ -14750,8 +14796,8 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
     if !self.inputID.isEmpty {
       try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 2)
     }
-    if !self.trackID.isEmpty {
-      try visitor.visitSingularStringField(value: self.trackID, fieldNumber: 3)
+    if !self.trackIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.trackIds, fieldNumber: 3)
     }
     if self.frameNumberStart != 0 {
       try visitor.visitSingularUInt32Field(value: self.frameNumberStart, fieldNumber: 4)
@@ -14777,7 +14823,7 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
   public static func ==(lhs: Clarifai_Api_StreamTrackAnnotationsSearchesRequest, rhs: Clarifai_Api_StreamTrackAnnotationsSearchesRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.inputID != rhs.inputID {return false}
-    if lhs.trackID != rhs.trackID {return false}
+    if lhs.trackIds != rhs.trackIds {return false}
     if lhs.frameNumberStart != rhs.frameNumberStart {return false}
     if lhs.frameTimeStart != rhs.frameTimeStart {return false}
     if lhs.annotationType != rhs.annotationType {return false}
@@ -15384,6 +15430,54 @@ extension Clarifai_Api_SingleAnnotationResponse: SwiftProtobuf.Message, SwiftPro
   public static func ==(lhs: Clarifai_Api_SingleAnnotationResponse, rhs: Clarifai_Api_SingleAnnotationResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._annotation != rhs._annotation {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_SingleStreamTrackAnnotationResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleStreamTrackAnnotationResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "annotation"),
+    3: .standard(proto: "frame_fully_processed"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._annotation) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.frameFullyProcessed) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._annotation {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.frameFullyProcessed != false {
+      try visitor.visitSingularBoolField(value: self.frameFullyProcessed, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_SingleStreamTrackAnnotationResponse, rhs: Clarifai_Api_SingleStreamTrackAnnotationResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs._annotation != rhs._annotation {return false}
+    if lhs.frameFullyProcessed != rhs.frameFullyProcessed {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -21213,6 +21307,7 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
     4: .same(proto: "workflows"),
     5: .same(proto: "modules"),
     6: .same(proto: "inputs"),
+    7: .same(proto: "pipelines"),
   ]
 
   fileprivate class _StorageClass {
@@ -21222,6 +21317,7 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
     var _workflows: Int64 = 0
     var _modules: Int64 = 0
     var _inputs: Int64 = 0
+    var _pipelines: Int64 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -21234,6 +21330,7 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
       _workflows = source._workflows
       _modules = source._modules
       _inputs = source._inputs
+      _pipelines = source._pipelines
     }
   }
 
@@ -21258,6 +21355,7 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
         case 4: try { try decoder.decodeSingularInt64Field(value: &_storage._workflows) }()
         case 5: try { try decoder.decodeSingularInt64Field(value: &_storage._modules) }()
         case 6: try { try decoder.decodeSingularInt64Field(value: &_storage._inputs) }()
+        case 7: try { try decoder.decodeSingularInt64Field(value: &_storage._pipelines) }()
         default: break
         }
       }
@@ -21288,6 +21386,9 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
       if _storage._inputs != 0 {
         try visitor.visitSingularInt64Field(value: _storage._inputs, fieldNumber: 6)
       }
+      if _storage._pipelines != 0 {
+        try visitor.visitSingularInt64Field(value: _storage._pipelines, fieldNumber: 7)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -21303,6 +21404,7 @@ extension Clarifai_Api_GetResourceCountsResponse: SwiftProtobuf.Message, SwiftPr
         if _storage._workflows != rhs_storage._workflows {return false}
         if _storage._modules != rhs_storage._modules {return false}
         if _storage._inputs != rhs_storage._inputs {return false}
+        if _storage._pipelines != rhs_storage._pipelines {return false}
         return true
       }
       if !storagesAreEqual {return false}

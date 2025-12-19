@@ -576,7 +576,10 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   /// An error occurred during add-task-annotations or add-auto-annotations pipeline.
   case taskFailed // = 54005
 
-  /// When an Auto Annotation task job has finished processing its last batch and is waiting for more dataset assets.
+  /// Task is waiting for user action.
+  /// Examples:
+  /// - When an Auto Annotation task job has finished processing its last batch and is waiting for more dataset assets.
+  /// - When an Auto Annotation task job for a video livestream input is waiting for user to create a task deployment.
   case taskIdle // = 54006
 
   /// The task operation is in conflict with the current state of the server.
@@ -685,6 +688,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case jobCancelled // = 64004
   case jobUnexpectedError // = 64006
   case jobConflict // = 64007
+  case jobPaused // = 64008
 
   ///auth issues
   case authMissingIdpAssoc // = 65000
@@ -1128,6 +1132,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 64005: self = .datasetVersionPending
     case 64006: self = .jobUnexpectedError
     case 64007: self = .jobConflict
+    case 64008: self = .jobPaused
     case 64010: self = .datasetVersionInProgress
     case 64015: self = .datasetVersionReady
     case 64020: self = .datasetVersionFailure
@@ -1563,6 +1568,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .datasetVersionPending: return 64005
     case .jobUnexpectedError: return 64006
     case .jobConflict: return 64007
+    case .jobPaused: return 64008
     case .datasetVersionInProgress: return 64010
     case .datasetVersionReady: return 64015
     case .datasetVersionFailure: return 64020
@@ -2015,6 +2021,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .jobCancelled,
     .jobUnexpectedError,
     .jobConflict,
+    .jobPaused,
     .authMissingIdpAssoc,
     .listObjectsFailed,
     .archiveExtractFailed,
@@ -2441,6 +2448,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     64005: .same(proto: "DATASET_VERSION_PENDING"),
     64006: .same(proto: "JOB_UNEXPECTED_ERROR"),
     64007: .same(proto: "JOB_CONFLICT"),
+    64008: .same(proto: "JOB_PAUSED"),
     64010: .same(proto: "DATASET_VERSION_IN_PROGRESS"),
     64015: .same(proto: "DATASET_VERSION_READY"),
     64020: .same(proto: "DATASET_VERSION_FAILURE"),
