@@ -13310,6 +13310,68 @@ public struct Clarifai_Api_MultiPipelineVersionRunResponse {
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
 }
 
+public struct Clarifai_Api_ListPipelineVersionRunStatusLogsRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// User App ID
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// Pipeline ID
+  public var pipelineID: String = String()
+
+  /// Pipeline Version ID
+  public var pipelineVersionID: String = String()
+
+  /// Pipeline Version Run ID
+  public var pipelineVersionRunID: String = String()
+
+  /// Status codes to filter by (optional)
+  public var statusCodes: [Clarifai_Api_Status_StatusCode] = []
+
+  /// Pagination
+  public var page: UInt32 = 0
+
+  public var perPage: UInt32 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
+public struct Clarifai_Api_MultiPipelineVersionRunStatusLogResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var pipelineVersionRunStatusLogs: [Clarifai_Api_PipelineVersionRunStatusLog] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
 public struct Clarifai_Api_PostPipelineStepsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -35392,6 +35454,120 @@ extension Clarifai_Api_MultiPipelineVersionRunResponse: SwiftProtobuf.Message, S
   public static func ==(lhs: Clarifai_Api_MultiPipelineVersionRunResponse, rhs: Clarifai_Api_MultiPipelineVersionRunResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.pipelineVersionRuns != rhs.pipelineVersionRuns {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListPipelineVersionRunStatusLogsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListPipelineVersionRunStatusLogsRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "pipeline_id"),
+    3: .standard(proto: "pipeline_version_id"),
+    4: .standard(proto: "pipeline_version_run_id"),
+    5: .standard(proto: "status_codes"),
+    6: .same(proto: "page"),
+    7: .standard(proto: "per_page"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.pipelineID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionRunID) }()
+      case 5: try { try decoder.decodeRepeatedEnumField(value: &self.statusCodes) }()
+      case 6: try { try decoder.decodeSingularUInt32Field(value: &self.page) }()
+      case 7: try { try decoder.decodeSingularUInt32Field(value: &self.perPage) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.pipelineID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineID, fieldNumber: 2)
+    }
+    if !self.pipelineVersionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineVersionID, fieldNumber: 3)
+    }
+    if !self.pipelineVersionRunID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineVersionRunID, fieldNumber: 4)
+    }
+    if !self.statusCodes.isEmpty {
+      try visitor.visitPackedEnumField(value: self.statusCodes, fieldNumber: 5)
+    }
+    if self.page != 0 {
+      try visitor.visitSingularUInt32Field(value: self.page, fieldNumber: 6)
+    }
+    if self.perPage != 0 {
+      try visitor.visitSingularUInt32Field(value: self.perPage, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, rhs: Clarifai_Api_ListPipelineVersionRunStatusLogsRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.pipelineID != rhs.pipelineID {return false}
+    if lhs.pipelineVersionID != rhs.pipelineVersionID {return false}
+    if lhs.pipelineVersionRunID != rhs.pipelineVersionRunID {return false}
+    if lhs.statusCodes != rhs.statusCodes {return false}
+    if lhs.page != rhs.page {return false}
+    if lhs.perPage != rhs.perPage {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiPipelineVersionRunStatusLogResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiPipelineVersionRunStatusLogResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "pipeline_version_run_status_logs"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.pipelineVersionRunStatusLogs) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.pipelineVersionRunStatusLogs.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.pipelineVersionRunStatusLogs, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiPipelineVersionRunStatusLogResponse, rhs: Clarifai_Api_MultiPipelineVersionRunStatusLogResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.pipelineVersionRunStatusLogs != rhs.pipelineVersionRunStatusLogs {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

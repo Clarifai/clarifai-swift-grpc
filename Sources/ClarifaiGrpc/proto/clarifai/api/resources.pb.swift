@@ -9617,6 +9617,11 @@ public struct Clarifai_Api_TaskWorker {
   /// If set, worker must have be set accordingly to either human worker or model/workflow worker
   public var type: Clarifai_Api_TaskWorker.WorkerType = .notSet
 
+  /// Runner selectors is used to select specific runners for the workers of this task.
+  /// The index of runner_selectors corresponds to the index of workers.
+  /// In other words: runner_selectors[i] is the runner selector for workers[i].
+  public var runnerSelectors: [Clarifai_Api_RunnerSelector] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Info based on the worker strategy,
@@ -13682,7 +13687,7 @@ public struct Clarifai_Api_RunnerSelector {
   /// Clears the value of `nodepool`. Subsequent reads from it will return its default value.
   public mutating func clearNodepool() {_uniqueStorage()._nodepool = nil}
 
-  /// Optionally a partcular runner within the nodepool.
+  /// Optionally a particular runner within the nodepool.
   public var runner: Clarifai_Api_Runner {
     get {return _storage._runner ?? Clarifai_Api_Runner()}
     set {_uniqueStorage()._runner = newValue}
@@ -13692,7 +13697,7 @@ public struct Clarifai_Api_RunnerSelector {
   /// Clears the value of `runner`. Subsequent reads from it will return its default value.
   public mutating func clearRunner() {_uniqueStorage()._runner = nil}
 
-  /// Optionally a partcular deployment within the nodepool.
+  /// Optionally a particular deployment within the nodepool.
   public var deployment: Clarifai_Api_Deployment {
     get {return _storage._deployment ?? Clarifai_Api_Deployment()}
     set {_uniqueStorage()._deployment = newValue}
@@ -15552,6 +15557,92 @@ public struct Clarifai_Api_PipelineVersionRun {
   public var hasOrchestrationSpec: Bool {return _storage._orchestrationSpec != nil}
   /// Clears the value of `orchestrationSpec`. Subsequent reads from it will return its default value.
   public mutating func clearOrchestrationSpec() {_uniqueStorage()._orchestrationSpec = nil}
+
+  /// When the pipeline run started executing (first JOB_RUNNING status)
+  public var startedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._startedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._startedAt = newValue}
+  }
+  /// Returns true if `startedAt` has been explicitly set.
+  public var hasStartedAt: Bool {return _storage._startedAt != nil}
+  /// Clears the value of `startedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearStartedAt() {_uniqueStorage()._startedAt = nil}
+
+  /// When the pipeline run finished executing (terminal status)  
+  public var endedAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._endedAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._endedAt = newValue}
+  }
+  /// Returns true if `endedAt` has been explicitly set.
+  public var hasEndedAt: Bool {return _storage._endedAt != nil}
+  /// Clears the value of `endedAt`. Subsequent reads from it will return its default value.
+  public mutating func clearEndedAt() {_uniqueStorage()._endedAt = nil}
+
+  /// Total cumulative run duration excluding pause time
+  public var totalRunDuration: SwiftProtobuf.Google_Protobuf_Duration {
+    get {return _storage._totalRunDuration ?? SwiftProtobuf.Google_Protobuf_Duration()}
+    set {_uniqueStorage()._totalRunDuration = newValue}
+  }
+  /// Returns true if `totalRunDuration` has been explicitly set.
+  public var hasTotalRunDuration: Bool {return _storage._totalRunDuration != nil}
+  /// Clears the value of `totalRunDuration`. Subsequent reads from it will return its default value.
+  public mutating func clearTotalRunDuration() {_uniqueStorage()._totalRunDuration = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_PipelineVersionRunStatusLog {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Unique ID for this status record
+  public var id: String {
+    get {return _storage._id}
+    set {_uniqueStorage()._id = newValue}
+  }
+
+  /// The PipelineVersionRun this log entry belongs to
+  public var pipelineVersionRunID: String {
+    get {return _storage._pipelineVersionRunID}
+    set {_uniqueStorage()._pipelineVersionRunID = newValue}
+  }
+
+  /// Clarifai status object representing the current status
+  public var status: Clarifai_Api_Status_Status {
+    get {return _storage._status ?? Clarifai_Api_Status_Status()}
+    set {_uniqueStorage()._status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return _storage._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {_uniqueStorage()._status = nil}
+
+  /// Optional human-readable reason or message (e.g. "Paused due to resource limit")
+  public var message: String {
+    get {return _storage._message}
+    set {_uniqueStorage()._message = newValue}
+  }
+
+  /// Who triggered this status change
+  public var triggeredByUserID: String {
+    get {return _storage._triggeredByUserID}
+    set {_uniqueStorage()._triggeredByUserID = newValue}
+  }
+
+  /// When this status was recorded
+  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_uniqueStorage()._createdAt = newValue}
+  }
+  /// Returns true if `createdAt` has been explicitly set.
+  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
+  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
+  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -27247,6 +27338,7 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     3: .standard(proto: "partitioned_strategy_info"),
     7: .same(proto: "workers"),
     8: .same(proto: "type"),
+    9: .standard(proto: "runner_selectors"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -27273,6 +27365,7 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 4: try { try decoder.decodeRepeatedMessageField(value: &self.users) }()
       case 7: try { try decoder.decodeRepeatedMessageField(value: &self.workers) }()
       case 8: try { try decoder.decodeSingularEnumField(value: &self.type) }()
+      case 9: try { try decoder.decodeRepeatedMessageField(value: &self.runnerSelectors) }()
       default: break
       }
     }
@@ -27301,6 +27394,9 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if self.type != .notSet {
       try visitor.visitSingularEnumField(value: self.type, fieldNumber: 8)
     }
+    if !self.runnerSelectors.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.runnerSelectors, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -27311,6 +27407,7 @@ extension Clarifai_Api_TaskWorker: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.strategyInfo != rhs.strategyInfo {return false}
     if lhs.workers != rhs.workers {return false}
     if lhs.type != rhs.type {return false}
+    if lhs.runnerSelectors != rhs.runnerSelectors {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -35018,6 +35115,9 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
     8: .standard(proto: "modified_at"),
     9: .standard(proto: "input_args_override"),
     10: .standard(proto: "orchestration_spec"),
+    11: .standard(proto: "started_at"),
+    12: .standard(proto: "ended_at"),
+    13: .standard(proto: "total_run_duration"),
   ]
 
   fileprivate class _StorageClass {
@@ -35031,6 +35131,9 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
     var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
     var _inputArgsOverride: Clarifai_Api_OrchestrationArgsOverride? = nil
     var _orchestrationSpec: Clarifai_Api_OrchestrationSpec? = nil
+    var _startedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _endedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _totalRunDuration: SwiftProtobuf.Google_Protobuf_Duration? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -35047,6 +35150,9 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
       _modifiedAt = source._modifiedAt
       _inputArgsOverride = source._inputArgsOverride
       _orchestrationSpec = source._orchestrationSpec
+      _startedAt = source._startedAt
+      _endedAt = source._endedAt
+      _totalRunDuration = source._totalRunDuration
     }
   }
 
@@ -35075,6 +35181,9 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
         case 8: try { try decoder.decodeSingularMessageField(value: &_storage._modifiedAt) }()
         case 9: try { try decoder.decodeSingularMessageField(value: &_storage._inputArgsOverride) }()
         case 10: try { try decoder.decodeSingularMessageField(value: &_storage._orchestrationSpec) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._startedAt) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._endedAt) }()
+        case 13: try { try decoder.decodeSingularMessageField(value: &_storage._totalRunDuration) }()
         default: break
         }
       }
@@ -35117,6 +35226,15 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
       try { if let v = _storage._orchestrationSpec {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
       } }()
+      try { if let v = _storage._startedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._endedAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
+      try { if let v = _storage._totalRunDuration {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -35136,6 +35254,117 @@ extension Clarifai_Api_PipelineVersionRun: SwiftProtobuf.Message, SwiftProtobuf.
         if _storage._modifiedAt != rhs_storage._modifiedAt {return false}
         if _storage._inputArgsOverride != rhs_storage._inputArgsOverride {return false}
         if _storage._orchestrationSpec != rhs_storage._orchestrationSpec {return false}
+        if _storage._startedAt != rhs_storage._startedAt {return false}
+        if _storage._endedAt != rhs_storage._endedAt {return false}
+        if _storage._totalRunDuration != rhs_storage._totalRunDuration {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineVersionRunStatusLog: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PipelineVersionRunStatusLog"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "pipeline_version_run_id"),
+    3: .same(proto: "status"),
+    4: .same(proto: "message"),
+    5: .standard(proto: "triggered_by_user_id"),
+    6: .standard(proto: "created_at"),
+  ]
+
+  fileprivate class _StorageClass {
+    var _id: String = String()
+    var _pipelineVersionRunID: String = String()
+    var _status: Clarifai_Api_Status_Status? = nil
+    var _message: String = String()
+    var _triggeredByUserID: String = String()
+    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _id = source._id
+      _pipelineVersionRunID = source._pipelineVersionRunID
+      _status = source._status
+      _message = source._message
+      _triggeredByUserID = source._triggeredByUserID
+      _createdAt = source._createdAt
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._pipelineVersionRunID) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
+        case 4: try { try decoder.decodeSingularStringField(value: &_storage._message) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._triggeredByUserID) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
+        default: break
+        }
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._id.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
+      }
+      if !_storage._pipelineVersionRunID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._pipelineVersionRunID, fieldNumber: 2)
+      }
+      try { if let v = _storage._status {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      if !_storage._message.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._message, fieldNumber: 4)
+      }
+      if !_storage._triggeredByUserID.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._triggeredByUserID, fieldNumber: 5)
+      }
+      try { if let v = _storage._createdAt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineVersionRunStatusLog, rhs: Clarifai_Api_PipelineVersionRunStatusLog) -> Bool {
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._id != rhs_storage._id {return false}
+        if _storage._pipelineVersionRunID != rhs_storage._pipelineVersionRunID {return false}
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._message != rhs_storage._message {return false}
+        if _storage._triggeredByUserID != rhs_storage._triggeredByUserID {return false}
+        if _storage._createdAt != rhs_storage._createdAt {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -338,6 +338,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   case artifactsGet // = 170
   case artifactsAdd // = 171
   case artifactsDelete // = 172
+
+  /// Pipeline version run status logs (audit trail)
+  case pipelineVersionRunStatusLogsGet // = 173
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -467,6 +470,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case 170: self = .artifactsGet
     case 171: self = .artifactsAdd
     case 172: self = .artifactsDelete
+    case 173: self = .pipelineVersionRunStatusLogsGet
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -594,6 +598,7 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
     case .artifactsGet: return 170
     case .artifactsAdd: return 171
     case .artifactsDelete: return 172
+    case .pipelineVersionRunStatusLogsGet: return 173
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -726,6 +731,7 @@ extension Clarifai_Auth_Scope_S: CaseIterable {
     .artifactsGet,
     .artifactsAdd,
     .artifactsDelete,
+    .pipelineVersionRunStatusLogsGet,
   ]
 }
 
@@ -950,6 +956,7 @@ extension Clarifai_Auth_Scope_S: SwiftProtobuf._ProtoNameProviding {
     170: .same(proto: "Artifacts_Get"),
     171: .same(proto: "Artifacts_Add"),
     172: .same(proto: "Artifacts_Delete"),
+    173: .same(proto: "PipelineVersionRunStatusLogs_Get"),
   ]
 }
 

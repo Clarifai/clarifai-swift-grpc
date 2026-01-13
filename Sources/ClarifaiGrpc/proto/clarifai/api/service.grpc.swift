@@ -1363,6 +1363,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>
 
+  func listPipelineVersionRunStatusLogs(
+    _ request: Clarifai_Api_ListPipelineVersionRunStatusLogsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, Clarifai_Api_MultiPipelineVersionRunStatusLogResponse>
+
   func postPipelineSteps(
     _ request: Clarifai_Api_PostPipelineStepsRequest,
     callOptions: CallOptions?
@@ -6412,6 +6417,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Unary call to ListPipelineVersionRunStatusLogs
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineVersionRunStatusLogs.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineVersionRunStatusLogs(
+    _ request: Clarifai_Api_ListPipelineVersionRunStatusLogsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, Clarifai_Api_MultiPipelineVersionRunStatusLogResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineVersionRunStatusLogs",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineVersionRunStatusLogsInterceptors() ?? []
+    )
+  }
+
   /// Unary call to PostPipelineSteps
   ///
   /// - Parameters:
@@ -7641,6 +7664,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'patchPipelineVersionRuns'.
   func makePatchPipelineVersionRunsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'listPipelineVersionRunStatusLogs'.
+  func makeListPipelineVersionRunStatusLogsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, Clarifai_Api_MultiPipelineVersionRunStatusLogResponse>]
+
   /// - Returns: Interceptors to use when invoking 'postPipelineSteps'.
   func makePostPipelineStepsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineStepsRequest, Clarifai_Api_MultiPipelineStepResponse>]
 
@@ -8610,6 +8636,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func postPipelineVersionRuns(request: Clarifai_Api_PostPipelineVersionRunsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunResponse>
 
   func patchPipelineVersionRuns(request: Clarifai_Api_PatchPipelineVersionRunsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunResponse>
+
+  func listPipelineVersionRunStatusLogs(request: Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineVersionRunStatusLogResponse>
 
   func postPipelineSteps(request: Clarifai_Api_PostPipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineStepResponse>
 
@@ -11072,6 +11100,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.patchPipelineVersionRuns(request:context:)
       )
 
+    case "ListPipelineVersionRunStatusLogs":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineVersionRunStatusLogsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineVersionRunStatusLogResponse>(),
+        interceptors: self.interceptors?.makeListPipelineVersionRunStatusLogsInterceptors() ?? [],
+        userFunction: self.listPipelineVersionRunStatusLogs(request:context:)
+      )
+
     case "PostPipelineSteps":
       return UnaryServerHandler(
         context: context,
@@ -12350,6 +12387,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'patchPipelineVersionRuns'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePatchPipelineVersionRunsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchPipelineVersionRunsRequest, Clarifai_Api_MultiPipelineVersionRunResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelineVersionRunStatusLogs'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineVersionRunStatusLogsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineVersionRunStatusLogsRequest, Clarifai_Api_MultiPipelineVersionRunStatusLogResponse>]
 
   /// - Returns: Interceptors to use when handling 'postPipelineSteps'.
   ///   Defaults to calling `self.makeInterceptors()`.
