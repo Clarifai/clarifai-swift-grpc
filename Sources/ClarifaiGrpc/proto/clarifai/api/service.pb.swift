@@ -354,8 +354,8 @@ public struct Clarifai_Api_PostTrackAnnotationsSearchesRequest {
   fileprivate var _worker: Clarifai_Api_Worker? = nil
 }
 
-/// StreamTrackAnnotationsSearchesRequest
-public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
+/// StreamAnnotationsRequest
+public struct Clarifai_Api_StreamAnnotationsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -369,10 +369,11 @@ public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
   /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
   public mutating func clearUserAppID() {self._userAppID = nil}
 
-  /// The input ID containing the video track annotations to stream
+  /// The input ID containing the annotations to stream
   public var inputID: String = String()
 
-  /// Filter annotations by track_ids
+  /// Filter annotations by track_ids (optional - omit to stream all tracks for the input).
+  /// This is useful for historical playback where you want to stream all annotations in a time range.
   public var trackIds: [String] = []
 
   /// Filter annotations starting from this frame number (inclusive)
@@ -386,11 +387,11 @@ public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
 
   /// Maximum number of frames to return. Returns annotations from frames in range [frame_number_start, frame_number_start + max_frames - 1] (inclusive on both ends).
   /// For example: frame_number_start=5, max_frames=3 returns frames 5, 6, and 7.
-  /// Default and max: 10800 frames (3 minutes at 60 FPS)
+  /// Default and max: 216000 frames (60 minutes at 60 FPS)
   public var maxFrames: UInt32 = 0
 
   /// Maximum duration in milliseconds to return. Returns annotations from time range [frame_time_start, frame_time_start + max_duration - 1] (inclusive on both ends).
-  /// Default and max: 180000 ms (3 minutes)
+  /// Default and max: 3600000 ms (60 minutes)
   public var maxDuration: UInt32 = 0
 
   /// Filtering by model version ID within a worker (optional).
@@ -411,6 +412,41 @@ public struct Clarifai_Api_StreamTrackAnnotationsSearchesRequest {
 
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
   fileprivate var _worker: Clarifai_Api_Worker? = nil
+}
+
+/// StreamLivestreamAnnotationsRequest
+/// Streams live annotations from Redis as they are being created by the runner
+public struct Clarifai_Api_StreamLivestreamAnnotationsRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// The input ID containing the video being processed
+  public var inputID: String = String()
+
+  /// (Optional) Filter by specific task ID if known
+  public var taskID: String = String()
+
+  /// (Optional) Filter annotations by track_ids
+  public var trackIds: [String] = []
+
+  /// (Optional) Filter by annotation type (e.g., "bounding_box", "point", "mask")
+  public var annotationType: Clarifai_Api_AnnotationDataType = .notSet
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
 /// PostAnnotationsRequest
@@ -759,8 +795,8 @@ public struct Clarifai_Api_SingleAnnotationResponse {
   fileprivate var _annotation: Clarifai_Api_Annotation? = nil
 }
 
-/// SingleStreamTrackAnnotationResponse similar to SingleAnnotationResponse but with an extra field
-public struct Clarifai_Api_SingleStreamTrackAnnotationResponse {
+/// SingleStreamAnnotationResponse similar to SingleAnnotationResponse but with an extra field
+public struct Clarifai_Api_SingleStreamAnnotationResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -11481,6 +11517,15 @@ public struct Clarifai_Api_RunnerItem {
     set {_uniqueStorage()._request = .syncStateRequest(newValue)}
   }
 
+  /// Auto annotation request from a user.
+  public var autoAnnotationRequest: Clarifai_Api_AutoAnnotationRequest {
+    get {
+      if case .autoAnnotationRequest(let v)? = _storage._request {return v}
+      return Clarifai_Api_AutoAnnotationRequest()
+    }
+    set {_uniqueStorage()._request = .autoAnnotationRequest(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Request: Equatable {
@@ -11488,6 +11533,8 @@ public struct Clarifai_Api_RunnerItem {
     case postModelOutputsRequest(Clarifai_Api_PostModelOutputsRequest)
     /// Agent sync request from control plane.
     case syncStateRequest(Clarifai_Api_SyncStateRequest)
+    /// Auto annotation request from a user.
+    case autoAnnotationRequest(Clarifai_Api_AutoAnnotationRequest)
 
   #if !swift(>=4.1)
     public static func ==(lhs: Clarifai_Api_RunnerItem.OneOf_Request, rhs: Clarifai_Api_RunnerItem.OneOf_Request) -> Bool {
@@ -11503,6 +11550,10 @@ public struct Clarifai_Api_RunnerItem {
         guard case .syncStateRequest(let l) = lhs, case .syncStateRequest(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
+      case (.autoAnnotationRequest, .autoAnnotationRequest): return {
+        guard case .autoAnnotationRequest(let l) = lhs, case .autoAnnotationRequest(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
       default: return false
       }
     }
@@ -11512,6 +11563,65 @@ public struct Clarifai_Api_RunnerItem {
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct Clarifai_Api_AutoAnnotationRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Perform prediction request and call PostAnnotations endpoint using post_annotations_info and prediction results.
+  public var postModelOutputsRequest: Clarifai_Api_PostModelOutputsRequest {
+    get {return _postModelOutputsRequest ?? Clarifai_Api_PostModelOutputsRequest()}
+    set {_postModelOutputsRequest = newValue}
+  }
+  /// Returns true if `postModelOutputsRequest` has been explicitly set.
+  public var hasPostModelOutputsRequest: Bool {return self._postModelOutputsRequest != nil}
+  /// Clears the value of `postModelOutputsRequest`. Subsequent reads from it will return its default value.
+  public mutating func clearPostModelOutputsRequest() {self._postModelOutputsRequest = nil}
+
+  public var postAnnotationsInfo: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo {
+    get {return _postAnnotationsInfo ?? Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo()}
+    set {_postAnnotationsInfo = newValue}
+  }
+  /// Returns true if `postAnnotationsInfo` has been explicitly set.
+  public var hasPostAnnotationsInfo: Bool {return self._postAnnotationsInfo != nil}
+  /// Clears the value of `postAnnotationsInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearPostAnnotationsInfo() {self._postAnnotationsInfo = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public struct PostAnnotationsInfo {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var userAppID: Clarifai_Api_UserAppIDSet {
+      get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+      set {_userAppID = newValue}
+    }
+    /// Returns true if `userAppID` has been explicitly set.
+    public var hasUserAppID: Bool {return self._userAppID != nil}
+    /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+    public mutating func clearUserAppID() {self._userAppID = nil}
+
+    /// Authorization value to be used when calling PostAnnotations endpoint.
+    public var authorizationValue: String = String()
+
+    /// Task ID linked to the annotations being created.
+    public var taskID: String = String()
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+
+    fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  }
+
+  public init() {}
+
+  fileprivate var _postModelOutputsRequest: Clarifai_Api_PostModelOutputsRequest? = nil
+  fileprivate var _postAnnotationsInfo: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo? = nil
 }
 
 /// This contains the response of the user's request once processing is done.
@@ -14813,8 +14923,8 @@ extension Clarifai_Api_PostTrackAnnotationsSearchesRequest: SwiftProtobuf.Messag
   }
 }
 
-extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StreamTrackAnnotationsSearchesRequest"
+extension Clarifai_Api_StreamAnnotationsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".StreamAnnotationsRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "input_id"),
@@ -14882,7 +14992,7 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_StreamTrackAnnotationsSearchesRequest, rhs: Clarifai_Api_StreamTrackAnnotationsSearchesRequest) -> Bool {
+  public static func ==(lhs: Clarifai_Api_StreamAnnotationsRequest, rhs: Clarifai_Api_StreamAnnotationsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.inputID != rhs.inputID {return false}
     if lhs.trackIds != rhs.trackIds {return false}
@@ -14892,6 +15002,66 @@ extension Clarifai_Api_StreamTrackAnnotationsSearchesRequest: SwiftProtobuf.Mess
     if lhs.maxFrames != rhs.maxFrames {return false}
     if lhs.maxDuration != rhs.maxDuration {return false}
     if lhs._worker != rhs._worker {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".StreamLivestreamAnnotationsRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "input_id"),
+    3: .standard(proto: "task_id"),
+    4: .standard(proto: "track_ids"),
+    5: .standard(proto: "annotation_type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.taskID) }()
+      case 4: try { try decoder.decodeRepeatedStringField(value: &self.trackIds) }()
+      case 5: try { try decoder.decodeSingularEnumField(value: &self.annotationType) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.inputID.isEmpty {
+      try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 2)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 3)
+    }
+    if !self.trackIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.trackIds, fieldNumber: 4)
+    }
+    if self.annotationType != .notSet {
+      try visitor.visitSingularEnumField(value: self.annotationType, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_StreamLivestreamAnnotationsRequest, rhs: Clarifai_Api_StreamLivestreamAnnotationsRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.inputID != rhs.inputID {return false}
+    if lhs.taskID != rhs.taskID {return false}
+    if lhs.trackIds != rhs.trackIds {return false}
+    if lhs.annotationType != rhs.annotationType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -15497,8 +15667,8 @@ extension Clarifai_Api_SingleAnnotationResponse: SwiftProtobuf.Message, SwiftPro
   }
 }
 
-extension Clarifai_Api_SingleStreamTrackAnnotationResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".SingleStreamTrackAnnotationResponse"
+extension Clarifai_Api_SingleStreamAnnotationResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".SingleStreamAnnotationResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "status"),
     2: .same(proto: "annotation"),
@@ -15536,7 +15706,7 @@ extension Clarifai_Api_SingleStreamTrackAnnotationResponse: SwiftProtobuf.Messag
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: Clarifai_Api_SingleStreamTrackAnnotationResponse, rhs: Clarifai_Api_SingleStreamTrackAnnotationResponse) -> Bool {
+  public static func ==(lhs: Clarifai_Api_SingleStreamAnnotationResponse, rhs: Clarifai_Api_SingleStreamAnnotationResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs._annotation != rhs._annotation {return false}
     if lhs.frameFullyProcessed != rhs.frameFullyProcessed {return false}
@@ -32265,6 +32435,7 @@ extension Clarifai_Api_RunnerItem: SwiftProtobuf.Message, SwiftProtobuf._Message
     3: .standard(proto: "processing_info"),
     4: .standard(proto: "post_model_outputs_request"),
     5: .standard(proto: "sync_state_request"),
+    6: .standard(proto: "auto_annotation_request"),
   ]
 
   fileprivate class _StorageClass {
@@ -32329,6 +32500,19 @@ extension Clarifai_Api_RunnerItem: SwiftProtobuf.Message, SwiftProtobuf._Message
             _storage._request = .syncStateRequest(v)
           }
         }()
+        case 6: try {
+          var v: Clarifai_Api_AutoAnnotationRequest?
+          var hadOneofValue = false
+          if let current = _storage._request {
+            hadOneofValue = true
+            if case .autoAnnotationRequest(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._request = .autoAnnotationRequest(v)
+          }
+        }()
         default: break
         }
       }
@@ -32359,6 +32543,10 @@ extension Clarifai_Api_RunnerItem: SwiftProtobuf.Message, SwiftProtobuf._Message
         guard case .syncStateRequest(let v)? = _storage._request else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
       }()
+      case .autoAnnotationRequest?: try {
+        guard case .autoAnnotationRequest(let v)? = _storage._request else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      }()
       case nil: break
       }
     }
@@ -32378,6 +32566,96 @@ extension Clarifai_Api_RunnerItem: SwiftProtobuf.Message, SwiftProtobuf._Message
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_AutoAnnotationRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".AutoAnnotationRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "post_model_outputs_request"),
+    2: .standard(proto: "post_annotations_info"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._postModelOutputsRequest) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._postAnnotationsInfo) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._postModelOutputsRequest {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._postAnnotationsInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AutoAnnotationRequest, rhs: Clarifai_Api_AutoAnnotationRequest) -> Bool {
+    if lhs._postModelOutputsRequest != rhs._postModelOutputsRequest {return false}
+    if lhs._postAnnotationsInfo != rhs._postAnnotationsInfo {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_AutoAnnotationRequest.protoMessageName + ".PostAnnotationsInfo"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "authorization_value"),
+    3: .standard(proto: "task_id"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.authorizationValue) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.taskID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.authorizationValue.isEmpty {
+      try visitor.visitSingularStringField(value: self.authorizationValue, fieldNumber: 2)
+    }
+    if !self.taskID.isEmpty {
+      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo, rhs: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.authorizationValue != rhs.authorizationValue {return false}
+    if lhs.taskID != rhs.taskID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

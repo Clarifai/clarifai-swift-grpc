@@ -712,12 +712,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case logEntriesInvalidRequest // = 70000
 
   ///Twilio related issues: 71xxx
-  case twilioUncategorizedError // = 71001
-  case twilioInvalidArgument // = 71002
   case twilioMaxVerificationBeginExceeded // = 71003
   case twilioMaxVerificationCheckExceeded // = 71004
-  case twilioResourceNotFound // = 71005
-  case twilioClientNotInitialized // = 71006
 
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
@@ -1158,12 +1154,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 69000: self = .billingInvalidInfo
     case 69001: self = .billingMissingTokens
     case 70000: self = .logEntriesInvalidRequest
-    case 71001: self = .twilioUncategorizedError
-    case 71002: self = .twilioInvalidArgument
     case 71003: self = .twilioMaxVerificationBeginExceeded
     case 71004: self = .twilioMaxVerificationCheckExceeded
-    case 71005: self = .twilioResourceNotFound
-    case 71006: self = .twilioClientNotInitialized
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -1594,12 +1586,8 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .billingInvalidInfo: return 69000
     case .billingMissingTokens: return 69001
     case .logEntriesInvalidRequest: return 70000
-    case .twilioUncategorizedError: return 71001
-    case .twilioInvalidArgument: return 71002
     case .twilioMaxVerificationBeginExceeded: return 71003
     case .twilioMaxVerificationCheckExceeded: return 71004
-    case .twilioResourceNotFound: return 71005
-    case .twilioClientNotInitialized: return 71006
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -2035,12 +2023,8 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .billingInvalidInfo,
     .billingMissingTokens,
     .logEntriesInvalidRequest,
-    .twilioUncategorizedError,
-    .twilioInvalidArgument,
     .twilioMaxVerificationBeginExceeded,
     .twilioMaxVerificationCheckExceeded,
-    .twilioResourceNotFound,
-    .twilioClientNotInitialized,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -2474,12 +2458,8 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     69000: .same(proto: "BILLING_INVALID_INFO"),
     69001: .same(proto: "BILLING_MISSING_TOKENS"),
     70000: .same(proto: "LOG_ENTRIES_INVALID_REQUEST"),
-    71001: .same(proto: "TWILIO_UNCATEGORIZED_ERROR"),
-    71002: .same(proto: "TWILIO_INVALID_ARGUMENT"),
     71003: .same(proto: "TWILIO_MAX_VERIFICATION_BEGIN_EXCEEDED"),
     71004: .same(proto: "TWILIO_MAX_VERIFICATION_CHECK_EXCEEDED"),
-    71005: .same(proto: "TWILIO_RESOURCE_NOT_FOUND"),
-    71006: .same(proto: "TWILIO_CLIENT_NOT_INITIALIZED"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),

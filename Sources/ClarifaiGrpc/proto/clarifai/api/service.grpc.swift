@@ -125,11 +125,17 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>
 
-  func streamTrackAnnotationsSearches(
-    _ request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest,
+  func streamAnnotations(
+    _ request: Clarifai_Api_StreamAnnotationsRequest,
     callOptions: CallOptions?,
-    handler: @escaping (Clarifai_Api_SingleStreamTrackAnnotationResponse) -> Void
-  ) -> ServerStreamingCall<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleStreamTrackAnnotationResponse>
+    handler: @escaping (Clarifai_Api_SingleStreamAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>
+
+  func streamLivestreamAnnotations(
+    _ request: Clarifai_Api_StreamLivestreamAnnotationsRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (Clarifai_Api_SingleStreamAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamLivestreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>
 
   func postAnnotations(
     _ request: Clarifai_Api_PostAnnotationsRequest,
@@ -1836,23 +1842,45 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Stream video track annotations for a specific input one-by-one.
+  /// Stream annotations for a specific input one-by-one.
   ///
   /// - Parameters:
-  ///   - request: Request to send to StreamTrackAnnotationsSearches.
+  ///   - request: Request to send to StreamAnnotations.
   ///   - callOptions: Call options.
   ///   - handler: A closure called when each response is received from the server.
   /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
-  public func streamTrackAnnotationsSearches(
-    _ request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest,
+  public func streamAnnotations(
+    _ request: Clarifai_Api_StreamAnnotationsRequest,
     callOptions: CallOptions? = nil,
-    handler: @escaping (Clarifai_Api_SingleStreamTrackAnnotationResponse) -> Void
-  ) -> ServerStreamingCall<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleStreamTrackAnnotationResponse> {
+    handler: @escaping (Clarifai_Api_SingleStreamAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse> {
     return self.makeServerStreamingCall(
-      path: "/clarifai.api.V2/StreamTrackAnnotationsSearches",
+      path: "/clarifai.api.V2/StreamAnnotations",
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeStreamTrackAnnotationsSearchesInterceptors() ?? [],
+      interceptors: self.interceptors?.makeStreamAnnotationsInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  /// Stream live video annotations as they are being created by the runner.
+  /// This endpoint reads from Redis instead of the database for real-time streaming.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StreamLivestreamAnnotations.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func streamLivestreamAnnotations(
+    _ request: Clarifai_Api_StreamLivestreamAnnotationsRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Clarifai_Api_SingleStreamAnnotationResponse) -> Void
+  ) -> ServerStreamingCall<Clarifai_Api_StreamLivestreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse> {
+    return self.makeServerStreamingCall(
+      path: "/clarifai.api.V2/StreamLivestreamAnnotations",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamLivestreamAnnotationsInterceptors() ?? [],
       handler: handler
     )
   }
@@ -6923,8 +6951,11 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postTrackAnnotationsSearches'.
   func makePostTrackAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'streamTrackAnnotationsSearches'.
-  func makeStreamTrackAnnotationsSearchesInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleStreamTrackAnnotationResponse>]
+  /// - Returns: Interceptors to use when invoking 'streamAnnotations'.
+  func makeStreamAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'streamLivestreamAnnotations'.
+  func makeStreamLivestreamAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_StreamLivestreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postAnnotations'.
   func makePostAnnotationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostAnnotationsRequest, Clarifai_Api_MultiAnnotationResponse>]
@@ -7825,8 +7856,12 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// List video track annotations for a specific input.
   func postTrackAnnotationsSearches(request: Clarifai_Api_PostTrackAnnotationsSearchesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
 
-  /// Stream video track annotations for a specific input one-by-one.
-  func streamTrackAnnotationsSearches(request: Clarifai_Api_StreamTrackAnnotationsSearchesRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleStreamTrackAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
+  /// Stream annotations for a specific input one-by-one.
+  func streamAnnotations(request: Clarifai_Api_StreamAnnotationsRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleStreamAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
+
+  /// Stream live video annotations as they are being created by the runner.
+  /// This endpoint reads from Redis instead of the database for real-time streaming.
+  func streamLivestreamAnnotations(request: Clarifai_Api_StreamLivestreamAnnotationsRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleStreamAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
 
   /// Post annotations.
   func postAnnotations(request: Clarifai_Api_PostAnnotationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAnnotationResponse>
@@ -8877,13 +8912,22 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postTrackAnnotationsSearches(request:context:)
       )
 
-    case "StreamTrackAnnotationsSearches":
+    case "StreamAnnotations":
       return ServerStreamingServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamTrackAnnotationsSearchesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleStreamTrackAnnotationResponse>(),
-        interceptors: self.interceptors?.makeStreamTrackAnnotationsSearchesInterceptors() ?? [],
-        userFunction: self.streamTrackAnnotationsSearches(request:context:)
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleStreamAnnotationResponse>(),
+        interceptors: self.interceptors?.makeStreamAnnotationsInterceptors() ?? [],
+        userFunction: self.streamAnnotations(request:context:)
+      )
+
+    case "StreamLivestreamAnnotations":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_StreamLivestreamAnnotationsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleStreamAnnotationResponse>(),
+        interceptors: self.interceptors?.makeStreamLivestreamAnnotationsInterceptors() ?? [],
+        userFunction: self.streamLivestreamAnnotations(request:context:)
       )
 
     case "PostAnnotations":
@@ -11400,9 +11444,13 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostTrackAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostTrackAnnotationsSearchesRequest, Clarifai_Api_MultiAnnotationResponse>]
 
-  /// - Returns: Interceptors to use when handling 'streamTrackAnnotationsSearches'.
+  /// - Returns: Interceptors to use when handling 'streamAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeStreamTrackAnnotationsSearchesInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamTrackAnnotationsSearchesRequest, Clarifai_Api_SingleStreamTrackAnnotationResponse>]
+  func makeStreamAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>]
+
+  /// - Returns: Interceptors to use when handling 'streamLivestreamAnnotations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamLivestreamAnnotationsInterceptors() -> [ServerInterceptor<Clarifai_Api_StreamLivestreamAnnotationsRequest, Clarifai_Api_SingleStreamAnnotationResponse>]
 
   /// - Returns: Interceptors to use when handling 'postAnnotations'.
   ///   Defaults to calling `self.makeInterceptors()`.
