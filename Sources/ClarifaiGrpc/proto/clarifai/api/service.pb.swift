@@ -8736,8 +8736,11 @@ public struct Clarifai_Api_PatchTasksRequest {
 
   public var tasks: [Clarifai_Api_Task] = []
 
-  /// The action to perform on the patched objects
-  /// For now, only 'overwrite' action is supported
+  /// The action to perform on the patched tasks
+  /// Supported operations:
+  /// * 'overwrite' - overwrite the task with the fields provided in the request
+  /// * 'merge' - update only the fields provided in the request, leave other fields unchanged
+  /// For now, the 'merge' operation only supports updating task status.
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -8996,7 +8999,7 @@ public struct Clarifai_Api_PatchLabelOrdersRequest {
   public var labelOrders: [Clarifai_Api_LabelOrder] = []
 
   /// The action to perform on the patched objects
-  /// For now actions 'merge', 'overwrite', and 'remove' are supported
+  /// For now, only 'overwrite' option is supported
   public var action: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -11570,7 +11573,7 @@ public struct Clarifai_Api_AutoAnnotationRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Perform prediction request and call PostAnnotations endpoint using post_annotations_info and prediction results.
+  /// Perform prediction request and call PostAnnotations endpoint using prediction results.
   public var postModelOutputsRequest: Clarifai_Api_PostModelOutputsRequest {
     get {return _postModelOutputsRequest ?? Clarifai_Api_PostModelOutputsRequest()}
     set {_postModelOutputsRequest = newValue}
@@ -11580,48 +11583,25 @@ public struct Clarifai_Api_AutoAnnotationRequest {
   /// Clears the value of `postModelOutputsRequest`. Subsequent reads from it will return its default value.
   public mutating func clearPostModelOutputsRequest() {self._postModelOutputsRequest = nil}
 
-  public var postAnnotationsInfo: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo {
-    get {return _postAnnotationsInfo ?? Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo()}
-    set {_postAnnotationsInfo = newValue}
+  /// Task used to create annotations .
+  public var task: Clarifai_Api_Task {
+    get {return _task ?? Clarifai_Api_Task()}
+    set {_task = newValue}
   }
-  /// Returns true if `postAnnotationsInfo` has been explicitly set.
-  public var hasPostAnnotationsInfo: Bool {return self._postAnnotationsInfo != nil}
-  /// Clears the value of `postAnnotationsInfo`. Subsequent reads from it will return its default value.
-  public mutating func clearPostAnnotationsInfo() {self._postAnnotationsInfo = nil}
+  /// Returns true if `task` has been explicitly set.
+  public var hasTask: Bool {return self._task != nil}
+  /// Clears the value of `task`. Subsequent reads from it will return its default value.
+  public mutating func clearTask() {self._task = nil}
+
+  /// Authorization value to be used when calling PostAnnotations endpoint.
+  public var authorizationValue: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public struct PostAnnotationsInfo {
-    // SwiftProtobuf.Message conformance is added in an extension below. See the
-    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-    // methods supported on all messages.
-
-    public var userAppID: Clarifai_Api_UserAppIDSet {
-      get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
-      set {_userAppID = newValue}
-    }
-    /// Returns true if `userAppID` has been explicitly set.
-    public var hasUserAppID: Bool {return self._userAppID != nil}
-    /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
-    public mutating func clearUserAppID() {self._userAppID = nil}
-
-    /// Authorization value to be used when calling PostAnnotations endpoint.
-    public var authorizationValue: String = String()
-
-    /// Task ID linked to the annotations being created.
-    public var taskID: String = String()
-
-    public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-    public init() {}
-
-    fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
-  }
 
   public init() {}
 
   fileprivate var _postModelOutputsRequest: Clarifai_Api_PostModelOutputsRequest? = nil
-  fileprivate var _postAnnotationsInfo: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo? = nil
+  fileprivate var _task: Clarifai_Api_Task? = nil
 }
 
 /// This contains the response of the user's request once processing is done.
@@ -32575,7 +32555,8 @@ extension Clarifai_Api_AutoAnnotationRequest: SwiftProtobuf.Message, SwiftProtob
   public static let protoMessageName: String = _protobuf_package + ".AutoAnnotationRequest"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "post_model_outputs_request"),
-    2: .standard(proto: "post_annotations_info"),
+    2: .same(proto: "task"),
+    3: .standard(proto: "authorization_value"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -32585,7 +32566,8 @@ extension Clarifai_Api_AutoAnnotationRequest: SwiftProtobuf.Message, SwiftProtob
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._postModelOutputsRequest) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._postAnnotationsInfo) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._task) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.authorizationValue) }()
       default: break
       }
     }
@@ -32599,63 +32581,19 @@ extension Clarifai_Api_AutoAnnotationRequest: SwiftProtobuf.Message, SwiftProtob
     try { if let v = self._postModelOutputsRequest {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    try { if let v = self._postAnnotationsInfo {
+    try { if let v = self._task {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
+    if !self.authorizationValue.isEmpty {
+      try visitor.visitSingularStringField(value: self.authorizationValue, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_AutoAnnotationRequest, rhs: Clarifai_Api_AutoAnnotationRequest) -> Bool {
     if lhs._postModelOutputsRequest != rhs._postModelOutputsRequest {return false}
-    if lhs._postAnnotationsInfo != rhs._postAnnotationsInfo {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = Clarifai_Api_AutoAnnotationRequest.protoMessageName + ".PostAnnotationsInfo"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "user_app_id"),
-    2: .standard(proto: "authorization_value"),
-    3: .standard(proto: "task_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.authorizationValue) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.taskID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._userAppID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.authorizationValue.isEmpty {
-      try visitor.visitSingularStringField(value: self.authorizationValue, fieldNumber: 2)
-    }
-    if !self.taskID.isEmpty {
-      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo, rhs: Clarifai_Api_AutoAnnotationRequest.PostAnnotationsInfo) -> Bool {
-    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs._task != rhs._task {return false}
     if lhs.authorizationValue != rhs.authorizationValue {return false}
-    if lhs.taskID != rhs.taskID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
