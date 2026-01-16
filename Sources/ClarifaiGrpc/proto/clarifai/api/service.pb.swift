@@ -433,15 +433,6 @@ public struct Clarifai_Api_StreamLivestreamAnnotationsRequest {
   /// The input ID containing the video being processed
   public var inputID: String = String()
 
-  /// (Optional) Filter by specific task ID if known
-  public var taskID: String = String()
-
-  /// (Optional) Filter annotations by track_ids
-  public var trackIds: [String] = []
-
-  /// (Optional) Filter by annotation type (e.g., "bounding_box", "point", "mask")
-  public var annotationType: Clarifai_Api_AnnotationDataType = .notSet
-
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -14992,9 +14983,6 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "input_id"),
-    3: .standard(proto: "task_id"),
-    4: .standard(proto: "track_ids"),
-    5: .standard(proto: "annotation_type"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -15005,9 +14993,6 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.taskID) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.trackIds) }()
-      case 5: try { try decoder.decodeSingularEnumField(value: &self.annotationType) }()
       default: break
       }
     }
@@ -15024,24 +15009,12 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
     if !self.inputID.isEmpty {
       try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 2)
     }
-    if !self.taskID.isEmpty {
-      try visitor.visitSingularStringField(value: self.taskID, fieldNumber: 3)
-    }
-    if !self.trackIds.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.trackIds, fieldNumber: 4)
-    }
-    if self.annotationType != .notSet {
-      try visitor.visitSingularEnumField(value: self.annotationType, fieldNumber: 5)
-    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_StreamLivestreamAnnotationsRequest, rhs: Clarifai_Api_StreamLivestreamAnnotationsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.inputID != rhs.inputID {return false}
-    if lhs.taskID != rhs.taskID {return false}
-    if lhs.trackIds != rhs.trackIds {return false}
-    if lhs.annotationType != rhs.annotationType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

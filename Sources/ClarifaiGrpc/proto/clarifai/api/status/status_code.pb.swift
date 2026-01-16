@@ -520,6 +520,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case redisStreamErr // = 45003
   case redisNoConsumers // = 45004
   case redisStreamBackoff // = 45005
+  case redisChannelErr // = 45006
 
   /// Sift Science 46xxx
   case signupEventError // = 46001
@@ -1057,6 +1058,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 45003: self = .redisStreamErr
     case 45004: self = .redisNoConsumers
     case 45005: self = .redisStreamBackoff
+    case 45006: self = .redisChannelErr
     case 46001: self = .signupEventError
     case 46002: self = .signupFlagged
     case 46003: self = .filetypeUnsupported
@@ -1489,6 +1491,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .redisStreamErr: return 45003
     case .redisNoConsumers: return 45004
     case .redisStreamBackoff: return 45005
+    case .redisChannelErr: return 45006
     case .signupEventError: return 46001
     case .signupFlagged: return 46002
     case .filetypeUnsupported: return 46003
@@ -1926,6 +1929,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .redisStreamErr,
     .redisNoConsumers,
     .redisStreamBackoff,
+    .redisChannelErr,
     .signupEventError,
     .signupFlagged,
     .filetypeUnsupported,
@@ -2361,6 +2365,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     45003: .same(proto: "REDIS_STREAM_ERR"),
     45004: .same(proto: "REDIS_NO_CONSUMERS"),
     45005: .same(proto: "REDIS_STREAM_BACKOFF"),
+    45006: .same(proto: "REDIS_CHANNEL_ERR"),
     46001: .same(proto: "SIGNUP_EVENT_ERROR"),
     46002: .same(proto: "SIGNUP_FLAGGED"),
     46003: .same(proto: "FILETYPE_UNSUPPORTED"),
