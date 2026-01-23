@@ -8667,6 +8667,7 @@ public struct Clarifai_Api_ListTasksRequest {
   public var perPage: UInt32 = 0
 
   /// Get tasks that have ANY user from this list assigned as worker.
+  /// Deprecated: Use worker_ids.
   public var workerUserIds: [String] = []
 
   /// Get tasks that have ANY user from this list assigned as reviewer.
@@ -8702,6 +8703,8 @@ public struct Clarifai_Api_ListTasksRequest {
 
   /// (optional) ids of input source to be filtered
   public var inputSourceIds: [String] = []
+
+  public var workerIds: [Clarifai_Api_WorkerIDSet] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -27817,6 +27820,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     9: .same(proto: "ids"),
     10: .standard(proto: "input_source_type"),
     11: .standard(proto: "input_source_ids"),
+    12: .standard(proto: "worker_ids"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -27836,6 +27840,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
       case 9: try { try decoder.decodeRepeatedStringField(value: &self.ids) }()
       case 10: try { try decoder.decodeSingularEnumField(value: &self.inputSourceType) }()
       case 11: try { try decoder.decodeRepeatedStringField(value: &self.inputSourceIds) }()
+      case 12: try { try decoder.decodeRepeatedMessageField(value: &self.workerIds) }()
       default: break
       }
     }
@@ -27879,6 +27884,9 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if !self.inputSourceIds.isEmpty {
       try visitor.visitRepeatedStringField(value: self.inputSourceIds, fieldNumber: 11)
     }
+    if !self.workerIds.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.workerIds, fieldNumber: 12)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -27894,6 +27902,7 @@ extension Clarifai_Api_ListTasksRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     if lhs.ids != rhs.ids {return false}
     if lhs.inputSourceType != rhs.inputSourceType {return false}
     if lhs.inputSourceIds != rhs.inputSourceIds {return false}
+    if lhs.workerIds != rhs.workerIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
