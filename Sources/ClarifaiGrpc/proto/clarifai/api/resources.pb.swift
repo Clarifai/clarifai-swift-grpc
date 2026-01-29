@@ -3327,8 +3327,8 @@ public struct Clarifai_Api_FrameInfo {
   public var index: UInt32 = 0
 
   /// time in the video in milliseconds. This is independent of the sampling rates used during
-  /// processing.
-  public var time: UInt32 = 0
+  /// processing. Changed from uint32 to uint64 to support video livestreams longer than 49.7 days.
+  public var time: UInt64 = 0
 
   /// The absolute number of the frame in the (original) video
   /// Different from index. Index is just the order in which frames were processed for search (and can be 0 for manual annotations)
@@ -6541,6 +6541,12 @@ public struct Clarifai_Api_ModelVersion {
   public var specialHandling: [Clarifai_Api_SpecialHandling] {
     get {return _storage._specialHandling}
     set {_uniqueStorage()._specialHandling = newValue}
+  }
+
+  /// The number of threads to use for this model version.
+  public var numThreads: Int32 {
+    get {return _storage._numThreads}
+    set {_uniqueStorage()._numThreads = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -19107,7 +19113,7 @@ extension Clarifai_Api_FrameInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self.index) }()
-      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.time) }()
+      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.time) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.number) }()
       default: break
       }
@@ -19119,7 +19125,7 @@ extension Clarifai_Api_FrameInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       try visitor.visitSingularUInt32Field(value: self.index, fieldNumber: 1)
     }
     if self.time != 0 {
-      try visitor.visitSingularUInt32Field(value: self.time, fieldNumber: 2)
+      try visitor.visitSingularUInt64Field(value: self.time, fieldNumber: 2)
     }
     if self.number != 0 {
       try visitor.visitSingularUInt32Field(value: self.number, fieldNumber: 3)
@@ -23004,6 +23010,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     25: .standard(proto: "build_info"),
     26: .standard(proto: "method_signatures"),
     27: .standard(proto: "special_handling"),
+    28: .standard(proto: "num_threads"),
   ]
 
   fileprivate class _StorageClass {
@@ -23031,6 +23038,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
     var _buildInfo: Clarifai_Api_BuildInfo? = nil
     var _methodSignatures: [Clarifai_Api_MethodSignature] = []
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
+    var _numThreads: Int32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -23061,6 +23069,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       _buildInfo = source._buildInfo
       _methodSignatures = source._methodSignatures
       _specialHandling = source._specialHandling
+      _numThreads = source._numThreads
     }
   }
 
@@ -23103,6 +23112,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         case 25: try { try decoder.decodeSingularMessageField(value: &_storage._buildInfo) }()
         case 26: try { try decoder.decodeRepeatedMessageField(value: &_storage._methodSignatures) }()
         case 27: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
+        case 28: try { try decoder.decodeSingularInt32Field(value: &_storage._numThreads) }()
         default: break
         }
       }
@@ -23187,6 +23197,9 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
       if !_storage._specialHandling.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._specialHandling, fieldNumber: 27)
       }
+      if _storage._numThreads != 0 {
+        try visitor.visitSingularInt32Field(value: _storage._numThreads, fieldNumber: 28)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -23220,6 +23233,7 @@ extension Clarifai_Api_ModelVersion: SwiftProtobuf.Message, SwiftProtobuf._Messa
         if _storage._buildInfo != rhs_storage._buildInfo {return false}
         if _storage._methodSignatures != rhs_storage._methodSignatures {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
+        if _storage._numThreads != rhs_storage._numThreads {return false}
         return true
       }
       if !storagesAreEqual {return false}
