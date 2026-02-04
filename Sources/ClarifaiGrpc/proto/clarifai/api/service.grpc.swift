@@ -498,6 +498,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>
 
+  func deleteModelMigration(
+    _ request: Clarifai_Api_DeleteModelMigrationRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_DeleteModelMigrationRequest, Clarifai_Api_SingleModelResponse>
+
   func putModelVersionExports(
     _ request: Clarifai_Api_PutModelVersionExportsRequest,
     callOptions: CallOptions?
@@ -3225,6 +3230,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostModelMigrationInterceptors() ?? []
+    )
+  }
+
+  /// Reverts a model migration from Docker format back to Triton format.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to DeleteModelMigration.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func deleteModelMigration(
+    _ request: Clarifai_Api_DeleteModelMigrationRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_DeleteModelMigrationRequest, Clarifai_Api_SingleModelResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/DeleteModelMigration",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeDeleteModelMigrationInterceptors() ?? []
     )
   }
 
@@ -7173,6 +7196,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postModelMigration'.
   func makePostModelMigrationInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'deleteModelMigration'.
+  func makeDeleteModelMigrationInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
+
   /// - Returns: Interceptors to use when invoking 'putModelVersionExports'.
   func makePutModelVersionExportsInterceptors() -> [ClientInterceptor<Clarifai_Api_PutModelVersionExportsRequest, Clarifai_Api_SingleModelVersionExportResponse>]
 
@@ -8112,6 +8138,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
 
   /// Kicks off conversion from the old Triton model format to the new Docker model format.
   func postModelMigration(request: Clarifai_Api_PostModelMigrationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
+
+  /// Reverts a model migration from Docker format back to Triton format.
+  func deleteModelMigration(request: Clarifai_Api_DeleteModelMigrationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelResponse>
 
   /// Export a model
   func putModelVersionExports(request: Clarifai_Api_PutModelVersionExportsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModelVersionExportResponse>
@@ -9576,6 +9605,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
         interceptors: self.interceptors?.makePostModelMigrationInterceptors() ?? [],
         userFunction: self.postModelMigration(request:context:)
+      )
+
+    case "DeleteModelMigration":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModelMigrationRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModelResponse>(),
+        interceptors: self.interceptors?.makeDeleteModelMigrationInterceptors() ?? [],
+        userFunction: self.deleteModelMigration(request:context:)
       )
 
     case "PutModelVersionExports":
@@ -11739,6 +11777,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postModelMigration'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostModelMigrationInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
+
+  /// - Returns: Interceptors to use when handling 'deleteModelMigration'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeDeleteModelMigrationInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModelMigrationRequest, Clarifai_Api_SingleModelResponse>]
 
   /// - Returns: Interceptors to use when handling 'putModelVersionExports'.
   ///   Defaults to calling `self.makeInterceptors()`.
