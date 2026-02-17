@@ -12742,6 +12742,8 @@ public struct Clarifai_Api_PostModelMigrationRequest {
 
   public var modelID: String = String()
 
+  public var versionID: String = String()
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -34511,6 +34513,7 @@ extension Clarifai_Api_PostModelMigrationRequest: SwiftProtobuf.Message, SwiftPr
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "model_id"),
+    3: .standard(proto: "version_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -34521,6 +34524,7 @@ extension Clarifai_Api_PostModelMigrationRequest: SwiftProtobuf.Message, SwiftPr
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.versionID) }()
       default: break
       }
     }
@@ -34537,12 +34541,16 @@ extension Clarifai_Api_PostModelMigrationRequest: SwiftProtobuf.Message, SwiftPr
     if !self.modelID.isEmpty {
       try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 2)
     }
+    if !self.versionID.isEmpty {
+      try visitor.visitSingularStringField(value: self.versionID, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_PostModelMigrationRequest, rhs: Clarifai_Api_PostModelMigrationRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.modelID != rhs.modelID {return false}
+    if lhs.versionID != rhs.versionID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
