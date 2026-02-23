@@ -933,86 +933,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>
 
-  func getModule(
-    _ request: Clarifai_Api_GetModuleRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>
-
-  func listModules(
-    _ request: Clarifai_Api_ListModulesRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>
-
-  func postModules(
-    _ request: Clarifai_Api_PostModulesRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>
-
-  func patchModules(
-    _ request: Clarifai_Api_PatchModulesRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>
-
-  func deleteModules(
-    _ request: Clarifai_Api_DeleteModulesRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>
-
-  func getModuleVersion(
-    _ request: Clarifai_Api_GetModuleVersionRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>
-
-  func listModuleVersions(
-    _ request: Clarifai_Api_ListModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
-
-  func postModuleVersions(
-    _ request: Clarifai_Api_PostModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
-
-  func patchModuleVersions(
-    _ request: Clarifai_Api_PatchModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>
-
-  func deleteModuleVersions(
-    _ request: Clarifai_Api_DeleteModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>
-
-  func getModuleVersionUsageCount(
-    _ request: Clarifai_Api_GetModuleVersionUsageCountRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>
-
-  func getInstalledModuleVersion(
-    _ request: Clarifai_Api_GetInstalledModuleVersionRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>
-
-  func listInstalledModuleVersions(
-    _ request: Clarifai_Api_ListInstalledModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>
-
-  func postInstalledModuleVersions(
-    _ request: Clarifai_Api_PostInstalledModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>
-
-  func deleteInstalledModuleVersions(
-    _ request: Clarifai_Api_DeleteInstalledModuleVersionsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>
-
-  func postInstalledModuleVersionsKey(
-    _ request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>
-
   func postBulkOperations(
     _ request: Clarifai_Api_PostBulkOperationsRequest,
     callOptions: CallOptions?
@@ -1283,6 +1203,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_PostComputePlaneMetricsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func postRunnerReplicaTaskMetrics(
+    _ request: Clarifai_Api_PostRunnerReplicaTaskMetricsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostRunnerReplicaTaskMetricsRequest, Clarifai_Api_Status_BaseResponse>
 
   func postWorkflowVersionEvaluations(
     _ request: Clarifai_Api_PostWorkflowVersionEvaluationsRequest,
@@ -1868,8 +1793,8 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Stream live video annotations as they are being created by the runner.
-  /// This endpoint reads from Redis instead of the database for real-time streaming.
+  /// Stream live video annotations as soon as they are available.
+  /// This endpoint will NOT replay old annotations, but only stream new annotations that are generated after the stream is opened.
   ///
   /// - Parameters:
   ///   - request: Request to send to StreamLivestreamAnnotations.
@@ -4838,297 +4763,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Get a specific module from an app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetModule.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getModule(
-    _ request: Clarifai_Api_GetModuleRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetModule",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetModuleInterceptors() ?? []
-    )
-  }
-
-  /// List all the modules in community, by user or by app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListModules.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listModules(
-    _ request: Clarifai_Api_ListModulesRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListModules",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListModulesInterceptors() ?? []
-    )
-  }
-
-  /// Add a modules to an app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostModules.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postModules(
-    _ request: Clarifai_Api_PostModulesRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostModules",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostModulesInterceptors() ?? []
-    )
-  }
-
-  /// Patch one or more modules.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PatchModules.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func patchModules(
-    _ request: Clarifai_Api_PatchModulesRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PatchModules",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePatchModulesInterceptors() ?? []
-    )
-  }
-
-  /// Delete multiple modules in one request.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteModules.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteModules(
-    _ request: Clarifai_Api_DeleteModulesRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteModules",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteModulesInterceptors() ?? []
-    )
-  }
-
-  /// Get a specific module version for a module.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetModuleVersion.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getModuleVersion(
-    _ request: Clarifai_Api_GetModuleVersionRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetModuleVersion",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetModuleVersionInterceptors() ?? []
-    )
-  }
-
-  /// List all the modules versions for a given module.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listModuleVersions(
-    _ request: Clarifai_Api_ListModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Create a new module version to trigger training of the module.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postModuleVersions(
-    _ request: Clarifai_Api_PostModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Modify details of an existing module version.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PatchModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func patchModuleVersions(
-    _ request: Clarifai_Api_PatchModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PatchModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePatchModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Delete a multiple module version.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteModuleVersions(
-    _ request: Clarifai_Api_DeleteModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Get usage count for specific module version.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetModuleVersionUsageCount.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getModuleVersionUsageCount(
-    _ request: Clarifai_Api_GetModuleVersionUsageCountRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetModuleVersionUsageCount",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetModuleVersionUsageCountInterceptors() ?? []
-    )
-  }
-
-  /// Get installed modules vesrions for an app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetInstalledModuleVersion.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getInstalledModuleVersion(
-    _ request: Clarifai_Api_GetInstalledModuleVersionRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetInstalledModuleVersion",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetInstalledModuleVersionInterceptors() ?? []
-    )
-  }
-
-  /// List installed modules vesrions for an app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListInstalledModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listInstalledModuleVersions(
-    _ request: Clarifai_Api_ListInstalledModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListInstalledModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListInstalledModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Install a new module version which will deploy the specific ModuleVersion to the app in the url.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostInstalledModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postInstalledModuleVersions(
-    _ request: Clarifai_Api_PostInstalledModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostInstalledModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostInstalledModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Uninstall an installed module version which will deploy the specific ModuleVersion to the app
-  /// in the url.
-  /// This cleaned up any associated caller keys so needs the Keys_Delete scope.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteInstalledModuleVersions.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteInstalledModuleVersions(
-    _ request: Clarifai_Api_DeleteInstalledModuleVersionsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteInstalledModuleVersions",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteInstalledModuleVersionsInterceptors() ?? []
-    )
-  }
-
-  /// Assign a key that the caller owns to be used when accessing this installed module version
-  /// If this endpoint is called with a different key then it overwrites what is there.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostInstalledModuleVersionsKey.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postInstalledModuleVersionsKey(
-    _ request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostInstalledModuleVersionsKey",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostInstalledModuleVersionsKeyInterceptors() ?? []
-    )
-  }
-
   /// Perform bulk operations on a list of inputs based on input source.
   /// Operation include add, update, delete of concepts, metadata and geo data.
   /// This is an Asynchronous process. Use ListBulkOperations or GetBulkOperation to check the status.
@@ -6141,6 +5775,24 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostComputePlaneMetricsInterceptors() ?? []
+    )
+  }
+
+  /// Post task metrics from runner replicas.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostRunnerReplicaTaskMetrics.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postRunnerReplicaTaskMetrics(
+    _ request: Clarifai_Api_PostRunnerReplicaTaskMetricsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostRunnerReplicaTaskMetricsRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostRunnerReplicaTaskMetrics",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostRunnerReplicaTaskMetricsInterceptors() ?? []
     )
   }
 
@@ -7457,54 +7109,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postStatValuesAggregate'.
   func makePostStatValuesAggregateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'getModule'.
-  func makeGetModuleInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listModules'.
-  func makeListModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postModules'.
-  func makePostModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'patchModules'.
-  func makePatchModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'deleteModules'.
-  func makeDeleteModulesInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getModuleVersion'.
-  func makeGetModuleVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listModuleVersions'.
-  func makeListModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postModuleVersions'.
-  func makePostModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'patchModuleVersions'.
-  func makePatchModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'deleteModuleVersions'.
-  func makeDeleteModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getModuleVersionUsageCount'.
-  func makeGetModuleVersionUsageCountInterceptors() -> [ClientInterceptor<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getInstalledModuleVersion'.
-  func makeGetInstalledModuleVersionInterceptors() -> [ClientInterceptor<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listInstalledModuleVersions'.
-  func makeListInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postInstalledModuleVersions'.
-  func makePostInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'deleteInstalledModuleVersions'.
-  func makeDeleteInstalledModuleVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postInstalledModuleVersionsKey'.
-  func makePostInstalledModuleVersionsKeyInterceptors() -> [ClientInterceptor<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>]
-
   /// - Returns: Interceptors to use when invoking 'postBulkOperations'.
   func makePostBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
 
@@ -7666,6 +7270,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'postComputePlaneMetrics'.
   func makePostComputePlaneMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postRunnerReplicaTaskMetrics'.
+  func makePostRunnerReplicaTaskMetricsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostRunnerReplicaTaskMetricsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postWorkflowVersionEvaluations'.
   func makePostWorkflowVersionEvaluationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostWorkflowVersionEvaluationsRequest, Clarifai_Api_MultiWorkflowVersionEvaluationResponse>]
@@ -7885,8 +7492,8 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Stream annotations for a specific input one-by-one.
   func streamAnnotations(request: Clarifai_Api_StreamAnnotationsRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleStreamAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
 
-  /// Stream live video annotations as they are being created by the runner.
-  /// This endpoint reads from Redis instead of the database for real-time streaming.
+  /// Stream live video annotations as soon as they are available.
+  /// This endpoint will NOT replay old annotations, but only stream new annotations that are generated after the stream is opened.
   func streamLivestreamAnnotations(request: Clarifai_Api_StreamLivestreamAnnotationsRequest, context: StreamingResponseCallContext<Clarifai_Api_SingleStreamAnnotationResponse>) -> EventLoopFuture<GRPCStatus>
 
   /// Post annotations.
@@ -8434,57 +8041,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// PostStatValuesAggregate
   func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
 
-  /// Get a specific module from an app.
-  func getModule(request: Clarifai_Api_GetModuleRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleResponse>
-
-  /// List all the modules in community, by user or by app.
-  func listModules(request: Clarifai_Api_ListModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
-
-  /// Add a modules to an app.
-  func postModules(request: Clarifai_Api_PostModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
-
-  /// Patch one or more modules.
-  func patchModules(request: Clarifai_Api_PatchModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleResponse>
-
-  /// Delete multiple modules in one request.
-  func deleteModules(request: Clarifai_Api_DeleteModulesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// Get a specific module version for a module.
-  func getModuleVersion(request: Clarifai_Api_GetModuleVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleVersionResponse>
-
-  /// List all the modules versions for a given module.
-  func listModuleVersions(request: Clarifai_Api_ListModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
-
-  /// Create a new module version to trigger training of the module.
-  func postModuleVersions(request: Clarifai_Api_PostModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
-
-  /// Modify details of an existing module version.
-  func patchModuleVersions(request: Clarifai_Api_PatchModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiModuleVersionResponse>
-
-  /// Delete a multiple module version.
-  func deleteModuleVersions(request: Clarifai_Api_DeleteModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// Get usage count for specific module version.
-  func getModuleVersionUsageCount(request: Clarifai_Api_GetModuleVersionUsageCountRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleModuleVersionUsageCountResponse>
-
-  /// Get installed modules vesrions for an app.
-  func getInstalledModuleVersion(request: Clarifai_Api_GetInstalledModuleVersionRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleInstalledModuleVersionResponse>
-
-  /// List installed modules vesrions for an app.
-  func listInstalledModuleVersions(request: Clarifai_Api_ListInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstalledModuleVersionResponse>
-
-  /// Install a new module version which will deploy the specific ModuleVersion to the app in the url.
-  func postInstalledModuleVersions(request: Clarifai_Api_PostInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiInstalledModuleVersionResponse>
-
-  /// Uninstall an installed module version which will deploy the specific ModuleVersion to the app
-  /// in the url.
-  /// This cleaned up any associated caller keys so needs the Keys_Delete scope.
-  func deleteInstalledModuleVersions(request: Clarifai_Api_DeleteInstalledModuleVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// Assign a key that the caller owns to be used when accessing this installed module version
-  /// If this endpoint is called with a different key then it overwrites what is there.
-  func postInstalledModuleVersionsKey(request: Clarifai_Api_PostInstalledModuleVersionsKeyRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleKeyResponse>
-
   /// Perform bulk operations on a list of inputs based on input source.
   /// Operation include add, update, delete of concepts, metadata and geo data.
   /// This is an Asynchronous process. Use ListBulkOperations or GetBulkOperation to check the status.
@@ -8664,6 +8220,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func streamLogEntries(request: Clarifai_Api_StreamLogEntriesRequest, context: StreamingResponseCallContext<Clarifai_Api_MultiLogEntryResponse>) -> EventLoopFuture<GRPCStatus>
 
   func postComputePlaneMetrics(request: Clarifai_Api_PostComputePlaneMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Post task metrics from runner replicas.
+  func postRunnerReplicaTaskMetrics(request: Clarifai_Api_PostRunnerReplicaTaskMetricsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   func postWorkflowVersionEvaluations(request: Clarifai_Api_PostWorkflowVersionEvaluationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiWorkflowVersionEvaluationResponse>
 
@@ -10390,150 +9949,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.postStatValuesAggregate(request:context:)
       )
 
-    case "GetModule":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleResponse>(),
-        interceptors: self.interceptors?.makeGetModuleInterceptors() ?? [],
-        userFunction: self.getModule(request:context:)
-      )
-
-    case "ListModules":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModulesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
-        interceptors: self.interceptors?.makeListModulesInterceptors() ?? [],
-        userFunction: self.listModules(request:context:)
-      )
-
-    case "PostModules":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModulesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
-        interceptors: self.interceptors?.makePostModulesInterceptors() ?? [],
-        userFunction: self.postModules(request:context:)
-      )
-
-    case "PatchModules":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModulesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleResponse>(),
-        interceptors: self.interceptors?.makePatchModulesInterceptors() ?? [],
-        userFunction: self.patchModules(request:context:)
-      )
-
-    case "DeleteModules":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModulesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makeDeleteModulesInterceptors() ?? [],
-        userFunction: self.deleteModules(request:context:)
-      )
-
-    case "GetModuleVersion":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleVersionRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleVersionResponse>(),
-        interceptors: self.interceptors?.makeGetModuleVersionInterceptors() ?? [],
-        userFunction: self.getModuleVersion(request:context:)
-      )
-
-    case "ListModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
-        interceptors: self.interceptors?.makeListModuleVersionsInterceptors() ?? [],
-        userFunction: self.listModuleVersions(request:context:)
-      )
-
-    case "PostModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
-        interceptors: self.interceptors?.makePostModuleVersionsInterceptors() ?? [],
-        userFunction: self.postModuleVersions(request:context:)
-      )
-
-    case "PatchModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiModuleVersionResponse>(),
-        interceptors: self.interceptors?.makePatchModuleVersionsInterceptors() ?? [],
-        userFunction: self.patchModuleVersions(request:context:)
-      )
-
-    case "DeleteModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makeDeleteModuleVersionsInterceptors() ?? [],
-        userFunction: self.deleteModuleVersions(request:context:)
-      )
-
-    case "GetModuleVersionUsageCount":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetModuleVersionUsageCountRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleModuleVersionUsageCountResponse>(),
-        interceptors: self.interceptors?.makeGetModuleVersionUsageCountInterceptors() ?? [],
-        userFunction: self.getModuleVersionUsageCount(request:context:)
-      )
-
-    case "GetInstalledModuleVersion":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetInstalledModuleVersionRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleInstalledModuleVersionResponse>(),
-        interceptors: self.interceptors?.makeGetInstalledModuleVersionInterceptors() ?? [],
-        userFunction: self.getInstalledModuleVersion(request:context:)
-      )
-
-    case "ListInstalledModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListInstalledModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInstalledModuleVersionResponse>(),
-        interceptors: self.interceptors?.makeListInstalledModuleVersionsInterceptors() ?? [],
-        userFunction: self.listInstalledModuleVersions(request:context:)
-      )
-
-    case "PostInstalledModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInstalledModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiInstalledModuleVersionResponse>(),
-        interceptors: self.interceptors?.makePostInstalledModuleVersionsInterceptors() ?? [],
-        userFunction: self.postInstalledModuleVersions(request:context:)
-      )
-
-    case "DeleteInstalledModuleVersions":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteInstalledModuleVersionsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makeDeleteInstalledModuleVersionsInterceptors() ?? [],
-        userFunction: self.deleteInstalledModuleVersions(request:context:)
-      )
-
-    case "PostInstalledModuleVersionsKey":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostInstalledModuleVersionsKeyRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleKeyResponse>(),
-        interceptors: self.interceptors?.makePostInstalledModuleVersionsKeyInterceptors() ?? [],
-        userFunction: self.postInstalledModuleVersionsKey(request:context:)
-      )
-
     case "PostBulkOperations":
       return UnaryServerHandler(
         context: context,
@@ -11018,6 +10433,15 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makePostComputePlaneMetricsInterceptors() ?? [],
         userFunction: self.postComputePlaneMetrics(request:context:)
+      )
+
+    case "PostRunnerReplicaTaskMetrics":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostRunnerReplicaTaskMetricsRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostRunnerReplicaTaskMetricsInterceptors() ?? [],
+        userFunction: self.postRunnerReplicaTaskMetrics(request:context:)
       )
 
     case "PostWorkflowVersionEvaluations":
@@ -12126,70 +11550,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostStatValuesAggregateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
 
-  /// - Returns: Interceptors to use when handling 'getModule'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetModuleInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleRequest, Clarifai_Api_SingleModuleResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listModules'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postModules'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when handling 'patchModules'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePatchModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModulesRequest, Clarifai_Api_MultiModuleResponse>]
-
-  /// - Returns: Interceptors to use when handling 'deleteModules'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteModulesInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModulesRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getModuleVersion'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetModuleVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleVersionRequest, Clarifai_Api_SingleModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'patchModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePatchModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchModuleVersionsRequest, Clarifai_Api_MultiModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'deleteModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getModuleVersionUsageCount'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetModuleVersionUsageCountInterceptors() -> [ServerInterceptor<Clarifai_Api_GetModuleVersionUsageCountRequest, Clarifai_Api_SingleModuleVersionUsageCountResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getInstalledModuleVersion'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetInstalledModuleVersionInterceptors() -> [ServerInterceptor<Clarifai_Api_GetInstalledModuleVersionRequest, Clarifai_Api_SingleInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listInstalledModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postInstalledModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInstalledModuleVersionsRequest, Clarifai_Api_MultiInstalledModuleVersionResponse>]
-
-  /// - Returns: Interceptors to use when handling 'deleteInstalledModuleVersions'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteInstalledModuleVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteInstalledModuleVersionsRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postInstalledModuleVersionsKey'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostInstalledModuleVersionsKeyInterceptors() -> [ServerInterceptor<Clarifai_Api_PostInstalledModuleVersionsKeyRequest, Clarifai_Api_SingleKeyResponse>]
-
   /// - Returns: Interceptors to use when handling 'postBulkOperations'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostBulkOperationsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
@@ -12405,6 +11765,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'postComputePlaneMetrics'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostComputePlaneMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostComputePlaneMetricsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postRunnerReplicaTaskMetrics'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostRunnerReplicaTaskMetricsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostRunnerReplicaTaskMetricsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'postWorkflowVersionEvaluations'.
   ///   Defaults to calling `self.makeInterceptors()`.
