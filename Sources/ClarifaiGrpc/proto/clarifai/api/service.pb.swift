@@ -11432,6 +11432,37 @@ public struct Clarifai_Api_DeleteNodepoolsRequest {
   fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
 }
 
+public struct Clarifai_Api_PostNodepoolStatusRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  public var computeClusterID: String = String()
+
+  public var nodepoolID: String = String()
+
+  /// New status of the nodepool.
+  public var status: Clarifai_Api_Nodepool.NodepoolStatus = .unknown
+
+  /// Human-readable status description. Contains error details when status is NODEPOOL_STATUS_ERROR.
+  public var statusDescription: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+}
+
 public struct Clarifai_Api_SingleNodepoolResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -13338,6 +13369,134 @@ public struct Clarifai_Api_MultiSecretResponse {
   public init() {}
 
   fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+public struct Clarifai_Api_ListPipelineTemplatesRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Filter based on PipelineTemplateTypes (e.g. TRAINING)
+  public var pipelineTemplateType: [Clarifai_Api_PipelineTemplate.PipelineTemplateType] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct Clarifai_Api_MultiPipelineTemplateResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var pipelineTemplates: [Clarifai_Api_PipelineTemplate] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+}
+
+/// Request to create a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate
+public struct Clarifai_Api_PostPipelineVersionRunFromTemplateRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var userAppID: Clarifai_Api_UserAppIDSet {
+    get {return _userAppID ?? Clarifai_Api_UserAppIDSet()}
+    set {_userAppID = newValue}
+  }
+  /// Returns true if `userAppID` has been explicitly set.
+  public var hasUserAppID: Bool {return self._userAppID != nil}
+  /// Clears the value of `userAppID`. Subsequent reads from it will return its default value.
+  public mutating func clearUserAppID() {self._userAppID = nil}
+
+  /// Name of the pipeline template to use (from ListPipelineTemplates)
+  public var pipelineTemplateName: String = String()
+
+  /// Optional: ID of existing pipeline to create version under
+  public var pipelineID: String = String()
+
+  /// Optional: Description for the pipeline (used if creating new pipeline)
+  public var pipelineDescription: String = String()
+
+  /// Optional: Description for the pipeline version
+  public var pipelineVersionDescription: String = String()
+
+  /// Optional: Nodepools to use for the pipeline version run
+  public var nodepools: [Clarifai_Api_Nodepool] = []
+
+  /// Optional: Overrides to input arguments for the orchestration system
+  public var inputArgsOverride: Clarifai_Api_OrchestrationArgsOverride {
+    get {return _inputArgsOverride ?? Clarifai_Api_OrchestrationArgsOverride()}
+    set {_inputArgsOverride = newValue}
+  }
+  /// Returns true if `inputArgsOverride` has been explicitly set.
+  public var hasInputArgsOverride: Bool {return self._inputArgsOverride != nil}
+  /// Clears the value of `inputArgsOverride`. Subsequent reads from it will return its default value.
+  public mutating func clearInputArgsOverride() {self._inputArgsOverride = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _userAppID: Clarifai_Api_UserAppIDSet? = nil
+  fileprivate var _inputArgsOverride: Clarifai_Api_OrchestrationArgsOverride? = nil
+}
+
+/// Response containing the created Pipeline, PipelineVersion, and PipelineVersionRun
+public struct Clarifai_Api_PostPipelineVersionRunFromTemplateResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var status: Clarifai_Api_Status_Status {
+    get {return _status ?? Clarifai_Api_Status_Status()}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  /// The created or updated pipeline (contains the latest pipeline version)
+  public var pipeline: Clarifai_Api_Pipeline {
+    get {return _pipeline ?? Clarifai_Api_Pipeline()}
+    set {_pipeline = newValue}
+  }
+  /// Returns true if `pipeline` has been explicitly set.
+  public var hasPipeline: Bool {return self._pipeline != nil}
+  /// Clears the value of `pipeline`. Subsequent reads from it will return its default value.
+  public mutating func clearPipeline() {self._pipeline = nil}
+
+  /// The created pipeline version run
+  public var pipelineVersionRun: Clarifai_Api_PipelineVersionRun {
+    get {return _pipelineVersionRun ?? Clarifai_Api_PipelineVersionRun()}
+    set {_pipelineVersionRun = newValue}
+  }
+  /// Returns true if `pipelineVersionRun` has been explicitly set.
+  public var hasPipelineVersionRun: Bool {return self._pipelineVersionRun != nil}
+  /// Clears the value of `pipelineVersionRun`. Subsequent reads from it will return its default value.
+  public mutating func clearPipelineVersionRun() {self._pipelineVersionRun = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _status: Clarifai_Api_Status_Status? = nil
+  fileprivate var _pipeline: Clarifai_Api_Pipeline? = nil
+  fileprivate var _pipelineVersionRun: Clarifai_Api_PipelineVersionRun? = nil
 }
 
 public struct Clarifai_Api_PostMetricsQueryRequest {
@@ -31719,6 +31878,66 @@ extension Clarifai_Api_DeleteNodepoolsRequest: SwiftProtobuf.Message, SwiftProto
   }
 }
 
+extension Clarifai_Api_PostNodepoolStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostNodepoolStatusRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "compute_cluster_id"),
+    3: .standard(proto: "nodepool_id"),
+    4: .same(proto: "status"),
+    5: .standard(proto: "status_description"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.nodepoolID) }()
+      case 4: try { try decoder.decodeSingularEnumField(value: &self.status) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.statusDescription) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.computeClusterID.isEmpty {
+      try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 2)
+    }
+    if !self.nodepoolID.isEmpty {
+      try visitor.visitSingularStringField(value: self.nodepoolID, fieldNumber: 3)
+    }
+    if self.status != .unknown {
+      try visitor.visitSingularEnumField(value: self.status, fieldNumber: 4)
+    }
+    if !self.statusDescription.isEmpty {
+      try visitor.visitSingularStringField(value: self.statusDescription, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostNodepoolStatusRequest, rhs: Clarifai_Api_PostNodepoolStatusRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.computeClusterID != rhs.computeClusterID {return false}
+    if lhs.nodepoolID != rhs.nodepoolID {return false}
+    if lhs.status != rhs.status {return false}
+    if lhs.statusDescription != rhs.statusDescription {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_SingleNodepoolResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SingleNodepoolResponse"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -34955,6 +35174,200 @@ extension Clarifai_Api_MultiSecretResponse: SwiftProtobuf.Message, SwiftProtobuf
   public static func ==(lhs: Clarifai_Api_MultiSecretResponse, rhs: Clarifai_Api_MultiSecretResponse) -> Bool {
     if lhs._status != rhs._status {return false}
     if lhs.secrets != rhs.secrets {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_ListPipelineTemplatesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ListPipelineTemplatesRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "pipeline_template_type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedEnumField(value: &self.pipelineTemplateType) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.pipelineTemplateType.isEmpty {
+      try visitor.visitPackedEnumField(value: self.pipelineTemplateType, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_ListPipelineTemplatesRequest, rhs: Clarifai_Api_ListPipelineTemplatesRequest) -> Bool {
+    if lhs.pipelineTemplateType != rhs.pipelineTemplateType {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_MultiPipelineTemplateResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".MultiPipelineTemplateResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .standard(proto: "pipeline_templates"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.pipelineTemplates) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.pipelineTemplates.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.pipelineTemplates, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_MultiPipelineTemplateResponse, rhs: Clarifai_Api_MultiPipelineTemplateResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs.pipelineTemplates != rhs.pipelineTemplates {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostPipelineVersionRunFromTemplateRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostPipelineVersionRunFromTemplateRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "user_app_id"),
+    2: .standard(proto: "pipeline_template_name"),
+    3: .standard(proto: "pipeline_id"),
+    4: .standard(proto: "pipeline_description"),
+    5: .standard(proto: "pipeline_version_description"),
+    6: .same(proto: "nodepools"),
+    7: .standard(proto: "input_args_override"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.pipelineTemplateName) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.pipelineID) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.pipelineDescription) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.pipelineVersionDescription) }()
+      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.nodepools) }()
+      case 7: try { try decoder.decodeSingularMessageField(value: &self._inputArgsOverride) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._userAppID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.pipelineTemplateName.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineTemplateName, fieldNumber: 2)
+    }
+    if !self.pipelineID.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineID, fieldNumber: 3)
+    }
+    if !self.pipelineDescription.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineDescription, fieldNumber: 4)
+    }
+    if !self.pipelineVersionDescription.isEmpty {
+      try visitor.visitSingularStringField(value: self.pipelineVersionDescription, fieldNumber: 5)
+    }
+    if !self.nodepools.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.nodepools, fieldNumber: 6)
+    }
+    try { if let v = self._inputArgsOverride {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, rhs: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest) -> Bool {
+    if lhs._userAppID != rhs._userAppID {return false}
+    if lhs.pipelineTemplateName != rhs.pipelineTemplateName {return false}
+    if lhs.pipelineID != rhs.pipelineID {return false}
+    if lhs.pipelineDescription != rhs.pipelineDescription {return false}
+    if lhs.pipelineVersionDescription != rhs.pipelineVersionDescription {return false}
+    if lhs.nodepools != rhs.nodepools {return false}
+    if lhs._inputArgsOverride != rhs._inputArgsOverride {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PostPipelineVersionRunFromTemplateResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PostPipelineVersionRunFromTemplateResponse"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "status"),
+    2: .same(proto: "pipeline"),
+    3: .standard(proto: "pipeline_version_run"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._status) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._pipeline) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._pipelineVersionRun) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._status {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._pipeline {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._pipelineVersionRun {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PostPipelineVersionRunFromTemplateResponse, rhs: Clarifai_Api_PostPipelineVersionRunFromTemplateResponse) -> Bool {
+    if lhs._status != rhs._status {return false}
+    if lhs._pipeline != rhs._pipeline {return false}
+    if lhs._pipelineVersionRun != rhs._pipelineVersionRun {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

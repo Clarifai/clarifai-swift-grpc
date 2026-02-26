@@ -1148,6 +1148,11 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>
 
+  func postNodepoolStatus(
+    _ request: Clarifai_Api_PostNodepoolStatusRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostNodepoolStatusRequest, Clarifai_Api_Status_BaseResponse>
+
   func getDeployment(
     _ request: Clarifai_Api_GetDeploymentRequest,
     callOptions: CallOptions?
@@ -1343,6 +1348,16 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     _ request: Clarifai_Api_DeletePipelineStepVersionsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>
+
+  func listPipelineTemplates(
+    _ request: Clarifai_Api_ListPipelineTemplatesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_ListPipelineTemplatesRequest, Clarifai_Api_MultiPipelineTemplateResponse>
+
+  func postPipelineVersionRunFromTemplate(
+    _ request: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>
 
   func postArtifacts(
     _ request: Clarifai_Api_PostArtifactsRequest,
@@ -5577,6 +5592,24 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Update nodepool status. Called by the agent to report nodepool health/errors.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostNodepoolStatus.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postNodepoolStatus(
+    _ request: Clarifai_Api_PostNodepoolStatusRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostNodepoolStatusRequest, Clarifai_Api_Status_BaseResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostNodepoolStatus",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostNodepoolStatusInterceptors() ?? []
+    )
+  }
+
   /// Deployments CRUD
   ///
   /// - Parameters:
@@ -6286,6 +6319,43 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeletePipelineStepVersionsInterceptors() ?? []
+    )
+  }
+
+  /// Lists pipeline templates, which are ready-to-use templates that can simply be run on demand.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListPipelineTemplates.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listPipelineTemplates(
+    _ request: Clarifai_Api_ListPipelineTemplatesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_ListPipelineTemplatesRequest, Clarifai_Api_MultiPipelineTemplateResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/ListPipelineTemplates",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListPipelineTemplatesInterceptors() ?? []
+    )
+  }
+
+  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate. 
+  /// This is a convenience endpoint for users to quickly get started with running pipelines.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PostPipelineVersionRunFromTemplate.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func postPipelineVersionRunFromTemplate(
+    _ request: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, Clarifai_Api_PostPipelineVersionRunFromTemplateResponse> {
+    return self.makeUnaryCall(
+      path: "/clarifai.api.V2/PostPipelineVersionRunFromTemplate",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePostPipelineVersionRunFromTemplateInterceptors() ?? []
     )
   }
 
@@ -7238,6 +7308,9 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteNodepools'.
   func makeDeleteNodepoolsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'postNodepoolStatus'.
+  func makePostNodepoolStatusInterceptors() -> [ClientInterceptor<Clarifai_Api_PostNodepoolStatusRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getDeployment'.
   func makeGetDeploymentInterceptors() -> [ClientInterceptor<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse>]
 
@@ -7354,6 +7427,12 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deletePipelineStepVersions'.
   func makeDeletePipelineStepVersionsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'listPipelineTemplates'.
+  func makeListPipelineTemplatesInterceptors() -> [ClientInterceptor<Clarifai_Api_ListPipelineTemplatesRequest, Clarifai_Api_MultiPipelineTemplateResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'postPipelineVersionRunFromTemplate'.
+  func makePostPipelineVersionRunFromTemplateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postArtifacts'.
   func makePostArtifactsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostArtifactsRequest, Clarifai_Api_MultiArtifactResponse>]
@@ -8197,6 +8276,9 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple nodepools in one request.
   func deleteNodepools(request: Clarifai_Api_DeleteNodepoolsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
+  /// Update nodepool status. Called by the agent to report nodepool health/errors.
+  func postNodepoolStatus(request: Clarifai_Api_PostNodepoolStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
   /// Deployments CRUD
   func getDeployment(request: Clarifai_Api_GetDeploymentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleDeploymentResponse>
 
@@ -8282,6 +8364,13 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   func deletePipelineSteps(request: Clarifai_Api_DeletePipelineStepsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   func deletePipelineStepVersions(request: Clarifai_Api_DeletePipelineStepVersionsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
+
+  /// Lists pipeline templates, which are ready-to-use templates that can simply be run on demand.
+  func listPipelineTemplates(request: Clarifai_Api_ListPipelineTemplatesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineTemplateResponse>
+
+  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate. 
+  /// This is a convenience endpoint for users to quickly get started with running pipelines.
+  func postPipelineVersionRunFromTemplate(request: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>
 
   func postArtifacts(request: Clarifai_Api_PostArtifactsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiArtifactResponse>
 
@@ -10336,6 +10425,15 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteNodepools(request:context:)
       )
 
+    case "PostNodepoolStatus":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostNodepoolStatusRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
+        interceptors: self.interceptors?.makePostNodepoolStatusInterceptors() ?? [],
+        userFunction: self.postNodepoolStatus(request:context:)
+      )
+
     case "GetDeployment":
       return UnaryServerHandler(
         context: context,
@@ -10685,6 +10783,24 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeletePipelineStepVersionsInterceptors() ?? [],
         userFunction: self.deletePipelineStepVersions(request:context:)
+      )
+
+    case "ListPipelineTemplates":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListPipelineTemplatesRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiPipelineTemplateResponse>(),
+        interceptors: self.interceptors?.makeListPipelineTemplatesInterceptors() ?? [],
+        userFunction: self.listPipelineTemplates(request:context:)
+      )
+
+    case "PostPipelineVersionRunFromTemplate":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostPipelineVersionRunFromTemplateRequest>(),
+        responseSerializer: ProtobufSerializer<Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>(),
+        interceptors: self.interceptors?.makePostPipelineVersionRunFromTemplateInterceptors() ?? [],
+        userFunction: self.postPipelineVersionRunFromTemplate(request:context:)
       )
 
     case "PostArtifacts":
@@ -11722,6 +11838,10 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteNodepoolsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteNodepoolsRequest, Clarifai_Api_Status_BaseResponse>]
 
+  /// - Returns: Interceptors to use when handling 'postNodepoolStatus'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostNodepoolStatusInterceptors() -> [ServerInterceptor<Clarifai_Api_PostNodepoolStatusRequest, Clarifai_Api_Status_BaseResponse>]
+
   /// - Returns: Interceptors to use when handling 'getDeployment'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetDeploymentInterceptors() -> [ServerInterceptor<Clarifai_Api_GetDeploymentRequest, Clarifai_Api_SingleDeploymentResponse>]
@@ -11877,6 +11997,14 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deletePipelineStepVersions'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeletePipelineStepVersionsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeletePipelineStepVersionsRequest, Clarifai_Api_Status_BaseResponse>]
+
+  /// - Returns: Interceptors to use when handling 'listPipelineTemplates'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListPipelineTemplatesInterceptors() -> [ServerInterceptor<Clarifai_Api_ListPipelineTemplatesRequest, Clarifai_Api_MultiPipelineTemplateResponse>]
+
+  /// - Returns: Interceptors to use when handling 'postPipelineVersionRunFromTemplate'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePostPipelineVersionRunFromTemplateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>]
 
   /// - Returns: Interceptors to use when handling 'postArtifacts'.
   ///   Defaults to calling `self.makeInterceptors()`.

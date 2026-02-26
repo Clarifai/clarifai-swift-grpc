@@ -12640,12 +12640,76 @@ public struct Clarifai_Api_Nodepool {
     set {_uniqueStorage()._nodeCount = newValue}
   }
 
+  /// Current status of the nodepool.
+  public var status: Clarifai_Api_Nodepool.NodepoolStatus {
+    get {return _storage._status}
+    set {_uniqueStorage()._status = newValue}
+  }
+
+  /// Human-readable status description. Contains error details when status is NODEPOOL_STATUS_ERROR.
+  public var statusDescription: String {
+    get {return _storage._statusDescription}
+    set {_uniqueStorage()._statusDescription = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum NodepoolStatus: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case unknown // = 0
+    case pending // = 1
+    case ready // = 2
+    case error // = 3
+    case deleted // = 4
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknown
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknown
+      case 1: self = .pending
+      case 2: self = .ready
+      case 3: self = .error
+      case 4: self = .deleted
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknown: return 0
+      case .pending: return 1
+      case .ready: return 2
+      case .error: return 3
+      case .deleted: return 4
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
 
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_Nodepool.NodepoolStatus: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_Nodepool.NodepoolStatus] = [
+    .unknown,
+    .pending,
+    .ready,
+    .error,
+    .deleted,
+  ]
+}
+
+#endif  // swift(>=4.2)
 
 /// Type of nodes that are ok for instances in this pool.
 /// If both spot and on-demand are provided then the runner will be able to run on either
@@ -15430,6 +15494,446 @@ public struct Clarifai_Api_PipelineVersionRunStatusLog {
 
   fileprivate var _storage = _StorageClass.defaultInstance
 }
+
+public struct Clarifai_Api_PipelineTemplateParameter {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Name of the parameter
+  public var name: String = String()
+
+  /// Type of the parameter (string, int, float, bool)
+  public var type: Clarifai_Api_PipelineTemplateParameter.TypeEnum = .parameterTypeUnspecified
+
+  /// Whether this parameter is required
+  public var required: Bool = false
+
+  public var defaultValue: Clarifai_Api_PipelineTemplateParameter.OneOf_DefaultValue? = nil
+
+  /// Default value when type is STRING
+  public var defaultString: String {
+    get {
+      if case .defaultString(let v)? = defaultValue {return v}
+      return String()
+    }
+    set {defaultValue = .defaultString(newValue)}
+  }
+
+  /// Default value when type is INT
+  public var defaultInt: Int64 {
+    get {
+      if case .defaultInt(let v)? = defaultValue {return v}
+      return 0
+    }
+    set {defaultValue = .defaultInt(newValue)}
+  }
+
+  /// Default value when type is FLOAT
+  public var defaultFloat: Double {
+    get {
+      if case .defaultFloat(let v)? = defaultValue {return v}
+      return 0
+    }
+    set {defaultValue = .defaultFloat(newValue)}
+  }
+
+  /// Default value when type is BOOL
+  public var defaultBool: Bool {
+    get {
+      if case .defaultBool(let v)? = defaultValue {return v}
+      return false
+    }
+    set {defaultValue = .defaultBool(newValue)}
+  }
+
+  /// Description of the parameter
+  public var description_p: String = String()
+
+  /// Constraints to validate parameter values
+  public var constraints: Clarifai_Api_PipelineTemplateParameter.Constraints {
+    get {return _constraints ?? Clarifai_Api_PipelineTemplateParameter.Constraints()}
+    set {_constraints = newValue}
+  }
+  /// Returns true if `constraints` has been explicitly set.
+  public var hasConstraints: Bool {return self._constraints != nil}
+  /// Clears the value of `constraints`. Subsequent reads from it will return its default value.
+  public mutating func clearConstraints() {self._constraints = nil}
+
+  /// UI hints for rendering this parameter in the frontend
+  public var uiHints: Clarifai_Api_PipelineTemplateParameter.UIHints {
+    get {return _uiHints ?? Clarifai_Api_PipelineTemplateParameter.UIHints()}
+    set {_uiHints = newValue}
+  }
+  /// Returns true if `uiHints` has been explicitly set.
+  public var hasUiHints: Bool {return self._uiHints != nil}
+  /// Clears the value of `uiHints`. Subsequent reads from it will return its default value.
+  public mutating func clearUiHints() {self._uiHints = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum OneOf_DefaultValue: Equatable {
+    /// Default value when type is STRING
+    case defaultString(String)
+    /// Default value when type is INT
+    case defaultInt(Int64)
+    /// Default value when type is FLOAT
+    case defaultFloat(Double)
+    /// Default value when type is BOOL
+    case defaultBool(Bool)
+
+  #if !swift(>=4.1)
+    public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.OneOf_DefaultValue, rhs: Clarifai_Api_PipelineTemplateParameter.OneOf_DefaultValue) -> Bool {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch (lhs, rhs) {
+      case (.defaultString, .defaultString): return {
+        guard case .defaultString(let l) = lhs, case .defaultString(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.defaultInt, .defaultInt): return {
+        guard case .defaultInt(let l) = lhs, case .defaultInt(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.defaultFloat, .defaultFloat): return {
+        guard case .defaultFloat(let l) = lhs, case .defaultFloat(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.defaultBool, .defaultBool): return {
+        guard case .defaultBool(let l) = lhs, case .defaultBool(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      default: return false
+      }
+    }
+  #endif
+  }
+
+  public enum TypeEnum: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case parameterTypeUnspecified // = 0
+    case string // = 1
+    case int // = 2
+    case float // = 3
+    case bool // = 4
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .parameterTypeUnspecified
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .parameterTypeUnspecified
+      case 1: self = .string
+      case 2: self = .int
+      case 3: self = .float
+      case 4: self = .bool
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .parameterTypeUnspecified: return 0
+      case .string: return 1
+      case .int: return 2
+      case .float: return 3
+      case .bool: return 4
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
+  public struct Constraints {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var constraints: Clarifai_Api_PipelineTemplateParameter.Constraints.OneOf_Constraints? = nil
+
+    public var stringConstraints: Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints {
+      get {
+        if case .stringConstraints(let v)? = constraints {return v}
+        return Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints()
+      }
+      set {constraints = .stringConstraints(newValue)}
+    }
+
+    public var intConstraints: Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints {
+      get {
+        if case .intConstraints(let v)? = constraints {return v}
+        return Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints()
+      }
+      set {constraints = .intConstraints(newValue)}
+    }
+
+    public var floatConstraints: Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints {
+      get {
+        if case .floatConstraints(let v)? = constraints {return v}
+        return Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints()
+      }
+      set {constraints = .floatConstraints(newValue)}
+    }
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public enum OneOf_Constraints: Equatable {
+      case stringConstraints(Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints)
+      case intConstraints(Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints)
+      case floatConstraints(Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints)
+
+    #if !swift(>=4.1)
+      public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.Constraints.OneOf_Constraints, rhs: Clarifai_Api_PipelineTemplateParameter.Constraints.OneOf_Constraints) -> Bool {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch (lhs, rhs) {
+        case (.stringConstraints, .stringConstraints): return {
+          guard case .stringConstraints(let l) = lhs, case .stringConstraints(let r) = rhs else { preconditionFailure() }
+          return l == r
+        }()
+        case (.intConstraints, .intConstraints): return {
+          guard case .intConstraints(let l) = lhs, case .intConstraints(let r) = rhs else { preconditionFailure() }
+          return l == r
+        }()
+        case (.floatConstraints, .floatConstraints): return {
+          guard case .floatConstraints(let l) = lhs, case .floatConstraints(let r) = rhs else { preconditionFailure() }
+          return l == r
+        }()
+        default: return false
+        }
+      }
+    #endif
+    }
+
+    public struct StringConstraints {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      /// List of allowed values for the string parameter
+      public var allowedValues: [String] = []
+
+      /// Whether free text input is allowed beyond allowed_values
+      public var allowFreeText: Bool = false
+
+      /// Minimum length of the string
+      public var minLength: UInt32 = 0
+
+      /// Maximum length of the string
+      public var maxLength: UInt32 = 0
+
+      public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      public init() {}
+    }
+
+    public struct IntConstraints {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      /// Minimum value for the int parameter
+      public var min: Int64 = 0
+
+      /// Maximum value for the int parameter
+      public var max: Int64 = 0
+
+      public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      public init() {}
+    }
+
+    public struct FloatConstraints {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      /// Minimum value for the float parameter
+      public var min: Double = 0
+
+      /// Maximum value for the float parameter
+      public var max: Double = 0
+
+      public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      public init() {}
+    }
+
+    public init() {}
+  }
+
+  public struct UIHints {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// The UI widget to use for displaying this parameter
+    public var widget: Clarifai_Api_PipelineTemplateParameter.UIHints.UIWidget = .unspecified
+
+    /// Used for dropdowns populated dynamically
+    public var dataSource: String = String()
+
+    /// Used when backend expects string even if UI shows bool/int
+    public var serializeAsString: Bool = false
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public enum UIWidget: SwiftProtobuf.Enum {
+      public typealias RawValue = Int
+      case unspecified // = 0
+      case textInput // = 1
+      case numberInput // = 2
+      case slider // = 3
+      case dropdown // = 4
+      case toggle // = 5
+      case UNRECOGNIZED(Int)
+
+      public init() {
+        self = .unspecified
+      }
+
+      public init?(rawValue: Int) {
+        switch rawValue {
+        case 0: self = .unspecified
+        case 1: self = .textInput
+        case 2: self = .numberInput
+        case 3: self = .slider
+        case 4: self = .dropdown
+        case 5: self = .toggle
+        default: self = .UNRECOGNIZED(rawValue)
+        }
+      }
+
+      public var rawValue: Int {
+        switch self {
+        case .unspecified: return 0
+        case .textInput: return 1
+        case .numberInput: return 2
+        case .slider: return 3
+        case .dropdown: return 4
+        case .toggle: return 5
+        case .UNRECOGNIZED(let i): return i
+        }
+      }
+
+    }
+
+    public init() {}
+  }
+
+  public init() {}
+
+  fileprivate var _constraints: Clarifai_Api_PipelineTemplateParameter.Constraints? = nil
+  fileprivate var _uiHints: Clarifai_Api_PipelineTemplateParameter.UIHints? = nil
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_PipelineTemplateParameter.TypeEnum: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_PipelineTemplateParameter.TypeEnum] = [
+    .parameterTypeUnspecified,
+    .string,
+    .int,
+    .float,
+    .bool,
+  ]
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.UIHints.UIWidget: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_PipelineTemplateParameter.UIHints.UIWidget] = [
+    .unspecified,
+    .textInput,
+    .numberInput,
+    .slider,
+    .dropdown,
+    .toggle,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
+public struct Clarifai_Api_PipelineTemplate {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Name of the template
+  public var name: String = String()
+
+  /// Description of the template
+  public var description_p: String = String()
+
+  /// Type of the pipeline template
+  public var pipelineTemplateType: Clarifai_Api_PipelineTemplate.PipelineTemplateType = .unknown
+
+  /// Compute resources required to run this pipeline template
+  public var computeInfo: Clarifai_Api_ComputeInfo {
+    get {return _computeInfo ?? Clarifai_Api_ComputeInfo()}
+    set {_computeInfo = newValue}
+  }
+  /// Returns true if `computeInfo` has been explicitly set.
+  public var hasComputeInfo: Bool {return self._computeInfo != nil}
+  /// Clears the value of `computeInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearComputeInfo() {self._computeInfo = nil}
+
+  /// List of parameters that can be configured for this template
+  public var parameters: [Clarifai_Api_PipelineTemplateParameter] = []
+
+  /// Map from pipeline step name to pipeline step reference
+  public var pipelineSteps: Dictionary<String,String> = [:]
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public enum PipelineTemplateType: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+    case unknown // = 0
+    case training // = 1
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknown
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknown
+      case 1: self = .training
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknown: return 0
+      case .training: return 1
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
+  public init() {}
+
+  fileprivate var _computeInfo: Clarifai_Api_ComputeInfo? = nil
+}
+
+#if swift(>=4.2)
+
+extension Clarifai_Api_PipelineTemplate.PipelineTemplateType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_PipelineTemplate.PipelineTemplateType] = [
+    .unknown,
+    .training,
+  ]
+}
+
+#endif  // swift(>=4.2)
 
 public struct Clarifai_Api_Secret {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -30919,6 +31423,8 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     12: .same(proto: "metadata"),
     15: .standard(proto: "special_handling"),
     16: .standard(proto: "node_count"),
+    17: .same(proto: "status"),
+    18: .standard(proto: "status_description"),
   ]
 
   fileprivate class _StorageClass {
@@ -30937,6 +31443,8 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
     var _nodeCount: UInt32 = 0
+    var _status: Clarifai_Api_Nodepool.NodepoolStatus = .unknown
+    var _statusDescription: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -30958,6 +31466,8 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       _metadata = source._metadata
       _specialHandling = source._specialHandling
       _nodeCount = source._nodeCount
+      _status = source._status
+      _statusDescription = source._statusDescription
     }
   }
 
@@ -30991,6 +31501,8 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         case 14: try { try decoder.decodeSingularUInt32Field(value: &_storage._enforcedMaxInstances) }()
         case 15: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
         case 16: try { try decoder.decodeSingularUInt32Field(value: &_storage._nodeCount) }()
+        case 17: try { try decoder.decodeSingularEnumField(value: &_storage._status) }()
+        case 18: try { try decoder.decodeSingularStringField(value: &_storage._statusDescription) }()
         default: break
         }
       }
@@ -31048,6 +31560,12 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       if _storage._nodeCount != 0 {
         try visitor.visitSingularUInt32Field(value: _storage._nodeCount, fieldNumber: 16)
       }
+      if _storage._status != .unknown {
+        try visitor.visitSingularEnumField(value: _storage._status, fieldNumber: 17)
+      }
+      if !_storage._statusDescription.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._statusDescription, fieldNumber: 18)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31072,6 +31590,8 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         if _storage._metadata != rhs_storage._metadata {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
         if _storage._nodeCount != rhs_storage._nodeCount {return false}
+        if _storage._status != rhs_storage._status {return false}
+        if _storage._statusDescription != rhs_storage._statusDescription {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -31079,6 +31599,16 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_Nodepool.NodepoolStatus: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "NODEPOOL_STATUS_UNKNOWN"),
+    1: .same(proto: "NODEPOOL_STATUS_PENDING"),
+    2: .same(proto: "NODEPOOL_STATUS_READY"),
+    3: .same(proto: "NODEPOOL_STATUS_ERROR"),
+    4: .same(proto: "NODEPOOL_STATUS_DELETED"),
+  ]
 }
 
 extension Clarifai_Api_NodeCapacityType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -34897,6 +35427,480 @@ extension Clarifai_Api_PipelineVersionRunStatusLog: SwiftProtobuf.Message, Swift
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PipelineTemplateParameter"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "name"),
+    2: .same(proto: "type"),
+    3: .same(proto: "required"),
+    4: .standard(proto: "default_string"),
+    5: .standard(proto: "default_int"),
+    6: .standard(proto: "default_float"),
+    7: .standard(proto: "default_bool"),
+    8: .same(proto: "description"),
+    9: .same(proto: "constraints"),
+    10: .standard(proto: "ui_hints"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.type) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.required) }()
+      case 4: try {
+        var v: String?
+        try decoder.decodeSingularStringField(value: &v)
+        if let v = v {
+          if self.defaultValue != nil {try decoder.handleConflictingOneOf()}
+          self.defaultValue = .defaultString(v)
+        }
+      }()
+      case 5: try {
+        var v: Int64?
+        try decoder.decodeSingularInt64Field(value: &v)
+        if let v = v {
+          if self.defaultValue != nil {try decoder.handleConflictingOneOf()}
+          self.defaultValue = .defaultInt(v)
+        }
+      }()
+      case 6: try {
+        var v: Double?
+        try decoder.decodeSingularDoubleField(value: &v)
+        if let v = v {
+          if self.defaultValue != nil {try decoder.handleConflictingOneOf()}
+          self.defaultValue = .defaultFloat(v)
+        }
+      }()
+      case 7: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.defaultValue != nil {try decoder.handleConflictingOneOf()}
+          self.defaultValue = .defaultBool(v)
+        }
+      }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._constraints) }()
+      case 10: try { try decoder.decodeSingularMessageField(value: &self._uiHints) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
+    }
+    if self.type != .parameterTypeUnspecified {
+      try visitor.visitSingularEnumField(value: self.type, fieldNumber: 2)
+    }
+    if self.required != false {
+      try visitor.visitSingularBoolField(value: self.required, fieldNumber: 3)
+    }
+    switch self.defaultValue {
+    case .defaultString?: try {
+      guard case .defaultString(let v)? = self.defaultValue else { preconditionFailure() }
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    }()
+    case .defaultInt?: try {
+      guard case .defaultInt(let v)? = self.defaultValue else { preconditionFailure() }
+      try visitor.visitSingularInt64Field(value: v, fieldNumber: 5)
+    }()
+    case .defaultFloat?: try {
+      guard case .defaultFloat(let v)? = self.defaultValue else { preconditionFailure() }
+      try visitor.visitSingularDoubleField(value: v, fieldNumber: 6)
+    }()
+    case .defaultBool?: try {
+      guard case .defaultBool(let v)? = self.defaultValue else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 7)
+    }()
+    case nil: break
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 8)
+    }
+    try { if let v = self._constraints {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    } }()
+    try { if let v = self._uiHints {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter, rhs: Clarifai_Api_PipelineTemplateParameter) -> Bool {
+    if lhs.name != rhs.name {return false}
+    if lhs.type != rhs.type {return false}
+    if lhs.required != rhs.required {return false}
+    if lhs.defaultValue != rhs.defaultValue {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs._constraints != rhs._constraints {return false}
+    if lhs._uiHints != rhs._uiHints {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "PARAMETER_TYPE_UNSPECIFIED"),
+    1: .same(proto: "STRING"),
+    2: .same(proto: "INT"),
+    3: .same(proto: "FLOAT"),
+    4: .same(proto: "BOOL"),
+  ]
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.Constraints: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_PipelineTemplateParameter.protoMessageName + ".Constraints"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "string_constraints"),
+    2: .standard(proto: "int_constraints"),
+    3: .standard(proto: "float_constraints"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints?
+        var hadOneofValue = false
+        if let current = self.constraints {
+          hadOneofValue = true
+          if case .stringConstraints(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.constraints = .stringConstraints(v)
+        }
+      }()
+      case 2: try {
+        var v: Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints?
+        var hadOneofValue = false
+        if let current = self.constraints {
+          hadOneofValue = true
+          if case .intConstraints(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.constraints = .intConstraints(v)
+        }
+      }()
+      case 3: try {
+        var v: Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints?
+        var hadOneofValue = false
+        if let current = self.constraints {
+          hadOneofValue = true
+          if case .floatConstraints(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.constraints = .floatConstraints(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.constraints {
+    case .stringConstraints?: try {
+      guard case .stringConstraints(let v)? = self.constraints else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .intConstraints?: try {
+      guard case .intConstraints(let v)? = self.constraints else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case .floatConstraints?: try {
+      guard case .floatConstraints(let v)? = self.constraints else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.Constraints, rhs: Clarifai_Api_PipelineTemplateParameter.Constraints) -> Bool {
+    if lhs.constraints != rhs.constraints {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_PipelineTemplateParameter.Constraints.protoMessageName + ".StringConstraints"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "allowed_values"),
+    2: .standard(proto: "allow_free_text"),
+    3: .standard(proto: "min_length"),
+    4: .standard(proto: "max_length"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.allowedValues) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.allowFreeText) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.minLength) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.maxLength) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.allowedValues.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.allowedValues, fieldNumber: 1)
+    }
+    if self.allowFreeText != false {
+      try visitor.visitSingularBoolField(value: self.allowFreeText, fieldNumber: 2)
+    }
+    if self.minLength != 0 {
+      try visitor.visitSingularUInt32Field(value: self.minLength, fieldNumber: 3)
+    }
+    if self.maxLength != 0 {
+      try visitor.visitSingularUInt32Field(value: self.maxLength, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints, rhs: Clarifai_Api_PipelineTemplateParameter.Constraints.StringConstraints) -> Bool {
+    if lhs.allowedValues != rhs.allowedValues {return false}
+    if lhs.allowFreeText != rhs.allowFreeText {return false}
+    if lhs.minLength != rhs.minLength {return false}
+    if lhs.maxLength != rhs.maxLength {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_PipelineTemplateParameter.Constraints.protoMessageName + ".IntConstraints"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "min"),
+    2: .same(proto: "max"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.min) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.max) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.min != 0 {
+      try visitor.visitSingularInt64Field(value: self.min, fieldNumber: 1)
+    }
+    if self.max != 0 {
+      try visitor.visitSingularInt64Field(value: self.max, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints, rhs: Clarifai_Api_PipelineTemplateParameter.Constraints.IntConstraints) -> Bool {
+    if lhs.min != rhs.min {return false}
+    if lhs.max != rhs.max {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_PipelineTemplateParameter.Constraints.protoMessageName + ".FloatConstraints"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "min"),
+    2: .same(proto: "max"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularDoubleField(value: &self.min) }()
+      case 2: try { try decoder.decodeSingularDoubleField(value: &self.max) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.min != 0 {
+      try visitor.visitSingularDoubleField(value: self.min, fieldNumber: 1)
+    }
+    if self.max != 0 {
+      try visitor.visitSingularDoubleField(value: self.max, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints, rhs: Clarifai_Api_PipelineTemplateParameter.Constraints.FloatConstraints) -> Bool {
+    if lhs.min != rhs.min {return false}
+    if lhs.max != rhs.max {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.UIHints: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Clarifai_Api_PipelineTemplateParameter.protoMessageName + ".UIHints"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "widget"),
+    2: .standard(proto: "data_source"),
+    3: .standard(proto: "serialize_as_string"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.widget) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.dataSource) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.serializeAsString) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.widget != .unspecified {
+      try visitor.visitSingularEnumField(value: self.widget, fieldNumber: 1)
+    }
+    if !self.dataSource.isEmpty {
+      try visitor.visitSingularStringField(value: self.dataSource, fieldNumber: 2)
+    }
+    if self.serializeAsString != false {
+      try visitor.visitSingularBoolField(value: self.serializeAsString, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplateParameter.UIHints, rhs: Clarifai_Api_PipelineTemplateParameter.UIHints) -> Bool {
+    if lhs.widget != rhs.widget {return false}
+    if lhs.dataSource != rhs.dataSource {return false}
+    if lhs.serializeAsString != rhs.serializeAsString {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplateParameter.UIHints.UIWidget: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "UI_WIDGET_UNSPECIFIED"),
+    1: .same(proto: "TEXT_INPUT"),
+    2: .same(proto: "NUMBER_INPUT"),
+    3: .same(proto: "SLIDER"),
+    4: .same(proto: "DROPDOWN"),
+    5: .same(proto: "TOGGLE"),
+  ]
+}
+
+extension Clarifai_Api_PipelineTemplate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PipelineTemplate"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "name"),
+    2: .same(proto: "description"),
+    3: .standard(proto: "pipeline_template_type"),
+    4: .standard(proto: "compute_info"),
+    5: .same(proto: "parameters"),
+    6: .standard(proto: "pipeline_steps"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.description_p) }()
+      case 3: try { try decoder.decodeSingularEnumField(value: &self.pipelineTemplateType) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._computeInfo) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.parameters) }()
+      case 6: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: &self.pipelineSteps) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.name.isEmpty {
+      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
+    }
+    if !self.description_p.isEmpty {
+      try visitor.visitSingularStringField(value: self.description_p, fieldNumber: 2)
+    }
+    if self.pipelineTemplateType != .unknown {
+      try visitor.visitSingularEnumField(value: self.pipelineTemplateType, fieldNumber: 3)
+    }
+    try { if let v = self._computeInfo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
+    if !self.parameters.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.parameters, fieldNumber: 5)
+    }
+    if !self.pipelineSteps.isEmpty {
+      try visitor.visitMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: self.pipelineSteps, fieldNumber: 6)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_PipelineTemplate, rhs: Clarifai_Api_PipelineTemplate) -> Bool {
+    if lhs.name != rhs.name {return false}
+    if lhs.description_p != rhs.description_p {return false}
+    if lhs.pipelineTemplateType != rhs.pipelineTemplateType {return false}
+    if lhs._computeInfo != rhs._computeInfo {return false}
+    if lhs.parameters != rhs.parameters {return false}
+    if lhs.pipelineSteps != rhs.pipelineSteps {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_PipelineTemplate.PipelineTemplateType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "UNKNOWN"),
+    1: .same(proto: "TRAINING"),
+  ]
 }
 
 extension Clarifai_Api_Secret: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
