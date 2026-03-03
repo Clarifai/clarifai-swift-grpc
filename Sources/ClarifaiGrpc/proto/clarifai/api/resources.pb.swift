@@ -13118,6 +13118,27 @@ public struct Clarifai_Api_AutoscaleConfig {
   public init() {}
 }
 
+/// DeploymentMetrics captures metrics and status for a Deployment's underlying runners.
+/// This allows tracking of the desired replica count and the actual live replica count.
+public struct Clarifai_Api_DeploymentMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The number of replicas desired by the orchestrator.
+  public var desiredReplicas: UInt32 = 0
+
+  /// The actual number of live replicas connected and ready to process requests.
+  public var liveReplicas: UInt32 = 0
+
+  /// If true, the deployment is currently rolling out a new version.
+  public var rolloutInProgress: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 /// A deployment allows you to configure how runners for a particular type of resource will
 /// scale up and down. These are unique per user_id, nodepool and model so for differnet nodepools
 /// you can scale differently.
@@ -13265,6 +13286,16 @@ public struct Clarifai_Api_Deployment {
     get {return _storage._deploymentNodepools}
     set {_uniqueStorage()._deploymentNodepools = newValue}
   }
+
+  /// Real-time metrics for this deployment, including the desired and live replica counts.
+  public var deploymentMetrics: Clarifai_Api_DeploymentMetrics {
+    get {return _storage._deploymentMetrics ?? Clarifai_Api_DeploymentMetrics()}
+    set {_uniqueStorage()._deploymentMetrics = newValue}
+  }
+  /// Returns true if `deploymentMetrics` has been explicitly set.
+  public var hasDeploymentMetrics: Bool {return _storage._deploymentMetrics != nil}
+  /// Clears the value of `deploymentMetrics`. Subsequent reads from it will return its default value.
+  public mutating func clearDeploymentMetrics() {_uniqueStorage()._deploymentMetrics = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -32217,6 +32248,50 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
+extension Clarifai_Api_DeploymentMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeploymentMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "desired_replicas"),
+    2: .standard(proto: "live_replicas"),
+    3: .standard(proto: "rollout_in_progress"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.desiredReplicas) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.liveReplicas) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.rolloutInProgress) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.desiredReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.desiredReplicas, fieldNumber: 1)
+    }
+    if self.liveReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.liveReplicas, fieldNumber: 2)
+    }
+    if self.rolloutInProgress != false {
+      try visitor.visitSingularBoolField(value: self.rolloutInProgress, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_DeploymentMetrics, rhs: Clarifai_Api_DeploymentMetrics) -> Bool {
+    if lhs.desiredReplicas != rhs.desiredReplicas {return false}
+    if lhs.liveReplicas != rhs.liveReplicas {return false}
+    if lhs.rolloutInProgress != rhs.rolloutInProgress {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Deployment"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -32237,6 +32312,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     17: .standard(proto: "email_reminder_after"),
     18: .standard(proto: "graceful_deploy"),
     19: .standard(proto: "deployment_nodepools"),
+    20: .standard(proto: "deployment_metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -32257,6 +32333,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _emailReminderAfter: SwiftProtobuf.Google_Protobuf_Duration? = nil
     var _gracefulDeploy: Bool = false
     var _deploymentNodepools: [Clarifai_Api_DeploymentNodepool] = []
+    var _deploymentMetrics: Clarifai_Api_DeploymentMetrics? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -32280,6 +32357,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       _emailReminderAfter = source._emailReminderAfter
       _gracefulDeploy = source._gracefulDeploy
       _deploymentNodepools = source._deploymentNodepools
+      _deploymentMetrics = source._deploymentMetrics
     }
   }
 
@@ -32315,6 +32393,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         case 17: try { try decoder.decodeSingularMessageField(value: &_storage._emailReminderAfter) }()
         case 18: try { try decoder.decodeSingularBoolField(value: &_storage._gracefulDeploy) }()
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._deploymentNodepools) }()
+        case 20: try { try decoder.decodeSingularMessageField(value: &_storage._deploymentMetrics) }()
         default: break
         }
       }
@@ -32378,6 +32457,9 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       if !_storage._deploymentNodepools.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._deploymentNodepools, fieldNumber: 19)
       }
+      try { if let v = _storage._deploymentMetrics {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -32404,6 +32486,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         if _storage._emailReminderAfter != rhs_storage._emailReminderAfter {return false}
         if _storage._gracefulDeploy != rhs_storage._gracefulDeploy {return false}
         if _storage._deploymentNodepools != rhs_storage._deploymentNodepools {return false}
+        if _storage._deploymentMetrics != rhs_storage._deploymentMetrics {return false}
         return true
       }
       if !storagesAreEqual {return false}
