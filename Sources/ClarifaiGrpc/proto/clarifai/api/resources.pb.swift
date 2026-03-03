@@ -13148,13 +13148,7 @@ public struct Clarifai_Api_Deployment {
   /// Clears the value of `autoscaleConfig`. Subsequent reads from it will return its default value.
   public mutating func clearAutoscaleConfig() {_uniqueStorage()._autoscaleConfig = nil}
 
-  /// You can configure different autoscaling per nodepool(s).
-  /// These nodepools have to be also owned by the same user_id/org as this deployment.
-  /// If there is more than one nodepool we use the model's ComputeInfo to match
-  /// with what the nodepool provides to decide which one can handle it combined with the
-  /// NodepoolRank below. Note: even within a single nodepool if it is heterogeneous then
-  /// we need a way to rank scheduling choices when we don't know how to decide (like a model
-  /// supports
+  /// Use DeploymentNodepools field instead
   public var nodepools: [Clarifai_Api_Nodepool] {
     get {return _storage._nodepools}
     set {_uniqueStorage()._nodepools = newValue}
@@ -13264,6 +13258,14 @@ public struct Clarifai_Api_Deployment {
     set {_uniqueStorage()._gracefulDeploy = newValue}
   }
 
+  /// Per-nodepool settings including priority. If set, 'nodepools' must not also be set.
+  /// When any priority value is non-zero, the response will populate this field instead
+  /// of 'nodepools'.
+  public var deploymentNodepools: [Clarifai_Api_DeploymentNodepool] {
+    get {return _storage._deploymentNodepools}
+    set {_uniqueStorage()._deploymentNodepools = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// In some scenarios it may not be obvous how we should schedule a resource to underlying nodes
@@ -13362,6 +13364,50 @@ extension Clarifai_Api_Deployment.SchedulingChoice: CaseIterable {
 }
 
 #endif  // swift(>=4.2)
+
+/// DeploymentNodepool associates a nodepool with a deployment and holds per-nodepool settings.
+public struct Clarifai_Api_DeploymentNodepool {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Nodepool ID correlates with nodepools in deployment.
+  public var id: String = String()
+
+  /// The compute cluster that owns this nodepool.
+  public var computeCluster: Clarifai_Api_ComputeCluster {
+    get {return _computeCluster ?? Clarifai_Api_ComputeCluster()}
+    set {_computeCluster = newValue}
+  }
+  /// Returns true if `computeCluster` has been explicitly set.
+  public var hasComputeCluster: Bool {return self._computeCluster != nil}
+  /// Clears the value of `computeCluster`. Subsequent reads from it will return its default value.
+  public mutating func clearComputeCluster() {self._computeCluster = nil}
+
+  /// The scheduling priority for this deployment on the given nodepool.
+  /// Valid values are 0-9, where higher values indicate higher priority.
+  /// Default is 0 (lowest priority).
+  public var priority: UInt32 = 0
+
+  /// -------------------------------------------------------------------
+  /// OUTPUT FIELDS (Server populates these so the client gets the data)
+  /// -------------------------------------------------------------------
+  public var nodepool: Clarifai_Api_Nodepool {
+    get {return _nodepool ?? Clarifai_Api_Nodepool()}
+    set {_nodepool = newValue}
+  }
+  /// Returns true if `nodepool` has been explicitly set.
+  public var hasNodepool: Bool {return self._nodepool != nil}
+  /// Clears the value of `nodepool`. Subsequent reads from it will return its default value.
+  public mutating func clearNodepool() {self._nodepool = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _computeCluster: Clarifai_Api_ComputeCluster? = nil
+  fileprivate var _nodepool: Clarifai_Api_Nodepool? = nil
+}
 
 ///////////////////////////////////////////
 /// Don't need RunnerSelector if we're opening up endpoints for deployments.
@@ -32190,6 +32236,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     15: .standard(proto: "special_handling"),
     17: .standard(proto: "email_reminder_after"),
     18: .standard(proto: "graceful_deploy"),
+    19: .standard(proto: "deployment_nodepools"),
   ]
 
   fileprivate class _StorageClass {
@@ -32209,6 +32256,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
     var _emailReminderAfter: SwiftProtobuf.Google_Protobuf_Duration? = nil
     var _gracefulDeploy: Bool = false
+    var _deploymentNodepools: [Clarifai_Api_DeploymentNodepool] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -32231,6 +32279,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       _specialHandling = source._specialHandling
       _emailReminderAfter = source._emailReminderAfter
       _gracefulDeploy = source._gracefulDeploy
+      _deploymentNodepools = source._deploymentNodepools
     }
   }
 
@@ -32265,6 +32314,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         case 16: try { try decoder.decodeSingularMessageField(value: &_storage._desiredWorker) }()
         case 17: try { try decoder.decodeSingularMessageField(value: &_storage._emailReminderAfter) }()
         case 18: try { try decoder.decodeSingularBoolField(value: &_storage._gracefulDeploy) }()
+        case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._deploymentNodepools) }()
         default: break
         }
       }
@@ -32325,6 +32375,9 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       if _storage._gracefulDeploy != false {
         try visitor.visitSingularBoolField(value: _storage._gracefulDeploy, fieldNumber: 18)
       }
+      if !_storage._deploymentNodepools.isEmpty {
+        try visitor.visitRepeatedMessageField(value: _storage._deploymentNodepools, fieldNumber: 19)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -32350,6 +32403,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
         if _storage._emailReminderAfter != rhs_storage._emailReminderAfter {return false}
         if _storage._gracefulDeploy != rhs_storage._gracefulDeploy {return false}
+        if _storage._deploymentNodepools != rhs_storage._deploymentNodepools {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -32371,6 +32425,60 @@ extension Clarifai_Api_Deployment.SchedulingChoice: SwiftProtobuf._ProtoNameProv
     7: .same(proto: "PREFER_SPOT"),
     8: .same(proto: "PREFER_ONDEMAND"),
   ]
+}
+
+extension Clarifai_Api_DeploymentNodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeploymentNodepool"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "id"),
+    2: .standard(proto: "compute_cluster"),
+    3: .same(proto: "priority"),
+    4: .same(proto: "nodepool"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._computeCluster) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.priority) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._nodepool) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.id.isEmpty {
+      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    }
+    try { if let v = self._computeCluster {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    if self.priority != 0 {
+      try visitor.visitSingularUInt32Field(value: self.priority, fieldNumber: 3)
+    }
+    try { if let v = self._nodepool {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_DeploymentNodepool, rhs: Clarifai_Api_DeploymentNodepool) -> Bool {
+    if lhs.id != rhs.id {return false}
+    if lhs._computeCluster != rhs._computeCluster {return false}
+    if lhs.priority != rhs.priority {return false}
+    if lhs._nodepool != rhs._nodepool {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
 }
 
 extension Clarifai_Api_RunnerSelector: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
