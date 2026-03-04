@@ -341,6 +341,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case deploymentInvalidArgument // = 25901
   case deploymentInvalidRequest // = 25902
 
+  /// The deployment is disabled and cannot serve traffic.
+  case deploymentDisabled // = 25903
+
   /// InstanceType related codes 260xx
   case instanceTypeDoesNotExist // = 26000
   case instanceTypeInvalidArgument // = 26001
@@ -923,6 +926,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 25900: self = .deploymentDoesNotExist
     case 25901: self = .deploymentInvalidArgument
     case 25902: self = .deploymentInvalidRequest
+    case 25903: self = .deploymentDisabled
     case 26000: self = .instanceTypeDoesNotExist
     case 26001: self = .instanceTypeInvalidArgument
     case 26002: self = .instanceTypeInvalidRequest
@@ -1356,6 +1360,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .deploymentDoesNotExist: return 25900
     case .deploymentInvalidArgument: return 25901
     case .deploymentInvalidRequest: return 25902
+    case .deploymentDisabled: return 25903
     case .instanceTypeDoesNotExist: return 26000
     case .instanceTypeInvalidArgument: return 26001
     case .instanceTypeInvalidRequest: return 26002
@@ -1794,6 +1799,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .deploymentDoesNotExist,
     .deploymentInvalidArgument,
     .deploymentInvalidRequest,
+    .deploymentDisabled,
     .instanceTypeDoesNotExist,
     .instanceTypeInvalidArgument,
     .instanceTypeInvalidRequest,
@@ -2230,6 +2236,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     25900: .same(proto: "DEPLOYMENT_DOES_NOT_EXIST"),
     25901: .same(proto: "DEPLOYMENT_INVALID_ARGUMENT"),
     25902: .same(proto: "DEPLOYMENT_INVALID_REQUEST"),
+    25903: .same(proto: "DEPLOYMENT_DISABLED"),
     26000: .same(proto: "INSTANCE_TYPE_DOES_NOT_EXIST"),
     26001: .same(proto: "INSTANCE_TYPE_INVALID_ARGUMENT"),
     26002: .same(proto: "INSTANCE_TYPE_INVALID_REQUEST"),

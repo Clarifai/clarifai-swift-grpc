@@ -13297,7 +13297,48 @@ public struct Clarifai_Api_Deployment {
   /// Clears the value of `deploymentMetrics`. Subsequent reads from it will return its default value.
   public mutating func clearDeploymentMetrics() {_uniqueStorage()._deploymentMetrics = nil}
 
+  /// The current status of the deployment.
+  /// When disabled, all infrastructure is scaled to zero and prediction requests are rejected.
+  /// The autoscale_config is preserved for when the deployment is enabled.
+  public var status: Clarifai_Api_Deployment.Status {
+    get {return _storage._status}
+    set {_uniqueStorage()._status = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Status of the deployment.
+  public enum Status: SwiftProtobuf.Enum {
+    public typealias RawValue = Int
+
+    /// Default: deployment is enabled and can serve traffic.
+    case enabled // = 0
+
+    /// Deployment is disabled: scaled to zero, traffic rejected.
+    case disabled // = 1
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .enabled
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .enabled
+      case 1: self = .disabled
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .enabled: return 0
+      case .disabled: return 1
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
 
   /// In some scenarios it may not be obvous how we should schedule a resource to underlying nodes
   /// within the nodepool(s) above. The SchedulerChoice allows us to specify how to decide which
@@ -13378,6 +13419,14 @@ public struct Clarifai_Api_Deployment {
 }
 
 #if swift(>=4.2)
+
+extension Clarifai_Api_Deployment.Status: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [Clarifai_Api_Deployment.Status] = [
+    .enabled,
+    .disabled,
+  ]
+}
 
 extension Clarifai_Api_Deployment.SchedulingChoice: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
@@ -32313,6 +32362,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     18: .standard(proto: "graceful_deploy"),
     19: .standard(proto: "deployment_nodepools"),
     20: .standard(proto: "deployment_metrics"),
+    21: .same(proto: "status"),
   ]
 
   fileprivate class _StorageClass {
@@ -32334,6 +32384,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _gracefulDeploy: Bool = false
     var _deploymentNodepools: [Clarifai_Api_DeploymentNodepool] = []
     var _deploymentMetrics: Clarifai_Api_DeploymentMetrics? = nil
+    var _status: Clarifai_Api_Deployment.Status = .enabled
 
     static let defaultInstance = _StorageClass()
 
@@ -32358,6 +32409,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       _gracefulDeploy = source._gracefulDeploy
       _deploymentNodepools = source._deploymentNodepools
       _deploymentMetrics = source._deploymentMetrics
+      _status = source._status
     }
   }
 
@@ -32394,6 +32446,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         case 18: try { try decoder.decodeSingularBoolField(value: &_storage._gracefulDeploy) }()
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._deploymentNodepools) }()
         case 20: try { try decoder.decodeSingularMessageField(value: &_storage._deploymentMetrics) }()
+        case 21: try { try decoder.decodeSingularEnumField(value: &_storage._status) }()
         default: break
         }
       }
@@ -32460,6 +32513,9 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
       try { if let v = _storage._deploymentMetrics {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
       } }()
+      if _storage._status != .enabled {
+        try visitor.visitSingularEnumField(value: _storage._status, fieldNumber: 21)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -32487,6 +32543,7 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
         if _storage._gracefulDeploy != rhs_storage._gracefulDeploy {return false}
         if _storage._deploymentNodepools != rhs_storage._deploymentNodepools {return false}
         if _storage._deploymentMetrics != rhs_storage._deploymentMetrics {return false}
+        if _storage._status != rhs_storage._status {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -32494,6 +32551,13 @@ extension Clarifai_Api_Deployment: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Clarifai_Api_Deployment.Status: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "ENABLED"),
+    1: .same(proto: "DISABLED"),
+  ]
 }
 
 extension Clarifai_Api_Deployment.SchedulingChoice: SwiftProtobuf._ProtoNameProviding {
