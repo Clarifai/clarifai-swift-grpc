@@ -719,6 +719,9 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case twilioMaxVerificationBeginExceeded // = 71003
   case twilioMaxVerificationCheckExceeded // = 71004
 
+  /// The provided phone number was rejected or blocked by Twilio.
+  case twilioPhoneNumberBlocked // = 71005
+
   /// Internal issues: 98xxx
   case internalServerIssue // = 98004
   case internalFetchingIssue // = 98005
@@ -1162,6 +1165,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 70000: self = .logEntriesInvalidRequest
     case 71003: self = .twilioMaxVerificationBeginExceeded
     case 71004: self = .twilioMaxVerificationCheckExceeded
+    case 71005: self = .twilioPhoneNumberBlocked
     case 90400: self = .badRequest
     case 90500: self = .serverError
     case 98004: self = .internalServerIssue
@@ -1596,6 +1600,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .logEntriesInvalidRequest: return 70000
     case .twilioMaxVerificationBeginExceeded: return 71003
     case .twilioMaxVerificationCheckExceeded: return 71004
+    case .twilioPhoneNumberBlocked: return 71005
     case .badRequest: return 90400
     case .serverError: return 90500
     case .internalServerIssue: return 98004
@@ -2035,6 +2040,7 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .logEntriesInvalidRequest,
     .twilioMaxVerificationBeginExceeded,
     .twilioMaxVerificationCheckExceeded,
+    .twilioPhoneNumberBlocked,
     .internalServerIssue,
     .internalFetchingIssue,
     .internalDatabaseIssue,
@@ -2472,6 +2478,7 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     70000: .same(proto: "LOG_ENTRIES_INVALID_REQUEST"),
     71003: .same(proto: "TWILIO_MAX_VERIFICATION_BEGIN_EXCEEDED"),
     71004: .same(proto: "TWILIO_MAX_VERIFICATION_CHECK_EXCEEDED"),
+    71005: .same(proto: "TWILIO_PHONE_NUMBER_BLOCKED"),
     90400: .same(proto: "BAD_REQUEST"),
     90500: .same(proto: "SERVER_ERROR"),
     98004: .same(proto: "INTERNAL_SERVER_ISSUE"),

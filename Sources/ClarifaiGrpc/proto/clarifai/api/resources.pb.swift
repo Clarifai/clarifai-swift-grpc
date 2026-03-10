@@ -10263,27 +10263,55 @@ public struct Clarifai_Api_TaskConceptAutoAnnotationConfig {
   /// This is a bit-mask field that holds multiple AnnotationDataType values that are combined in an OR fashion.
   /// Example: if annotation_data_types = 34, then we filter annotations that appear as a mask or a bounding box,
   /// because MASK = 32 and BOUNDING_BOX = 2.
-  public var annotationDataTypes: UInt32 = 0
+  public var annotationDataTypes: UInt32 {
+    get {return _storage._annotationDataTypes}
+    set {_uniqueStorage()._annotationDataTypes = newValue}
+  }
 
   /// Filter annotations by concept value.
   /// Only concepts that fit in the threshold will be used to generate annotations.
   public var thresholdRange: Clarifai_Api_ThresholdRange {
-    get {return _thresholdRange ?? Clarifai_Api_ThresholdRange()}
-    set {_thresholdRange = newValue}
+    get {return _storage._thresholdRange ?? Clarifai_Api_ThresholdRange()}
+    set {_uniqueStorage()._thresholdRange = newValue}
   }
   /// Returns true if `thresholdRange` has been explicitly set.
-  public var hasThresholdRange: Bool {return self._thresholdRange != nil}
+  public var hasThresholdRange: Bool {return _storage._thresholdRange != nil}
   /// Clears the value of `thresholdRange`. Subsequent reads from it will return its default value.
-  public mutating func clearThresholdRange() {self._thresholdRange = nil}
+  public mutating func clearThresholdRange() {_uniqueStorage()._thresholdRange = nil}
 
   /// The output annotations will be created using this status code.
-  public var statusCode: Clarifai_Api_Status_StatusCode = .zero
+  public var statusCode: Clarifai_Api_Status_StatusCode {
+    get {return _storage._statusCode}
+    set {_uniqueStorage()._statusCode = newValue}
+  }
+
+  /// Task auto annotation for this concept only applies to this time of day range.
+  /// When out of range, the task will not generate annotations for the concept.
+  public var timeOfDayRange: Clarifai_Api_Utils_TimeOfDayRange {
+    get {return _storage._timeOfDayRange ?? Clarifai_Api_Utils_TimeOfDayRange()}
+    set {_uniqueStorage()._timeOfDayRange = newValue}
+  }
+  /// Returns true if `timeOfDayRange` has been explicitly set.
+  public var hasTimeOfDayRange: Bool {return _storage._timeOfDayRange != nil}
+  /// Clears the value of `timeOfDayRange`. Subsequent reads from it will return its default value.
+  public mutating func clearTimeOfDayRange() {_uniqueStorage()._timeOfDayRange = nil}
+
+  /// Filter out annotations that are out of this polygon.
+  /// When it's set, only detection annotations that intersect the polygon will pass the filter.
+  public var polygon: Clarifai_Api_Polygon {
+    get {return _storage._polygon ?? Clarifai_Api_Polygon()}
+    set {_uniqueStorage()._polygon = newValue}
+  }
+  /// Returns true if `polygon` has been explicitly set.
+  public var hasPolygon: Bool {return _storage._polygon != nil}
+  /// Clears the value of `polygon`. Subsequent reads from it will return its default value.
+  public mutating func clearPolygon() {_uniqueStorage()._polygon = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _thresholdRange: Clarifai_Api_ThresholdRange? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct Clarifai_Api_TaskConcept {
@@ -13112,6 +13140,13 @@ public struct Clarifai_Api_AutoscaleConfig {
 
   /// The idle time before scaling down to zero
   public var scaleToZeroDelaySeconds: UInt32 = 0
+
+  /// The soft minimum number of replicas for the runner.
+  /// Unlike min_replicas (which is a hard floor the autoscaler never violates),
+  /// soft_min_replicas is a target the autoscaler tries to maintain but can violate
+  /// (e.g., scaling to zero during idle periods).
+  /// A value of 0 means not set / disabled.
+  public var softMinReplicas: UInt32 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -28453,43 +28488,95 @@ extension Clarifai_Api_TaskConceptAutoAnnotationConfig: SwiftProtobuf.Message, S
     1: .standard(proto: "annotation_data_types"),
     2: .standard(proto: "threshold_range"),
     3: .standard(proto: "status_code"),
+    4: .standard(proto: "time_of_day_range"),
+    5: .same(proto: "polygon"),
   ]
 
+  fileprivate class _StorageClass {
+    var _annotationDataTypes: UInt32 = 0
+    var _thresholdRange: Clarifai_Api_ThresholdRange? = nil
+    var _statusCode: Clarifai_Api_Status_StatusCode = .zero
+    var _timeOfDayRange: Clarifai_Api_Utils_TimeOfDayRange? = nil
+    var _polygon: Clarifai_Api_Polygon? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _annotationDataTypes = source._annotationDataTypes
+      _thresholdRange = source._thresholdRange
+      _statusCode = source._statusCode
+      _timeOfDayRange = source._timeOfDayRange
+      _polygon = source._polygon
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.annotationDataTypes) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._thresholdRange) }()
-      case 3: try { try decoder.decodeSingularEnumField(value: &self.statusCode) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._annotationDataTypes) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._thresholdRange) }()
+        case 3: try { try decoder.decodeSingularEnumField(value: &_storage._statusCode) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._timeOfDayRange) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._polygon) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if self.annotationDataTypes != 0 {
-      try visitor.visitSingularUInt32Field(value: self.annotationDataTypes, fieldNumber: 1)
-    }
-    try { if let v = self._thresholdRange {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    if self.statusCode != .zero {
-      try visitor.visitSingularEnumField(value: self.statusCode, fieldNumber: 3)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if _storage._annotationDataTypes != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._annotationDataTypes, fieldNumber: 1)
+      }
+      try { if let v = _storage._thresholdRange {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+      if _storage._statusCode != .zero {
+        try visitor.visitSingularEnumField(value: _storage._statusCode, fieldNumber: 3)
+      }
+      try { if let v = _storage._timeOfDayRange {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._polygon {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_TaskConceptAutoAnnotationConfig, rhs: Clarifai_Api_TaskConceptAutoAnnotationConfig) -> Bool {
-    if lhs.annotationDataTypes != rhs.annotationDataTypes {return false}
-    if lhs._thresholdRange != rhs._thresholdRange {return false}
-    if lhs.statusCode != rhs.statusCode {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._annotationDataTypes != rhs_storage._annotationDataTypes {return false}
+        if _storage._thresholdRange != rhs_storage._thresholdRange {return false}
+        if _storage._statusCode != rhs_storage._statusCode {return false}
+        if _storage._timeOfDayRange != rhs_storage._timeOfDayRange {return false}
+        if _storage._polygon != rhs_storage._polygon {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -32239,6 +32326,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     5: .standard(proto: "scale_up_delay_seconds"),
     7: .standard(proto: "disable_packing"),
     8: .standard(proto: "scale_to_zero_delay_seconds"),
+    9: .standard(proto: "soft_min_replicas"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -32254,6 +32342,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 5: try { try decoder.decodeSingularUInt32Field(value: &self.scaleUpDelaySeconds) }()
       case 7: try { try decoder.decodeSingularBoolField(value: &self.disablePacking) }()
       case 8: try { try decoder.decodeSingularUInt32Field(value: &self.scaleToZeroDelaySeconds) }()
+      case 9: try { try decoder.decodeSingularUInt32Field(value: &self.softMinReplicas) }()
       default: break
       }
     }
@@ -32281,6 +32370,9 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     if self.scaleToZeroDelaySeconds != 0 {
       try visitor.visitSingularUInt32Field(value: self.scaleToZeroDelaySeconds, fieldNumber: 8)
     }
+    if self.softMinReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.softMinReplicas, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -32292,6 +32384,7 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.scaleUpDelaySeconds != rhs.scaleUpDelaySeconds {return false}
     if lhs.disablePacking != rhs.disablePacking {return false}
     if lhs.scaleToZeroDelaySeconds != rhs.scaleToZeroDelaySeconds {return false}
+    if lhs.softMinReplicas != rhs.softMinReplicas {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
