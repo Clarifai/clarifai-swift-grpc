@@ -67,6 +67,9 @@ public struct Clarifai_Api_Status_Status {
   /// e.g. why an error occurred and how to avoid getting the error.
   public var developerNotes: String = String()
 
+  /// The HTTP status code of the response.
+  public var httpStatusCode: UInt32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -136,6 +139,7 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     8: .standard(proto: "internal_details"),
     9: .standard(proto: "redirect_info"),
     10: .standard(proto: "developer_notes"),
+    11: .standard(proto: "http_status_code"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -154,6 +158,7 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
       case 8: try { try decoder.decodeSingularStringField(value: &self.internalDetails) }()
       case 9: try { try decoder.decodeSingularMessageField(value: &self._redirectInfo) }()
       case 10: try { try decoder.decodeSingularStringField(value: &self.developerNotes) }()
+      case 11: try { try decoder.decodeSingularUInt32Field(value: &self.httpStatusCode) }()
       default: break
       }
     }
@@ -194,6 +199,9 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if !self.developerNotes.isEmpty {
       try visitor.visitSingularStringField(value: self.developerNotes, fieldNumber: 10)
     }
+    if self.httpStatusCode != 0 {
+      try visitor.visitSingularUInt32Field(value: self.httpStatusCode, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -208,6 +216,7 @@ extension Clarifai_Api_Status_Status: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if lhs.internalDetails != rhs.internalDetails {return false}
     if lhs._redirectInfo != rhs._redirectInfo {return false}
     if lhs.developerNotes != rhs.developerNotes {return false}
+    if lhs.httpStatusCode != rhs.httpStatusCode {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
