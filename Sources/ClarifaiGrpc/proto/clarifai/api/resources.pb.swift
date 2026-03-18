@@ -1090,6 +1090,7 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
 
   /// Event types related to compute clusters: 900-999
   case computeClusterCreate // = 900
+  case computeClusterUpdate // = 902
   case computeClusterDelete // = 901
 
   /// Event types related to nodepools: 1000-1099
@@ -1145,6 +1146,7 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case 800: self = .userUpdate
     case 900: self = .computeClusterCreate
     case 901: self = .computeClusterDelete
+    case 902: self = .computeClusterUpdate
     case 1000: self = .nodepoolCreate
     case 1001: self = .nodepoolUpdate
     case 1002: self = .nodepoolDelete
@@ -1193,6 +1195,7 @@ public enum Clarifai_Api_EventType: SwiftProtobuf.Enum {
     case .userUpdate: return 800
     case .computeClusterCreate: return 900
     case .computeClusterDelete: return 901
+    case .computeClusterUpdate: return 902
     case .nodepoolCreate: return 1000
     case .nodepoolUpdate: return 1001
     case .nodepoolDelete: return 1002
@@ -1245,6 +1248,7 @@ extension Clarifai_Api_EventType: CaseIterable {
     .collaboratorRemove,
     .userUpdate,
     .computeClusterCreate,
+    .computeClusterUpdate,
     .computeClusterDelete,
     .nodepoolCreate,
     .nodepoolUpdate,
@@ -16879,6 +16883,7 @@ extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
     800: .same(proto: "USER_UPDATE"),
     900: .same(proto: "COMPUTE_CLUSTER_CREATE"),
     901: .same(proto: "COMPUTE_CLUSTER_DELETE"),
+    902: .same(proto: "COMPUTE_CLUSTER_UPDATE"),
     1000: .same(proto: "NODEPOOL_CREATE"),
     1001: .same(proto: "NODEPOOL_UPDATE"),
     1002: .same(proto: "NODEPOOL_DELETE"),
