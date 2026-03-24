@@ -12539,6 +12539,13 @@ public struct Clarifai_Api_Runner {
   /// Clears the value of `runnerMetrics`. Subsequent reads from it will return its default value.
   public mutating func clearRunnerMetrics() {_uniqueStorage()._runnerMetrics = nil}
 
+  /// Hard minimum replicas from the deployment's autoscale config.
+  /// The agent uses this to determine how many replicas are non-preemptable.
+  public var minReplicas: UInt32 {
+    get {return _storage._minReplicas}
+    set {_uniqueStorage()._minReplicas = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -13145,10 +13152,9 @@ public struct Clarifai_Api_AutoscaleConfig {
   /// The idle time before scaling down to zero
   public var scaleToZeroDelaySeconds: UInt32 = 0
 
-  /// The soft minimum number of replicas for the runner.
-  /// Unlike min_replicas (which is a hard floor the autoscaler never violates),
-  /// soft_min_replicas is a target the autoscaler tries to maintain but can violate
-  /// (e.g., scaling to zero during idle periods).
+  /// Additional minimum replicas added on top of min_replicas. "Soft" refers to scheduling
+  /// priority (preemptable), not to whether the floor is enforced. The orchestrator always
+  /// maintains min_replicas + soft_min_replicas (capped to max_replicas).
   /// A value of 0 means not set / disabled.
   public var softMinReplicas: UInt32 = 0
 
@@ -31482,6 +31488,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     11: .standard(proto: "num_replicas"),
     12: .standard(proto: "special_handling"),
     13: .standard(proto: "runner_metrics"),
+    14: .standard(proto: "min_replicas"),
   ]
 
   fileprivate class _StorageClass {
@@ -31497,6 +31504,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _numReplicas: UInt32 = 0
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
     var _runnerMetrics: Clarifai_Api_RunnerMetrics? = nil
+    var _minReplicas: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -31515,6 +31523,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _numReplicas = source._numReplicas
       _specialHandling = source._specialHandling
       _runnerMetrics = source._runnerMetrics
+      _minReplicas = source._minReplicas
     }
   }
 
@@ -31545,6 +31554,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._numReplicas) }()
         case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
         case 13: try { try decoder.decodeSingularMessageField(value: &_storage._runnerMetrics) }()
+        case 14: try { try decoder.decodeSingularUInt32Field(value: &_storage._minReplicas) }()
         default: break
         }
       }
@@ -31593,6 +31603,9 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       try { if let v = _storage._runnerMetrics {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
       } }()
+      if _storage._minReplicas != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._minReplicas, fieldNumber: 14)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31614,6 +31627,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._numReplicas != rhs_storage._numReplicas {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
         if _storage._runnerMetrics != rhs_storage._runnerMetrics {return false}
+        if _storage._minReplicas != rhs_storage._minReplicas {return false}
         return true
       }
       if !storagesAreEqual {return false}
