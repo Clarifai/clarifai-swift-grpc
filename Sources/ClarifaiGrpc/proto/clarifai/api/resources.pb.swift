@@ -1264,8 +1264,10 @@ extension Clarifai_Api_EventType: CaseIterable {
 public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
-  case modelRequestCount // = 1
-  case modelLatency // = 2
+  case modelTtft // = 1
+  case modelThroughput // = 2
+  case modelPromptTokenThroughput // = 3
+  case modelCompletionTokenThroughput // = 4
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1275,8 +1277,10 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
   public init?(rawValue: Int) {
     switch rawValue {
     case 0: self = .notSet
-    case 1: self = .modelRequestCount
-    case 2: self = .modelLatency
+    case 1: self = .modelTtft
+    case 2: self = .modelThroughput
+    case 3: self = .modelPromptTokenThroughput
+    case 4: self = .modelCompletionTokenThroughput
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1284,8 +1288,10 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
   public var rawValue: Int {
     switch self {
     case .notSet: return 0
-    case .modelRequestCount: return 1
-    case .modelLatency: return 2
+    case .modelTtft: return 1
+    case .modelThroughput: return 2
+    case .modelPromptTokenThroughput: return 3
+    case .modelCompletionTokenThroughput: return 4
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1298,8 +1304,10 @@ extension Clarifai_Api_MetricType: CaseIterable {
   // The compiler won't synthesize support with the UNRECOGNIZED case.
   public static var allCases: [Clarifai_Api_MetricType] = [
     .notSet,
-    .modelRequestCount,
-    .modelLatency,
+    .modelTtft,
+    .modelThroughput,
+    .modelPromptTokenThroughput,
+    .modelCompletionTokenThroughput,
   ]
 }
 
@@ -1311,8 +1319,7 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
   case appID // = 1
   case modelID // = 2
   case modelVersionID // = 3
-  case callerUserID // = 4
-  case workflowID // = 5
+  case httpStatus // = 4
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1325,8 +1332,7 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
     case 1: self = .appID
     case 2: self = .modelID
     case 3: self = .modelVersionID
-    case 4: self = .callerUserID
-    case 5: self = .workflowID
+    case 4: self = .httpStatus
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1337,8 +1343,7 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
     case .appID: return 1
     case .modelID: return 2
     case .modelVersionID: return 3
-    case .callerUserID: return 4
-    case .workflowID: return 5
+    case .httpStatus: return 4
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1354,8 +1359,7 @@ extension Clarifai_Api_MetricLabel: CaseIterable {
     .appID,
     .modelID,
     .modelVersionID,
-    .callerUserID,
-    .workflowID,
+    .httpStatus,
   ]
 }
 
@@ -7345,6 +7349,13 @@ public struct Clarifai_Api_Output {
     set {_uniqueStorage()._completionTokens = newValue}
   }
 
+  /// Number of cached prompt tokens as reported by the model (subset of prompt_tokens).
+  /// Cached tokens are prompt tokens served from the model's KV cache rather than recomputed.
+  public var cachedTokens: UInt32 {
+    get {return _storage._cachedTokens}
+    set {_uniqueStorage()._cachedTokens = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -8988,6 +8999,7 @@ public struct Clarifai_Api_WorkflowState {
   public init() {}
 }
 
+/// Deprecated: App duplication is no longer supported.
 /// AppDuplication
 public struct Clarifai_Api_AppDuplication {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -9001,18 +9013,6 @@ public struct Clarifai_Api_AppDuplication {
   }
 
   /// The destination application where resources are written.
-  ///
-  /// If the destination does not exist, then the fields from the request are
-  /// used to create the application. If a field is not set or not supported,
-  /// then it will be copied from the source app, unless otherwise noted.
-  ///
-  /// Note: this field can be empty when reading app duplication jobs in cases
-  /// where the app has been deleted or is just not visible to the caller.
-  ///
-  /// ########## Supported fields ##########
-  ///  - description
-  ///  - id      - if not set, then generated automatically
-  ///  - user_id - if not set, then the calling user is used as the app owner
   public var destinationApp: Clarifai_Api_App {
     get {return _storage._destinationApp ?? Clarifai_Api_App()}
     set {_uniqueStorage()._destinationApp = newValue}
@@ -9022,33 +9022,18 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `destinationApp`. Subsequent reads from it will return its default value.
   public mutating func clearDestinationApp() {_uniqueStorage()._destinationApp = nil}
 
-  /// The ID of an existing app you want to copy data into.
-  ///
-  /// If not provided, then we will create a new application as the destination instead.
-  /// The various new_app_* fields can be used to set fields of this new application.
-  ///
   /// Deprecated: Use destination_app.id with an existing ID instead.
   public var existingAppID: String {
     get {return _storage._existingAppID}
     set {_uniqueStorage()._existingAppID = newValue}
   }
 
-  /// The ID to use when creating a new application.
-  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
-  ///
-  /// If not provided, then it will be generated automatically.
-  ///
   /// Deprecated: Use destination_app.id with a new ID instead.
   public var newAppID: String {
     get {return _storage._newAppID}
     set {_uniqueStorage()._newAppID = newValue}
   }
 
-  /// The name to use when creating a new application.
-  /// You cannot set this field when copying into an existing app, i.e., when existing_app_is is set.
-  ///
-  /// If not provided, then the ID of the new application is also used as the name.
-  ///
   /// Deprecated: Application names are deprecated, use application IDs instead.
   public var newAppName: String {
     get {return _storage._newAppName}
@@ -9095,12 +9080,7 @@ public struct Clarifai_Api_AppDuplication {
   /// Clears the value of `filter`. Subsequent reads from it will return its default value.
   public mutating func clearFilter() {_uniqueStorage()._filter = nil}
 
-  /// Copy progress for each resource type requested by the filter. Possible fields:
-  ///  - inputs
-  ///  - concepts
-  ///  - annotations
-  ///  - models
-  ///  - workflows
+  /// Copy progress for each resource type requested by the filter.
   public var progress: [Clarifai_Api_AppCopyProgress] {
     get {return _storage._progress}
     set {_uniqueStorage()._progress = newValue}
@@ -9127,23 +9107,23 @@ public struct Clarifai_Api_AppCopyProgress {
   public init() {}
 }
 
+/// Deprecated: App duplication is no longer supported.
 /// AppDuplicationFilters
 public struct Clarifai_Api_AppDuplicationFilters {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Copy inputs. Requires that copy_concepts is also set.
-  /// Note that this will still copy input-level annotations even if copy_annotations is not set.
+  /// Copy inputs.
   public var copyInputs: Bool = false
 
   /// Copy concepts.
   public var copyConcepts: Bool = false
 
-  /// Copy annotations. Requires that copy_inputs and copy_concepts are also set.
+  /// Copy annotations.
   public var copyAnnotations: Bool = false
 
-  /// Copy models. Requires that copy_concepts is also set.
+  /// Copy models.
   public var copyModels: Bool = false
 
   /// Copy workflows.
@@ -10570,171 +10550,6 @@ public struct Clarifai_Api_Team {
 
   fileprivate var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-}
-
-/// Collector is a data pathway from a CollectorSource to an app to collect data automatically.
-/// For example, a CollectorSource
-public struct Clarifai_Api_Collector {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Unique ID for the collector.
-  public var id: String {
-    get {return _storage._id}
-    set {_uniqueStorage()._id = newValue}
-  }
-
-  /// Human readable description for the collector.
-  public var description_p: String {
-    get {return _storage._description_p}
-    set {_uniqueStorage()._description_p = newValue}
-  }
-
-  /// When the collector is created. We follow the XXXX timestamp
-  /// format. We use https://www.ietf.org/rfc/rfc3339.txt format:
-  /// "2006-01-02T15:04:05.999999Z" so you can expect results like
-  /// the following from the API:
-  /// "2017-04-11T21:50:50.223962Z"
-  public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _storage._createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_uniqueStorage()._createdAt = newValue}
-  }
-  /// Returns true if `createdAt` has been explicitly set.
-  public var hasCreatedAt: Bool {return _storage._createdAt != nil}
-  /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
-  public mutating func clearCreatedAt() {_uniqueStorage()._createdAt = nil}
-
-  /// This is a workflow to run inline in model predict calls. It should ONLY have very fast and
-  /// light-weight models in it as it will effect the speed of the predictions being made.
-  /// This workflow's purpose is to filter down the inputs to queue for the collector to process.
-  /// The input to this workflow is going to be the OUTPUT of the model, not the input to the model
-  /// since we want to encourage having fast workflows that can also take advantage of the model
-  /// outputs to make deciions (for example: thresholding based on concepts). If the workflow
-  /// output has any field that is non-empty then the input will be queued for the collector
-  /// to process with the post_queue_workflow_id.
-  ///
-  /// As a simpler alternative, pre_queue_random_sample can be set to just use random sampling instead.
-  public var preQueueWorkflowID: String {
-    get {return _storage._preQueueWorkflowID}
-    set {_uniqueStorage()._preQueueWorkflowID = newValue}
-  }
-
-  /// Instead of needing to create a new workflow for pre_queue_workflow_id, if just random sampling
-  /// of the model inputs is required, then pre_queue_random_sample can be set to a value from (0-1]
-  /// to denote the fraction of inputs to collect.
-  public var preQueueRandomSample: Float {
-    get {return _storage._preQueueRandomSample}
-    set {_uniqueStorage()._preQueueRandomSample = newValue}
-  }
-
-  /// A workflow to run to after the collector is processing the queued input. This workflow
-  /// uses the original input to the model as input to the workflow so that you can run additional
-  /// models as well on that input to decide whether to queue the model or not. If the workflow
-  /// output has any field that is non-empty then it will be passed on to POST /inputs to
-  /// the destination app.
-  public var postQueueWorkflowID: String {
-    get {return _storage._postQueueWorkflowID}
-    set {_uniqueStorage()._postQueueWorkflowID = newValue}
-  }
-
-  /// The source of the collector to feed data into this app.
-  /// Note(zeiler): if we wanted more than one source per collector we could make this it's own
-  /// object and introduce /collectors/{collector_id}/sources
-  /// We will keep it simple for now and have just one source per collector since a user can make
-  /// more than one collector in the same app anyways.
-  public var collectorSource: Clarifai_Api_CollectorSource {
-    get {return _storage._collectorSource ?? Clarifai_Api_CollectorSource()}
-    set {_uniqueStorage()._collectorSource = newValue}
-  }
-  /// Returns true if `collectorSource` has been explicitly set.
-  public var hasCollectorSource: Bool {return _storage._collectorSource != nil}
-  /// Clears the value of `collectorSource`. Subsequent reads from it will return its default value.
-  public mutating func clearCollectorSource() {_uniqueStorage()._collectorSource = nil}
-
-  /// Status for the collector. This allows you to pause a collector without having to delete it as
-  /// an example.
-  public var status: Clarifai_Api_Status_Status {
-    get {return _storage._status ?? Clarifai_Api_Status_Status()}
-    set {_uniqueStorage()._status = newValue}
-  }
-  /// Returns true if `status` has been explicitly set.
-  public var hasStatus: Bool {return _storage._status != nil}
-  /// Clears the value of `status`. Subsequent reads from it will return its default value.
-  public mutating func clearStatus() {_uniqueStorage()._status = nil}
-
-  /// Whether to collect outputs or not. Default is false. If selected, outputs from the
-  /// original model predict call will be posted as annotations along with the input with success status.
-  public var collectOutputs: Bool {
-    get {return _storage._collectOutputs}
-    set {_uniqueStorage()._collectOutputs = newValue}
-  }
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _storage = _StorageClass.defaultInstance
-}
-
-/// Configuration for the source to collect data from.
-/// Only one of the fields can be present at a time.
-public struct Clarifai_Api_CollectorSource {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// Collect from the inputs passed in for PostModelOutputs predictions of a specific model.
-  /// This does not apply to models used within workflows, only PostModelOutputs calls.
-  public var apiPostModelOutputsCollectorSource: Clarifai_Api_APIPostModelOutputsCollectorSource {
-    get {return _apiPostModelOutputsCollectorSource ?? Clarifai_Api_APIPostModelOutputsCollectorSource()}
-    set {_apiPostModelOutputsCollectorSource = newValue}
-  }
-  /// Returns true if `apiPostModelOutputsCollectorSource` has been explicitly set.
-  public var hasApiPostModelOutputsCollectorSource: Bool {return self._apiPostModelOutputsCollectorSource != nil}
-  /// Clears the value of `apiPostModelOutputsCollectorSource`. Subsequent reads from it will return its default value.
-  public mutating func clearApiPostModelOutputsCollectorSource() {self._apiPostModelOutputsCollectorSource = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _apiPostModelOutputsCollectorSource: Clarifai_Api_APIPostModelOutputsCollectorSource? = nil
-}
-
-/// This is configuration for using the inputs send for model prediction in our API as
-/// as the source for data.
-public struct Clarifai_Api_APIPostModelOutputsCollectorSource {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// To define the model that we should collect from we need to specify the following 4 IDs:
-  /// The User ID of the model we want to collect from.
-  /// This is User B in the example.
-  public var modelUserID: String = String()
-
-  /// The App ID of the model we want to collect from.
-  public var modelAppID: String = String()
-
-  /// The Model ID of the model we want to collect from.
-  public var modelID: String = String()
-
-  /// The Version ID of the model we want to collect from.
-  public var modelVersionID: String = String()
-
-  /// This key is used to POST /inputs into your app by the collector. It can be an API key or a
-  /// PAT. This needs the permissions that are needed for POST /inputs for the app_id this
-  /// Collector is defined in.
-  public var postInputsKeyID: String = String()
-
-  /// This is a private field that defaults to the app owner for public users.
-  /// If this is left blank then this collector will collect from ALL users calling the given model.
-  public var callerUserID: String = String()
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
 }
 
 /// StatValue
@@ -12411,6 +12226,10 @@ public struct Clarifai_Api_RunnerMetrics {
   /// This accumulates across scale-up/down cycles and is reported by the agent.
   public var totalPodsRunningTimeS: UInt32 = 0
 
+  /// Cumulative count of pods that have been preempted by the k8s scheduler.
+  /// This accumulates across reconcile cycles and is reported by the agent.
+  public var podsPreemptedTotal: UInt32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -12544,6 +12363,14 @@ public struct Clarifai_Api_Runner {
   public var minReplicas: UInt32 {
     get {return _storage._minReplicas}
     set {_uniqueStorage()._minReplicas = newValue}
+  }
+
+  /// The scheduling priority for this runner's k8s deployment.
+  /// Valid values are 0-9, where higher values indicate higher priority.
+  /// This value comes from the deployment nodepool's priority setting.
+  public var priority: UInt32 {
+    get {return _storage._priority}
+    set {_uniqueStorage()._priority = newValue}
   }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -13163,9 +12990,9 @@ public struct Clarifai_Api_AutoscaleConfig {
   public init() {}
 }
 
-/// DeploymentMetrics captures metrics and status for a Deployment's underlying runners.
-/// This allows tracking of the desired replica count and the actual live replica count.
-public struct Clarifai_Api_DeploymentMetrics {
+/// DeploymentMetricsSummary holds the core deployment metrics fields, reusable as both
+/// an aggregate across all nodepools and per-individual-nodepool metrics.
+public struct Clarifai_Api_DeploymentMetricsSummary {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -13176,12 +13003,77 @@ public struct Clarifai_Api_DeploymentMetrics {
   /// The actual number of live replicas connected and ready to process requests.
   public var liveReplicas: UInt32 = 0
 
-  /// If true, the deployment is currently rolling out a new version.
+  /// If true, a new version is currently being rolled out.
   public var rolloutInProgress: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+}
+
+/// NodepoolDeploymentMetrics captures metrics for a single nodepool within a Deployment.
+public struct Clarifai_Api_NodepoolDeploymentMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The user-facing compute cluster ID.
+  public var computeClusterID: String = String()
+
+  /// The user-facing nodepool ID.
+  public var nodepoolID: String = String()
+
+  /// Metrics for this nodepool.
+  public var metrics: Clarifai_Api_DeploymentMetricsSummary {
+    get {return _metrics ?? Clarifai_Api_DeploymentMetricsSummary()}
+    set {_metrics = newValue}
+  }
+  /// Returns true if `metrics` has been explicitly set.
+  public var hasMetrics: Bool {return self._metrics != nil}
+  /// Clears the value of `metrics`. Subsequent reads from it will return its default value.
+  public mutating func clearMetrics() {self._metrics = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _metrics: Clarifai_Api_DeploymentMetricsSummary? = nil
+}
+
+/// DeploymentMetrics captures metrics and status for a Deployment's underlying runners.
+/// This allows tracking of the desired replica count and the actual live replica count.
+public struct Clarifai_Api_DeploymentMetrics {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Deprecated: use aggregate instead.
+  public var desiredReplicas: UInt32 = 0
+
+  /// Deprecated: use aggregate instead.
+  public var liveReplicas: UInt32 = 0
+
+  /// Deprecated: use aggregate instead.
+  public var rolloutInProgress: Bool = false
+
+  /// Per-nodepool breakdown of metrics.
+  public var nodepoolMetrics: [Clarifai_Api_NodepoolDeploymentMetrics] = []
+
+  /// Aggregate metrics across all nodepools.
+  public var aggregate: Clarifai_Api_DeploymentMetricsSummary {
+    get {return _aggregate ?? Clarifai_Api_DeploymentMetricsSummary()}
+    set {_aggregate = newValue}
+  }
+  /// Returns true if `aggregate` has been explicitly set.
+  public var hasAggregate: Bool {return self._aggregate != nil}
+  /// Clears the value of `aggregate`. Subsequent reads from it will return its default value.
+  public mutating func clearAggregate() {self._aggregate = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _aggregate: Clarifai_Api_DeploymentMetricsSummary? = nil
 }
 
 /// A deployment allows you to configure how runners for a particular type of resource will
@@ -16902,8 +16794,10 @@ extension Clarifai_Api_EventType: SwiftProtobuf._ProtoNameProviding {
 extension Clarifai_Api_MetricType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "METRIC_TYPE_NOT_SET"),
-    1: .same(proto: "MODEL_REQUEST_COUNT"),
-    2: .same(proto: "MODEL_LATENCY"),
+    1: .same(proto: "MODEL_TTFT"),
+    2: .same(proto: "MODEL_THROUGHPUT"),
+    3: .same(proto: "MODEL_PROMPT_TOKEN_THROUGHPUT"),
+    4: .same(proto: "MODEL_COMPLETION_TOKEN_THROUGHPUT"),
   ]
 }
 
@@ -16913,8 +16807,7 @@ extension Clarifai_Api_MetricLabel: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "APP_ID"),
     2: .same(proto: "MODEL_ID"),
     3: .same(proto: "MODEL_VERSION_ID"),
-    4: .same(proto: "CALLER_USER_ID"),
-    5: .same(proto: "WORKFLOW_ID"),
+    4: .same(proto: "HTTP_STATUS"),
   ]
 }
 
@@ -24994,6 +24887,7 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     6: .same(proto: "data"),
     7: .standard(proto: "prompt_tokens"),
     8: .standard(proto: "completion_tokens"),
+    9: .standard(proto: "cached_tokens"),
   ]
 
   fileprivate class _StorageClass {
@@ -25005,6 +24899,7 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _data: Clarifai_Api_Data? = nil
     var _promptTokens: UInt32 = 0
     var _completionTokens: UInt32 = 0
+    var _cachedTokens: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -25019,6 +24914,7 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _data = source._data
       _promptTokens = source._promptTokens
       _completionTokens = source._completionTokens
+      _cachedTokens = source._cachedTokens
     }
   }
 
@@ -25045,6 +24941,7 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._data) }()
         case 7: try { try decoder.decodeSingularUInt32Field(value: &_storage._promptTokens) }()
         case 8: try { try decoder.decodeSingularUInt32Field(value: &_storage._completionTokens) }()
+        case 9: try { try decoder.decodeSingularUInt32Field(value: &_storage._cachedTokens) }()
         default: break
         }
       }
@@ -25081,6 +24978,9 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       if _storage._completionTokens != 0 {
         try visitor.visitSingularUInt32Field(value: _storage._completionTokens, fieldNumber: 8)
       }
+      if _storage._cachedTokens != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._cachedTokens, fieldNumber: 9)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -25098,6 +24998,7 @@ extension Clarifai_Api_Output: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._data != rhs_storage._data {return false}
         if _storage._promptTokens != rhs_storage._promptTokens {return false}
         if _storage._completionTokens != rhs_storage._completionTokens {return false}
+        if _storage._cachedTokens != rhs_storage._cachedTokens {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -28947,236 +28848,6 @@ extension Clarifai_Api_Team: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Clarifai_Api_Collector: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".Collector"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .same(proto: "description"),
-    3: .standard(proto: "created_at"),
-    4: .standard(proto: "pre_queue_workflow_id"),
-    8: .standard(proto: "pre_queue_random_sample"),
-    5: .standard(proto: "post_queue_workflow_id"),
-    6: .standard(proto: "collector_source"),
-    7: .same(proto: "status"),
-    9: .standard(proto: "collect_outputs"),
-  ]
-
-  fileprivate class _StorageClass {
-    var _id: String = String()
-    var _description_p: String = String()
-    var _createdAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _preQueueWorkflowID: String = String()
-    var _preQueueRandomSample: Float = 0
-    var _postQueueWorkflowID: String = String()
-    var _collectorSource: Clarifai_Api_CollectorSource? = nil
-    var _status: Clarifai_Api_Status_Status? = nil
-    var _collectOutputs: Bool = false
-
-    static let defaultInstance = _StorageClass()
-
-    private init() {}
-
-    init(copying source: _StorageClass) {
-      _id = source._id
-      _description_p = source._description_p
-      _createdAt = source._createdAt
-      _preQueueWorkflowID = source._preQueueWorkflowID
-      _preQueueRandomSample = source._preQueueRandomSample
-      _postQueueWorkflowID = source._postQueueWorkflowID
-      _collectorSource = source._collectorSource
-      _status = source._status
-      _collectOutputs = source._collectOutputs
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularStringField(value: &_storage._id) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._description_p) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._createdAt) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._preQueueWorkflowID) }()
-        case 5: try { try decoder.decodeSingularStringField(value: &_storage._postQueueWorkflowID) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._collectorSource) }()
-        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._status) }()
-        case 8: try { try decoder.decodeSingularFloatField(value: &_storage._preQueueRandomSample) }()
-        case 9: try { try decoder.decodeSingularBoolField(value: &_storage._collectOutputs) }()
-        default: break
-        }
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      if !_storage._id.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._id, fieldNumber: 1)
-      }
-      if !_storage._description_p.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._description_p, fieldNumber: 2)
-      }
-      try { if let v = _storage._createdAt {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-      } }()
-      if !_storage._preQueueWorkflowID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._preQueueWorkflowID, fieldNumber: 4)
-      }
-      if !_storage._postQueueWorkflowID.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._postQueueWorkflowID, fieldNumber: 5)
-      }
-      try { if let v = _storage._collectorSource {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-      } }()
-      try { if let v = _storage._status {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-      } }()
-      if _storage._preQueueRandomSample != 0 {
-        try visitor.visitSingularFloatField(value: _storage._preQueueRandomSample, fieldNumber: 8)
-      }
-      if _storage._collectOutputs != false {
-        try visitor.visitSingularBoolField(value: _storage._collectOutputs, fieldNumber: 9)
-      }
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_Collector, rhs: Clarifai_Api_Collector) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._id != rhs_storage._id {return false}
-        if _storage._description_p != rhs_storage._description_p {return false}
-        if _storage._createdAt != rhs_storage._createdAt {return false}
-        if _storage._preQueueWorkflowID != rhs_storage._preQueueWorkflowID {return false}
-        if _storage._preQueueRandomSample != rhs_storage._preQueueRandomSample {return false}
-        if _storage._postQueueWorkflowID != rhs_storage._postQueueWorkflowID {return false}
-        if _storage._collectorSource != rhs_storage._collectorSource {return false}
-        if _storage._status != rhs_storage._status {return false}
-        if _storage._collectOutputs != rhs_storage._collectOutputs {return false}
-        return true
-      }
-      if !storagesAreEqual {return false}
-    }
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_CollectorSource: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".CollectorSource"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    2: .standard(proto: "api_post_model_outputs_collector_source"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._apiPostModelOutputsCollectorSource) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._apiPostModelOutputsCollectorSource {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_CollectorSource, rhs: Clarifai_Api_CollectorSource) -> Bool {
-    if lhs._apiPostModelOutputsCollectorSource != rhs._apiPostModelOutputsCollectorSource {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_APIPostModelOutputsCollectorSource: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".APIPostModelOutputsCollectorSource"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "model_user_id"),
-    2: .standard(proto: "model_app_id"),
-    3: .standard(proto: "model_id"),
-    4: .standard(proto: "model_version_id"),
-    5: .standard(proto: "post_inputs_key_id"),
-    6: .standard(proto: "caller_user_id"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.modelUserID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.modelAppID) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.modelID) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.modelVersionID) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.postInputsKeyID) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self.callerUserID) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.modelUserID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelUserID, fieldNumber: 1)
-    }
-    if !self.modelAppID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelAppID, fieldNumber: 2)
-    }
-    if !self.modelID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelID, fieldNumber: 3)
-    }
-    if !self.modelVersionID.isEmpty {
-      try visitor.visitSingularStringField(value: self.modelVersionID, fieldNumber: 4)
-    }
-    if !self.postInputsKeyID.isEmpty {
-      try visitor.visitSingularStringField(value: self.postInputsKeyID, fieldNumber: 5)
-    }
-    if !self.callerUserID.isEmpty {
-      try visitor.visitSingularStringField(value: self.callerUserID, fieldNumber: 6)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_APIPostModelOutputsCollectorSource, rhs: Clarifai_Api_APIPostModelOutputsCollectorSource) -> Bool {
-    if lhs.modelUserID != rhs.modelUserID {return false}
-    if lhs.modelAppID != rhs.modelAppID {return false}
-    if lhs.modelID != rhs.modelID {return false}
-    if lhs.modelVersionID != rhs.modelVersionID {return false}
-    if lhs.postInputsKeyID != rhs.postInputsKeyID {return false}
-    if lhs.callerUserID != rhs.callerUserID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Clarifai_Api_StatValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".StatValue"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -31435,6 +31106,7 @@ extension Clarifai_Api_RunnerMetrics: SwiftProtobuf.Message, SwiftProtobuf._Mess
     1: .standard(proto: "pods_total"),
     2: .standard(proto: "pods_running"),
     3: .standard(proto: "total_pods_running_time_s"),
+    4: .standard(proto: "pods_preempted_total"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -31446,6 +31118,7 @@ extension Clarifai_Api_RunnerMetrics: SwiftProtobuf.Message, SwiftProtobuf._Mess
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self.podsTotal) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self.podsRunning) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self.totalPodsRunningTimeS) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self.podsPreemptedTotal) }()
       default: break
       }
     }
@@ -31461,6 +31134,9 @@ extension Clarifai_Api_RunnerMetrics: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if self.totalPodsRunningTimeS != 0 {
       try visitor.visitSingularUInt32Field(value: self.totalPodsRunningTimeS, fieldNumber: 3)
     }
+    if self.podsPreemptedTotal != 0 {
+      try visitor.visitSingularUInt32Field(value: self.podsPreemptedTotal, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -31468,6 +31144,7 @@ extension Clarifai_Api_RunnerMetrics: SwiftProtobuf.Message, SwiftProtobuf._Mess
     if lhs.podsTotal != rhs.podsTotal {return false}
     if lhs.podsRunning != rhs.podsRunning {return false}
     if lhs.totalPodsRunningTimeS != rhs.totalPodsRunningTimeS {return false}
+    if lhs.podsPreemptedTotal != rhs.podsPreemptedTotal {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -31489,6 +31166,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     12: .standard(proto: "special_handling"),
     13: .standard(proto: "runner_metrics"),
     14: .standard(proto: "min_replicas"),
+    15: .same(proto: "priority"),
   ]
 
   fileprivate class _StorageClass {
@@ -31505,6 +31183,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
     var _runnerMetrics: Clarifai_Api_RunnerMetrics? = nil
     var _minReplicas: UInt32 = 0
+    var _priority: UInt32 = 0
 
     static let defaultInstance = _StorageClass()
 
@@ -31524,6 +31203,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       _specialHandling = source._specialHandling
       _runnerMetrics = source._runnerMetrics
       _minReplicas = source._minReplicas
+      _priority = source._priority
     }
   }
 
@@ -31555,6 +31235,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._specialHandling) }()
         case 13: try { try decoder.decodeSingularMessageField(value: &_storage._runnerMetrics) }()
         case 14: try { try decoder.decodeSingularUInt32Field(value: &_storage._minReplicas) }()
+        case 15: try { try decoder.decodeSingularUInt32Field(value: &_storage._priority) }()
         default: break
         }
       }
@@ -31606,6 +31287,9 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       if _storage._minReplicas != 0 {
         try visitor.visitSingularUInt32Field(value: _storage._minReplicas, fieldNumber: 14)
       }
+      if _storage._priority != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._priority, fieldNumber: 15)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31628,6 +31312,7 @@ extension Clarifai_Api_Runner: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
         if _storage._runnerMetrics != rhs_storage._runnerMetrics {return false}
         if _storage._minReplicas != rhs_storage._minReplicas {return false}
+        if _storage._priority != rhs_storage._priority {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -32409,8 +32094,8 @@ extension Clarifai_Api_AutoscaleConfig: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Clarifai_Api_DeploymentMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".DeploymentMetrics"
+extension Clarifai_Api_DeploymentMetricsSummary: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeploymentMetricsSummary"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "desired_replicas"),
     2: .standard(proto: "live_replicas"),
@@ -32444,10 +32129,118 @@ extension Clarifai_Api_DeploymentMetrics: SwiftProtobuf.Message, SwiftProtobuf._
     try unknownFields.traverse(visitor: &visitor)
   }
 
+  public static func ==(lhs: Clarifai_Api_DeploymentMetricsSummary, rhs: Clarifai_Api_DeploymentMetricsSummary) -> Bool {
+    if lhs.desiredReplicas != rhs.desiredReplicas {return false}
+    if lhs.liveReplicas != rhs.liveReplicas {return false}
+    if lhs.rolloutInProgress != rhs.rolloutInProgress {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_NodepoolDeploymentMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".NodepoolDeploymentMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "compute_cluster_id"),
+    2: .standard(proto: "nodepool_id"),
+    3: .same(proto: "metrics"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.computeClusterID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.nodepoolID) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._metrics) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.computeClusterID.isEmpty {
+      try visitor.visitSingularStringField(value: self.computeClusterID, fieldNumber: 1)
+    }
+    if !self.nodepoolID.isEmpty {
+      try visitor.visitSingularStringField(value: self.nodepoolID, fieldNumber: 2)
+    }
+    try { if let v = self._metrics {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Clarifai_Api_NodepoolDeploymentMetrics, rhs: Clarifai_Api_NodepoolDeploymentMetrics) -> Bool {
+    if lhs.computeClusterID != rhs.computeClusterID {return false}
+    if lhs.nodepoolID != rhs.nodepoolID {return false}
+    if lhs._metrics != rhs._metrics {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Clarifai_Api_DeploymentMetrics: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".DeploymentMetrics"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "desired_replicas"),
+    2: .standard(proto: "live_replicas"),
+    3: .standard(proto: "rollout_in_progress"),
+    4: .standard(proto: "nodepool_metrics"),
+    5: .same(proto: "aggregate"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.desiredReplicas) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.liveReplicas) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.rolloutInProgress) }()
+      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.nodepoolMetrics) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._aggregate) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.desiredReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.desiredReplicas, fieldNumber: 1)
+    }
+    if self.liveReplicas != 0 {
+      try visitor.visitSingularUInt32Field(value: self.liveReplicas, fieldNumber: 2)
+    }
+    if self.rolloutInProgress != false {
+      try visitor.visitSingularBoolField(value: self.rolloutInProgress, fieldNumber: 3)
+    }
+    if !self.nodepoolMetrics.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.nodepoolMetrics, fieldNumber: 4)
+    }
+    try { if let v = self._aggregate {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
   public static func ==(lhs: Clarifai_Api_DeploymentMetrics, rhs: Clarifai_Api_DeploymentMetrics) -> Bool {
     if lhs.desiredReplicas != rhs.desiredReplicas {return false}
     if lhs.liveReplicas != rhs.liveReplicas {return false}
     if lhs.rolloutInProgress != rhs.rolloutInProgress {return false}
+    if lhs.nodepoolMetrics != rhs.nodepoolMetrics {return false}
+    if lhs._aggregate != rhs._aggregate {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

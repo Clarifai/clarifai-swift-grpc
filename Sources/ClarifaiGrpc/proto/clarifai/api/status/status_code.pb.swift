@@ -292,7 +292,7 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case dataDumpExportInProgress // = 25173
   case dataDumpExportUnexpectedError // = 25174
 
-  /// Duplicate related 252xx
+  /// Duplicate related 252xx - DEPRECATED: App duplication is no longer supported.
   case appDuplicationSuccess // = 25200
   case appDuplicationFailed // = 25201
   case appDuplicationPending // = 25202
@@ -557,12 +557,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
   case workerMissing // = 51000
   case workerActive // = 51001
   case workerInactive // = 51002
-
-  /// Collectors 52xxx
-  case collectorMissing // = 52000
-  case collectorActive // = 52001
-  case collectorInactive // = 52002
-  case collectorPostInputFailed // = 52003
 
   /// SSO 53xxx
   case ssoIdentityProviderDoesNotExist // = 53001
@@ -1087,10 +1081,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case 51000: self = .workerMissing
     case 51001: self = .workerActive
     case 51002: self = .workerInactive
-    case 52000: self = .collectorMissing
-    case 52001: self = .collectorActive
-    case 52002: self = .collectorInactive
-    case 52003: self = .collectorPostInputFailed
     case 53001: self = .ssoIdentityProviderDoesNotExist
     case 54001: self = .taskInProgress
     case 54002: self = .taskDone
@@ -1522,10 +1512,6 @@ public enum Clarifai_Api_Status_StatusCode: SwiftProtobuf.Enum {
     case .workerMissing: return 51000
     case .workerActive: return 51001
     case .workerInactive: return 51002
-    case .collectorMissing: return 52000
-    case .collectorActive: return 52001
-    case .collectorInactive: return 52002
-    case .collectorPostInputFailed: return 52003
     case .ssoIdentityProviderDoesNotExist: return 53001
     case .taskInProgress: return 54001
     case .taskDone: return 54002
@@ -1962,10 +1948,6 @@ extension Clarifai_Api_Status_StatusCode: CaseIterable {
     .workerMissing,
     .workerActive,
     .workerInactive,
-    .collectorMissing,
-    .collectorActive,
-    .collectorInactive,
-    .collectorPostInputFailed,
     .ssoIdentityProviderDoesNotExist,
     .taskInProgress,
     .taskDone,
@@ -2400,10 +2382,6 @@ extension Clarifai_Api_Status_StatusCode: SwiftProtobuf._ProtoNameProviding {
     51000: .same(proto: "WORKER_MISSING"),
     51001: .same(proto: "WORKER_ACTIVE"),
     51002: .same(proto: "WORKER_INACTIVE"),
-    52000: .same(proto: "COLLECTOR_MISSING"),
-    52001: .same(proto: "COLLECTOR_ACTIVE"),
-    52002: .same(proto: "COLLECTOR_INACTIVE"),
-    52003: .same(proto: "COLLECTOR_POST_INPUT_FAILED"),
     53001: .same(proto: "SSO_IDENTITY_PROVIDER_DOES_NOT_EXIST"),
     54001: .same(proto: "TASK_IN_PROGRESS"),
     54002: .same(proto: "TASK_DONE"),

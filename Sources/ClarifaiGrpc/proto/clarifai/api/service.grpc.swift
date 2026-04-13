@@ -898,31 +898,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>
 
-  func postCollectors(
-    _ request: Clarifai_Api_PostCollectorsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse>
-
-  func getCollector(
-    _ request: Clarifai_Api_GetCollectorRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse>
-
-  func listCollectors(
-    _ request: Clarifai_Api_ListCollectorsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse>
-
-  func patchCollectors(
-    _ request: Clarifai_Api_PatchCollectorsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse>
-
-  func deleteCollectors(
-    _ request: Clarifai_Api_DeleteCollectorsRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse>
-
   func postStatValues(
     _ request: Clarifai_Api_PostStatValuesRequest,
     callOptions: CallOptions?
@@ -4365,17 +4340,9 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Deprecated: App duplication is no longer supported.
   /// PostAppDuplications starts async app duplication jobs which copy resources
-  /// (inputs, annotations, models etc) from one application to another. It can
-  /// also create the destination application if it does not exist, with fields
-  /// (description, metadata etc) copied from the source application.
-  ///
-  /// A duplication job can be started by any user that can read from the source
-  /// application (the target of this call) and can create and write to the
-  /// destination application. The duplication is associated with the user that
-  /// created it, so in order to read the status and progress of the job, that
-  /// user's ID has to be used in the call to GetAppDuplication, which might be
-  /// different to the source application owner ID in this call.
+  /// (inputs, annotations, models etc) from one application to another.
   ///
   /// - Parameters:
   ///   - request: Request to send to PostAppDuplications.
@@ -4393,6 +4360,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Deprecated: App duplication is no longer supported.
   /// ListAppDuplications lists all app duplication jobs created by the user.
   ///
   /// - Parameters:
@@ -4411,6 +4379,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
+  /// Deprecated: App duplication is no longer supported.
   /// GetAppDuplication returns an app duplication job created by the user.
   ///
   /// - Parameters:
@@ -4643,102 +4612,6 @@ extension Clarifai_Api_V2ClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeDeleteLabelOrdersInterceptors() ?? []
-    )
-  }
-
-  /// Add a list of Collectors to an app.
-  /// In the handler of this endpoint we also check for all the scopes of the  POST /inputs
-  /// endpoint.
-  /// Those current scopes are listed here as a hard requirement.
-  /// They are needed when adding the collectors just so we now that you have permission with
-  /// that key at least to do the writing to this app with POST /inputs.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostCollectors.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postCollectors(
-    _ request: Clarifai_Api_PostCollectorsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostCollectors",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostCollectorsInterceptors() ?? []
-    )
-  }
-
-  /// Get a specific collector from an app.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to GetCollector.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func getCollector(
-    _ request: Clarifai_Api_GetCollectorRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/GetCollector",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeGetCollectorInterceptors() ?? []
-    )
-  }
-
-  /// List all the collectors.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to ListCollectors.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listCollectors(
-    _ request: Clarifai_Api_ListCollectorsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/ListCollectors",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListCollectorsInterceptors() ?? []
-    )
-  }
-
-  /// Patch one or more collectors.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PatchCollectors.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func patchCollectors(
-    _ request: Clarifai_Api_PatchCollectorsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PatchCollectors",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePatchCollectorsInterceptors() ?? []
-    )
-  }
-
-  /// Delete multiple collectors in one request.
-  /// This call is asynchronous. Use DeleteCollector if you want a synchronous version.
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to DeleteCollectors.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteCollectors(
-    _ request: Clarifai_Api_DeleteCollectorsRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/DeleteCollectors",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteCollectorsInterceptors() ?? []
     )
   }
 
@@ -6340,7 +6213,7 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate. 
+  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate.
   /// This is a convenience endpoint for users to quickly get started with running pipelines.
   ///
   /// - Parameters:
@@ -7157,21 +7030,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'deleteLabelOrders'.
   func makeDeleteLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postCollectors'.
-  func makePostCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'getCollector'.
-  func makeGetCollectorInterceptors() -> [ClientInterceptor<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'listCollectors'.
-  func makeListCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'patchCollectors'.
-  func makePatchCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'deleteCollectors'.
-  func makeDeleteCollectorsInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when invoking 'postStatValues'.
   func makePostStatValuesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>]
@@ -8037,22 +7895,16 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Collaboration includes the app user are invitied to work on
   func listCollaborations(request: Clarifai_Api_ListCollaborationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollaborationsResponse>
 
+  /// Deprecated: App duplication is no longer supported.
   /// PostAppDuplications starts async app duplication jobs which copy resources
-  /// (inputs, annotations, models etc) from one application to another. It can
-  /// also create the destination application if it does not exist, with fields
-  /// (description, metadata etc) copied from the source application.
-  ///
-  /// A duplication job can be started by any user that can read from the source
-  /// application (the target of this call) and can create and write to the
-  /// destination application. The duplication is associated with the user that
-  /// created it, so in order to read the status and progress of the job, that
-  /// user's ID has to be used in the call to GetAppDuplication, which might be
-  /// different to the source application owner ID in this call.
+  /// (inputs, annotations, models etc) from one application to another.
   func postAppDuplications(request: Clarifai_Api_PostAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
 
+  /// Deprecated: App duplication is no longer supported.
   /// ListAppDuplications lists all app duplication jobs created by the user.
   func listAppDuplications(request: Clarifai_Api_ListAppDuplicationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiAppDuplicationsResponse>
 
+  /// Deprecated: App duplication is no longer supported.
   /// GetAppDuplication returns an app duplication job created by the user.
   func getAppDuplication(request: Clarifai_Api_GetAppDuplicationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleAppDuplicationResponse>
 
@@ -8092,27 +7944,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple label orders in one request.
   /// this do not change task status
   func deleteLabelOrders(request: Clarifai_Api_DeleteLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// Add a list of Collectors to an app.
-  /// In the handler of this endpoint we also check for all the scopes of the  POST /inputs
-  /// endpoint.
-  /// Those current scopes are listed here as a hard requirement.
-  /// They are needed when adding the collectors just so we now that you have permission with
-  /// that key at least to do the writing to this app with POST /inputs.
-  func postCollectors(request: Clarifai_Api_PostCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
-
-  /// Get a specific collector from an app.
-  func getCollector(request: Clarifai_Api_GetCollectorRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_SingleCollectorResponse>
-
-  /// List all the collectors.
-  func listCollectors(request: Clarifai_Api_ListCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
-
-  /// Patch one or more collectors.
-  func patchCollectors(request: Clarifai_Api_PatchCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiCollectorResponse>
-
-  /// Delete multiple collectors in one request.
-  /// This call is asynchronous. Use DeleteCollector if you want a synchronous version.
-  func deleteCollectors(request: Clarifai_Api_DeleteCollectorsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
 
   /// PostStatValues
   func postStatValues(request: Clarifai_Api_PostStatValuesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueResponse>
@@ -8368,7 +8199,7 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Lists pipeline templates, which are ready-to-use templates that can simply be run on demand.
   func listPipelineTemplates(request: Clarifai_Api_ListPipelineTemplatesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiPipelineTemplateResponse>
 
-  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate. 
+  /// Creates a Pipeline, PipelineVersion, and PipelineVersionRun from a PipelineTemplate.
   /// This is a convenience endpoint for users to quickly get started with running pipelines.
   func postPipelineVersionRunFromTemplate(request: Clarifai_Api_PostPipelineVersionRunFromTemplateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_PostPipelineVersionRunFromTemplateResponse>
 
@@ -9973,51 +9804,6 @@ extension Clarifai_Api_V2Provider {
         responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
         interceptors: self.interceptors?.makeDeleteLabelOrdersInterceptors() ?? [],
         userFunction: self.deleteLabelOrders(request:context:)
-      )
-
-    case "PostCollectors":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostCollectorsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
-        interceptors: self.interceptors?.makePostCollectorsInterceptors() ?? [],
-        userFunction: self.postCollectors(request:context:)
-      )
-
-    case "GetCollector":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_GetCollectorRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_SingleCollectorResponse>(),
-        interceptors: self.interceptors?.makeGetCollectorInterceptors() ?? [],
-        userFunction: self.getCollector(request:context:)
-      )
-
-    case "ListCollectors":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_ListCollectorsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
-        interceptors: self.interceptors?.makeListCollectorsInterceptors() ?? [],
-        userFunction: self.listCollectors(request:context:)
-      )
-
-    case "PatchCollectors":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PatchCollectorsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiCollectorResponse>(),
-        interceptors: self.interceptors?.makePatchCollectorsInterceptors() ?? [],
-        userFunction: self.patchCollectors(request:context:)
-      )
-
-    case "DeleteCollectors":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_DeleteCollectorsRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_Status_BaseResponse>(),
-        interceptors: self.interceptors?.makeDeleteCollectorsInterceptors() ?? [],
-        userFunction: self.deleteCollectors(request:context:)
       )
 
     case "PostStatValues":
@@ -11637,26 +11423,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteLabelOrders'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postCollectors'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PostCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when handling 'getCollector'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeGetCollectorInterceptors() -> [ServerInterceptor<Clarifai_Api_GetCollectorRequest, Clarifai_Api_SingleCollectorResponse>]
-
-  /// - Returns: Interceptors to use when handling 'listCollectors'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_ListCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when handling 'patchCollectors'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePatchCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_PatchCollectorsRequest, Clarifai_Api_MultiCollectorResponse>]
-
-  /// - Returns: Interceptors to use when handling 'deleteCollectors'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteCollectorsInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteCollectorsRequest, Clarifai_Api_Status_BaseResponse>]
 
   /// - Returns: Interceptors to use when handling 'postStatValues'.
   ///   Defaults to calling `self.makeInterceptors()`.

@@ -43,10 +43,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 /// also specify cl_depending_scopes for each API endpoint. Those cover cases where an endpoint
 /// might need to access more than just that one resource type in order to operate (ie. API handlers
 /// that make multiple DB calls of various resource types likely have more cl_depending_scopes than
-/// the ones listed below). For example: PostCollectors to create a collector we make sure that you
-/// can do model predictions, get concepts, etc. so that you don't have a collector that would be
-/// useless at the end of that API handler but below you can see that the dependencies of Collector
-/// scopes are only on other Collector scopes.
+/// the ones listed below).
 public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -157,13 +154,9 @@ public enum Clarifai_Auth_Scope_S: SwiftProtobuf.Enum {
   /// To delete we need read/write.
   case annotationsDelete // = 40
 
-  /// Write to the collectors DB table.
+  /// Deprecated: collectors feature has been removed.
   case collectorsAdd // = 41
-
-  /// Read from the collectors DB table.
   case collectorsGet // = 42
-
-  /// To delete we need read/write.
   case collectorsDelete // = 43
 
   /// Write to the apps DB table.
