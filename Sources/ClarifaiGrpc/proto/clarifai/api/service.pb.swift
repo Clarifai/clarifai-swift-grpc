@@ -406,6 +406,12 @@ public struct Clarifai_Api_StreamAnnotationsRequest {
   /// Clears the value of `worker`. Subsequent reads from it will return its default value.
   public mutating func clearWorker() {self._worker = nil}
 
+  /// Optional minimum prediction confidence threshold (0.0 to 1.0).
+  /// When set (> 0), only annotations with at least one concept (tag) having
+  /// metadata.prediction_score >= this value are returned.
+  /// When unset (0), all annotations are returned (backwards compatible).
+  public var minPredictionScore: Float = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -432,6 +438,12 @@ public struct Clarifai_Api_StreamLivestreamAnnotationsRequest {
 
   /// The input ID containing the video being processed
   public var inputID: String = String()
+
+  /// Optional minimum prediction confidence threshold (0.0 to 1.0).
+  /// When set (> 0), only annotations with at least one concept (tag) having
+  /// metadata.prediction_score >= this value are streamed.
+  /// When unset (0), all annotations are streamed (backwards compatible).
+  public var minPredictionScore: Float = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -14227,6 +14239,7 @@ extension Clarifai_Api_StreamAnnotationsRequest: SwiftProtobuf.Message, SwiftPro
     7: .standard(proto: "max_frames"),
     8: .standard(proto: "max_duration"),
     9: .same(proto: "worker"),
+    10: .standard(proto: "min_prediction_score"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14244,6 +14257,7 @@ extension Clarifai_Api_StreamAnnotationsRequest: SwiftProtobuf.Message, SwiftPro
       case 7: try { try decoder.decodeSingularUInt32Field(value: &self.maxFrames) }()
       case 8: try { try decoder.decodeSingularUInt64Field(value: &self.maxDuration) }()
       case 9: try { try decoder.decodeSingularMessageField(value: &self._worker) }()
+      case 10: try { try decoder.decodeSingularFloatField(value: &self.minPredictionScore) }()
       default: break
       }
     }
@@ -14281,6 +14295,9 @@ extension Clarifai_Api_StreamAnnotationsRequest: SwiftProtobuf.Message, SwiftPro
     try { if let v = self._worker {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
     } }()
+    if self.minPredictionScore != 0 {
+      try visitor.visitSingularFloatField(value: self.minPredictionScore, fieldNumber: 10)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -14294,6 +14311,7 @@ extension Clarifai_Api_StreamAnnotationsRequest: SwiftProtobuf.Message, SwiftPro
     if lhs.maxFrames != rhs.maxFrames {return false}
     if lhs.maxDuration != rhs.maxDuration {return false}
     if lhs._worker != rhs._worker {return false}
+    if lhs.minPredictionScore != rhs.minPredictionScore {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -14304,6 +14322,7 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "user_app_id"),
     2: .standard(proto: "input_id"),
+    3: .standard(proto: "min_prediction_score"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -14314,6 +14333,7 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._userAppID) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.inputID) }()
+      case 3: try { try decoder.decodeSingularFloatField(value: &self.minPredictionScore) }()
       default: break
       }
     }
@@ -14330,12 +14350,16 @@ extension Clarifai_Api_StreamLivestreamAnnotationsRequest: SwiftProtobuf.Message
     if !self.inputID.isEmpty {
       try visitor.visitSingularStringField(value: self.inputID, fieldNumber: 2)
     }
+    if self.minPredictionScore != 0 {
+      try visitor.visitSingularFloatField(value: self.minPredictionScore, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: Clarifai_Api_StreamLivestreamAnnotationsRequest, rhs: Clarifai_Api_StreamLivestreamAnnotationsRequest) -> Bool {
     if lhs._userAppID != rhs._userAppID {return false}
     if lhs.inputID != rhs.inputID {return false}
+    if lhs.minPredictionScore != rhs.minPredictionScore {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

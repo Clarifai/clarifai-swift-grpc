@@ -1268,6 +1268,7 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
   case modelThroughput // = 2
   case modelPromptTokenThroughput // = 3
   case modelCompletionTokenThroughput // = 4
+  case modelRequestCount // = 5
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1281,6 +1282,7 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
     case 2: self = .modelThroughput
     case 3: self = .modelPromptTokenThroughput
     case 4: self = .modelCompletionTokenThroughput
+    case 5: self = .modelRequestCount
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1292,6 +1294,7 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
     case .modelThroughput: return 2
     case .modelPromptTokenThroughput: return 3
     case .modelCompletionTokenThroughput: return 4
+    case .modelRequestCount: return 5
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1308,6 +1311,7 @@ extension Clarifai_Api_MetricType: CaseIterable {
     .modelThroughput,
     .modelPromptTokenThroughput,
     .modelCompletionTokenThroughput,
+    .modelRequestCount,
   ]
 }
 
@@ -16798,6 +16802,7 @@ extension Clarifai_Api_MetricType: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "MODEL_THROUGHPUT"),
     3: .same(proto: "MODEL_PROMPT_TOKEN_THROUGHPUT"),
     4: .same(proto: "MODEL_COMPLETION_TOKEN_THROUGHPUT"),
+    5: .same(proto: "MODEL_REQUEST_COUNT"),
   ]
 }
 
