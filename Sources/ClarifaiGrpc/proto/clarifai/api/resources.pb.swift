@@ -781,106 +781,6 @@ extension Clarifai_Api_RoleType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-public enum Clarifai_Api_StatValueAggType: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-  case sum // = 0
-  case avg // = 1
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .sum
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .sum
-    case 1: self = .avg
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .sum: return 0
-    case .avg: return 1
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension Clarifai_Api_StatValueAggType: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_StatValueAggType] = [
-    .sum,
-    .avg,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
-public enum Clarifai_Api_StatTimeAggType: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-  case noTimeAgg // = 0
-  case year // = 1
-  case month // = 2
-  case week // = 3
-  case day // = 4
-  case hour // = 5
-  case minute // = 6
-  case UNRECOGNIZED(Int)
-
-  public init() {
-    self = .noTimeAgg
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .noTimeAgg
-    case 1: self = .year
-    case 2: self = .month
-    case 3: self = .week
-    case 4: self = .day
-    case 5: self = .hour
-    case 6: self = .minute
-    default: self = .UNRECOGNIZED(rawValue)
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .noTimeAgg: return 0
-    case .year: return 1
-    case .month: return 2
-    case .week: return 3
-    case .day: return 4
-    case .hour: return 5
-    case .minute: return 6
-    case .UNRECOGNIZED(let i): return i
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension Clarifai_Api_StatTimeAggType: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  public static var allCases: [Clarifai_Api_StatTimeAggType] = [
-    .noTimeAgg,
-    .year,
-    .month,
-    .week,
-    .day,
-    .hour,
-    .minute,
-  ]
-}
-
-#endif  // swift(>=4.2)
-
 public enum Clarifai_Api_ValidationErrorType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
@@ -1264,11 +1164,22 @@ extension Clarifai_Api_EventType: CaseIterable {
 public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case notSet // = 0
+
+  /// Model metrics: 1-50
   case modelTtft // = 1
   case modelThroughput // = 2
   case modelPromptTokenThroughput // = 3
   case modelCompletionTokenThroughput // = 4
   case modelRequestCount // = 5
+  case modelE2ELatency // = 6
+
+  /// Nodepool metrics: 51-100
+  case nodepoolNodeCount // = 51
+  case nodepoolGpuUtilization // = 52
+  case nodepoolGpuTensorUtilization // = 53
+  case nodepoolGpuMemoryUtilization // = 54
+  case nodepoolCpuUtilization // = 55
+  case nodepoolMemoryUtilization // = 56
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1283,6 +1194,13 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
     case 3: self = .modelPromptTokenThroughput
     case 4: self = .modelCompletionTokenThroughput
     case 5: self = .modelRequestCount
+    case 6: self = .modelE2ELatency
+    case 51: self = .nodepoolNodeCount
+    case 52: self = .nodepoolGpuUtilization
+    case 53: self = .nodepoolGpuTensorUtilization
+    case 54: self = .nodepoolGpuMemoryUtilization
+    case 55: self = .nodepoolCpuUtilization
+    case 56: self = .nodepoolMemoryUtilization
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1295,6 +1213,13 @@ public enum Clarifai_Api_MetricType: SwiftProtobuf.Enum {
     case .modelPromptTokenThroughput: return 3
     case .modelCompletionTokenThroughput: return 4
     case .modelRequestCount: return 5
+    case .modelE2ELatency: return 6
+    case .nodepoolNodeCount: return 51
+    case .nodepoolGpuUtilization: return 52
+    case .nodepoolGpuTensorUtilization: return 53
+    case .nodepoolGpuMemoryUtilization: return 54
+    case .nodepoolCpuUtilization: return 55
+    case .nodepoolMemoryUtilization: return 56
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1312,6 +1237,13 @@ extension Clarifai_Api_MetricType: CaseIterable {
     .modelPromptTokenThroughput,
     .modelCompletionTokenThroughput,
     .modelRequestCount,
+    .modelE2ELatency,
+    .nodepoolNodeCount,
+    .nodepoolGpuUtilization,
+    .nodepoolGpuTensorUtilization,
+    .nodepoolGpuMemoryUtilization,
+    .nodepoolCpuUtilization,
+    .nodepoolMemoryUtilization,
   ]
 }
 
@@ -1324,6 +1256,8 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
   case modelID // = 2
   case modelVersionID // = 3
   case httpStatus // = 4
+  case computeClusterID // = 5
+  case nodepoolID // = 6
   case UNRECOGNIZED(Int)
 
   public init() {
@@ -1337,6 +1271,8 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
     case 2: self = .modelID
     case 3: self = .modelVersionID
     case 4: self = .httpStatus
+    case 5: self = .computeClusterID
+    case 6: self = .nodepoolID
     default: self = .UNRECOGNIZED(rawValue)
     }
   }
@@ -1348,6 +1284,8 @@ public enum Clarifai_Api_MetricLabel: SwiftProtobuf.Enum {
     case .modelID: return 2
     case .modelVersionID: return 3
     case .httpStatus: return 4
+    case .computeClusterID: return 5
+    case .nodepoolID: return 6
     case .UNRECOGNIZED(let i): return i
     }
   }
@@ -1364,6 +1302,8 @@ extension Clarifai_Api_MetricLabel: CaseIterable {
     .modelID,
     .modelVersionID,
     .httpStatus,
+    .computeClusterID,
+    .nodepoolID,
   ]
 }
 
@@ -10556,161 +10496,6 @@ public struct Clarifai_Api_Team {
   fileprivate var _modifiedAt: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
-/// StatValue
-public struct Clarifai_Api_StatValue {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The time of the event. Defaults to now().
-  public var time: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _time ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_time = newValue}
-  }
-  /// Returns true if `time` has been explicitly set.
-  public var hasTime: Bool {return self._time != nil}
-  /// Clears the value of `time`. Subsequent reads from it will return its default value.
-  public mutating func clearTime() {self._time = nil}
-
-  /// A value for the metric you're recording.
-  public var value: Float = 0
-
-  /// List of tags to attach to this stat. Each should contain one colon so that the first part will
-  /// be used as a tag group while the second being the tag itself. For example: ["task_id:a",
-  /// "worker_id:1"]. These tag groups like "task_id" or "worker_id" are important for aggregating
-  /// values in the StatValueAggregateQuery.
-  public var tags: [String] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-}
-
-/// StatValueAggregateResult
-public struct Clarifai_Api_StatValueAggregateResult {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The list of repeated aggregate values and their counts.
-  public var statValueAggregates: [Clarifai_Api_StatValueAggregate] = []
-
-  /// The query that created these results.
-  public var statValueAggregateQuery: Clarifai_Api_StatValueAggregateQuery {
-    get {return _statValueAggregateQuery ?? Clarifai_Api_StatValueAggregateQuery()}
-    set {_statValueAggregateQuery = newValue}
-  }
-  /// Returns true if `statValueAggregateQuery` has been explicitly set.
-  public var hasStatValueAggregateQuery: Bool {return self._statValueAggregateQuery != nil}
-  /// Clears the value of `statValueAggregateQuery`. Subsequent reads from it will return its default value.
-  public mutating func clearStatValueAggregateQuery() {self._statValueAggregateQuery = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _statValueAggregateQuery: Clarifai_Api_StatValueAggregateQuery? = nil
-}
-
-/// StatValueAggregate
-public struct Clarifai_Api_StatValueAggregate {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// The time of the aggregation. For example, if you aggregate over "HOUR" buckets then you can
-  /// expect each hour that has atleast one value (matching the rest of your query fields) will have
-  /// a StatValueAggregate with the time filled into that hour.
-  public var time: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _time ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_time = newValue}
-  }
-  /// Returns true if `time` has been explicitly set.
-  public var hasTime: Bool {return self._time != nil}
-  /// Clears the value of `time`. Subsequent reads from it will return its default value.
-  public mutating func clearTime() {self._time = nil}
-
-  /// The value aggregated according to the stat_value_agg_type
-  public var aggregateValue: Float = 0
-
-  /// The count of the stat values that were used in this aggregation.
-  public var count: UInt64 = 0
-
-  /// The tags for this aggregated_value and count. This will be filled in if tag groups were used in
-  /// the query to group aggregations.
-  public var tags: [String] = []
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-}
-
-/// StatValueAggregateQuery
-public struct Clarifai_Api_StatValueAggregateQuery {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// These tags are used to filter down the values before they are aggregated. For example,
-  /// if you want to aggregate values for "task_id:a" you could specify that as a tag here.
-  public var tags: [String] = []
-
-  /// These are tag groups to aggregate over. So for example if you added stat values with tags
-  /// "task_id:a" and others with "task_id:b", then added ["task_id"] to the task group, it the
-  /// aggregation would return StatValueAggregate values for each task_id. If you provide more than
-  /// one tag_group the response will return all rolled up combinations of them. For example
-  /// ["task_id", "something"] where "something:1" and "something:2" were used as tags for some
-  /// values then you'd get StatValueAggregate values back for:
-  /// task_id | something
-  /// a       | 1
-  /// a       | 2
-  /// b       | 1
-  /// b       | 1
-  public var tagGroups: [String] = []
-
-  /// Aggregation function to use over the values. Count(value) is also always returns.
-  /// Defaults to 'sum' if not provided.
-  public var statValueAggType: Clarifai_Api_StatValueAggType = .sum
-
-  /// Aggregation bins for time where the values will be aggregated at this bin granualarity.
-  /// And the "time" field will be returned in StatValueAggregate object.
-  /// If not provided then bins are not used, and all time is aggregated over.
-  public var statTimeAggType: Clarifai_Api_StatTimeAggType = .noTimeAgg
-
-  /// If provided the time range over which values will be >= this time. If not provided then
-  /// all values will be used back to start of time.
-  public var startTime: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _startTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_startTime = newValue}
-  }
-  /// Returns true if `startTime` has been explicitly set.
-  public var hasStartTime: Bool {return self._startTime != nil}
-  /// Clears the value of `startTime`. Subsequent reads from it will return its default value.
-  public mutating func clearStartTime() {self._startTime = nil}
-
-  /// If provided the time range over which values will be <= this time. If not provided then all
-  /// values will be used up until now().
-  public var endTime: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _endTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_endTime = newValue}
-  }
-  /// Returns true if `endTime` has been explicitly set.
-  public var hasEndTime: Bool {return self._endTime != nil}
-  /// Clears the value of `endTime`. Subsequent reads from it will return its default value.
-  public mutating func clearEndTime() {self._endTime = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _startTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-  fileprivate var _endTime: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-}
-
 /// PCAProjectionComparator
 public struct Clarifai_Api_PCAProjectionComparator {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -14053,6 +13838,14 @@ public struct Clarifai_Api_ComputePlaneMetrics {
     set {_uniqueStorage()._cpuMetrics = newValue}
   }
 
+  /// When true, indicates this is the final metrics submission from a node that is being
+  /// terminated. The handler should skip node count aggregation to avoid corrupting the
+  /// count with a partial batch from the dying node.
+  public var isFinalMetrics: Bool {
+    get {return _storage._isFinalMetrics}
+    set {_uniqueStorage()._isFinalMetrics = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -16701,25 +16494,6 @@ extension Clarifai_Api_RoleType: SwiftProtobuf._ProtoNameProviding {
   ]
 }
 
-extension Clarifai_Api_StatValueAggType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "SUM"),
-    1: .same(proto: "AVG"),
-  ]
-}
-
-extension Clarifai_Api_StatTimeAggType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "NO_TIME_AGG"),
-    1: .same(proto: "YEAR"),
-    2: .same(proto: "MONTH"),
-    3: .same(proto: "WEEK"),
-    4: .same(proto: "DAY"),
-    5: .same(proto: "HOUR"),
-    6: .same(proto: "MINUTE"),
-  ]
-}
-
 extension Clarifai_Api_ValidationErrorType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "VALIDATION_ERROR_TYPE_NOT_SET"),
@@ -16803,6 +16577,13 @@ extension Clarifai_Api_MetricType: SwiftProtobuf._ProtoNameProviding {
     3: .same(proto: "MODEL_PROMPT_TOKEN_THROUGHPUT"),
     4: .same(proto: "MODEL_COMPLETION_TOKEN_THROUGHPUT"),
     5: .same(proto: "MODEL_REQUEST_COUNT"),
+    6: .same(proto: "MODEL_E2E_LATENCY"),
+    51: .same(proto: "NODEPOOL_NODE_COUNT"),
+    52: .same(proto: "NODEPOOL_GPU_UTILIZATION"),
+    53: .same(proto: "NODEPOOL_GPU_TENSOR_UTILIZATION"),
+    54: .same(proto: "NODEPOOL_GPU_MEMORY_UTILIZATION"),
+    55: .same(proto: "NODEPOOL_CPU_UTILIZATION"),
+    56: .same(proto: "NODEPOOL_MEMORY_UTILIZATION"),
   ]
 }
 
@@ -16813,6 +16594,8 @@ extension Clarifai_Api_MetricLabel: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "MODEL_ID"),
     3: .same(proto: "MODEL_VERSION_ID"),
     4: .same(proto: "HTTP_STATUS"),
+    5: .same(proto: "COMPUTE_CLUSTER_ID"),
+    6: .same(proto: "NODEPOOL_ID"),
   ]
 }
 
@@ -28853,216 +28636,6 @@ extension Clarifai_Api_Team: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Clarifai_Api_StatValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StatValue"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "time"),
-    2: .same(proto: "value"),
-    3: .same(proto: "tags"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._time) }()
-      case 2: try { try decoder.decodeSingularFloatField(value: &self.value) }()
-      case 3: try { try decoder.decodeRepeatedStringField(value: &self.tags) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._time {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if self.value != 0 {
-      try visitor.visitSingularFloatField(value: self.value, fieldNumber: 2)
-    }
-    if !self.tags.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.tags, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_StatValue, rhs: Clarifai_Api_StatValue) -> Bool {
-    if lhs._time != rhs._time {return false}
-    if lhs.value != rhs.value {return false}
-    if lhs.tags != rhs.tags {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_StatValueAggregateResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StatValueAggregateResult"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "stat_value_aggregates"),
-    2: .standard(proto: "stat_value_aggregate_query"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.statValueAggregates) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._statValueAggregateQuery) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.statValueAggregates.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.statValueAggregates, fieldNumber: 1)
-    }
-    try { if let v = self._statValueAggregateQuery {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_StatValueAggregateResult, rhs: Clarifai_Api_StatValueAggregateResult) -> Bool {
-    if lhs.statValueAggregates != rhs.statValueAggregates {return false}
-    if lhs._statValueAggregateQuery != rhs._statValueAggregateQuery {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_StatValueAggregate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StatValueAggregate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "time"),
-    2: .standard(proto: "aggregate_value"),
-    3: .same(proto: "count"),
-    4: .same(proto: "tags"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._time) }()
-      case 2: try { try decoder.decodeSingularFloatField(value: &self.aggregateValue) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.count) }()
-      case 4: try { try decoder.decodeRepeatedStringField(value: &self.tags) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._time {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if self.aggregateValue != 0 {
-      try visitor.visitSingularFloatField(value: self.aggregateValue, fieldNumber: 2)
-    }
-    if self.count != 0 {
-      try visitor.visitSingularUInt64Field(value: self.count, fieldNumber: 3)
-    }
-    if !self.tags.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.tags, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_StatValueAggregate, rhs: Clarifai_Api_StatValueAggregate) -> Bool {
-    if lhs._time != rhs._time {return false}
-    if lhs.aggregateValue != rhs.aggregateValue {return false}
-    if lhs.count != rhs.count {return false}
-    if lhs.tags != rhs.tags {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Clarifai_Api_StatValueAggregateQuery: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = _protobuf_package + ".StatValueAggregateQuery"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "tags"),
-    2: .standard(proto: "tag_groups"),
-    3: .standard(proto: "stat_value_agg_type"),
-    4: .standard(proto: "stat_time_agg_type"),
-    5: .standard(proto: "start_time"),
-    6: .standard(proto: "end_time"),
-  ]
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedStringField(value: &self.tags) }()
-      case 2: try { try decoder.decodeRepeatedStringField(value: &self.tagGroups) }()
-      case 3: try { try decoder.decodeSingularEnumField(value: &self.statValueAggType) }()
-      case 4: try { try decoder.decodeSingularEnumField(value: &self.statTimeAggType) }()
-      case 5: try { try decoder.decodeSingularMessageField(value: &self._startTime) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._endTime) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.tags.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.tags, fieldNumber: 1)
-    }
-    if !self.tagGroups.isEmpty {
-      try visitor.visitRepeatedStringField(value: self.tagGroups, fieldNumber: 2)
-    }
-    if self.statValueAggType != .sum {
-      try visitor.visitSingularEnumField(value: self.statValueAggType, fieldNumber: 3)
-    }
-    if self.statTimeAggType != .noTimeAgg {
-      try visitor.visitSingularEnumField(value: self.statTimeAggType, fieldNumber: 4)
-    }
-    try { if let v = self._startTime {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    } }()
-    try { if let v = self._endTime {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: Clarifai_Api_StatValueAggregateQuery, rhs: Clarifai_Api_StatValueAggregateQuery) -> Bool {
-    if lhs.tags != rhs.tags {return false}
-    if lhs.tagGroups != rhs.tagGroups {return false}
-    if lhs.statValueAggType != rhs.statValueAggType {return false}
-    if lhs.statTimeAggType != rhs.statTimeAggType {return false}
-    if lhs._startTime != rhs._startTime {return false}
-    if lhs._endTime != rhs._endTime {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension Clarifai_Api_PCAProjectionComparator: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PCAProjectionComparator"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -33166,6 +32739,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
     10: .standard(proto: "gpu_metrics"),
     11: .same(proto: "hostname"),
     12: .standard(proto: "cpu_metrics"),
+    13: .standard(proto: "is_final_metrics"),
   ]
 
   fileprivate class _StorageClass {
@@ -33181,6 +32755,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
     var _gpuMetrics: [Clarifai_Api_GpuMetrics] = []
     var _hostname: String = String()
     var _cpuMetrics: [Clarifai_Api_CpuMetrics] = []
+    var _isFinalMetrics: Bool = false
 
     static let defaultInstance = _StorageClass()
 
@@ -33199,6 +32774,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
       _gpuMetrics = source._gpuMetrics
       _hostname = source._hostname
       _cpuMetrics = source._cpuMetrics
+      _isFinalMetrics = source._isFinalMetrics
     }
   }
 
@@ -33229,6 +32805,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
         case 10: try { try decoder.decodeRepeatedMessageField(value: &_storage._gpuMetrics) }()
         case 11: try { try decoder.decodeSingularStringField(value: &_storage._hostname) }()
         case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._cpuMetrics) }()
+        case 13: try { try decoder.decodeSingularBoolField(value: &_storage._isFinalMetrics) }()
         default: break
         }
       }
@@ -33277,6 +32854,9 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
       if !_storage._cpuMetrics.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._cpuMetrics, fieldNumber: 12)
       }
+      if _storage._isFinalMetrics != false {
+        try visitor.visitSingularBoolField(value: _storage._isFinalMetrics, fieldNumber: 13)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -33298,6 +32878,7 @@ extension Clarifai_Api_ComputePlaneMetrics: SwiftProtobuf.Message, SwiftProtobuf
         if _storage._gpuMetrics != rhs_storage._gpuMetrics {return false}
         if _storage._hostname != rhs_storage._hostname {return false}
         if _storage._cpuMetrics != rhs_storage._cpuMetrics {return false}
+        if _storage._isFinalMetrics != rhs_storage._isFinalMetrics {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -898,16 +898,6 @@ public protocol Clarifai_Api_V2ClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>
 
-  func postStatValues(
-    _ request: Clarifai_Api_PostStatValuesRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>
-
-  func postStatValuesAggregate(
-    _ request: Clarifai_Api_PostStatValuesAggregateRequest,
-    callOptions: CallOptions?
-  ) -> UnaryCall<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>
-
   func postBulkOperations(
     _ request: Clarifai_Api_PostBulkOperationsRequest,
     callOptions: CallOptions?
@@ -4615,42 +4605,6 @@ extension Clarifai_Api_V2ClientProtocol {
     )
   }
 
-  /// PostStatValues
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostStatValues.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postStatValues(
-    _ request: Clarifai_Api_PostStatValuesRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostStatValues",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostStatValuesInterceptors() ?? []
-    )
-  }
-
-  /// PostStatValuesAggregate
-  ///
-  /// - Parameters:
-  ///   - request: Request to send to PostStatValuesAggregate.
-  ///   - callOptions: Call options.
-  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func postStatValuesAggregate(
-    _ request: Clarifai_Api_PostStatValuesAggregateRequest,
-    callOptions: CallOptions? = nil
-  ) -> UnaryCall<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse> {
-    return self.makeUnaryCall(
-      path: "/clarifai.api.V2/PostStatValuesAggregate",
-      request: request,
-      callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makePostStatValuesAggregateInterceptors() ?? []
-    )
-  }
-
   /// Perform bulk operations on a list of inputs based on input source.
   /// Operation include add, update, delete of concepts, metadata and geo data.
   /// This is an Asynchronous process. Use ListBulkOperations or GetBulkOperation to check the status.
@@ -7031,12 +6985,6 @@ public protocol Clarifai_Api_V2ClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'deleteLabelOrders'.
   func makeDeleteLabelOrdersInterceptors() -> [ClientInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
 
-  /// - Returns: Interceptors to use when invoking 'postStatValues'.
-  func makePostStatValuesInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>]
-
-  /// - Returns: Interceptors to use when invoking 'postStatValuesAggregate'.
-  func makePostStatValuesAggregateInterceptors() -> [ClientInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
-
   /// - Returns: Interceptors to use when invoking 'postBulkOperations'.
   func makePostBulkOperationsInterceptors() -> [ClientInterceptor<Clarifai_Api_PostBulkOperationsRequest, Clarifai_Api_MultiBulkOperationsResponse>]
 
@@ -7944,12 +7892,6 @@ public protocol Clarifai_Api_V2Provider: CallHandlerProvider {
   /// Delete multiple label orders in one request.
   /// this do not change task status
   func deleteLabelOrders(request: Clarifai_Api_DeleteLabelOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_Status_BaseResponse>
-
-  /// PostStatValues
-  func postStatValues(request: Clarifai_Api_PostStatValuesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueResponse>
-
-  /// PostStatValuesAggregate
-  func postStatValuesAggregate(request: Clarifai_Api_PostStatValuesAggregateRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Clarifai_Api_MultiStatValueAggregateResponse>
 
   /// Perform bulk operations on a list of inputs based on input source.
   /// Operation include add, update, delete of concepts, metadata and geo data.
@@ -9806,24 +9748,6 @@ extension Clarifai_Api_V2Provider {
         userFunction: self.deleteLabelOrders(request:context:)
       )
 
-    case "PostStatValues":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostStatValuesRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiStatValueResponse>(),
-        interceptors: self.interceptors?.makePostStatValuesInterceptors() ?? [],
-        userFunction: self.postStatValues(request:context:)
-      )
-
-    case "PostStatValuesAggregate":
-      return UnaryServerHandler(
-        context: context,
-        requestDeserializer: ProtobufDeserializer<Clarifai_Api_PostStatValuesAggregateRequest>(),
-        responseSerializer: ProtobufSerializer<Clarifai_Api_MultiStatValueAggregateResponse>(),
-        interceptors: self.interceptors?.makePostStatValuesAggregateInterceptors() ?? [],
-        userFunction: self.postStatValuesAggregate(request:context:)
-      )
-
     case "PostBulkOperations":
       return UnaryServerHandler(
         context: context,
@@ -11423,14 +11347,6 @@ public protocol Clarifai_Api_V2ServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'deleteLabelOrders'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeDeleteLabelOrdersInterceptors() -> [ServerInterceptor<Clarifai_Api_DeleteLabelOrdersRequest, Clarifai_Api_Status_BaseResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postStatValues'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostStatValuesInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesRequest, Clarifai_Api_MultiStatValueResponse>]
-
-  /// - Returns: Interceptors to use when handling 'postStatValuesAggregate'.
-  ///   Defaults to calling `self.makeInterceptors()`.
-  func makePostStatValuesAggregateInterceptors() -> [ServerInterceptor<Clarifai_Api_PostStatValuesAggregateRequest, Clarifai_Api_MultiStatValueAggregateResponse>]
 
   /// - Returns: Interceptors to use when handling 'postBulkOperations'.
   ///   Defaults to calling `self.makeInterceptors()`.
