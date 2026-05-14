@@ -19,6 +19,7 @@ jobs:
     - uses: swift-actions/setup-swift@v3
       with:
         swift-version: "5.9"
+        skip-verify-signature: true
     - uses: actions/checkout@v2
     - name: Build
       run: swift build -v
