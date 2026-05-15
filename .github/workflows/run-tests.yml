@@ -16,10 +16,6 @@ jobs:
         os: [ubuntu-latest, macos-latest]
 
     steps:
-    - uses: swift-actions/setup-swift@v3
-      with:
-        swift-version: "5.10.1"
-        skip-verify-signature: true
     - uses: actions/checkout@v2
     - name: Build
       run: swift build -v
