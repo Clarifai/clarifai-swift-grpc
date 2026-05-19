@@ -12259,6 +12259,14 @@ public struct Clarifai_Api_Nodepool {
     set {_uniqueStorage()._enforcedMaxInstances = newValue}
   }
 
+  /// Number of warm idle instances to keep in this nodepool.
+  /// These allow the nodepool to have extra capacity ready for quickly scheduling additional runners.
+  /// This is the user desired amount. See node_count for actual current number of nodes.
+  public var warmInstances: UInt32 {
+    get {return _storage._warmInstances}
+    set {_uniqueStorage()._warmInstances = newValue}
+  }
+
   /// The visibility field represents whether this message is privately/publicly visible.
   /// To be visible to the public the App that contains it AND the User that contains the App must
   /// also be publicly visible.
@@ -30914,6 +30922,7 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     10: .standard(proto: "max_instances"),
     13: .standard(proto: "enforced_min_instances"),
     14: .standard(proto: "enforced_max_instances"),
+    19: .standard(proto: "warm_instances"),
     11: .same(proto: "visibility"),
     12: .same(proto: "metadata"),
     15: .standard(proto: "special_handling"),
@@ -30934,6 +30943,7 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     var _maxInstances: UInt32 = 0
     var _enforcedMinInstances: UInt32 = 0
     var _enforcedMaxInstances: UInt32 = 0
+    var _warmInstances: UInt32 = 0
     var _visibility: Clarifai_Api_Visibility? = nil
     var _metadata: SwiftProtobuf.Google_Protobuf_Struct? = nil
     var _specialHandling: [Clarifai_Api_SpecialHandling] = []
@@ -30957,6 +30967,7 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       _maxInstances = source._maxInstances
       _enforcedMinInstances = source._enforcedMinInstances
       _enforcedMaxInstances = source._enforcedMaxInstances
+      _warmInstances = source._warmInstances
       _visibility = source._visibility
       _metadata = source._metadata
       _specialHandling = source._specialHandling
@@ -30998,6 +31009,7 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         case 16: try { try decoder.decodeSingularUInt32Field(value: &_storage._nodeCount) }()
         case 17: try { try decoder.decodeSingularEnumField(value: &_storage._status) }()
         case 18: try { try decoder.decodeSingularStringField(value: &_storage._statusDescription) }()
+        case 19: try { try decoder.decodeSingularUInt32Field(value: &_storage._warmInstances) }()
         default: break
         }
       }
@@ -31061,6 +31073,9 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       if !_storage._statusDescription.isEmpty {
         try visitor.visitSingularStringField(value: _storage._statusDescription, fieldNumber: 18)
       }
+      if _storage._warmInstances != 0 {
+        try visitor.visitSingularUInt32Field(value: _storage._warmInstances, fieldNumber: 19)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -31081,6 +31096,7 @@ extension Clarifai_Api_Nodepool: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
         if _storage._maxInstances != rhs_storage._maxInstances {return false}
         if _storage._enforcedMinInstances != rhs_storage._enforcedMinInstances {return false}
         if _storage._enforcedMaxInstances != rhs_storage._enforcedMaxInstances {return false}
+        if _storage._warmInstances != rhs_storage._warmInstances {return false}
         if _storage._visibility != rhs_storage._visibility {return false}
         if _storage._metadata != rhs_storage._metadata {return false}
         if _storage._specialHandling != rhs_storage._specialHandling {return false}
